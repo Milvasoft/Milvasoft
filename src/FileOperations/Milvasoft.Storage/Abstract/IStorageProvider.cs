@@ -9,16 +9,16 @@ namespace Milvasoft.Storage.Abstract;
 public interface IStorageProvider
 {
     /// <summary>
-    /// Shows how to upload a file from the local computer to an Amazon S3 bucket.
+    /// Uploads file to provider.
     /// </summary>
-    /// <param name="filePath">The object to upload.</param>
+    /// <param name="filePath">The file to upload.</param>
     /// <param name="cancellationToken"></param>
     /// <param name="file">The file to upload.</param>
     /// <returns>A boolean value indicating the success or failure of the upload procedure.</returns>
     Task<FileOperationResult> UploadAsync(IFormFile file, string filePath, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Uploads file to container.
+    /// Uploads file to provider.
     /// </summary>
     /// <param name="context"></param>
     /// <param name="filePath"></param>
@@ -27,15 +27,15 @@ public interface IStorageProvider
     Task<FileOperationResult> NoBufferUploadAsync(HttpContext context, string filePath, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Shows how to download an object from an Amazon S3 bucket to the local computer.
+    /// Downloads file from provider.
     /// </summary>
-    /// <param name="filePath">The name of the object to download.</param>
+    /// <param name="filePath">The name of the file to download.</param>
     /// <param name="cancellationToken"></param>
     /// <returns>A boolean value indicating the success or failure of the download process.</returns>
     Task<FileDownloadResult> DownloadAsync(string filePath, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Copies aws file from <paramref name="source"/> to <paramref name="destination"/>.
+    /// Copies file from <paramref name="source"/> to <paramref name="destination"/>.
     /// </summary>
     /// <param name="source"></param>
     /// <param name="destination"></param>
@@ -44,11 +44,18 @@ public interface IStorageProvider
     Task<FileOperationResult> CopyAsync(string source, string destination, CancellationToken cancellationToken);
 
     /// <summary>
-    /// The DeleteObjectNonVersionedBucketAsync takes care of deleting the desired object from the named bucket.
+    /// Deletes file from the provider.
     /// </summary>
-    /// <param name="filePath">The name of the object to delete.</param>
+    /// <param name="filePath">The name of the file to delete.</param>
     /// <param name="cancellationToken"></param>
     Task<FileOperationResult> DeleteAsync(string filePath, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes files from the provider.
+    /// </summary>
+    /// <param name="filePaths">The names of the files to delete.</param>
+    /// <param name="cancellationToken"></param>
+    Task<FileOperationResult> DeleteAsync(List<string> filePaths, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets file url for <paramref name="filePath"/> according to the provider.
