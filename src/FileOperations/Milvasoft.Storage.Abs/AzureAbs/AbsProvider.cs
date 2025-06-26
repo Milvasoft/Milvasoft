@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Helpers;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Storage.Models;
 using Milvasoft.Storage.Providers;
@@ -115,7 +116,26 @@ public class AbsProvider(BlobServiceClient blobServiceClient, StorageProviderOpt
     }
 
     /// <inheritdoc/>
-    public async Task<FileOperationResult> RemoveAllAsync(CancellationToken cancellationToken = default)
+    public override async Task<FileOperationResult> DeleteAsync(List<string> filePaths, CancellationToken cancellationToken = default)
+    {
+        if (filePaths.IsNullOrEmpty())
+            return FileOperationResult.Failure("File paths cannot be null or empty.");
+
+        foreach (var filePath in filePaths)
+            try
+            {
+                await DeleteAsync(filePath, cancellationToken);
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+
+        return FileOperationResult.Success();
+    }
+
+    /// <inheritdoc/>
+    public async Task<FileOperationResult> ClearContainerAsync(CancellationToken cancellationToken = default)
     {
         var blobs = _containerClient.GetBlobsAsync(cancellationToken: cancellationToken);
 

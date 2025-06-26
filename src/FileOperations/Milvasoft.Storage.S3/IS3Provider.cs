@@ -13,7 +13,7 @@ public interface IS3Provider : IStorageProvider
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task<FileOperationResult> RemoveAllAsync(CancellationToken cancellationToken = default);
+    public Task<FileOperationResult> ClearBucketAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Generates a pre-signed URL for uploading a file to an S3 bucket.

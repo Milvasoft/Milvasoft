@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Helpers;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Storage.Models;
 using Milvasoft.Storage.Providers;
@@ -161,7 +162,29 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
     }
 
     /// <inheritdoc/>
-    public async Task<FileOperationResult> RemoveAllAsync(CancellationToken cancellationToken = default)
+    public override async Task<FileOperationResult> DeleteAsync(List<string> filePaths, CancellationToken cancellationToken = default)
+    {
+        if (filePaths.IsNullOrEmpty())
+            return FileOperationResult.Failure("File paths cannot be null or empty.");
+
+        var keys = filePaths.Select(filePath => new KeyVersion { Key = filePath }).ToList();
+
+        var deleteObjectsRequest = new DeleteObjectsRequest
+        {
+            BucketName = _s3Configuration.BucketName,
+            Objects = keys
+        };
+
+        var response = await _client.DeleteObjectsAsync(deleteObjectsRequest, cancellationToken);
+
+        if (response.HttpStatusCode != HttpStatusCode.OK)
+            return FileOperationResult.Failure();
+
+        return FileOperationResult.Success($"{response.DeletedObjects.Count} objects deleted.");
+    }
+
+    /// <inheritdoc/>
+    public async Task<FileOperationResult> ClearBucketAsync(CancellationToken cancellationToken = default)
     {
         var request = new ListObjectsRequest
         {

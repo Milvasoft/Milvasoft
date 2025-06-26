@@ -13,5 +13,5 @@ public interface ILocalFileProvider : IStorageProvider
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public FileOperationResult RemoveAll(CancellationToken cancellationToken = default);
+    public FileOperationResult ClearFileSource(CancellationToken cancellationToken = default);
 }

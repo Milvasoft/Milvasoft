@@ -13,5 +13,5 @@ public interface IAbsProvider : IStorageProvider
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task<FileOperationResult> RemoveAllAsync(CancellationToken cancellationToken = default);
+    public Task<FileOperationResult> ClearContainerAsync(CancellationToken cancellationToken = default);
 }

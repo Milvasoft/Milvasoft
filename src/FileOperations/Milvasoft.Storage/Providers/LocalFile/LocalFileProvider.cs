@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Milvasoft.Core.Helpers;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Storage.Models;
 
@@ -139,7 +140,26 @@ public class LocalFileProvider(StorageProviderOptions options) : StorageProvider
     }
 
     /// <inheritdoc/>
-    public FileOperationResult RemoveAll(CancellationToken cancellationToken = default)
+    public override Task<FileOperationResult> DeleteAsync(List<string> filePaths, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (filePaths.IsNullOrEmpty())
+                return Task.FromResult(FileOperationResult.Success());
+
+            foreach (var filePath in filePaths)
+                DeleteAsync(filePath, cancellationToken);
+
+            return Task.FromResult(FileOperationResult.Success());
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult(FileOperationResult.Failure(ex.Message));
+        }
+    }
+
+    /// <inheritdoc/>
+    public FileOperationResult ClearFileSource(CancellationToken cancellationToken = default)
     {
         try
         {

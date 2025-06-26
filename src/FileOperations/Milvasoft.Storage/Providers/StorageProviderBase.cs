@@ -55,6 +55,13 @@ public abstract class StorageProviderBase(StorageProviderOptions storageProvider
     public abstract Task<FileOperationResult> DeleteAsync(string filePath, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Deletes files from provider.
+    /// </summary>
+    /// <param name="filePaths">The names of the objects to delete.</param>
+    /// <param name="cancellationToken"></param>
+    public abstract Task<FileOperationResult> DeleteAsync(List<string> filePaths, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Gets file url for <paramref name="filePath"/> according to the provider.
     /// </summary>
     /// <param name="filePath"></param>

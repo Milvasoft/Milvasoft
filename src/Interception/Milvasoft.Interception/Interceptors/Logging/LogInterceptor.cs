@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Interception.Decorator;
+using Milvasoft.Interception.Decorator.Internal;
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Cache;
 using System.Diagnostics;
@@ -55,7 +56,12 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
             if (call.ReturnValue is IResponse response)
             {
                 if (cacheAttribute != null)
-                    responseDataFetchedFromCache = (bool)call.ReturnValue.GetType().GetProperty("IsCachedData").GetValue(call.ReturnValue);
+                {
+                    var prop = call.ReturnValue?.GetType().GetProperty("IsCachedData");
+
+                    if (prop != null && prop.PropertyType == typeof(bool))
+                        responseDataFetchedFromCache = (bool)(prop.GetValue(call.ReturnValue) ?? false);
+                }
 
                 isSuccessResponse = response.IsSuccess;
             }
@@ -105,10 +111,7 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
             }
         }
 
-        if (exception != null)
-        {
-            throw exception;
-        }
+       (exception is AggregateException agg && agg.InnerExceptions.Count == 1 ? agg.InnerExceptions[0] : exception)?.Rethrow();
     }
 
     /// <summary>
