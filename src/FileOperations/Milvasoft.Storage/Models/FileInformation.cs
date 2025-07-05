@@ -38,6 +38,13 @@ public class FileInformation : EntityBase<string>
     public string AltText { get; set; }
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="FileInformation"/> class with a new unique identifier.
+    /// </summary>
+    public FileInformation()
+    {
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="FileInformation"/> class with a new unique identifier. 
     /// </summary>
     public FileInformation(string id = null)
