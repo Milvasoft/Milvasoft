@@ -40,17 +40,19 @@ public class FileInformation : EntityBase<string>
     /// <summary>
     /// Initializes a new instance of the <see cref="FileInformation"/> class with a new unique identifier. 
     /// </summary>
-    public FileInformation()
+    public FileInformation(string id = null)
     {
-        if (string.IsNullOrWhiteSpace(Id))
+        if (string.IsNullOrWhiteSpace(id))
             Id = Guid.NewGuid().ToString();
+        else
+            Id = id;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FileInformation"/> class.
     /// </summary>
     /// <param name="fileUploadRequest"></param>
-    public FileInformation(FileUploadRequest fileUploadRequest) : this()
+    public FileInformation(FileUploadRequest fileUploadRequest) : this(fileUploadRequest.Id)
     {
         if (string.IsNullOrWhiteSpace(fileUploadRequest.Id))
             Id = fileUploadRequest.Id;
