@@ -14,7 +14,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Milvasoft.IntegrationTests.Client.Migrations
 {
     [DbContext(typeof(MilvaBulkDbContextFixture))]
-    [Migration("20250209220540_InitialCreate")]
+    [Migration("20250731220800_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -22,7 +22,7 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -215,6 +215,9 @@ namespace Milvasoft.IntegrationTests.Client.Migrations
 
                     b.Property<decimal>("SomeDecimalProp")
                         .HasColumnType("numeric");
+
+                    b.Property<int?>("SomeNullableProp")
+                        .HasColumnType("integer");
 
                     b.Property<string>("SomeStringProp")
                         .HasColumnType("text");

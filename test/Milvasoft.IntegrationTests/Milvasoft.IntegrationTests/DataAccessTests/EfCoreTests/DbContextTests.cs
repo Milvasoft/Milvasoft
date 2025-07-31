@@ -1198,7 +1198,8 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         {
             Id = 1,
             SomeStringProp = "stringprop",
-            SomeDecimalProp = 10M
+            SomeDecimalProp = 10M,
+            SomeNullableProp = 100
         };
         await dbContext.BaseEntities.AddAsync(entity);
         await dbContext.SaveChangesAsync();
@@ -1210,11 +1211,11 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
                 new()
                 {
                     EntityName = nameof(SomeBaseEntityFixture),
-                    RequestedPropertyNames = [nameof(SomeBaseEntityFixture.SomeDecimalProp)],
+                    RequestedPropertyNames = [nameof(SomeBaseEntityFixture.SomeDecimalProp), nameof(SomeBaseEntityFixture.SomeNullableProp)],
                 }
             ]
         };
-        object expectedData = new { SomeDecimalProp = 10M, Id = 1 };
+        object expectedData = new { SomeDecimalProp = 10M, SomeNullableProp = 100, Id = 1 };
 
         // Act
         var result = await dbContext.GetLookupsAsync(lookupRequest);

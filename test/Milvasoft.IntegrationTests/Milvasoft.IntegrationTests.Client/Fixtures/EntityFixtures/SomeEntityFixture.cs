@@ -38,6 +38,7 @@ public class SomeBaseEntityFixture : BaseEntity<int>
     public string SomeStringProp { get; set; }
     public DateTime SomeDateProp { get; set; }
     public decimal SomeDecimalProp { get; set; }
+    public int? SomeNullableProp { get; set; }
     public virtual DateTime? CreationDate { get; set; }
     public virtual string CreatorUserName { get; set; }
     public virtual DateTime? LastModificationDate { get; set; }

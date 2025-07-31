@@ -216,17 +216,22 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
 
     private static object GetDefaultValue(Type type)
     {
+        if (type == typeof(string))
+            return string.Empty;
+
+        if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            return null;
+
         if (type.IsValueType)
         {
             return _typeFactoryCache.GetOrAdd(type, t =>
             {
                 var ctor = Expression.New(t);
-                var lambda = Expression.Lambda<Func<object>>(ctor);
+                var converted = Expression.Convert(ctor, typeof(object));
+                var lambda = Expression.Lambda<Func<object>>(converted);
                 return lambda.Compile();
             })();
         }
-        else if (type == typeof(string))
-            return string.Empty;
 
         return null;
     }
