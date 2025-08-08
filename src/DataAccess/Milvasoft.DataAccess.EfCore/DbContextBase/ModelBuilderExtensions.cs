@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.MultiLanguage.EntityBases;
@@ -7,6 +9,7 @@ using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 using Milvasoft.Cryptography.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.Converters;
 using MongoDB.Bson;
+using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
@@ -114,6 +117,8 @@ public static class ModelBuilderExtensions
     /// </summary>
     /// <param name="modelBuilder"></param>
     /// <param name="encryptionProvider"></param>
+    /// <returns></returns>
+    /// <exception cref="MilvaDeveloperException"></exception>
     public static ModelBuilder UseAnnotationEncryption(this ModelBuilder modelBuilder, IMilvaCryptographyProvider encryptionProvider)
     {
         if (modelBuilder is null)
@@ -122,18 +127,58 @@ public static class ModelBuilderExtensions
         if (encryptionProvider is null)
             throw new MilvaDeveloperException("Cannot initialize encryption with a null provider.");
 
-        var encryptionConverter = new MilvaEncryptionConverter(encryptionProvider);
+        var stringEncryptionConverter = new MilvaEncryptionConverter(encryptionProvider);
 
-        foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
-            foreach (IMutableProperty property in entityType.GetProperties())
+            foreach (var property in entityType.GetProperties())
             {
-                if (property.ClrType == typeof(string) /* && !IsDiscriminator(property)*/)
-                {
-                    var attributes = property.PropertyInfo.GetCustomAttributes(typeof(EncryptedAttribute), false);
+                var clrType = property.ClrType;
 
-                    if (attributes.Length != 0)
-                        property.SetValueConverter(encryptionConverter);
+                // string + [Encrypted]
+                if (clrType == typeof(string))
+                {
+                    var propInfo = property.PropertyInfo; // shadow property olabilir
+                    if (propInfo is null)
+                        continue;
+
+                    if (propInfo.IsDefined(typeof(EncryptedAttribute), inherit: false))
+                    {
+                        property.SetValueConverter(stringEncryptionConverter);
+                    }
+
+                    continue;
+                }
+
+                // EncryptedJsonValueConverter<T> for jsonb columns
+                // (POCO -> jsonb field based encryption)
+                var columnType = property.GetColumnType();
+                var isJsonb = !string.IsNullOrWhiteSpace(columnType) && columnType.Contains("jsonb", StringComparison.OrdinalIgnoreCase);
+
+                // class && !string && !enum && !Nullable<> struct etc.
+                // Except array, list, etc.
+                var isPoco = clrType.IsClass && clrType != typeof(string) && !typeof(IEnumerable).IsAssignableFrom(clrType);
+
+                if (isJsonb && isPoco)
+                {
+                    var convType = typeof(EncryptedJsonValueConverter<>).MakeGenericType(clrType);
+
+                    var converter = (ValueConverter)Activator.CreateInstance(convType, encryptionProvider)!;
+
+                    property.SetValueConverter(converter);
+
+                    // Value converter for change tracker
+                    var comparerType = typeof(JsonValueComparer<>).MakeGenericType(clrType);
+
+                    var comparer = (ValueComparer)Activator.CreateInstance(comparerType)!;
+
+                    property.SetValueComparer(comparer);
+
+                    // If column type is empty, set it as jsonb (if already set, do not touch it)
+                    if (string.IsNullOrWhiteSpace(columnType))
+                        property.SetColumnType("jsonb");
+
+                    continue;
                 }
             }
         }

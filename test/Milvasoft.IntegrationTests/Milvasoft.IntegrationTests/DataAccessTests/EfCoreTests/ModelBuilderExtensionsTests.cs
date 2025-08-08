@@ -254,7 +254,9 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         var entityInDb2 = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync();
         entityInDb.SomeEncryptedStringProp.Should().Be(entity.SomeEncryptedStringProp);
         entityInDb.SomeEncryptedStringWithAttributeProp.Should().NotBe(entity.SomeEncryptedStringWithAttributeProp);
-        var decyrptedString = await encryptor.DecryptAsync(entityInDb.SomeEncryptedStringWithAttributeProp);
+        var cipher = entityInDb.SomeEncryptedStringWithAttributeProp;
+        cipher.Should().StartWith("enc::");
+        var decyrptedString = await encryptor.DecryptAsync(cipher["enc::".Length..]);
         decyrptedString.Should().Be(entity.SomeEncryptedStringWithAttributeProp);
         entityInDb2.SomeEncryptedStringProp.Should().Be(entity.SomeEncryptedStringProp);
         entityInDb2.SomeEncryptedStringWithAttributeProp.Should().Be(entity.SomeEncryptedStringWithAttributeProp);
@@ -308,8 +310,12 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
 
         var entityInDb = await dbContext.Database.SqlQueryRaw<SomeModelBuilderTestKeylessEntityFixture>(""" select * from "ModelBuilderTestEntities" """).FirstOrDefaultAsync();
         var entityInDb2 = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync();
-        (await encryptor.DecryptAsync(entityInDb.SomeEncryptedStringProp)).Should().Be(entity.SomeEncryptedStringProp);
-        (await encryptor.DecryptAsync(entityInDb.SomeEncryptedStringWithAttributeProp)).Should().Be(entity.SomeEncryptedStringWithAttributeProp);
+        var cipher = entityInDb.SomeEncryptedStringWithAttributeProp;
+        cipher.Should().StartWith("enc::");
+        var cipher2 = entityInDb.SomeEncryptedStringWithAttributeProp;
+        cipher.Should().StartWith("enc::");
+        (await encryptor.DecryptAsync(cipher["enc::".Length..])).Should().Be(entity.SomeEncryptedStringProp);
+        (await encryptor.DecryptAsync(cipher2["enc::".Length..])).Should().Be(entity.SomeEncryptedStringWithAttributeProp);
         entityInDb2.SomeEncryptedStringProp.Should().Be(entity.SomeEncryptedStringProp);
         entityInDb2.SomeEncryptedStringWithAttributeProp.Should().Be(entity.SomeEncryptedStringWithAttributeProp);
     }

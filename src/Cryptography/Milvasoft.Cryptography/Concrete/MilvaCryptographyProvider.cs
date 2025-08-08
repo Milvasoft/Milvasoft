@@ -44,7 +44,7 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
 
         using ICryptoTransform encryptor = aesProvider.CreateEncryptor(_key, initializationVector);
 
-        var memoryStream = _recyclableMemoryStreamManager.GetStream();
+        using var memoryStream = _recyclableMemoryStreamManager.GetStream();
 
         await memoryStream.WriteAsync(initializationVector.AsMemory(0, initializationVector.Length));
 
@@ -169,7 +169,7 @@ public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptograp
 
         using ICryptoTransform encryptor = aesProvider.CreateEncryptor(_key, initializationVector);
 
-        var memoryStream = _recyclableMemoryStreamManager.GetStream();
+        using var memoryStream = _recyclableMemoryStreamManager.GetStream();
 
         memoryStream.Write(initializationVector, 0, initializationVector.Length);
 
