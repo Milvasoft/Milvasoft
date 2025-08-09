@@ -24,6 +24,7 @@ public interface IS3Provider : IStorageProvider
     /// <param name="filePath">The path of the file within the S3 bucket. This is used as the key to identify the file.</param>
     /// <param name="expiresIn">The expiration time, in minutes, for the pre-signed URL. Defaults to 2 minutes. Must be a positive integer.</param>
     /// <param name="cacheControlHeader">The value of the Cache-Control header to be included in the request. Defaults to  "public, max-age=86400".</param>
+    /// <param name="contentType"></param>
     /// <returns>A string containing the pre-signed URL that can be used to upload the file.</returns>
-    public string GeneratePreSignedUrl(string filePath, int expiresIn = 2, string cacheControlHeader = "public, max-age=86400");
+    public string GeneratePreSignedUrl(string filePath, int expiresIn = 2, string cacheControlHeader = "public, max-age=86400", string contentType = null);
 }
