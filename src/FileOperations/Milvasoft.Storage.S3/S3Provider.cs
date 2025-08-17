@@ -21,6 +21,9 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
     private readonly AwsS3Configuration _s3Configuration = options.AwsS3;
 
     /// <inheritdoc/>
+    public IAmazonS3 GetClient() => _client;
+
+    /// <inheritdoc/>
     public override async Task<FileOperationResult> UploadAsync(IFormFile file, string filePath, CancellationToken cancellationToken = default)
     {
         var request = new PutObjectRequest
@@ -181,6 +184,54 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
             return FileOperationResult.Failure();
 
         return FileOperationResult.Success($"{response.DeletedObjects.Count} objects deleted.");
+    }
+
+    /// <inheritdoc/>
+    public async Task<FileOperationResult> DeleteFolderAsync(string prefix, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(prefix))
+            return FileOperationResult.Failure("Prefix cannot be empty.");
+
+        prefix = EnsureSlashSuffix(prefix.Trim().TrimStart('/'));
+
+        var listReq = new ListObjectsV2Request
+        {
+            BucketName = _s3Configuration.BucketName,
+            Prefix = prefix,
+            MaxKeys = 1000,
+            FetchOwner = false
+        };
+
+        int totalDeleted = 0;
+        ListObjectsV2Response listRes;
+
+        do
+        {
+            listRes = await _client.ListObjectsV2Async(listReq, cancellationToken);
+
+            // Sadece path (key) lazım
+            foreach (var chunk in listRes.S3Objects.Select(o => o.Key).Chunk(1000))
+            {
+                var delReq = new DeleteObjectsRequest
+                {
+                    BucketName = _s3Configuration.BucketName,
+                    Quiet = true,
+                    Objects = [.. chunk.Select(k => new KeyVersion { Key = k })]
+                };
+
+                var delRes = await _client.DeleteObjectsAsync(delReq, cancellationToken);
+
+                var errorCount = delRes.DeleteErrors?.Count ?? 0;
+                totalDeleted += chunk.Length - errorCount;
+            }
+
+            listReq.ContinuationToken = listRes.NextContinuationToken;
+        }
+        while (listRes.IsTruncated ?? false);
+
+        return FileOperationResult.Success($"{totalDeleted} objects deleted.");
+
+        static string EnsureSlashSuffix(string s) => string.IsNullOrEmpty(s) ? s : (s.EndsWith('/') ? s : s + "/");
     }
 
     /// <inheritdoc/>

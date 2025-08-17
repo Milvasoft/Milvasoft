@@ -1,4 +1,5 @@
-﻿using Milvasoft.Storage.Abstract;
+﻿using Amazon.S3;
+using Milvasoft.Storage.Abstract;
 using Milvasoft.Storage.Models;
 
 namespace Milvasoft.Storage.S3;
@@ -9,11 +10,25 @@ namespace Milvasoft.Storage.S3;
 public interface IS3Provider : IStorageProvider
 {
     /// <summary>
+    /// Exposes the S3 client for direct access to S3 operations.
+    /// </summary>
+    /// <returns></returns>
+    public IAmazonS3 GetClient();
+
+    /// <summary>
     /// Remove all files in bucket.
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public Task<FileOperationResult> ClearBucketAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes a files recursively from the S3 bucket with specified prefix.
+    /// </summary>
+    /// <param name="prefix"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<FileOperationResult> DeleteFolderAsync(string prefix, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Generates a pre-signed URL for uploading a file to an S3 bucket.
