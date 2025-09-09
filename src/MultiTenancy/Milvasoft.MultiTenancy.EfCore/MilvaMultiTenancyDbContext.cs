@@ -72,7 +72,9 @@ public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbC
 
             // Create the expression: entity.TenantId == CurrentTenantId
             var propertyAccess = Expression.Property(parameter, property);
+
             var tenantIdValue = Expression.Property(Expression.Constant(this), nameof(CurrentTenantId));
+
             var filterExpression = Expression.Equal(propertyAccess, tenantIdValue);
 
             var lambda = Expression.Lambda(filterExpression, parameter);
