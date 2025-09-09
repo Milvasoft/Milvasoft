@@ -205,33 +205,40 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
         int totalDeleted = 0;
         ListObjectsV2Response listRes;
 
-        do
+        try
         {
-            listRes = await _client.ListObjectsV2Async(listReq, cancellationToken);
-
-            if (listRes.S3Objects.IsNullOrEmpty())
-                break;
-
-            foreach (var chunk in listRes.S3Objects.Select(o => o.Key).Chunk(1000))
+            do
             {
-                var delReq = new DeleteObjectsRequest
+                listRes = await _client.ListObjectsV2Async(listReq, cancellationToken);
+
+                if (listRes.S3Objects.IsNullOrEmpty())
+                    break;
+
+                foreach (var chunk in listRes.S3Objects.Select(o => o.Key).Chunk(1000))
                 {
-                    BucketName = _s3Configuration.BucketName,
-                    Quiet = true,
-                    Objects = [.. chunk.Select(k => new KeyVersion { Key = k })]
-                };
+                    var delReq = new DeleteObjectsRequest
+                    {
+                        BucketName = _s3Configuration.BucketName,
+                        Quiet = true,
+                        Objects = [.. chunk.Select(k => new KeyVersion { Key = k })]
+                    };
 
-                var delRes = await _client.DeleteObjectsAsync(delReq, cancellationToken);
+                    var delRes = await _client.DeleteObjectsAsync(delReq, cancellationToken);
 
-                var errorCount = delRes.DeleteErrors?.Count ?? 0;
-                totalDeleted += chunk.Length - errorCount;
+                    var errorCount = delRes.DeleteErrors?.Count ?? 0;
+                    totalDeleted += chunk.Length - errorCount;
+                }
+
+                listReq.ContinuationToken = listRes.NextContinuationToken;
             }
+            while (listRes.IsTruncated ?? false);
 
-            listReq.ContinuationToken = listRes.NextContinuationToken;
+            return FileOperationResult.Success($"{totalDeleted} objects deleted.");
         }
-        while (listRes.IsTruncated ?? false);
-
-        return FileOperationResult.Success($"{totalDeleted} objects deleted.");
+        catch (Exception)
+        {
+            return FileDownloadResult.Failure(string.Empty);
+        }
 
         static string EnsureSlashSuffix(string s) => string.IsNullOrEmpty(s) ? s : (s.EndsWith('/') ? s : s + "/");
     }
