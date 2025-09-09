@@ -209,7 +209,9 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
         {
             listRes = await _client.ListObjectsV2Async(listReq, cancellationToken);
 
-            // Sadece path (key) lazım
+            if (listRes.S3Objects.IsNullOrEmpty())
+                break;
+
             foreach (var chunk in listRes.S3Objects.Select(o => o.Key).Chunk(1000))
             {
                 var delReq = new DeleteObjectsRequest
