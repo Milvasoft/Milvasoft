@@ -19,8 +19,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Milvasoft.Caching\Milvasoft.Caching.csproj" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="StackExchange.Redis" Version="2.9.11" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="StackExchange.Redis" Version="2.9.25" />
 	</ItemGroup>
 
 	<PropertyGroup>

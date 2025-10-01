@@ -27,7 +27,7 @@
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.9" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="9.0.9" />
-	  <PackageReference Include="MongoDB.Bson" Version="3.4.3" />
+	  <PackageReference Include="MongoDB.Bson" Version="3.5.0" />
 	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
 	  <PackageReference Include="System.Text.Json" Version="9.0.9" />
 	</ItemGroup>
