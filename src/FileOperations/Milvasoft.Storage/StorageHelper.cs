@@ -139,7 +139,7 @@ public static class StorageHelper
         using var stream = file.OpenReadStream();
         var header = new byte[8];
 
-        stream.Read(header, 0, header.Length);
+        stream.ReadExactly(header);
 
         return signatures.Any(sig => header.Take(sig.Length).SequenceEqual(sig));
     }

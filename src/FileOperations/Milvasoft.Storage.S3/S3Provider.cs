@@ -32,7 +32,7 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
             Key = filePath,
             InputStream = file.OpenReadStream(),
             ContentType = file.ContentType,
-            CannedACL = S3CannedACL.BucketOwnerFullControl
+            CannedACL = S3CannedACL.BucketOwnerFullControl,
         };
 
         var response = await _client.PutObjectAsync(request, cancellationToken);
@@ -282,8 +282,13 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
     /// <param name="expiresIn">The expiration time, in minutes, for the pre-signed URL. Defaults to 2 minutes. Must be a positive integer.</param>
     /// <param name="cacheControlHeader">The value of the Cache-Control header to be included in the request. Defaults to  "public, max-age=86400".</param>
     /// <param name="contentType"></param>
+    /// <param name="metadatas"></param>
     /// <returns>A string containing the pre-signed URL that can be used to upload the file.</returns>
-    public string GeneratePreSignedUrl(string filePath, int expiresIn = 2, string cacheControlHeader = "public, max-age=86400", string contentType = null)
+    public string GeneratePreSignedUrl(string filePath,
+                                       int expiresIn = 2,
+                                       string cacheControlHeader = "public, max-age=86400",
+                                       string contentType = null,
+                                       Dictionary<string, string> metadatas = null)
     {
         var request = new GetPreSignedUrlRequest
         {
@@ -297,6 +302,16 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
                 CacheControl = cacheControlHeader
             }
         };
+
+        // Add custom metadata
+        if (metadatas != null)
+        {
+            foreach (var kvp in metadatas)
+            {
+                // SDK automatically prefixes with "x-amz-meta-" when sending
+                request.Metadata.Add(kvp.Key, kvp.Value);
+            }
+        }
 
         return _client.GetPreSignedURL(request);
     }
