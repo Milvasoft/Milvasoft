@@ -222,6 +222,10 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
             else if (navigationEntry?.CurrentValue != null)
                 AuditDeletion(Entry(navigationEntry.CurrentValue));
         }
+
+        // Entry(navigationEntry.CurrentValue) changes entity state to Deleted again, so we need to set it to Modified again.
+        if (entry.State == EntityState.Deleted)
+            entry.State = EntityState.Modified;
     }
 
     /// <summary>
