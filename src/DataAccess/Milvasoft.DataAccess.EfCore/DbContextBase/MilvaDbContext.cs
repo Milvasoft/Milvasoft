@@ -224,12 +224,12 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
         }
 
         // Entry(navigationEntry.CurrentValue) changes entity state to Deleted again, so we need to set it to Modified again.
-        if (entry.State == EntityState.Deleted)
+        if (entry.State == EntityState.Deleted && entry.HasProperty(EntityPropertyNames.IsDeleted))
             entry.State = EntityState.Modified;
     }
 
     /// <summary>
-    /// Entity auditing for delete. 
+    /// Entity auditing for delete.
     /// </summary>
     /// <param name="entry"></param>
     protected internal virtual void AuditDeletion(EntityEntry entry)
@@ -251,7 +251,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     }
 
     /// <summary>
-    /// Entity auditing by date. 
+    /// Entity auditing by date.
     /// </summary>
     /// <param name="entry"></param>
     /// <param name="propertyName"></param>
@@ -309,7 +309,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
                                .ToListAsync();
 
     /// <summary>
-    /// Gets 
+    /// Gets
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TPropertyType"></typeparam>
@@ -397,18 +397,18 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="dto"></param>
     /// <remarks>
-    /// 
+    ///
     /// This method is used to update the entity object with the values of the updatable properties in the DTO object.
     /// It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
     /// If a matching property is found and the property value is an instance of <see cref="IUpdateProperty"/> and IsUpdated property is true,
     /// the specified action is performed on the matching property in the entity object.
-    /// 
+    ///
     /// <para></para>
-    /// 
+    ///
     /// If entity implements <see cref="IHasModificationDate"/>, <see cref="EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
     /// If entity implements <see cref="IHasModifier"/>, <see cref="EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
     /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTime"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
-    /// 
+    ///
     /// </remarks>
     public SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TEntity, TDto>(TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase
     {
