@@ -45,6 +45,19 @@ public class RequestHeaderTransformer : IOpenApiOperationTransformer
                     }
                 });
             }
+
+            operation.Parameters.Add(new OpenApiParameter()
+            {
+                Name = "M-Metadata",
+                In = ParameterLocation.Header,
+                Description = "Generate metadatada. Can be true or false",
+                Required = false,
+                Schema = new OpenApiSchema
+                {
+                    Type = JsonSchemaType.Boolean,
+                    Default = false
+                }
+            });
         }
 
         return Task.CompletedTask;

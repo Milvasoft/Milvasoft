@@ -80,6 +80,7 @@ public static class OpenApiExtensions
     public static OpenApiOptions AddMilvaTransformers(this OpenApiOptions options)
     {
         // Document
+        options.AddDocumentTransformer<OpenApiServerTransformer>();
         options.AddDocumentTransformer<OpenApiExcludeTransformer>();
         options.AddDocumentTransformer<BearerSecuritySchemaTransformer>();
 

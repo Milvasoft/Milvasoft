@@ -6,17 +6,31 @@
 /// <remarks>
 /// Use this class to initialize a new instance of <see cref="GeoPoint"/> with latitude and longitude values.
 /// </remarks>
-/// <param name="latitude">The latitude coordinate of the point.</param>
-/// <param name="longitude">The longitude coordinate of the point.</param>
-public class GeoPoint(double latitude, double longitude)
+public class GeoPoint
 {
     /// <summary>
     /// Gets or sets the latitude coordinate of the point.
     /// </summary>
-    public double Latitude { get; set; } = latitude;
+    public double Latitude { get; set; }
 
     /// <summary>
     /// Gets or sets the longitude coordinate of the point.
     /// </summary>
-    public double Longitude { get; set; } = longitude;
+    public double Longitude { get; set; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GeoPoint"/> class.
+    /// </summary>
+    public GeoPoint() { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GeoPoint"/> class with specified latitude and longitude.
+    /// </summary>
+    /// <param name="latitude"></param>
+    /// <param name="longitude"></param>
+    public GeoPoint(double latitude, double longitude)
+    {
+        Latitude = latitude;
+        Longitude = longitude;
+    }
 }
