@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: ${{ vars.DOTNET_VERSION }}
       - name: Restore Milvasoft.Middlewares project dependencies
         run: dotnet restore src/Middlewares/Milvasoft.Middlewares/Milvasoft.Middlewares.csproj
       - name: Build Milvasoft.Middlewares project

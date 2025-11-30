@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: ${{ vars.DOTNET_VERSION }}
       - name: Restore Milvasoft.Attributes.Annotations project dependencies
         run: dotnet restore src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.Annotations.csproj
       - name: Build Milvasoft.Attributes.Annotations project

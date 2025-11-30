@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: ${{ vars.DOTNET_VERSION }}
       - name: Restore Milvasoft.Cryptography project dependencies
         run: dotnet restore src/Cryptography/Milvasoft.Cryptography/Milvasoft.Cryptography.csproj
       - name: Build Milvasoft.Cryptography project

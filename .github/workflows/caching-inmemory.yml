@@ -21,7 +21,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: ${{ vars.DOTNET_VERSION }}
       - name: Restore Milvasoft.Caching.InMemory project dependencies
         run: dotnet restore src/Caching/Milvasoft.Caching.InMemory/Milvasoft.Caching.InMemory.csproj
       - name: Build Milvasoft.Caching.InMemory project

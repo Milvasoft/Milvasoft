@@ -126,6 +126,44 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{96186192
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflows", "github-workflows", "{767D54D1-8789-493E-924D-169E774D01D1}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\caching-inmemory.yml = .github\workflows\caching-inmemory.yml
+		.github\workflows\caching-redis.yml = .github\workflows\caching-redis.yml
+		.github\workflows\caching.yml = .github\workflows\caching.yml
+		.github\workflows\components-attributes-annotations.yml = .github\workflows\components-attributes-annotations.yml
+		.github\workflows\components-attributes.yml = .github\workflows\components-attributes.yml
+		.github\workflows\components-cqrs.yml = .github\workflows\components-cqrs.yml
+		.github\workflows\components-rest.yml = .github\workflows\components-rest.yml
+		.github\workflows\components-swagger.yml = .github\workflows\components-swagger.yml
+		.github\workflows\components-types.yml = .github\workflows\components-types.yml
+		.github\workflows\core-multi-language.yml = .github\workflows\core-multi-language.yml
+		.github\workflows\core.yml = .github\workflows\core.yml
+		.github\workflows\cryptography.yml = .github\workflows\cryptography.yml
+		.github\workflows\dataaccess-efcore-bulk.yml = .github\workflows\dataaccess-efcore-bulk.yml
+		.github\workflows\dataaccess-efcore.yml = .github\workflows\dataaccess-efcore.yml
+		.github\workflows\dataaccess-mongodb.yml = .github\workflows\dataaccess-mongodb.yml
+		.github\workflows\fileoperations.yml = .github\workflows\fileoperations.yml
+		.github\workflows\helpers.yml = .github\workflows\helpers.yml
+		.github\workflows\identity.yml = .github\workflows\identity.yml
+		.github\workflows\interception-ef.yml = .github\workflows\interception-ef.yml
+		.github\workflows\interception.yml = .github\workflows\interception.yml
+		.github\workflows\jobscheduling.yml = .github\workflows\jobscheduling.yml
+		.github\workflows\localization-redis.yml = .github\workflows\localization-redis.yml
+		.github\workflows\localization-resx.yml = .github\workflows\localization-resx.yml
+		.github\workflows\localization.yml = .github\workflows\localization.yml
+		.github\workflows\middlewares.yml = .github\workflows\middlewares.yml
+		.github\workflows\multitenancy-efcore.yml = .github\workflows\multitenancy-efcore.yml
+		.github\workflows\multitenancy-redis.yml = .github\workflows\multitenancy-redis.yml
+		.github\workflows\multitenancy.yml = .github\workflows\multitenancy.yml
+		.github\workflows\notification-mail-smtp.yml = .github\workflows\notification-mail-smtp.yml
+		.github\workflows\notification-push-expo.yml = .github\workflows\notification-push-expo.yml
+		.github\workflows\sonar-scan.yml = .github\workflows\sonar-scan.yml
+		.github\workflows\storage-abs.yml = .github\workflows\storage-abs.yml
+		.github\workflows\storage-s3.yml = .github\workflows\storage-s3.yml
+		.github\workflows\storage.yml = .github\workflows\storage.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -332,6 +370,7 @@ Global
 		{F15ED486-177D-FB2C-8BCE-024CE630A405} = {B9F322EB-5348-4FF0-AC74-381C6470C54F}
 		{776AF223-8929-4E38-AD16-57B088020B4C} = {B9F322EB-5348-4FF0-AC74-381C6470C54F}
 		{A0D7C1C9-0334-4F34-91F4-F8D94D4A14E0} = {B9F322EB-5348-4FF0-AC74-381C6470C54F}
+		{767D54D1-8789-493E-924D-169E774D01D1} = {96186192-FAA7-4010-93A2-BF6FDC703E76}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E552B285-92CB-491D-8ACD-91C933292699}
