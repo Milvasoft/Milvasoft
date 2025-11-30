@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<None Remove="F:\MilvasoftHelper\Milvasoft\resources\milvalogo.png" />
+		<None Remove="F:\MilvasoftHelper\Milvasoft\resources\readme.md" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+	</ItemGroup>
+
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.Components.OpenApi</PackageId>
+		<Product>Milvasoft.Components.OpenApi</Product>
+		<Description>OpenApi helper components.</Description>
+		<PackageTags>openapi, filter, request, header, operation</PackageTags>
+
+	</PropertyGroup>
+
+</Project>

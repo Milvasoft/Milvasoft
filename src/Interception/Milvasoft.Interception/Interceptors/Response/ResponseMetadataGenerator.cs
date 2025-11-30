@@ -146,7 +146,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
 
         metadata.Name = property.Name.ToLowerInvariantFirst();
         metadata.Type = GetPropertyFriendlyName(property.PropertyType);
-        metadata.DefaultValue = TryGetAttribute(property, out DefaultValueAttribute defaultValueAttribute) ? defaultValueAttribute.Value : null;
+        metadata.DefaultValue = TryGetAttribute(property, out ClientDefaultValueAttribute defaultValueAttribute) ? defaultValueAttribute.Value : null;
         metadata.Info = TryGetAttribute(property, out InfoAttribute infoAttribute) ? infoAttribute.Info : null;
 
         ApplyTranslationToMetadata(metadata, callerObjectInfo.ReviewedType, property, defaultValueAttribute, infoAttribute);
@@ -288,7 +288,7 @@ public class ResponseMetadataGenerator(IServiceProvider serviceProvider) : IResp
     private void ApplyTranslationToMetadata(ResponseDataMetadata metadata,
                                             Type callerObjectType,
                                             PropertyInfo property,
-                                            DefaultValueAttribute defaultValueAttribute,
+                                            ClientDefaultValueAttribute defaultValueAttribute,
                                             InfoAttribute infoAttribute)
     {
         var translateAttribute = _interceptionOptions.TranslateMetadata ? callerObjectType.GetCustomAttribute<TranslateAttribute>() : null;

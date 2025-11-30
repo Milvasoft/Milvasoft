@@ -134,6 +134,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflows", "github-
 		.github\workflows\components-attributes-annotations.yml = .github\workflows\components-attributes-annotations.yml
 		.github\workflows\components-attributes.yml = .github\workflows\components-attributes.yml
 		.github\workflows\components-cqrs.yml = .github\workflows\components-cqrs.yml
+		.github\workflows\components-openapi.yml = .github\workflows\components-openapi.yml
 		.github\workflows\components-rest.yml = .github\workflows\components-rest.yml
 		.github\workflows\components-swagger.yml = .github\workflows\components-swagger.yml
 		.github\workflows\components-types.yml = .github\workflows\components-types.yml
@@ -163,6 +164,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflows", "github-
 		.github\workflows\storage-s3.yml = .github\workflows\storage-s3.yml
 		.github\workflows\storage.yml = .github\workflows\storage.yml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Components.OpenApi", "src\Components\Milvasoft.Components.OpenApi\Milvasoft.Components.OpenApi.csproj", "{DD83D9BC-57C2-482A-9A8F-52C513D929CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -314,6 +317,10 @@ Global
 		{A0D7C1C9-0334-4F34-91F4-F8D94D4A14E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0D7C1C9-0334-4F34-91F4-F8D94D4A14E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0D7C1C9-0334-4F34-91F4-F8D94D4A14E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD83D9BC-57C2-482A-9A8F-52C513D929CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD83D9BC-57C2-482A-9A8F-52C513D929CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD83D9BC-57C2-482A-9A8F-52C513D929CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD83D9BC-57C2-482A-9A8F-52C513D929CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -371,6 +378,7 @@ Global
 		{776AF223-8929-4E38-AD16-57B088020B4C} = {B9F322EB-5348-4FF0-AC74-381C6470C54F}
 		{A0D7C1C9-0334-4F34-91F4-F8D94D4A14E0} = {B9F322EB-5348-4FF0-AC74-381C6470C54F}
 		{767D54D1-8789-493E-924D-169E774D01D1} = {96186192-FAA7-4010-93A2-BF6FDC703E76}
+		{DD83D9BC-57C2-482A-9A8F-52C513D929CD} = {59BDBA81-3527-48FB-A8D0-7891FBC7BE25}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E552B285-92CB-491D-8ACD-91C933292699}

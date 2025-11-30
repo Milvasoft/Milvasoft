@@ -16,6 +16,7 @@
 	  <ProjectReference Include="..\Caching\Milvasoft.Caching.InMemory\Milvasoft.Caching.InMemory.csproj" />
 	  <ProjectReference Include="..\Caching\Milvasoft.Caching.Redis\Milvasoft.Caching.Redis.csproj" />
 	  <ProjectReference Include="..\Components\Milvasoft.Components.CQRS\Milvasoft.Components.CQRS.csproj" />
+	  <ProjectReference Include="..\Components\Milvasoft.Components.OpenApi\Milvasoft.Components.OpenApi.csproj" />
 	  <ProjectReference Include="..\Components\Milvasoft.Components.Swagger\Milvasoft.Components.Swagger.csproj" />
 	  <ProjectReference Include="..\DataAccess\Milvasoft.DataAccess.EfCore.Bulk\Milvasoft.DataAccess.EfCore.Bulk.csproj" />
 	  <ProjectReference Include="..\DataAccess\Milvasoft.DataAccess.EfCore\Milvasoft.DataAccess.EfCore.csproj" />
