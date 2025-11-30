@@ -310,7 +310,7 @@ public class ResponseMetadataGeneratorTests
         public List<SomeComplexClass> SelfReferencingListProp { get; set; }
 
         [Browsable(false)]
-        public RecursiveClass RecursiveProp { get; set; } = new();
+        public RecursiveClass RecursiveProp { get; set; }
 
         [ExcludeFromMetadata]
         public Expression<Func<AnotherComplexClass, bool>> WillBeExcluded { get; set; }
@@ -369,6 +369,19 @@ public class ResponseMetadataGeneratorTests
                 {
                     DateProp = DateTime.Now,
                     EnumProp = SomeEnumFixture.None
+                },
+                RecursiveProp = new RecursiveClass
+                {
+                    DateProp = DateTime.Now,
+                    EnumProp = SomeEnumFixture.SomeValue,
+                    SomeComplexClass = new SomeComplexClass
+                    {
+                        IntProp = 2,
+                        StringProp = "string in recursive",
+                        DecimalProp = 1234.56M,
+                        BoolProp = false,
+                        RecursiveProp = new RecursiveClass { }
+                    },
                 },
                 ListProp = []
             };

@@ -16,7 +16,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
 {
     #region Data Access
 
-    #region FirstOrDefault 
+    #region FirstOrDefault
 
     /// <summary>
     /// Returns first entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
@@ -378,7 +378,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     #region  Insert/Update/Delete
 
     /// <summary>
-    ///  Adds single entity to database synchronously. 
+    ///  Adds single entity to database synchronously.
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
@@ -392,7 +392,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     }
 
     /// <summary>
-    ///  Adds multiple entities to database synchronously. 
+    ///  Adds multiple entities to database synchronously.
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
@@ -577,7 +577,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         return InternalSaveChanges();
     }
 
-    #region Bulk 
+    #region Bulk
 
     /// <summary>
     /// Runs execute update. Adds performer and perform time to to be updated properties.
@@ -606,11 +606,11 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
                 AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
         }
 
-        return _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.SetPropertyCalls);
+        return _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.UpdateSettersBuilder);
     }
 
     /// <summary>
-    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity.
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="id"></param>
@@ -620,7 +620,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         => ExecuteDelete(i => i.Id == id, propertyBuilder);
 
     /// <summary>
-    /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity.
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="predicate"></param>
@@ -637,7 +637,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
             //Soft delete
             AddDeletionPropertyCalls(propertyBuilder);
 
-            return _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.SetPropertyCalls);
+            return _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.UpdateSettersBuilder);
         }
 
         return _dbSet.Where(predicate).ExecuteDelete();

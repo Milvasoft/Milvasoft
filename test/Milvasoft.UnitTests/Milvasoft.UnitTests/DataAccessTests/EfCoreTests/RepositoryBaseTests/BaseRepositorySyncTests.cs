@@ -1243,7 +1243,17 @@ public class BaseRepositorySyncTests
     public void Update_ForEntityList_WithValidEntity_ShouldUpdateCorrectly()
     {
         // Arrange
-        var configuration = new DataAccessConfiguration();
+        var configuration = new DataAccessConfiguration
+        {
+            DbContext = new DbContextConfiguration
+            {
+                DefaultSoftDeletionState = SoftDeletionState.Passive,
+            },
+            Repository = new RepositoryConfiguration
+            {
+                DefaultSaveChangesChoice = SaveChangesChoice.AfterEveryOperation,
+            }
+        };
         var services = GetServices(configuration);
         var dbContext = services.GetService<SomeMilvaDbContextFixture>();
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
@@ -1444,9 +1454,9 @@ public class BaseRepositorySyncTests
         // Assert
         var entitiesAfterUpdate = entityRepository.GetAll(i => i.Id == 1 || i.Id == 2);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("somestring1");
-        entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10M);
+        entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10);
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("somestring2");
-        entitiesAfterUpdate[1].SomeDecimalProp.Should().Be(20M);
+        entitiesAfterUpdate[1].SomeDecimalProp.Should().Be(20);
     }
 
     [Fact]
@@ -1473,9 +1483,9 @@ public class BaseRepositorySyncTests
         // Assert
         var entitiesAfterUpdate = entityRepository.GetAll(i => i.Id == 1 || i.Id == 2);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
-        entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10M);
+        entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10);
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
-        entitiesAfterUpdate[1].SomeDecimalProp.Should().Be(20M);
+        entitiesAfterUpdate[1].SomeDecimalProp.Should().Be(20);
     }
 
     #endregion
@@ -1746,15 +1756,13 @@ public class BaseRepositorySyncTests
             Name = "john",
             Price = 10M
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> expectedExpression = i => i;
 
         // Act
         var result = entityRepository.GetUpdatablePropertiesBuilder(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(expectedExpression, result.SetPropertyCalls);
-
-        equality.Should().BeTrue();
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().BeEmpty();
     }
 
     [Fact]
@@ -1801,16 +1809,15 @@ public class BaseRepositorySyncTests
             Name = "john",
             UpdateDate = now
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
 
         // Act
         var result = entityRepository.GetUpdatablePropertiesBuilder(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
-        equality.Should().BeFalse();
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModificationDate);
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModifierUserName);
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().NotBeEmpty();
+        result.SetPropertyCallsLog.Should().NotContain(EntityPropertyNames.LastModificationDate);
+        result.SetPropertyCallsLog.Should().NotContain(EntityPropertyNames.LastModifierUserName);
     }
 
     [Fact]
@@ -1833,15 +1840,14 @@ public class BaseRepositorySyncTests
             Name = "john",
             UpdateDate = now
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
 
         // Act
         var result = entityRepository.GetUpdatablePropertiesBuilder(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
-        equality.Should().BeFalse();
-        result.SetPropertyCalls.Body.ToString().Should().Contain(EntityPropertyNames.LastModificationDate);
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().NotBeEmpty();
+        result.SetPropertyCallsLog.Should().Contain(EntityPropertyNames.LastModificationDate);
     }
 
     [Fact]
@@ -1869,16 +1875,15 @@ public class BaseRepositorySyncTests
             Name = "john",
             UpdateDate = now
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
 
         // Act
         var result = entityRepository.GetUpdatablePropertiesBuilder(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
-        equality.Should().BeFalse();
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModificationDate);
-        result.SetPropertyCalls.Body.ToString().Should().Contain(EntityPropertyNames.LastModifierUserName);
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().NotBeEmpty();
+        result.SetPropertyCallsLog.Should().NotContain(EntityPropertyNames.LastModificationDate);
+        result.SetPropertyCallsLog.Should().Contain(EntityPropertyNames.LastModifierUserName);
     }
 
     #endregion

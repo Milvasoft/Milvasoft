@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32112.339
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milvasoft.Helpers", "src\Milvasoft.Helpers\Milvasoft.Helpers.csproj", "{49A1B0F8-BAC8-433A-A5B8-737E28A5AFA6}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -117,6 +117,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Storage.S3", "src\FileOperations\Milvasoft.Storage.S3\Milvasoft.Storage.S3.csproj", "{776AF223-8929-4E38-AD16-57B088020B4C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Milvasoft.Storage.Abs", "src\FileOperations\Milvasoft.Storage.Abs\Milvasoft.Storage.Abs.csproj", "{A0D7C1C9-0334-4F34-91F4-F8D94D4A14E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{96186192-FAA7-4010-93A2-BF6FDC703E76}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		packagereadme.md = packagereadme.md
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

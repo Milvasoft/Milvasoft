@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Milvasoft.Components.Swagger.Attributes;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;

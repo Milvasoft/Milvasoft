@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text.RegularExpressions;
 
@@ -36,13 +36,7 @@ public class ReApplyOptionalRouteParameterOperationFilter : IOperationFilter
 
             var parameter = operation.Parameters.FirstOrDefault(p => p.In == ParameterLocation.Path && p.Name == name);
 
-            if (parameter != null)
-            {
-                parameter.AllowEmptyValue = true;
-                parameter.Description = "Must check \"Send empty value\" or Swagger passes a comma for empty values otherwise";
-                parameter.Required = false;
-                parameter.Schema.Nullable = true;
-            }
+            parameter?.Description = "Must check \"Send empty value\" or Swagger passes a comma for empty values otherwise";
         }
     }
 }

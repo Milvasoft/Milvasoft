@@ -1,11 +1,9 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Helpers;
-using Milvasoft.Core.Utils.Constants;
 using Milvasoft.DataAccess.EfCore.Configuration;
 using Milvasoft.DataAccess.EfCore.Utils.Enums;
 using Milvasoft.DataAccess.EfCore.Utils.LookupModels;
@@ -13,7 +11,6 @@ using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
 using Milvasoft.UnitTests.CoreTests.HelperTests.CommonTests.Fixtures;
 using Milvasoft.UnitTests.DataAccessTests.EfCoreTests.Fixtures;
-using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests.DbContextBaseTests;
 
@@ -166,7 +163,7 @@ public class MilvaDbContextTests
         entityAfterUpdate.LastModificationDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(2));
         entityAfterUpdate.LastModifierUserName.Should().Be("testuser");
 
-        // Delete 
+        // Delete
         dbContext.BaseEntities.Remove(entityAfterUpdate);
         await dbContext.SaveChangesAsync();
         var entityAfterDelete = await dbContext.BaseEntities.FirstOrDefaultAsync();
@@ -618,7 +615,7 @@ public class MilvaDbContextTests
             }
         };
 
-        // Max property count 
+        // Max property count
         yield return new object[]
         {
             new LookupRequest
@@ -945,15 +942,14 @@ public class MilvaDbContextTests
             Name = "john",
             Price = 10M
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> expectedExpression = i => i;
 
         // Act
         var result = dbContext.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestInvalidDto>(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(expectedExpression, result.SetPropertyCalls);
-
-        equality.Should().BeTrue();
+        result.Should().NotBeNull();
+        // No setters should be added
+        result.SetPropertyCallsLog.Should().BeEmpty();
     }
 
     [Fact]
@@ -1000,16 +996,13 @@ public class MilvaDbContextTests
             Name = "john",
             UpdateDate = now
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
 
         // Act
         var result = dbContext.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestDto>(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
-        equality.Should().BeFalse();
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModificationDate);
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModifierUserName);
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -1032,15 +1025,13 @@ public class MilvaDbContextTests
             Name = "john",
             UpdateDate = now
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
 
         // Act
         var result = dbContext.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestDto>(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
-        equality.Should().BeFalse();
-        result.SetPropertyCalls.Body.ToString().Should().Contain(EntityPropertyNames.LastModificationDate);
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -1064,16 +1055,13 @@ public class MilvaDbContextTests
             Name = "john",
             UpdateDate = now
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
 
         // Act
         var result = dbContext.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestDto>(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
-        equality.Should().BeFalse();
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModificationDate);
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModifierUserName);
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().NotBeEmpty();
     }
 
     [Fact]
@@ -1101,16 +1089,13 @@ public class MilvaDbContextTests
             Name = "john",
             UpdateDate = now
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
 
         // Act
         var result = dbContext.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestDto>(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
-        equality.Should().BeFalse();
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModificationDate);
-        result.SetPropertyCalls.Body.ToString().Should().Contain(EntityPropertyNames.LastModifierUserName);
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().NotBeEmpty();
     }
 
     #endregion

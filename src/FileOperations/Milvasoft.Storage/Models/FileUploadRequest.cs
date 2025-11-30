@@ -106,6 +106,7 @@ public record FileUploadRequest
     /// Converts data URI formatted base64 string to IFormFile.
     /// </summary>
     /// <returns></returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1859:Use concrete types when possible for improved performance", Justification = "<Pending>")]
     private IFormFile ConvertToFormFile()
     {
         if (string.IsNullOrEmpty(FileAsBase64))

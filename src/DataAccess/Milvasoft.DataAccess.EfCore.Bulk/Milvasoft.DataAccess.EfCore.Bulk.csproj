@@ -7,6 +7,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
+		<PackageReference Include="EFCore.BulkExtensions.Dotnet10" Version="10.0.0-rc.2.25502.107" />
 		<PackageReference Include="Fody" Version="6.9.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -14,10 +15,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.Identity" Version="1.17.0" />
-		<PackageReference Include="EFCore.BulkExtensions" Version="9.0.2" />
+		<PackageReference Include="Azure.Identity" Version="1.17.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Abstractions" Version="10.0.0" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<ProjectReference Include="..\Milvasoft.DataAccess.EfCore\Milvasoft.DataAccess.EfCore.csproj" />
 	</ItemGroup>
@@ -26,7 +27,7 @@
 
 	<PropertyGroup>
 
-		<PackageId>Milvasoft.DataAccess.EfCore.Bulk</PackageId>	
+		<PackageId>Milvasoft.DataAccess.EfCore.Bulk</PackageId>
 		<Product>Milvasoft.DataAccess.EfCore.Bulk</Product>
 		<Description>Entity Framework Core Bulk helpers. </Description>
 		<PackageTags>efcore,bulk,ef,dbcontext,pooling,auditing,sql,optimisation,performance</PackageTags>

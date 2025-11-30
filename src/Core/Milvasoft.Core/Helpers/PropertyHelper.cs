@@ -203,7 +203,7 @@ public static partial class CommonHelper
     {
         var entityType = typeof(T);
 
-        var parameter = Expression.Parameter(entityType);
+        var parameter = Expression.Parameter(entityType, "i");
 
         return Expression.Lambda<Func<T, TPropertyType>>(Expression.Convert(Expression.Property(parameter, propertyName), typeof(TPropertyType)), parameter);
     }

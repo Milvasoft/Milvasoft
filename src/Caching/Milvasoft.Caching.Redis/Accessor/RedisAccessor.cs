@@ -185,7 +185,7 @@ public partial class RedisAccessor : IRedisAccessor
     /// <param name="value"></param>
     /// <param name="expiration"></param>
     /// <returns></returns>
-    public bool Set(string key, object value, TimeSpan? expiration) => _database.StringSet(key, ToJson(value), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration);
+    public bool Set(string key, object value, TimeSpan? expiration) => _database.StringSet(key, ToJson(value), new Expiration(_useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration.Value));
 
     /// <summary>
     /// Removes <paramref name="key"/> and value.
@@ -194,7 +194,7 @@ public partial class RedisAccessor : IRedisAccessor
     public bool Remove(string key) => _database.KeyDelete(key);
 
     /// <summary>
-    /// Checks if there is a <paramref name="key"/> in database. 
+    /// Checks if there is a <paramref name="key"/> in database.
     /// </summary>
     /// <param name="key"></param>
     public bool KeyExists(string key) => _database.KeyExists(key);

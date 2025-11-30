@@ -23,6 +23,6 @@ public static class RegexHelper
     /// <returns><c>true</c> if the input matches the regex; otherwise, <c>false</c>.</returns>
     public static bool MatchRegex(this string input, string regexString) => !string.IsNullOrWhiteSpace(input)
                                                                             && regexString != null
-                                                                            && new Regex(regexString, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100)).Match(input).Success;
+                                                                            && new Regex(regexString, RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(100)).IsMatch(input);
 
 }

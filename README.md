@@ -11,7 +11,7 @@
 
 <h3 align="center">Milvasoft library helps you to create your .Net projects in the simplest way. </h3>
 <h4 align="center">It is not a framework. It is a library that brings together many components and provides ease of use for some concepts.</h4>
-<h4 align="center">Only supports .Net 9 for now! For .Net 8 versions see versions 8.x.x (no longer supported). </h4>
+<h4 align="center">Only supports .Net 10 for now! For .Net 9 versions see versions 9.x.x (no longer supported). </h4>
 
 <br>
 

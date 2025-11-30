@@ -997,15 +997,13 @@ public class MilvaEfExtensionsTests
             Name = "john",
             Price = 10M
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> expectedExpression = i => i;
 
         // Act
         var result = dto.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestInvalidDto>();
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(expectedExpression, result.SetPropertyCalls);
-
-        equality.Should().BeTrue();
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().BeEmpty();
     }
 
     [Fact]
@@ -1032,20 +1030,19 @@ public class MilvaEfExtensionsTests
             Name = "john",
             UpdateDate = now
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
 
         // Act
         var result = dto.GetUpdatablePropertiesBuilder<RestTestEntityFixture, UpdatedPropsTestDto>();
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
-        equality.Should().BeFalse();
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(nameof(UpdatedPropsTestDto.Price));
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(nameof(UpdatedPropsTestDto.Type));
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(nameof(UpdatedPropsTestDto.Priority));
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(nameof(UpdatedPropsTestDto.Id));
-        result.SetPropertyCalls.Body.ToString().Should().Contain(nameof(UpdatedPropsTestDto.Name));
-        result.SetPropertyCalls.Body.ToString().Should().Contain(nameof(UpdatedPropsTestDto.UpdateDate));
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().NotBeEmpty();
+        result.SetPropertyCallsLog.Should().NotContain(nameof(UpdatedPropsTestDto.Price));
+        result.SetPropertyCallsLog.Should().NotContain(nameof(UpdatedPropsTestDto.Type));
+        result.SetPropertyCallsLog.Should().NotContain(nameof(UpdatedPropsTestDto.Priority));
+        result.SetPropertyCallsLog.Should().NotContain(nameof(UpdatedPropsTestDto.Id));
+        result.SetPropertyCallsLog.Should().Contain(nameof(UpdatedPropsTestDto.Name));
+        result.SetPropertyCallsLog.Should().Contain(nameof(UpdatedPropsTestDto.UpdateDate));
     }
 
     #endregion
@@ -1132,6 +1129,7 @@ public class MilvaEfExtensionsTests
     public void FindUpdatablePropertiesAndAct_WithDtoIsNull_ShouldDoNothing()
     {
         // Arrange
+        var mockValidator = new Mock<UpdatedPropsTestDto>();
         var mockValidatorForAction = new Mock<Action<PropertyInfo, object>>();
 
         // Act

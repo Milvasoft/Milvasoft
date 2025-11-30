@@ -786,7 +786,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                 AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
         }
 
-        return _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.SetPropertyCalls, cancellationToken: cancellationToken);
+        return _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.UpdateSettersBuilder, cancellationToken: cancellationToken);
     }
 
     /// <summary>
@@ -820,7 +820,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
             //Soft delete
             AddDeletionPropertyCalls(propertyBuilder);
 
-            return _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.SetPropertyCalls, cancellationToken: cancellationToken);
+            return _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.UpdateSettersBuilder, cancellationToken: cancellationToken);
         }
 
         return _dbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken: cancellationToken);
@@ -875,8 +875,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                               .Entries<TEntity>()
                               .FirstOrDefault(e => e.Entity.GetUniqueIdentifier().Equals(keyValue));
 
-        if (entry is not null)
-            entry.State = EntityState.Detached;
+        entry?.State = EntityState.Detached;
     }
 
     /// <summary>

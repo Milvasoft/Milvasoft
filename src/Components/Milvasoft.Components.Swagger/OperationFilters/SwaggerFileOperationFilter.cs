@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Milvasoft.Components.Swagger.OperationFilters;
@@ -27,7 +27,7 @@ public class SwaggerFileOperationFilter : IOperationFilter
         {
             operation.RequestBody.Content[fileUploadMime].Schema.Properties.Add(fileParam.Name, new OpenApiSchema()
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
                 Format = "binary",
                 Description = "File to be upload."
             });

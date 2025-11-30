@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.EntityBases.Abstract;
@@ -406,7 +405,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetFirstOrDefaultAsync();
 
         // Assert
@@ -425,7 +424,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetFirstOrDefaultAsync(i => i.SomeDecimalProp > 20M);
 
         // Assert
@@ -445,7 +444,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetFirstOrDefaultAsync(null, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -469,7 +468,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetFirstOrDefaultAsync(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -493,7 +492,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetFirstOrDefaultAsync(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -518,7 +517,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         Func<Task> act = async () => await entityRepository.GetSingleOrDefaultAsync();
 
         // Assert
@@ -535,7 +534,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetSingleOrDefaultAsync(i => i.SomeDecimalProp > 20M);
 
         // Assert
@@ -555,7 +554,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetSingleOrDefaultAsync(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -579,7 +578,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetSingleOrDefaultAsync(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -604,7 +603,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetByIdAsync(1);
 
         // Assert
@@ -623,7 +622,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetByIdAsync(1, i => i.SomeDecimalProp > 20M);
 
         // Assert
@@ -640,7 +639,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetByIdAsync(3, i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -664,7 +663,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetByIdAsync(3, i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -689,7 +688,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync();
 
         // Assert
@@ -708,7 +707,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(i => i.SomeDecimalProp > 10M);
 
         // Assert
@@ -727,7 +726,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -751,7 +750,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -782,7 +781,7 @@ public class BaseRepositoryAsyncTests
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = Components.Rest.Enums.AggregationType.Sum }] }
         };
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(listRequest);
 
         // Assert
@@ -816,7 +815,7 @@ public class BaseRepositoryAsyncTests
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = Components.Rest.Enums.AggregationType.Sum }] }
         };
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(listRequest, i => i.SomeDecimalProp > 10M);
 
         // Assert
@@ -850,7 +849,7 @@ public class BaseRepositoryAsyncTests
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = Components.Rest.Enums.AggregationType.Sum }] }
         };
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(listRequest, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -889,7 +888,7 @@ public class BaseRepositoryAsyncTests
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = Components.Rest.Enums.AggregationType.Sum }] }
         };
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(listRequest, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -925,7 +924,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetSomeAsync(2);
 
         // Assert
@@ -944,7 +943,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetSomeAsync(1, i => i.SomeDecimalProp > 10M);
 
         // Assert
@@ -963,7 +962,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetSomeAsync(1, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -987,7 +986,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetSomeAsync(3, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -1017,7 +1016,7 @@ public class BaseRepositoryAsyncTests
 
         SomeFullAuditableEntityFixture entity = null;
 
-        // Act 
+        // Act
         Func<Task> act = async () => await entityRepository.AddAsync(entity);
 
         // Assert
@@ -1042,7 +1041,7 @@ public class BaseRepositoryAsyncTests
             SomeStringProp = "somestring1"
         };
 
-        // Act 
+        // Act
         await entityRepository.AddAsync(entity);
         var addedEntity = await entityRepository.GetByIdAsync(1);
 
@@ -1067,7 +1066,7 @@ public class BaseRepositoryAsyncTests
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         await entityRepository.AddRangeAsync(entities);
         var count = await dbContext.FullAuditableEntities.CountAsync();
 
@@ -1101,7 +1100,7 @@ public class BaseRepositoryAsyncTests
             }
         };
 
-        // Act 
+        // Act
         await entityRepository.AddRangeAsync(entities);
         var count = await dbContext.FullAuditableEntities.CountAsync();
         var addedEntity = await entityRepository.GetByIdAsync(1);
@@ -1128,7 +1127,7 @@ public class BaseRepositoryAsyncTests
 
         SomeFullAuditableEntityFixture entity = null;
 
-        // Act 
+        // Act
         Func<Task> act = async () => await entityRepository.UpdateAsync(entity);
 
         // Assert
@@ -1153,7 +1152,7 @@ public class BaseRepositoryAsyncTests
             SomeStringProp = "somestring1"
         };
 
-        // Act 
+        // Act
         Func<Task> act = async () => await entityRepository.UpdateAsync(entity);
 
         // Assert
@@ -1172,7 +1171,7 @@ public class BaseRepositoryAsyncTests
 
         var entity = await entityRepository.GetByIdAsync(1);
 
-        // Act 
+        // Act
         entity.SomeStringProp = "stringpropupdated";
         await entityRepository.UpdateAsync(entity);
 
@@ -1193,7 +1192,7 @@ public class BaseRepositoryAsyncTests
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         await entityRepository.UpdateAsync(entities);
         var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
 
@@ -1232,7 +1231,7 @@ public class BaseRepositoryAsyncTests
             }
         ];
 
-        // Act 
+        // Act
         Func<Task> act = async () => await entityRepository.UpdateAsync(entities);
 
         // Assert
@@ -1251,7 +1250,7 @@ public class BaseRepositoryAsyncTests
 
         var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[1].SomeStringProp = "stringpropupdated";
         await entityRepository.UpdateAsync(entities);
@@ -1276,7 +1275,7 @@ public class BaseRepositoryAsyncTests
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         Func<Task> act = async () => await entityRepository.UpdateAsync(entity, default, projections);
 
         // Assert
@@ -1303,7 +1302,7 @@ public class BaseRepositoryAsyncTests
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         Func<Task> act = async () => await entityRepository.UpdateAsync(entity, default, projections);
 
         // Assert
@@ -1323,7 +1322,7 @@ public class BaseRepositoryAsyncTests
         var entity = await entityRepository.GetByIdAsync(1);
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = null;
 
-        // Act 
+        // Act
         entity.SomeStringProp = "stringpropupdated";
         entity.SomeDecimalProp = 20M;
         await entityRepository.UpdateAsync(entity, default, projections);
@@ -1348,7 +1347,7 @@ public class BaseRepositoryAsyncTests
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         entity.SomeStringProp = "stringpropupdated";
         entity.SomeDecimalProp = 20M;
         await entityRepository.UpdateAsync(entity, default, projections);
@@ -1373,7 +1372,7 @@ public class BaseRepositoryAsyncTests
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
         await entityRepository.UpdateAsync(entities, default, projections);
 
@@ -1397,24 +1396,24 @@ public class BaseRepositoryAsyncTests
         List<SomeFullAuditableEntityFixture> entities =
         [
             new SomeFullAuditableEntityFixture()
-                    {
-                        Id = 7,
-                        SomeDateProp = DateTime.Now.AddYears(1),
-                        SomeDecimalProp = 10M,
-                        SomeStringProp = "somestring1"
-                    },
-                    new SomeFullAuditableEntityFixture()
-                    {
-                        Id = 8,
-                        SomeDateProp = DateTime.Now.AddYears(1),
-                        SomeDecimalProp = 10M,
-                        SomeStringProp = "somestring1"
-                    }
+            {
+                Id = 7,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+                SomeStringProp = "somestring1"
+            },
+            new SomeFullAuditableEntityFixture()
+            {
+                Id = 8,
+                SomeDateProp = DateTime.Now.AddYears(1),
+                SomeDecimalProp = 10M,
+                SomeStringProp = "somestring1"
+            }
         ];
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         Func<Task> act = async () => await entityRepository.UpdateAsync(entities, default, projections);
 
         // Assert
@@ -1434,7 +1433,7 @@ public class BaseRepositoryAsyncTests
         var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = null;
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[0].SomeDecimalProp = 20M;
         entities[1].SomeStringProp = "stringpropupdated";
@@ -1463,7 +1462,7 @@ public class BaseRepositoryAsyncTests
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[0].SomeDecimalProp = 20M;
         entities[1].SomeStringProp = "stringpropupdated";
@@ -1494,7 +1493,7 @@ public class BaseRepositoryAsyncTests
 
         SomeFullAuditableEntityFixture entity = null;
 
-        // Act 
+        // Act
         Func<Task> act = async () => await entityRepository.DeleteAsync(entity);
 
         // Assert
@@ -1519,7 +1518,7 @@ public class BaseRepositoryAsyncTests
             SomeStringProp = "somestring1"
         };
 
-        // Act 
+        // Act
         Func<Task> act = async () => await entityRepository.DeleteAsync(entity);
 
         // Assert
@@ -1538,7 +1537,7 @@ public class BaseRepositoryAsyncTests
 
         var entity = await entityRepository.GetByIdAsync(1);
 
-        // Act 
+        // Act
         await entityRepository.DeleteAsync(entity);
 
         // Assert
@@ -1558,7 +1557,7 @@ public class BaseRepositoryAsyncTests
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         await entityRepository.DeleteAsync(entities);
         var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
 
@@ -1597,7 +1596,7 @@ public class BaseRepositoryAsyncTests
             }
         ];
 
-        // Act 
+        // Act
         Func<Task> act = async () => await entityRepository.DeleteAsync(entities);
 
         // Assert
@@ -1616,7 +1615,7 @@ public class BaseRepositoryAsyncTests
 
         var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
 
-        // Act 
+        // Act
         await entityRepository.DeleteAsync(entities);
 
         // Assert
@@ -1645,7 +1644,7 @@ public class BaseRepositoryAsyncTests
         newEntities[1].Id = 6;
         newEntities[1].SomeStringProp = "stringpropupdated";
 
-        // Act 
+        // Act
         await entityRepository.ReplaceOldsWithNewsAsync(entities, newEntities);
 
         // Assert
@@ -1673,7 +1672,7 @@ public class BaseRepositoryAsyncTests
         foreach (var entity in newEntities)
             entity.SomeStringProp = "stringpropupdated";
 
-        // Act 
+        // Act
         await entityRepository.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(entities, newEntities);
 
         // Assert
@@ -1696,7 +1695,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAsync(dbContext);
 
-        // Act 
+        // Act
         await entityRepository.RemoveAllAsync();
 
         // Assert
@@ -1714,7 +1713,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        // Act 
+        // Act
         await entityRepository.RemoveAllAsync();
 
         // Assert
@@ -1727,7 +1726,7 @@ public class BaseRepositoryAsyncTests
     #region GetUpdatablePropertiesBuilder
 
     [Fact]
-    public void GetUpdatablePropertiesBuilder_WithInvalidDto_ShouldReturnNull()
+    public async Task GetUpdatablePropertiesBuilder_WithInvalidDto_ShouldReturnNull()
     {
         // Arrange
         var dataAccessConfiguration = new DataAccessConfiguration
@@ -1746,19 +1745,17 @@ public class BaseRepositoryAsyncTests
             Name = "john",
             Price = 10M
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> expectedExpression = i => i;
 
         // Act
         var result = entityRepository.GetUpdatablePropertiesBuilder(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(expectedExpression, result.SetPropertyCalls);
-
-        equality.Should().BeTrue();
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().BeEmpty();
     }
 
     [Fact]
-    public void GetUpdatablePropertiesBuilder_WithValidDtoButNull_ShouldReturnNull()
+    public async Task GetUpdatablePropertiesBuilder_WithValidDtoButNull_ShouldReturnNull()
     {
         // Arrange
         var dataAccessConfiguration = new DataAccessConfiguration
@@ -1781,7 +1778,7 @@ public class BaseRepositoryAsyncTests
     }
 
     [Fact]
-    public void GetUpdatablePropertiesBuilder_WithAuditModificationDateAndModifierUserFalseInDataAccessConfiguration_ShouldReturnCorrectResult()
+    public async Task GetUpdatablePropertiesBuilder_WithAuditModificationDateAndModifierUserFalseInDataAccessConfiguration_ShouldReturnCorrectResult()
     {
         // Arrange
         var dataAccessConfiguration = new DataAccessConfiguration
@@ -1801,20 +1798,19 @@ public class BaseRepositoryAsyncTests
             Name = "john",
             UpdateDate = now
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
 
         // Act
         var result = entityRepository.GetUpdatablePropertiesBuilder(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
-        equality.Should().BeFalse();
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModificationDate);
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModifierUserName);
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().NotBeEmpty();
+        result.SetPropertyCallsLog.Should().NotContain(EntityPropertyNames.LastModificationDate);
+        result.SetPropertyCallsLog.Should().NotContain(EntityPropertyNames.LastModifierUserName);
     }
 
     [Fact]
-    public void GetUpdatablePropertiesBuilder_WithAuditModificationDateTrueInDataAccessConfiguration_ShouldReturnCorrectResult()
+    public async Task GetUpdatablePropertiesBuilder_WithAuditModificationDateTrueInDataAccessConfiguration_ShouldReturnCorrectResult()
     {
         // Arrange
         var dataAccessConfiguration = new DataAccessConfiguration
@@ -1833,19 +1829,18 @@ public class BaseRepositoryAsyncTests
             Name = "john",
             UpdateDate = now
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
 
         // Act
         var result = entityRepository.GetUpdatablePropertiesBuilder(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
-        equality.Should().BeFalse();
-        result.SetPropertyCalls.Body.ToString().Should().Contain(EntityPropertyNames.LastModificationDate);
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().NotBeEmpty();
+        result.SetPropertyCallsLog.Should().Contain(EntityPropertyNames.LastModificationDate);
     }
 
     [Fact]
-    public void GetUpdatablePropertiesBuilder_WithAuditModifierUserTrueAndGetCurrentUsernameMethodIsNotNullInDataAccessConfiguration_ShouldReturnCorrectResult()
+    public async Task GetUpdatablePropertiesBuilder_WithAuditModifierUserTrueAndGetCurrentUsernameMethodIsNotNullInDataAccessConfiguration_ShouldReturnCorrectResult()
     {
         // Arrange
         var dataAccessConfiguration = new DataAccessConfiguration
@@ -1869,16 +1864,15 @@ public class BaseRepositoryAsyncTests
             Name = "john",
             UpdateDate = now
         };
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> notExpectedExpression = i => i;
 
         // Act
         var result = entityRepository.GetUpdatablePropertiesBuilder(dto);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(notExpectedExpression, result.SetPropertyCalls);
-        equality.Should().BeFalse();
-        result.SetPropertyCalls.Body.ToString().Should().NotContain(EntityPropertyNames.LastModificationDate);
-        result.SetPropertyCalls.Body.ToString().Should().Contain(EntityPropertyNames.LastModifierUserName);
+        result.Should().NotBeNull();
+        result.SetPropertyCallsLog.Should().NotBeEmpty();
+        result.SetPropertyCallsLog.Should().NotContain(EntityPropertyNames.LastModificationDate);
+        result.SetPropertyCallsLog.Should().Contain(EntityPropertyNames.LastModifierUserName);
     }
 
     #endregion

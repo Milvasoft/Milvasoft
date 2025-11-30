@@ -90,7 +90,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         await entityRepository.BulkAddAsync(entities);
         var count = await dbContext.FullAuditableEntities.CountAsync();
 
@@ -105,7 +105,6 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
     public async Task BulkAddAsync_WithValidEntity_ShouldAddCorrectly(QueryTrackingBehavior queryTrackingBehavior)
     {
         // Arrange
-
         await InitializeAsync(services =>
         {
             services.ConfigureMilvaDataAccess(opt =>
@@ -152,7 +151,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
             }
         };
 
-        // Act 
+        // Act
         await entityRepository.BulkAddAsync(entities);
         var count = await dbContext.FullAuditableEntities.CountAsync();
         var addedEntity = await entityRepository.GetByIdAsync(1);
@@ -213,7 +212,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
             }
         };
 
-        // Act 
+        // Act
         await entityRepository.BulkAddAsync(entities);
         var count = await dbContext.Entities.CountAsync();
         var addedEntity = await entityRepository.GetByIdAsync(1);
@@ -250,7 +249,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         await entityRepository.BulkAddWithSaveChangesAsync(entities);
         var count = await dbContext.FullAuditableEntities.CountAsync();
 
@@ -296,7 +295,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
             }
         };
 
-        // Act 
+        // Act
         await entityRepository.BulkAddWithSaveChangesAsync(entities);
         var count = await dbContext.FullAuditableEntities.CountAsync();
         var addedEntity = await entityRepository.GetByIdAsync(1);
@@ -351,7 +350,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
             }
         };
 
-        // Act 
+        // Act
         await entityRepository.BulkAddWithSaveChangesAsync(entities);
         var count = await dbContext.FullAuditableEntities.CountAsync();
 
@@ -403,7 +402,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
             }
         };
 
-        // Act 
+        // Act
         await entityRepository.BulkAddWithSaveChangesAsync(entities);
         await entityRepository.SaveChangesBulkAsync();
         var count = await dbContext.FullAuditableEntities.CountAsync();
@@ -443,7 +442,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         await entityRepository.BulkUpdateAsync(entities);
         var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
 
@@ -494,7 +493,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[1].SomeStringProp = "stringpropupdated";
         await entityRepository.BulkUpdateAsync(entities);
@@ -532,7 +531,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         await entityRepository.BulkUpdateWithSaveChangesAsync(entities);
         var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
 
@@ -567,7 +566,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[1].SomeStringProp = "stringpropupdated";
         await entityRepository.BulkUpdateWithSaveChangesAsync(entities);
@@ -608,7 +607,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         await entityRepository.BulkDeleteAsync(entities);
         var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
 
@@ -643,7 +642,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
 
-        // Act 
+        // Act
         await entityRepository.BulkDeleteAsync(entities);
 
         // Assert
@@ -693,7 +692,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
 
-        // Act 
+        // Act
         await entityRepository.BulkDeleteAsync(entities);
 
         // Assert
@@ -731,7 +730,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         await entityRepository.BulkDeleteWithSaveChangesAsync(entities);
         var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
 
@@ -766,7 +765,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
 
-        // Act 
+        // Act
         await entityRepository.BulkDeleteWithSaveChangesAsync(entities);
 
         // Assert
@@ -799,7 +798,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
 
         var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
 
-        // Act 
+        // Act
         await entityRepository.BulkDeleteWithSaveChangesAsync(entities);
 
         // Assert
@@ -841,7 +840,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
         propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
 
-        // Act 
+        // Act
         await entityRepository.ExecuteUpdateAsync(id: 5, propBuilder);
         var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
 
@@ -892,7 +891,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
         propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
 
-        // Act 
+        // Act
         await entityRepository.ExecuteUpdateAsync(1, propBuilder);
 
         // Assert
@@ -943,7 +942,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
         propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
 
-        // Act 
+        // Act
         await entityRepository.ExecuteUpdateAsync(i => i.Id == 1 || i.Id == 2, propBuilder);
 
         // Assert
@@ -984,7 +983,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         await entityRepository.ExecuteDeleteAsync(5);
         var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
 
@@ -1017,7 +1016,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         await entityRepository.ExecuteDeleteAsync(1);
 
         // Assert
@@ -1065,7 +1064,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         await entityRepository.ExecuteDeleteAsync(1);
 
         // Assert
@@ -1099,7 +1098,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         await entityRepository.ExecuteDeleteAsync(i => i.Id == 1 || i.Id == 2);
 
         // Assert
@@ -1150,7 +1149,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
         propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
 
-        // Act 
+        // Act
         await entityRepository.ExecuteDeleteAsync(i => i.Id == 1 || i.Id == 2, propBuilder);
 
         // Assert

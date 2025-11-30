@@ -234,7 +234,7 @@ public class ResponseInterceptorTests
     }
     public class RecursiveClass
     {
-        public SomeComplexClass SomeComplexClass { get; set; } = new();
+        public SomeComplexClass SomeComplexClass { get; set; }
     }
 
     public class SomeClass : ISomeInterface
@@ -262,6 +262,21 @@ public class ResponseInterceptorTests
                 {
                     DateProp = DateTime.Now,
                     EnumProp = SomeEnumFixture.None
+                },
+                RecursiveProp = new RecursiveClass
+                {
+                    SomeComplexClass = new SomeComplexClass
+                    {
+                        RecursiveProp = new RecursiveClass
+                        {
+
+                        },
+                        ComplexClass = new AnotherComplexClass
+                        {
+                            DateProp = DateTime.Now,
+                            EnumProp = SomeEnumFixture.None
+                        }
+                    }
                 },
                 ListProp = []
             };

@@ -16,7 +16,6 @@ public class SetPropertyBuilderTests
     {
         // Arrange
         var builder = new SetPropertyBuilder<RestTestEntityFixture>();
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> expectedExpression = i => i;
 
         // Act
         var result = builder.SetProperty(null, i => i.Id)
@@ -24,8 +23,8 @@ public class SetPropertyBuilderTests
                             .SetProperty<int>(null, null);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(expectedExpression, result.SetPropertyCalls);
-        equality.Should().BeTrue();
+        // No property calls should be recorded
+        result.SetPropertyCallsLog.Should().BeEmpty();
     }
 
     [Fact]
@@ -33,14 +32,12 @@ public class SetPropertyBuilderTests
     {
         // Arrange
         var builder = new SetPropertyBuilder<RestTestEntityFixture>();
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> expectedExpression = i => i.SetProperty(i => i.Id, i => i.Id);
 
         // Act
         var result = builder.SetProperty(i => i.Id, i => i.Id);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(expectedExpression, result.SetPropertyCalls);
-        equality.Should().BeTrue();
+        result.SetPropertyCallsLog.Should().ContainSingle().Which.Should().Be("Id");
     }
 
     #endregion
@@ -52,15 +49,13 @@ public class SetPropertyBuilderTests
     {
         // Arrange
         var builder = new SetPropertyBuilder<RestTestEntityFixture>();
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> expectedExpression = i => i;
 
         // Act
         var result = builder.SetProperty(null, i => i.UpdateDate)
                             .SetProperty<int>(null, null);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(expectedExpression, result.SetPropertyCalls);
-        equality.Should().BeTrue();
+        result.SetPropertyCallsLog.Should().BeEmpty();
     }
 
     [Fact]
@@ -68,14 +63,12 @@ public class SetPropertyBuilderTests
     {
         // Arrange
         var builder = new SetPropertyBuilder<RestTestEntityFixture>();
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> expectedExpression = i => i.SetProperty(i => i.Id, i => 1);
 
         // Act
         var result = builder.SetProperty(i => i.Id, i => 1);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(expectedExpression, result.SetPropertyCalls);
-        equality.Should().BeTrue();
+        result.SetPropertyCallsLog.Should().ContainSingle().Which.Should().Be("Id");
     }
 
     [Fact]
@@ -83,14 +76,12 @@ public class SetPropertyBuilderTests
     {
         // Arrange
         var builder = new SetPropertyBuilder<RestTestEntityFixture>();
-        Expression<Func<SetPropertyCalls<RestTestEntityFixture>, SetPropertyCalls<RestTestEntityFixture>>> expectedExpression = i => i.SetProperty(i => i.UpdateDate, i => null);
 
         // Act
         var result = builder.SetProperty(i => i.UpdateDate, i => null);
 
         // Assert
-        var equality = ExpressionEqualityComparer.Instance.Equals(expectedExpression, result.SetPropertyCalls);
-        equality.Should().BeTrue();
+        result.SetPropertyCallsLog.Should().ContainSingle().Which.Should().Be("UpdateDate");
     }
 
     #endregion

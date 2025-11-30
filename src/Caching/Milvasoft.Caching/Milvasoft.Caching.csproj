@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,11 +20,11 @@
 
 	<PropertyGroup>
 
-		<PackageId>Milvasoft.Caching</PackageId>	
+		<PackageId>Milvasoft.Caching</PackageId>
 		<Product>Milvasoft.Caching</Product>
 		<Description>Caching operations.</Description>
 		<PackageTags>cache,caching,inmemory,memory,redis</PackageTags>
-		
+
 	</PropertyGroup>
 
 </Project>

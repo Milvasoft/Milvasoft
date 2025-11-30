@@ -33,5 +33,3 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 
 await app.RunAsync();
-
-public partial class Program;

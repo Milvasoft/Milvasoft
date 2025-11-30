@@ -19,15 +19,15 @@ public static class DigitTokenProvider<TUser, TKey> where TUser : MilvaUser<TKey
     /// <param name="purpose">The purpose the token will be used for.</param>
     /// <param name="user">The user a token should be generated for. </param>
     /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, containing the token for the specified 
+    /// The <see cref="Task"/> that represents the asynchronous operation, containing the token for the specified
     /// <paramref name="user"/> and <paramref name="purpose"/>.
     /// </returns>
     /// <remarks>
     /// The <paramref name="purpose"/> parameter allows a token generator to be used for multiple types of token whilst
-    /// insuring a token for one purpose cannot be used for another. For example if you specified a purpose of "Email" 
+    /// insuring a token for one purpose cannot be used for another. For example if you specified a purpose of "Email"
     /// and validated it with the same purpose a token with the purpose of TOTP would not pass the check even if it was
     /// for the same user.
-    /// 
+    ///
     /// Implementations of <see cref="IUserTwoFactorTokenProvider{TUser}"/> should validate that purpose is not null or empty to
     /// help with token separation.
     /// </remarks>
@@ -70,14 +70,14 @@ public static class DigitTokenProvider<TUser, TKey> where TUser : MilvaUser<TKey
     /// <param name="purpose">The purpose the token will be generated for.</param>
     /// <param name="user">The user a token should be generated for.</param>
     /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, containing a constant modifier for the specified 
+    /// The <see cref="Task"/> that represents the asynchronous operation, containing a constant modifier for the specified
     /// <paramref name="user"/> and <paramref name="purpose"/>.
     /// </returns>
     private static string GetUserModifier(Purpose purpose, TUser user) => purpose switch
     {
-        Purpose.EmailChange => string.Join(':', nameof(MilvaUser<int>.Email), purpose, user.Email),
+        Purpose.EmailChange => string.Join(':', nameof(MilvaUser<>.Email), purpose, user.Email),
         Purpose.EmailConfirm => string.Join(':', _totp, purpose, user.PhoneNumber),
-        Purpose.PasswordReset => string.Join(':', nameof(MilvaUser<int>.PhoneNumber), purpose),
+        Purpose.PasswordReset => string.Join(':', nameof(MilvaUser<>.PhoneNumber), purpose),
         _ => string.Empty,
     };
 }

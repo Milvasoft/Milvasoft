@@ -151,7 +151,7 @@ public partial class RedisAccessor
     public Task<bool> SetAsync(string key, object value, TimeSpan? expiration)
     {
         if (expiration.HasValue)
-            return _database.StringSetAsync(key, ToJson(value), _useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration);
+            return _database.StringSetAsync(key, ToJson(value), new Expiration(_useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration.Value));
         else
             return _database.StringSetAsync(key, ToJson(value));
     }
@@ -179,7 +179,7 @@ public partial class RedisAccessor
         => _database.KeyDeleteAsync(keys: [.. keys.Select(i => new RedisKey(i))]);
 
     /// <summary>
-    /// Checks if there is a <paramref name="key"/> in database. 
+    /// Checks if there is a <paramref name="key"/> in database.
     /// </summary>
     /// <param name="key"></param>
     public Task<bool> KeyExistsAsync(string key)
@@ -230,7 +230,7 @@ public partial class RedisAccessor
 
     /// <summary>
     /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
-    /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
+    /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key.
     /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
     /// </summary>
     /// <param name="action"></param>
@@ -260,7 +260,7 @@ public partial class RedisAccessor
 
     /// <summary>
     /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
-    /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
+    /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key.
     /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
     /// </summary>
     /// <param name="action"></param>
