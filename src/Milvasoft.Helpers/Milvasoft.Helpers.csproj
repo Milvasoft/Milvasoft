@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
 	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\milvalogo.png" />
@@ -41,7 +41,6 @@
 		<PackageTags>multitenancy,localization, efcore, interception, tenant,tenancy,json,file,image,helper,milvasoft,extensions,filter,request,response,test</PackageTags>
 
 	</PropertyGroup>
-
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DocumentationFile>..\Milvasoft.Helpers\Milvasoft.Helpers.xml</DocumentationFile>

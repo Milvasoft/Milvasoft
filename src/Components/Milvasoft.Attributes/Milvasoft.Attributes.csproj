@@ -16,11 +16,11 @@
 
 	<PropertyGroup>
 
-		<PackageId>Milvasoft.Attributes</PackageId>		
+		<PackageId>Milvasoft.Attributes</PackageId>
 		<Product>Milvasoft.Attributes</Product>
 		<Description>Custom validation attributes. </Description>
 		<PackageTags>attribute,validation,actionfilter,filter</PackageTags>
 
 	</PropertyGroup>
-	
+
 </Project>

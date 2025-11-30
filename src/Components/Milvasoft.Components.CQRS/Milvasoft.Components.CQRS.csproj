@@ -14,12 +14,10 @@
   </ItemGroup>
 
 	<PropertyGroup>
-
 		<PackageId>Milvasoft.Components.CQRS</PackageId>
 		<Product>Milvasoft.Components.CQRS</Product>
 		<Description>CQRS helper components.</Description>
 		<PackageTags>cqrs, command, query</PackageTags>
-
 	</PropertyGroup>
 
 </Project>

@@ -17,7 +17,6 @@
     <ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
   </ItemGroup>
 
-
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.Caching</PackageId>

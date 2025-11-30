@@ -15,7 +15,7 @@
 		<Product>Milvasoft.Components.Swagger</Product>
 		<Description>Swagger helper components.</Description>
 		<PackageTags>swagger, filter, request, header, operation</PackageTags>
-		
+
 	</PropertyGroup>
-	
+
 </Project>

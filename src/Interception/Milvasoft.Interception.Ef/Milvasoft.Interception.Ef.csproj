@@ -16,7 +16,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-	
+
   <ItemGroup>
     <ProjectReference Include="..\Milvasoft.Interception\Milvasoft.Interception.csproj" />
   </ItemGroup>
@@ -29,5 +29,5 @@
 		<PackageTags>interception, ef, dbinterception, aop, cross-cutting, log, cache</PackageTags>
 
 	</PropertyGroup>
-	
+
 </Project>

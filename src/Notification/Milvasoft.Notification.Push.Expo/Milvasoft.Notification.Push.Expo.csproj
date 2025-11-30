@@ -6,7 +6,6 @@
 	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\readme.md" />
 	</ItemGroup>
 
-
 	<ItemGroup>
 		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
 		<PackageReference Include="Fody" Version="6.9.3">

@@ -23,8 +23,6 @@
 		<ProjectReference Include="..\Milvasoft.DataAccess.EfCore\Milvasoft.DataAccess.EfCore.csproj" />
 	</ItemGroup>
 
-
-
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.DataAccess.EfCore.Bulk</PackageId>

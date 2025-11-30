@@ -25,11 +25,11 @@
 
 	<PropertyGroup>
 
-		<PackageId>Milvasoft.Caching.Redis</PackageId>	
+		<PackageId>Milvasoft.Caching.Redis</PackageId>
 		<Product>Milvasoft.Caching.Redis</Product>
 		<Description>Caching helpers for redis. </Description>
 		<PackageTags>caching,redis,cache,distributed</PackageTags>
 
 	</PropertyGroup>
-	
+
 </Project>

@@ -13,5 +13,5 @@
 	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\milvalogo.png" />
 	  <None Remove="F:\MilvasoftHelper\Milvasoft\resources\readme.md" />
 	</ItemGroup>
-	
+
 </Project>

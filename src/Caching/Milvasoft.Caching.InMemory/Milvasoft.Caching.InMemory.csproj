@@ -16,7 +16,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Milvasoft.Caching\Milvasoft.Caching.csproj" />
 	</ItemGroup>
-	
+
 	<PropertyGroup>
 		<PackageId>Milvasoft.Caching.InMemory</PackageId>
 		<Product>Milvasoft.Caching.InMemory</Product>

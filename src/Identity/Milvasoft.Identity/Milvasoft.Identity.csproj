@@ -15,7 +15,7 @@
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
 		<ProjectReference Include="..\..\Components\Milvasoft.Attributes\Milvasoft.Attributes.csproj" />
 	</ItemGroup>
-	
+
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.Identity</PackageId>

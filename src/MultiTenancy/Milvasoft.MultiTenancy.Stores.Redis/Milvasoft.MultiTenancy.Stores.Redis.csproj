@@ -27,5 +27,5 @@
 		<PackageTags>multitenancy,database,ef,redis,cache,tenant</PackageTags>
 
 	</PropertyGroup>
-	
+
 </Project>

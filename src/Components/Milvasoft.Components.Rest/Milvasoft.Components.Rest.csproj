@@ -27,7 +27,7 @@
 		<Product>Milvasoft.Components.Rest</Product>
 		<Description>Rest helper components.</Description>
 		<PackageTags>rest, api, response, request, model</PackageTags>
-		
+
 	</PropertyGroup>
 
 </Project>

@@ -20,11 +20,11 @@
 
 	<PropertyGroup>
 
-		<PackageId>Milvasoft.Cryptography</PackageId>	
+		<PackageId>Milvasoft.Cryptography</PackageId>
 		<Product>Milvasoft.Cryptography</Product>
 		<Description>Cryptography operation.</Description>
 		<PackageTags>cryptography, encrypt, decrypt, encryption</PackageTags>
 
 	</PropertyGroup>
-	
+
 </Project>

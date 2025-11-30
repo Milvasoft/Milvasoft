@@ -21,7 +21,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-	
+
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
 	  <ProjectReference Include="..\..\Cryptography\Milvasoft.Cryptography\Milvasoft.Cryptography.csproj" />

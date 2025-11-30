@@ -20,7 +20,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
 	</ItemGroup>
-	
+
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.MultiTenancy</PackageId>

@@ -36,7 +36,6 @@
 		<Using Include="Milvasoft.DataAccess.EfCore.Utils.Enums" />
 	</ItemGroup>
 
-
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.DataAccess.EfCore</PackageId>

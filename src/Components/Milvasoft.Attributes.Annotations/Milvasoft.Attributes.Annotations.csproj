@@ -1,12 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-
 		<PackageId>Milvasoft.Attributes.Annotations</PackageId>
 		<Product>Milvasoft.Attributes.Annotations</Product>
 		<Description>Custom attributes.</Description>
 		<PackageTags>attribute,validation</PackageTags>
-
 	</PropertyGroup>
 
 	<ItemGroup>
