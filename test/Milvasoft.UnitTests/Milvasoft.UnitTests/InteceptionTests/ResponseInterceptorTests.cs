@@ -204,7 +204,7 @@ public class ResponseInterceptorTests
         public int IntProp { get; set; }
 
         [MaskByRole("NotAllowed")]
-        [DefaultValue("-")]
+        [ClientDefaultValue("-")]
         public string StringProp { get; set; }
 
         [HideByRole("Hide")]

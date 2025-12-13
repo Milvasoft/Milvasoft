@@ -3,7 +3,6 @@ using Milvasoft.Attributes.Annotations;
 using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.EntityBases.Concrete.Auditing;
 using Milvasoft.Core.EntityBases.MultiTenancy;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -128,7 +127,7 @@ public class SomeModelBuilderTestEntityFixture : FullAuditableEntity<int>
     public DateTime? SomeNullableDateProp { get; set; }
     public DateTime SomeDateProp { get; set; }
 
-    [DefaultValue(1)]
+    [ClientDefaultValue(1)]
     public int SomeIntProp { get; set; }
 
     [DecimalPrecision]
@@ -177,7 +176,7 @@ public class SomeMultiTenantTestEntityFixture : FullAuditableEntityWithTenantId<
     public DateTime? SomeNullableDateProp { get; set; }
     public DateTime SomeDateProp { get; set; }
 
-    [DefaultValue(1)]
+    [ClientDefaultValue(1)]
     public int SomeIntProp { get; set; }
 
     [DecimalPrecision]

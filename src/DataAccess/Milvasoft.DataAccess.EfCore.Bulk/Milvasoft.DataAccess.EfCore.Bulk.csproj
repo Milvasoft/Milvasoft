@@ -7,7 +7,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
-		<PackageReference Include="EFCore.BulkExtensions.Dotnet10" Version="10.0.0-rc.2.25502.107" />
+		<PackageReference Include="EFCore.BulkExtensions.Dotnet10" Version="10.0.0" />
 		<PackageReference Include="Fody" Version="6.9.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,7 +16,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Azure.Identity" Version="1.17.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Abstractions" Version="10.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Abstractions" Version="10.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

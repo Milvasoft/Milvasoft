@@ -3,10 +3,10 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
-		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.14" />
-		<PackageReference Include="AWSSDK.S3" Version="4.0.13.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.1" />
+		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.17" />
+		<PackageReference Include="AWSSDK.S3" Version="4.0.14.3" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
 	</ItemGroup>
 
