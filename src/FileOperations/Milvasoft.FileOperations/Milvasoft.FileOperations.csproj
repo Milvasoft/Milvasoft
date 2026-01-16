@@ -27,6 +27,10 @@
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Update="AsyncFixer" Version="2.1.0" />
+	</ItemGroup>
+
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.FileOperations</PackageId>

@@ -10,10 +10,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="10.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="10.0.2" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.15.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
 		<ProjectReference Include="..\..\Components\Milvasoft.Attributes\Milvasoft.Attributes.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="AsyncFixer" Version="2.1.0" />
 	</ItemGroup>
 
 	<PropertyGroup>

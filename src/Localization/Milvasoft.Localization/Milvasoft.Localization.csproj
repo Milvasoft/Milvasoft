@@ -13,6 +13,10 @@
     <ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="AsyncFixer" Version="2.1.0" />
+  </ItemGroup>
+
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.Localization</PackageId>

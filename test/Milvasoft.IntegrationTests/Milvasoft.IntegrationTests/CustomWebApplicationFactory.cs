@@ -10,12 +10,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
 {
     private Respawner _respawner;
     private NpgsqlConnection _connection;
-    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder().WithImage("postgres:latest")
-                                                                               .WithDatabase("testDb")
-                                                                               .WithUsername("root")
-                                                                               .WithPassword("postgres")
-                                                                               .WithCleanUp(true)
-                                                                               .Build();
+    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder("postgres:latest").WithDatabase("testDb")
+                                                                                                .WithUsername("root")
+                                                                                                .WithPassword("postgres")
+                                                                                                .WithCleanUp(true)
+                                                                                                .Build();
 
     private const string _resetAutoIncrementQuery = @"
                 DO $$

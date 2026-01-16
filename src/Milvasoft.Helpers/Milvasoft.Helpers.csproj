@@ -6,8 +6,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.1" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="10.0.1" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.2" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="10.0.2" />
 	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
 	</ItemGroup>
 
@@ -32,6 +32,10 @@
 	  <ProjectReference Include="..\Localization\Milvasoft.Localization.Redis\Milvasoft.Localization.Redis.csproj" />
 	  <ProjectReference Include="..\Localization\Milvasoft.Localization.Resx\Milvasoft.Localization.Resx.csproj" />
 	  <ProjectReference Include="..\Middlewares\Milvasoft.Middlewares\Milvasoft.Middlewares.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="AsyncFixer" Version="2.1.0" />
 	</ItemGroup>
 
 	<PropertyGroup>

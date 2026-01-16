@@ -2,7 +2,7 @@
 
 	<ItemGroup>
 
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.26.0" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.27.0" />
 
 	</ItemGroup>
 
@@ -16,6 +16,10 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="AsyncFixer" Version="2.1.0" />
 	</ItemGroup>
 
 	<PropertyGroup>

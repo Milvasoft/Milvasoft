@@ -116,7 +116,7 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
             SomeDateTimeOffsetProp = DateTimeOffset.Now,
         };
 
-        // Act 
+        // Act
         await dbContext.ModelBuilderTestEntities.AddAsync(entity);
         Func<Task> act = async () => await dbContext.SaveChangesAsync();
 

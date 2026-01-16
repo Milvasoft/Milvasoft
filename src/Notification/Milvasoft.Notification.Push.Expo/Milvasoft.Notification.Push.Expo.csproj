@@ -14,6 +14,10 @@
 		</PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Update="AsyncFixer" Version="2.1.0" />
+	</ItemGroup>
+
 	<PropertyGroup>
 
 		<PackageId>Milvasoft.Notification.Push.Expo</PackageId>

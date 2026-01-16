@@ -17,6 +17,10 @@
 		<ProjectReference Include="..\Milvasoft.Caching\Milvasoft.Caching.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Update="AsyncFixer" Version="2.1.0" />
+	</ItemGroup>
+
 	<PropertyGroup>
 		<PackageId>Milvasoft.Caching.InMemory</PackageId>
 		<Product>Milvasoft.Caching.InMemory</Product>

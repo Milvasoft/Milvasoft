@@ -11,7 +11,7 @@ Milvasoft.Helpers
 
 Milvasoft library helps you to create your .Net projects in the simplest way.
 It is not a framework. It is a library that brings together many components and provides ease of use for some concepts.
-Only supports .Net 10 for now! For .Net 9 versions see versions 9.x.x (no longer supported).
+Only supports .Net 10 for now! For .Net 10 versions see versions 10.x.x (no longer supported).
 
 
 ![milva-bird](https://user-images.githubusercontent.com/13048645/141461853-dbacad32-2150-4276-a848-45b81f2eeeb2.jpg)

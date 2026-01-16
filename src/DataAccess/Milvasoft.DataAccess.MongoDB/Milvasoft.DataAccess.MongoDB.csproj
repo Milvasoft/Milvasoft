@@ -10,7 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MongoDB.Driver" Version="3.5.2" />
+		<PackageReference Include="MongoDB.Driver" Version="3.6.0" />
 	</ItemGroup>
 
 
@@ -25,6 +25,10 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
 	  <ProjectReference Include="..\..\Cryptography\Milvasoft.Cryptography\Milvasoft.Cryptography.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="AsyncFixer" Version="2.1.0" />
 	</ItemGroup>
 
 	<PropertyGroup>

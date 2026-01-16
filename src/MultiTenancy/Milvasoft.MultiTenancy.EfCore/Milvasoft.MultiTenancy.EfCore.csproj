@@ -10,6 +10,10 @@
     <ProjectReference Include="..\Milvasoft.MultiTenancy\Milvasoft.MultiTenancy.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="AsyncFixer" Version="2.1.0" />
+  </ItemGroup>
+
 	<PropertyGroup>
 		<PackageId>Milvasoft.MultiTenancy.EfCore</PackageId>
 		<Product>Milvasoft.MultiTenancy.EfCore</Product>

@@ -13,6 +13,10 @@
     <ProjectReference Include="..\Milvasoft.Components.Rest\Milvasoft.Components.Rest.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="AsyncFixer" Version="2.1.0" />
+  </ItemGroup>
+
 	<PropertyGroup>
 		<PackageId>Milvasoft.Components.CQRS</PackageId>
 		<Product>Milvasoft.Components.CQRS</Product>

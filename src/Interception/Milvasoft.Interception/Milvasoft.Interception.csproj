@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="5.2.1" />
     <PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -26,6 +26,10 @@
 	<ItemGroup>
     <ProjectReference Include="..\..\Components\Milvasoft.Components.Rest\Milvasoft.Components.Rest.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="AsyncFixer" Version="2.1.0" />
+	</ItemGroup>
 
 
 	<PropertyGroup>

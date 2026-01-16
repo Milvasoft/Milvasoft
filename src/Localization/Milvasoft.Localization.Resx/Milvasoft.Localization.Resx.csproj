@@ -22,12 +22,16 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="10.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Milvasoft.Localization\Milvasoft.Localization.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="AsyncFixer" Version="2.1.0" />
   </ItemGroup>
 
 	<PropertyGroup>
