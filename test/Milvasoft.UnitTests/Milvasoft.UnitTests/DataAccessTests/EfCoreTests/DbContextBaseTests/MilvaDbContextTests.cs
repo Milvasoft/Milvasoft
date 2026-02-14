@@ -38,9 +38,9 @@ public class MilvaDbContextTests
         };
 
         // Act & Assert
-        await dbContext.BaseEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
-        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync();
+        await dbContext.BaseEntities.AddAsync(entity, TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
         entityInDb.Should().NotBeNull();
         entityInDb.Id.Should().Be(1);
         entityInDb.CreationDate.Should().NotBeNull();
@@ -65,9 +65,9 @@ public class MilvaDbContextTests
         };
 
         // Act & Assert
-        await dbContext.BaseEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
-        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync();
+        await dbContext.BaseEntities.AddAsync(entity, TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
         entityInDb.Should().NotBeNull();
         entityInDb.Id.Should().Be(1);
         entityInDb.CreationDate.Should().NotBeNull();
@@ -103,9 +103,9 @@ public class MilvaDbContextTests
         };
 
         // Act & Assert
-        await dbContext.BaseEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
-        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync();
+        await dbContext.BaseEntities.AddAsync(entity, TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
         entityInDb.Should().NotBeNull();
         entityInDb.Id.Should().Be(1);
         entityInDb.CreationDate.Should().BeNull();
@@ -147,9 +147,9 @@ public class MilvaDbContextTests
         // Act & Assert
 
         //Add
-        await dbContext.BaseEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
-        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync();
+        await dbContext.BaseEntities.AddAsync(entity, TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
         entityInDb.Should().NotBeNull();
         entityInDb.Id.Should().Be(1);
         entityInDb.CreationDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(2));
@@ -157,16 +157,16 @@ public class MilvaDbContextTests
 
         // Update
         dbContext.BaseEntities.Update(entityInDb);
-        await dbContext.SaveChangesAsync();
-        var entityAfterUpdate = await dbContext.BaseEntities.FirstOrDefaultAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityAfterUpdate = await dbContext.BaseEntities.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
         entityAfterUpdate.Id.Should().Be(1);
         entityAfterUpdate.LastModificationDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(2));
         entityAfterUpdate.LastModifierUserName.Should().Be("testuser");
 
         // Delete
         dbContext.BaseEntities.Remove(entityAfterUpdate);
-        await dbContext.SaveChangesAsync();
-        var entityAfterDelete = await dbContext.BaseEntities.FirstOrDefaultAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityAfterDelete = await dbContext.BaseEntities.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
         entityAfterDelete.Id.Should().Be(1);
         entityAfterDelete.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(2));
         entityAfterDelete.IsDeleted.Should().BeTrue();
@@ -199,15 +199,15 @@ public class MilvaDbContextTests
         };
 
         // Act & Assert
-        await dbContext.Entities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
-        var entityInDb = await dbContext.Entities.FirstOrDefaultAsync();
+        await dbContext.Entities.AddAsync(entity, TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb = await dbContext.Entities.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
         entityInDb.Should().NotBeNull();
         entityInDb.Id.Should().Be(1);
 
         dbContext.Entities.Remove(entityInDb);
-        await dbContext.SaveChangesAsync();
-        var dataCount = await dbContext.Entities.CountAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var dataCount = await dbContext.Entities.CountAsync(TestContext.Current.CancellationToken);
         dataCount.Should().Be(0);
     }
 
@@ -233,15 +233,15 @@ public class MilvaDbContextTests
         };
 
         // Act & Assert
-        await dbContext.BaseEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
-        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync();
+        await dbContext.BaseEntities.AddAsync(entity, TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
         entityInDb.Should().NotBeNull();
         entityInDb.Id.Should().Be(1);
 
         dbContext.BaseEntities.Remove(entityInDb);
-        await dbContext.SaveChangesAsync();
-        var dataCount = await dbContext.BaseEntities.CountAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var dataCount = await dbContext.BaseEntities.CountAsync(TestContext.Current.CancellationToken);
         dataCount.Should().Be(0);
     }
 
@@ -268,18 +268,18 @@ public class MilvaDbContextTests
         };
 
         // Act & Assert
-        await dbContext.BaseEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
-        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync();
+        await dbContext.BaseEntities.AddAsync(entity, TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
         entityInDb.Should().NotBeNull();
         entityInDb.Id.Should().Be(1);
 
         dbContext.BaseEntities.Remove(entityInDb);
-        await dbContext.SaveChangesAsync();
-        var dataCount = await dbContext.BaseEntities.CountAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var dataCount = await dbContext.BaseEntities.CountAsync(TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync();
+        entityInDb = await dbContext.BaseEntities.FirstOrDefaultAsync(TestContext.Current.CancellationToken);
         entityInDb.Should().NotBeNull();
         entityInDb.IsDeleted.Should().BeTrue();
         entityInDb.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
@@ -315,26 +315,26 @@ public class MilvaDbContextTests
         };
 
         // Act & Assert
-        await dbContext.BaseEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
-        var countAfterAdd = await dbContext.BaseEntities.CountAsync();
+        await dbContext.BaseEntities.AddRangeAsync(entities, TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var countAfterAdd = await dbContext.BaseEntities.CountAsync(TestContext.Current.CancellationToken);
         countAfterAdd.Should().Be(2);
 
         dbContext.ChangeSoftDeletionState(SoftDeletionState.Passive);
 
-        var firstEntity = await dbContext.BaseEntities.FindAsync(1);
+        var firstEntity = await dbContext.BaseEntities.FindAsync([1], TestContext.Current.CancellationToken);
         dbContext.BaseEntities.Remove(firstEntity);
-        await dbContext.SaveChangesAsync();
-        var dataCount = await dbContext.BaseEntities.CountAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var dataCount = await dbContext.BaseEntities.CountAsync(TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        var secondEntity = await dbContext.BaseEntities.FindAsync(2);
+        var secondEntity = await dbContext.BaseEntities.FindAsync([2], TestContext.Current.CancellationToken);
         dbContext.BaseEntities.Remove(secondEntity);
-        await dbContext.SaveChangesAsync();
-        dataCount = await dbContext.BaseEntities.CountAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        dataCount = await dbContext.BaseEntities.CountAsync(TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        var secondEntityAfterSoftDeletion = await dbContext.BaseEntities.FindAsync(2);
+        var secondEntityAfterSoftDeletion = await dbContext.BaseEntities.FindAsync([2], TestContext.Current.CancellationToken);
         secondEntityAfterSoftDeletion.Should().NotBeNull();
         secondEntityAfterSoftDeletion.IsDeleted.Should().BeTrue();
         secondEntityAfterSoftDeletion.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
@@ -369,23 +369,23 @@ public class MilvaDbContextTests
         };
 
         // Act & Assert
-        await dbContext.BaseEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
-        var countAfterAdd = await dbContext.BaseEntities.CountAsync();
+        await dbContext.BaseEntities.AddRangeAsync(entities, TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var countAfterAdd = await dbContext.BaseEntities.CountAsync(TestContext.Current.CancellationToken);
         countAfterAdd.Should().Be(2);
 
         dbContext.ChangeSoftDeletionState(SoftDeletionState.Passive);
 
-        var firstEntity = await dbContext.BaseEntities.FindAsync(1);
+        var firstEntity = await dbContext.BaseEntities.FindAsync([1], TestContext.Current.CancellationToken);
         dbContext.BaseEntities.Remove(firstEntity);
-        await dbContext.SaveChangesAsync();
-        var dataCount = await dbContext.BaseEntities.CountAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var dataCount = await dbContext.BaseEntities.CountAsync(TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        var secondEntity = await dbContext.BaseEntities.FindAsync(2);
+        var secondEntity = await dbContext.BaseEntities.FindAsync([2], TestContext.Current.CancellationToken);
         dbContext.BaseEntities.Remove(secondEntity);
-        await dbContext.SaveChangesAsync();
-        dataCount = await dbContext.BaseEntities.CountAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        dataCount = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         dataCount.Should().Be(0);
     }
 
@@ -419,27 +419,27 @@ public class MilvaDbContextTests
         };
 
         // Act & Assert
-        await dbContext.BaseEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
-        var countAfterAdd = await dbContext.BaseEntities.CountAsync();
+        await dbContext.BaseEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var countAfterAdd = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         countAfterAdd.Should().Be(2);
 
         dbContext.ChangeSoftDeletionState(SoftDeletionState.Passive);
         dbContext.SoftDeletionStateResetAfterOperation(true);
 
-        var firstEntity = await dbContext.BaseEntities.FindAsync(1);
+        var firstEntity = await dbContext.BaseEntities.FindAsync([1], TestContext.Current.CancellationToken);
         dbContext.BaseEntities.Remove(firstEntity);
-        await dbContext.SaveChangesAsync();
-        var dataCount = await dbContext.BaseEntities.CountAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var dataCount = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        var secondEntity = await dbContext.BaseEntities.FindAsync(2);
+        var secondEntity = await dbContext.BaseEntities.FindAsync([2], TestContext.Current.CancellationToken);
         dbContext.BaseEntities.Remove(secondEntity);
-        await dbContext.SaveChangesAsync();
-        dataCount = await dbContext.BaseEntities.CountAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        dataCount = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        var secondEntityAfterSoftDeletion = await dbContext.BaseEntities.FindAsync(2);
+        var secondEntityAfterSoftDeletion = await dbContext.BaseEntities.FindAsync([2], TestContext.Current.CancellationToken);
         secondEntityAfterSoftDeletion.Should().NotBeNull();
         secondEntityAfterSoftDeletion.IsDeleted.Should().BeTrue();
         secondEntityAfterSoftDeletion.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
@@ -721,8 +721,8 @@ public class MilvaDbContextTests
             SomeStringProp = "stringprop",
             SomeDecimalProp = 10M
         };
-        await dbContext.BaseEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
+        await dbContext.BaseEntities.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         var lookupRequest = new LookupRequest
         {
@@ -859,10 +859,10 @@ public class MilvaDbContextTests
             SomeStringProp = "stringprop2",
             SomeDecimalProp = 30M
         };
-        await dbContext.BaseEntities.AddAsync(entity);
-        await dbContext.BaseEntities.AddAsync(entity2);
-        await dbContext.BaseEntities.AddAsync(entity3);
-        await dbContext.SaveChangesAsync();
+        await dbContext.BaseEntities.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.BaseEntities.AddAsync(entity2, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.BaseEntities.AddAsync(entity3, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         var request = new EntityPropertyValuesRequest
         {
@@ -908,8 +908,8 @@ public class MilvaDbContextTests
             SomeStringProp = "stringprop",
             SomeDecimalProp = 10M
         };
-        await dbContext.BaseEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
+        await dbContext.BaseEntities.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
         var result = await dbContext.GetContentsAsync<SomeBaseEntityFixture>(null, null, null);

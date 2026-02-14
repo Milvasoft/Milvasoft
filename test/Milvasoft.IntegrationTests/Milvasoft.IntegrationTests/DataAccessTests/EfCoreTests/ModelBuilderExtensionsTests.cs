@@ -83,9 +83,9 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         };
 
         // Act & Assert
-        await dbContext.ModelBuilderTestEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
-        var entityInDb = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync();
+        await dbContext.ModelBuilderTestEntities.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
         entityInDb.TenantId.Should().Be(entity.TenantId);
     }
 
@@ -117,8 +117,8 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         };
 
         // Act
-        await dbContext.ModelBuilderTestEntities.AddAsync(entity);
-        Func<Task> act = async () => await dbContext.SaveChangesAsync();
+        await dbContext.ModelBuilderTestEntities.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        Func<Task> act = async () => await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<DbUpdateException>();
@@ -152,10 +152,10 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         };
 
         // Act & Assert
-        await dbContext.ModelBuilderTestEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
+        await dbContext.ModelBuilderTestEntities.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var entityInDb = await dbContext.Database.SqlQueryRaw<SomeModelBuilderTestKeylessEntityFixture>(""" select * from "ModelBuilderTestEntities" """).FirstOrDefaultAsync();
+        var entityInDb = await dbContext.Database.SqlQueryRaw<SomeModelBuilderTestKeylessEntityFixture>(""" select * from "ModelBuilderTestEntities" """).FirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
         entityInDb.SomeDateProp.Should().BeCloseTo(entity.SomeDateProp.ToUniversalTime(), TimeSpan.FromSeconds(2));
         entityInDb.SomeNullableDateProp.Should().BeCloseTo(entity.SomeNullableDateProp.Value.ToUniversalTime(), TimeSpan.FromSeconds(2));
         entityInDb.SomeNullableDateTimeOffsetProp.Should().BeCloseTo(entity.SomeNullableDateTimeOffsetProp.Value.ToUniversalTime(), TimeSpan.FromSeconds(2));
@@ -196,10 +196,10 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         };
 
         // Act & Assert
-        await dbContext.ModelBuilderTestEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
+        await dbContext.ModelBuilderTestEntities.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var entityInDb = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync();
+        var entityInDb = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
         entityInDb.SomeEncryptedStringProp.Should().Be(entity.SomeEncryptedStringProp);
         entityInDb.SomeEncryptedStringWithAttributeProp.Should().Be(entity.SomeEncryptedStringWithAttributeProp);
     }
@@ -247,11 +247,11 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         var encryptor = _serviceProvider.GetService<IMilvaCryptographyProvider>();
 
         // Act & Assert
-        await dbContext.ModelBuilderTestEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
+        await dbContext.ModelBuilderTestEntities.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var entityInDb = await dbContext.Database.SqlQueryRaw<SomeModelBuilderTestKeylessEntityFixture>(""" select * from "ModelBuilderTestEntities" """).FirstOrDefaultAsync();
-        var entityInDb2 = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync();
+        var entityInDb = await dbContext.Database.SqlQueryRaw<SomeModelBuilderTestKeylessEntityFixture>(""" select * from "ModelBuilderTestEntities" """).FirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb2 = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
         entityInDb.SomeEncryptedStringProp.Should().Be(entity.SomeEncryptedStringProp);
         entityInDb.SomeEncryptedStringWithAttributeProp.Should().NotBe(entity.SomeEncryptedStringWithAttributeProp);
         var cipher = entityInDb.SomeEncryptedStringWithAttributeProp;
@@ -305,11 +305,11 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         var encryptor = _serviceProvider.GetService<IMilvaCryptographyProvider>();
 
         // Act & Assert
-        await dbContext.ModelBuilderTestEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
+        await dbContext.ModelBuilderTestEntities.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var entityInDb = await dbContext.Database.SqlQueryRaw<SomeModelBuilderTestKeylessEntityFixture>(""" select * from "ModelBuilderTestEntities" """).FirstOrDefaultAsync();
-        var entityInDb2 = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync();
+        var entityInDb = await dbContext.Database.SqlQueryRaw<SomeModelBuilderTestKeylessEntityFixture>(""" select * from "ModelBuilderTestEntities" """).FirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb2 = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
         var cipher = entityInDb.SomeEncryptedStringWithAttributeProp;
         cipher.Should().StartWith("enc::");
         var cipher2 = entityInDb.SomeEncryptedStringWithAttributeProp;
@@ -684,10 +684,10 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         };
 
         // Act & Assert
-        await dbContext.ModelBuilderTestEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
+        await dbContext.ModelBuilderTestEntities.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var entityInDb = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync();
+        var entityInDb = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
         entityInDb.SomeIntProp.Should().Be(0);
     }
 
@@ -727,10 +727,10 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         };
 
         // Act & Assert
-        await dbContext.ModelBuilderTestEntities.AddAsync(entity);
-        await dbContext.SaveChangesAsync();
+        await dbContext.ModelBuilderTestEntities.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var entityInDb = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync();
+        var entityInDb = await dbContext.ModelBuilderTestEntities.FirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
         entityInDb.SomeIntProp.Should().Be(1);
     }
 
@@ -774,10 +774,10 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         };
 
         // Act & Assert
-        await dbContext.ModelBuilderTestEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
+        await dbContext.ModelBuilderTestEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var entitiesInDb = await dbContext.ModelBuilderTestEntities.ToListAsync();
+        var entitiesInDb = await dbContext.ModelBuilderTestEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
         entitiesInDb.Count.Should().Be(2);
     }
 
@@ -823,10 +823,10 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         };
 
         // Act & Assert
-        await dbContext.ModelBuilderTestEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
+        await dbContext.ModelBuilderTestEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var entitiesInDb = await dbContext.ModelBuilderTestEntities.ToListAsync();
+        var entitiesInDb = await dbContext.ModelBuilderTestEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
         entitiesInDb.Count.Should().Be(2);
     }
 
@@ -871,10 +871,10 @@ public class ModelBuilderExtensionsTests(CustomWebApplicationFactory factory) : 
         };
 
         // Act & Assert
-        await dbContext.ModelBuilderTestEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
+        await dbContext.ModelBuilderTestEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var entitiesInDb = await dbContext.ModelBuilderTestEntities.ToListAsync();
+        var entitiesInDb = await dbContext.ModelBuilderTestEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
         entitiesInDb.Count.Should().Be(1);
     }
 }

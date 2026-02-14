@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 namespace Milvasoft.Interception.Interceptors.Logging;
 
 /// <summary>
-/// The LogInterceptor is an interceptor that allows the logging of method attributes, such as return values, parameters, and other properties, using the IMilvaLogger. 
+/// The LogInterceptor is an interceptor that allows the logging of method attributes, such as return values, parameters, and other properties, using the IMilvaLogger.
 /// It intercepts methods that are marked with the LogAttribute and logs the relevant information using the provided logger.
 /// </summary>
 /// <param name="serviceProvider"></param>
@@ -99,9 +99,7 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
                 await _logger.LogAsync(logObjectAsJson);
             }
             else
-#pragma warning disable S6966 // Awaitable method should be used
                 _logger.Log(logObjectAsJson);
-#pragma warning restore S6966 // Awaitable method should be used
 
             //If metadata removing requested, add removed metadata to call.returnValue again
             if (metadatas != null)
@@ -111,7 +109,7 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
             }
         }
 
-       (exception is AggregateException agg && agg.InnerExceptions.Count == 1 ? agg.InnerExceptions[0] : exception)?.Rethrow();
+        (exception is AggregateException agg && agg.InnerExceptions.Count == 1 ? agg.InnerExceptions[0] : exception)?.Rethrow();
     }
 
     /// <summary>

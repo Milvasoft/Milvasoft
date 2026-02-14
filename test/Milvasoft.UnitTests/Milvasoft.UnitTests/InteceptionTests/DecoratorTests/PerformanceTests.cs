@@ -4,7 +4,6 @@ using Milvasoft.Core.Abstractions;
 using Milvasoft.Interception.Builder;
 using Milvasoft.Interception.Decorator;
 using System.Diagnostics;
-using Xunit.Abstractions;
 
 namespace Milvasoft.UnitTests.InteceptionTests.DecoratorTests;
 

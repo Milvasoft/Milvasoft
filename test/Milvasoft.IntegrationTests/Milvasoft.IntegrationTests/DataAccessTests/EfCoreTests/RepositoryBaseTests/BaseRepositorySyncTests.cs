@@ -24,7 +24,6 @@ namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests.RepositoryBaseT
 
 [Collection(nameof(UtcTrueDatabaseTestCollection))]
 [Trait("RepositoryBase Sync Integration Tests", "Integration tests for Milvasoft.DataAccess.EfCore integration tests.")]
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6966:Awaitable method should be used", Justification = "<Pending>")]
 #pragma warning disable AsyncFixer02 // Long-running or blocking operations inside an async method
 public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : DataAccessIntegrationTestBase(factory)
 {
@@ -723,7 +722,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetFirstOrDefault();
 
         // Assert
@@ -753,7 +752,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetFirstOrDefault(i => i.SomeDecimalProp > 20M);
 
         // Assert
@@ -784,7 +783,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetFirstOrDefault(null, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -819,7 +818,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetFirstOrDefault(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -854,7 +853,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetFirstOrDefault(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -891,7 +890,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         Action act = () => entityRepository.GetSingleOrDefault();
 
         // Assert
@@ -919,7 +918,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetSingleOrDefault(i => i.SomeDecimalProp > 20M);
 
         // Assert
@@ -950,7 +949,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetSingleOrDefault(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -985,7 +984,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetSingleOrDefault(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -1022,7 +1021,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetById(1);
 
         // Assert
@@ -1052,7 +1051,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetById(1, i => i.SomeDecimalProp > 20M);
 
         // Assert
@@ -1080,7 +1079,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetById(3, i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -1115,7 +1114,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetById(3, i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -1153,7 +1152,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetForDelete(1);
 
         // Assert
@@ -1186,7 +1185,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetForDelete(1, condition: i => i.SomeDecimalProp > 20M);
 
         // Assert
@@ -1215,7 +1214,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetForDelete(1, includes: i => i.Include(m => m.ManyToOneEntities));
 
         // Assert
@@ -1248,7 +1247,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetForDelete(1, condition: i => i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -1288,7 +1287,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetForDelete(1, condition: i => i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -1328,7 +1327,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetForDelete(condition: i => i.Id == 1);
 
         // Assert
@@ -1361,7 +1360,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetForDelete(condition: i => i.Id == 1 && i.SomeDecimalProp > 20M);
 
         // Assert
@@ -1390,7 +1389,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetForDelete(condition: i => i.Id == 1, includes: i => i.Include(m => m.ManyToOneEntities));
 
         // Assert
@@ -1423,7 +1422,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetForDelete(condition: i => i.Id == 1 && i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -1463,7 +1462,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetForDelete(condition: i => i.Id == 1 && i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
@@ -1506,7 +1505,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetAll();
 
         // Assert
@@ -1536,7 +1535,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetAll(i => i.SomeDecimalProp > 10M);
 
         // Assert
@@ -1566,7 +1565,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetAll(i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -1601,7 +1600,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetAll(i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -1643,7 +1642,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = AggregationType.Sum }] }
         };
 
-        // Act 
+        // Act
         var result = entityRepository.GetAll(listRequest);
 
         // Assert
@@ -1688,7 +1687,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = AggregationType.Sum }] }
         };
 
-        // Act 
+        // Act
         var result = entityRepository.GetAll(listRequest, i => i.SomeDecimalProp > 10M);
 
         // Assert
@@ -1733,7 +1732,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = AggregationType.Sum }] }
         };
 
-        // Act 
+        // Act
         var result = entityRepository.GetAll(listRequest, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -1783,7 +1782,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = AggregationType.Sum }] }
         };
 
-        // Act 
+        // Act
         var result = entityRepository.GetAll(listRequest, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -1830,7 +1829,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetSome(2);
 
         // Assert
@@ -1860,7 +1859,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetSome(1, i => i.SomeDecimalProp > 10M);
 
         // Assert
@@ -1890,7 +1889,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetSome(1, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -1925,7 +1924,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = entityRepository.GetSome(3, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
@@ -1964,7 +1963,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         SomeFullAuditableEntityFixture entity = null;
 
-        // Act 
+        // Act
         Action act = () => entityRepository.Add(entity);
 
         // Assert
@@ -1998,7 +1997,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
             SomeStringProp = "somestring1"
         };
 
-        // Act 
+        // Act
         entityRepository.Add(entity);
         var addedEntity = entityRepository.GetById(1);
 
@@ -2033,7 +2032,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         entityRepository.AddRange(entities);
         var count = dbContext.FullAuditableEntities.Count();
 
@@ -2077,7 +2076,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
             }
         };
 
-        // Act 
+        // Act
         entityRepository.AddRange(entities);
         var count = dbContext.FullAuditableEntities.Count();
         var addedEntity = entityRepository.GetById(1);
@@ -2115,7 +2114,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         SomeFullAuditableEntityFixture entity = null;
 
-        // Act 
+        // Act
         Action act = () => entityRepository.Update(entity);
 
         // Assert
@@ -2151,7 +2150,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
             SomeStringProp = "somestring1"
         };
 
-        // Act 
+        // Act
         Action act = () => entityRepository.Update(entity);
 
         // Assert
@@ -2181,7 +2180,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         var entity = entityRepository.GetById(1);
 
-        // Act 
+        // Act
         entity.SomeStringProp = "stringpropupdated";
         entityRepository.Update(entity);
 
@@ -2213,7 +2212,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         entityRepository.Update(entities);
         var allEntities = dbContext.FullAuditableEntities.ToList();
 
@@ -2263,7 +2262,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
             }
         ];
 
-        // Act 
+        // Act
         Action act = () => entityRepository.Update(entities);
 
         // Assert
@@ -2293,7 +2292,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         var entities = entityRepository.GetAll(i => i.Id == 1 || i.Id == 2);
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[1].SomeStringProp = "stringpropupdated";
         entityRepository.Update(entities);
@@ -2329,7 +2328,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         Action act = () => entityRepository.Update(entity, projections);
 
         // Assert
@@ -2367,7 +2366,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         Action act = () => entityRepository.Update(entity, projections);
 
         // Assert
@@ -2398,7 +2397,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entity = entityRepository.GetById(1);
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = null;
 
-        // Act 
+        // Act
         entity.SomeStringProp = "stringpropupdated";
         entity.SomeDecimalProp = 20M;
         entityRepository.Update(entity, projections);
@@ -2434,7 +2433,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         entity.SomeStringProp = "stringpropupdated";
         entity.SomeDecimalProp = 20M;
         entityRepository.Update(entity, projections);
@@ -2470,7 +2469,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         var allEntities = dbContext.FullAuditableEntities.ToList();
         entityRepository.Update(entities, projections);
 
@@ -2522,7 +2521,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         Action act = () => entityRepository.Update(entities, projections);
 
         // Assert
@@ -2553,7 +2552,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entities = entityRepository.GetAll(i => i.Id == 1 || i.Id == 2);
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = null;
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[0].SomeDecimalProp = 20M;
         entities[1].SomeStringProp = "stringpropupdated";
@@ -2593,7 +2592,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[0].SomeDecimalProp = 20M;
         entities[1].SomeStringProp = "stringpropupdated";
@@ -2635,7 +2634,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         SomeFullAuditableEntityFixture entity = null;
 
-        // Act 
+        // Act
         Action act = () => entityRepository.Delete(entity);
 
         // Assert
@@ -2671,7 +2670,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
             SomeStringProp = "somestring1"
         };
 
-        // Act 
+        // Act
         Action act = () => entityRepository.Delete(entity);
 
         // Assert
@@ -2701,7 +2700,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         var entity = entityRepository.GetById(1);
 
-        // Act 
+        // Act
         entityRepository.Delete(entity);
 
         // Assert
@@ -2732,7 +2731,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         entityRepository.Delete(entities);
         var allEntities = dbContext.FullAuditableEntities.ToList();
 
@@ -2782,7 +2781,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
             }
         ];
 
-        // Act 
+        // Act
         Action act = () => entityRepository.Delete(entities);
 
         // Assert
@@ -2812,7 +2811,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
 
         var entities = entityRepository.GetAll(i => i.Id == 1 || i.Id == 2);
 
-        // Act 
+        // Act
         entityRepository.Delete(entities);
 
         // Assert
@@ -2852,7 +2851,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         newEntities[1].Id = 6;
         newEntities[1].SomeStringProp = "stringpropupdated";
 
-        // Act 
+        // Act
         entityRepository.ReplaceOldsWithNews(entities, newEntities);
 
         // Assert
@@ -2891,7 +2890,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         foreach (var entity in newEntities)
             entity.SomeStringProp = "stringpropupdated";
 
-        // Act 
+        // Act
         entityRepository.ReplaceOldsWithNewsInSeperateDatabaseProcess(entities, newEntities);
 
         // Assert
@@ -2923,7 +2922,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         });
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
 
-        // Act 
+        // Act
         entityRepository.RemoveAll();
 
         // Assert
@@ -2952,7 +2951,7 @@ public class BaseRepositorySyncTests(CustomWebApplicationFactory factory) : Data
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         entityRepository.RemoveAll();
 
         // Assert

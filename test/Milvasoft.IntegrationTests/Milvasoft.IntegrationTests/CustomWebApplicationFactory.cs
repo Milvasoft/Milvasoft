@@ -70,4 +70,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
     }
 
     public string GetConnectionString() => _dbContainer.GetConnectionString();
+
+    async ValueTask IAsyncLifetime.InitializeAsync() => await InitializeAsync();
 }

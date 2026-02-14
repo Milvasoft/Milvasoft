@@ -82,11 +82,11 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         await SeedAsync(dbContext);
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         getAllData.Should().HaveCount(3);
@@ -108,10 +108,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -125,35 +125,35 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             SomeStringProp = i.SomeStringProp,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
         var getSomeData = await entityRepository.GetSomeAsync(4, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeStringProp = i.SomeStringProp,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
         var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 1, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeStringProp = i.SomeStringProp,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
         var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 1, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeStringProp = i.SomeStringProp,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
         var getByIdData = await entityRepository.GetByIdAsync(1, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeStringProp = i.SomeStringProp,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         getAllData.Should().HaveCount(3);
@@ -198,12 +198,11 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         entityRepository.FetchSoftDeletedEntities(true);
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
-
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         getAllData.Should().HaveCount(4);
         getSomeData.Should().HaveCount(4);
@@ -248,35 +247,35 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             SomeStringProp = i.SomeStringProp,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
         var getSomeData = await entityRepository.GetSomeAsync(4, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeStringProp = i.SomeStringProp,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
         var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 1, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeStringProp = i.SomeStringProp,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
         var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 1, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeStringProp = i.SomeStringProp,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
         var getByIdData = await entityRepository.GetByIdAsync(1, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeStringProp = i.SomeStringProp,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         getAllData.Should().HaveCount(4);
@@ -322,12 +321,12 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         entityRepository.SoftDeleteFetchStateResetAfterOperation(false);
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
         entityRepository.ResetSoftDeletedEntityFetchResetState();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         getAllData.Should().HaveCount(4);
@@ -367,12 +366,11 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         entityRepository.FetchSoftDeletedEntities(true);
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
-
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         getAllData.Should().HaveCount(4);
         getSomeData.Should().HaveCount(3);
@@ -413,12 +411,11 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         entityRepository.SoftDeleteFetchStateResetAfterOperation(true);
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
-
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         getAllData.Should().HaveCount(4);
         getSomeData.Should().HaveCount(3);
@@ -460,12 +457,11 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         entityRepository.ResetSoftDeletedEntityFetchState();
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
-
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         getAllData.Should().HaveCount(3);
         getSomeData.Should().HaveCount(3);
@@ -506,22 +502,22 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         await SeedAsync(dbContext);
 
         // Act & Assert
-        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1);
+        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataBeforeUpdate.SomeStringProp = "somestring11";
         dataBeforeUpdate.CreationDate.Should().NotBeNull();
 
-        await entityRepository.UpdateAsync(dataBeforeUpdate);
+        await entityRepository.UpdateAsync(dataBeforeUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var dataAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataAfterUpdate.SomeStringProp.Should().Be("somestring11");
         dataAfterUpdate.CreationDate.Should().NotBeNull();
         dataAfterUpdate.LastModificationDate.Should().NotBeNull();
 
-        await entityRepository.DeleteAsync(dataAfterUpdate);
+        await entityRepository.DeleteAsync(dataAfterUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterDelete = await entityRepository.GetByIdAsync(1);
+        var dataAfterDelete = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataAfterDelete.Should().BeNull();
     }
@@ -559,27 +555,27 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         await SeedAsync(dbContext);
 
         // Act & Assert
-        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1);
+        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataBeforeUpdate.SomeStringProp = "somestring11";
         dataBeforeUpdate.CreationDate.Should().NotBeNull();
 
-        await entityRepository.UpdateAsync(dataBeforeUpdate);
+        await entityRepository.UpdateAsync(dataBeforeUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var dataAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataAfterUpdate.SomeStringProp.Should().Be("somestring1");
         dataAfterUpdate.CreationDate.Should().NotBeNull();
         dataAfterUpdate.LastModificationDate.Should().BeNull();
 
-        await entityRepository.DeleteAsync(dataAfterUpdate);
+        await entityRepository.DeleteAsync(dataAfterUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterDelete = await entityRepository.GetByIdAsync(1);
+        var dataAfterDelete = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         dataAfterDelete.Should().NotBeNull();
 
-        await entityRepository.SaveChangesAsync();
+        await entityRepository.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        var dataAfterSaveChanges = await entityRepository.GetByIdAsync(1);
+        var dataAfterSaveChanges = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         dataAfterSaveChanges.Should().BeNull();
     }
 
@@ -617,27 +613,27 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         entityRepository.ChangeSaveChangesChoice(SaveChangesChoice.Manual);
 
         // Act & Assert
-        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1);
+        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataBeforeUpdate.SomeStringProp = "somestring11";
         dataBeforeUpdate.CreationDate.Should().NotBeNull();
 
-        await entityRepository.UpdateAsync(dataBeforeUpdate);
+        await entityRepository.UpdateAsync(dataBeforeUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var dataAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataAfterUpdate.SomeStringProp.Should().Be("somestring1");
         dataAfterUpdate.CreationDate.Should().NotBeNull();
         dataAfterUpdate.LastModificationDate.Should().BeNull();
 
-        await entityRepository.DeleteAsync(dataAfterUpdate);
+        await entityRepository.DeleteAsync(dataAfterUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterDelete = await entityRepository.GetByIdAsync(1);
+        var dataAfterDelete = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         dataAfterDelete.Should().NotBeNull();
 
-        await entityRepository.SaveChangesAsync();
+        await entityRepository.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        var dataAfterSaveChanges = await entityRepository.GetByIdAsync(1);
+        var dataAfterSaveChanges = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         dataAfterSaveChanges.Should().BeNull();
     }
 
@@ -675,14 +671,14 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         entityRepository.ChangeSaveChangesChoice(SaveChangesChoice.Manual);
 
         // Act & Assert
-        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1);
+        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataBeforeUpdate.SomeStringProp = "somestring11";
         dataBeforeUpdate.CreationDate.Should().NotBeNull();
 
-        await entityRepository.UpdateAsync(dataBeforeUpdate);
+        await entityRepository.UpdateAsync(dataBeforeUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var dataAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataAfterUpdate.SomeStringProp.Should().Be("somestring1");
         dataAfterUpdate.CreationDate.Should().NotBeNull();
@@ -690,9 +686,9 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
 
         entityRepository.ResetSaveChangesChoiceToDefault();
 
-        await entityRepository.DeleteAsync(dataAfterUpdate);
+        await entityRepository.DeleteAsync(dataAfterUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterDelete = await entityRepository.GetByIdAsync(1);
+        var dataAfterDelete = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         dataAfterDelete.Should().BeNull();
     }
 
@@ -731,13 +727,13 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         };
 
         // Act & Assert
-        await entityRepository.AddAsync(entity);
-        var entityInDb = await entityRepository.GetFirstOrDefaultAsync();
+        await entityRepository.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb = await entityRepository.GetFirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
         entityInDb.Should().NotBeNull();
         entityInDb.Id.Should().Be(1);
 
-        await entityRepository.DeleteAsync(entityInDb);
-        var dataCount = await dbContext.BaseEntities.CountAsync();
+        await entityRepository.DeleteAsync(entityInDb, cancellationToken: TestContext.Current.CancellationToken);
+        var dataCount = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         dataCount.Should().Be(0);
     }
 
@@ -774,16 +770,16 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         };
 
         // Act & Assert
-        await entityRepository.AddAsync(entity);
-        var entityInDb = await entityRepository.GetFirstOrDefaultAsync();
+        await entityRepository.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        var entityInDb = await entityRepository.GetFirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
         entityInDb.Should().NotBeNull();
         entityInDb.Id.Should().Be(1);
 
-        await entityRepository.DeleteAsync(entityInDb);
-        var dataCount = await dbContext.BaseEntities.CountAsync();
+        await entityRepository.DeleteAsync(entityInDb, cancellationToken: TestContext.Current.CancellationToken);
+        var dataCount = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        entityInDb = await entityRepository.GetFirstOrDefaultAsync();
+        entityInDb = await entityRepository.GetFirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
         entityInDb.Should().NotBeNull();
         entityInDb.IsDeleted.Should().BeTrue();
         entityInDb.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
@@ -829,23 +825,23 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         };
 
         // Act & Assert
-        await entityRepository.AddRangeAsync(entities);
-        var countAfterAdd = await dbContext.BaseEntities.CountAsync();
+        await entityRepository.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        var countAfterAdd = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         countAfterAdd.Should().Be(2);
 
         dbContext.ChangeSoftDeletionState(SoftDeletionState.Passive);
 
-        var firstEntity = await entityRepository.GetByIdAsync(1);
-        await entityRepository.DeleteAsync(firstEntity);
-        var dataCount = await dbContext.BaseEntities.CountAsync();
+        var firstEntity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
+        await entityRepository.DeleteAsync(firstEntity, cancellationToken: TestContext.Current.CancellationToken);
+        var dataCount = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        var secondEntity = await entityRepository.GetByIdAsync(2);
-        await entityRepository.DeleteAsync(secondEntity);
-        dataCount = await dbContext.BaseEntities.CountAsync();
+        var secondEntity = await entityRepository.GetByIdAsync(2, cancellationToken: TestContext.Current.CancellationToken);
+        await entityRepository.DeleteAsync(secondEntity, cancellationToken: TestContext.Current.CancellationToken);
+        dataCount = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        var secondEntityAfterSoftDeletion = await entityRepository.GetByIdAsync(2);
+        var secondEntityAfterSoftDeletion = await entityRepository.GetByIdAsync(2, cancellationToken: TestContext.Current.CancellationToken);
         secondEntityAfterSoftDeletion.Should().NotBeNull();
         secondEntityAfterSoftDeletion.IsDeleted.Should().BeTrue();
         secondEntityAfterSoftDeletion.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
@@ -890,20 +886,20 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         };
 
         // Act & Assert
-        await entityRepository.AddRangeAsync(entities);
-        var countAfterAdd = await dbContext.BaseEntities.CountAsync();
+        await entityRepository.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        var countAfterAdd = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         countAfterAdd.Should().Be(2);
 
         dbContext.ChangeSoftDeletionState(SoftDeletionState.Passive);
 
-        var firstEntity = await entityRepository.GetByIdAsync(1);
-        await entityRepository.DeleteAsync(firstEntity);
-        var dataCount = await dbContext.BaseEntities.CountAsync();
+        var firstEntity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
+        await entityRepository.DeleteAsync(firstEntity, cancellationToken: TestContext.Current.CancellationToken);
+        var dataCount = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        var secondEntity = await entityRepository.GetByIdAsync(2);
-        await entityRepository.DeleteAsync(secondEntity);
-        dataCount = await dbContext.BaseEntities.CountAsync();
+        var secondEntity = await entityRepository.GetByIdAsync(2, cancellationToken: TestContext.Current.CancellationToken);
+        await entityRepository.DeleteAsync(secondEntity, cancellationToken: TestContext.Current.CancellationToken);
+        dataCount = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         dataCount.Should().Be(0);
     }
 
@@ -947,24 +943,24 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         };
 
         // Act & Assert
-        await entityRepository.AddRangeAsync(entities);
-        var countAfterAdd = await dbContext.BaseEntities.CountAsync();
+        await entityRepository.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        var countAfterAdd = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         countAfterAdd.Should().Be(2);
 
         entityRepository.ChangeSoftDeletionState(SoftDeletionState.Passive);
         entityRepository.SoftDeletionStateResetAfterOperation(true);
 
-        var firstEntity = await entityRepository.GetByIdAsync(1);
-        await entityRepository.DeleteAsync(firstEntity);
-        var dataCount = await dbContext.BaseEntities.CountAsync();
+        var firstEntity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
+        await entityRepository.DeleteAsync(firstEntity, cancellationToken: TestContext.Current.CancellationToken);
+        var dataCount = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        var secondEntity = await entityRepository.GetByIdAsync(2);
-        await entityRepository.DeleteAsync(secondEntity);
-        dataCount = await dbContext.BaseEntities.CountAsync();
+        var secondEntity = await entityRepository.GetByIdAsync(2, cancellationToken: TestContext.Current.CancellationToken);
+        await entityRepository.DeleteAsync(secondEntity, cancellationToken: TestContext.Current.CancellationToken);
+        dataCount = await dbContext.BaseEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         dataCount.Should().Be(1);
 
-        var secondEntityAfterSoftDeletion = await entityRepository.GetByIdAsync(2);
+        var secondEntityAfterSoftDeletion = await entityRepository.GetByIdAsync(2, cancellationToken: TestContext.Current.CancellationToken);
         secondEntityAfterSoftDeletion.Should().NotBeNull();
         secondEntityAfterSoftDeletion.IsDeleted.Should().BeTrue();
         secondEntityAfterSoftDeletion.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
@@ -1101,8 +1097,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetFirstOrDefaultAsync();
+        // Act
+        var result = await entityRepository.GetFirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1122,17 +1118,17 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetFirstOrDefaultAsync(i => i.SomeDecimalProp > 20M);
+        // Act
+        var result = await entityRepository.GetFirstOrDefaultAsync(i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1153,22 +1149,22 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetFirstOrDefaultAsync(null, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1189,22 +1185,22 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetFirstOrDefaultAsync(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1225,23 +1221,23 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetFirstOrDefaultAsync(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        }, i => i.SomeDecimalProp > 30M);
+        }, i => i.SomeDecimalProp > 30M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -1263,18 +1259,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        Func<Task> act = async () => await entityRepository.GetSingleOrDefaultAsync();
+        // Act
+        Func<Task> act = async () => await entityRepository.GetSingleOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Sequence contains more than one element.");
@@ -1292,18 +1288,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetSingleOrDefaultAsync(i => i.SomeDecimalProp > 20M);
+        // Act
+        var result = await entityRepository.GetSingleOrDefaultAsync(i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1324,22 +1320,22 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetSingleOrDefaultAsync(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1360,23 +1356,23 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetSingleOrDefaultAsync(i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        }, i => i.SomeDecimalProp > 30M);
+        }, i => i.SomeDecimalProp > 30M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -1398,18 +1394,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetByIdAsync(1);
+        // Act
+        var result = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1429,18 +1425,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetByIdAsync(1, i => i.SomeDecimalProp > 20M);
+        // Act
+        var result = await entityRepository.GetByIdAsync(1, i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -1458,22 +1454,22 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetByIdAsync(3, i => i.SomeDecimalProp > 20M, i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1494,23 +1490,23 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetByIdAsync(3, condition: i => i.SomeDecimalProp > 20M, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        }, conditionAfterProjection: i => i.SomeDecimalProp > 30M);
+        }, conditionAfterProjection: i => i.SomeDecimalProp > 30M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -1532,18 +1528,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetForDeleteAsync(1);
+        // Act
+        var result = await entityRepository.GetForDeleteAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1565,18 +1561,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetForDeleteAsync(1, condition: i => i.SomeDecimalProp > 20M);
+        // Act
+        var result = await entityRepository.GetForDeleteAsync(1, condition: i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -1594,18 +1590,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetForDeleteAsync(1, includes: i => i.Include(m => m.ManyToOneEntities));
+        // Act
+        var result = await entityRepository.GetForDeleteAsync(1, includes: i => i.Include(m => m.ManyToOneEntities), cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1627,24 +1623,24 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetForDeleteAsync(1, condition: i => i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities,
             CreationDate = i.CreationDate,
-        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M);
+        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1667,24 +1663,24 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetForDeleteAsync(1, condition: i => i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities,
             CreationDate = i.CreationDate,
-        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M, includes: i => i.Include(m => m.ManyToOneEntities));
+        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M, includes: i => i.Include(m => m.ManyToOneEntities), cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1707,18 +1703,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetForDeleteAsync(condition: i => i.Id == 1);
+        // Act
+        var result = await entityRepository.GetForDeleteAsync(condition: i => i.Id == 1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result[0].Should().NotBeNull();
@@ -1740,18 +1736,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetForDeleteAsync(condition: i => i.Id == 1 && i.SomeDecimalProp > 20M);
+        // Act
+        var result = await entityRepository.GetForDeleteAsync(condition: i => i.Id == 1 && i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEmpty();
@@ -1769,18 +1765,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetForDeleteAsync(condition: i => i.Id == 1, includes: i => i.Include(m => m.ManyToOneEntities));
+        // Act
+        var result = await entityRepository.GetForDeleteAsync(condition: i => i.Id == 1, includes: i => i.Include(m => m.ManyToOneEntities), cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result[0].Should().NotBeNull();
@@ -1802,24 +1798,24 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetForDeleteAsync(condition: i => i.Id == 1 && i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities,
             CreationDate = i.CreationDate,
-        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M);
+        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result[0].Should().NotBeNull();
@@ -1842,24 +1838,24 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetForDeleteAsync(condition: i => i.Id == 1 && i.SomeDecimalProp >= 10M, projection: i => new SomeFullAuditableEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             ManyToOneEntities = i.ManyToOneEntities,
             CreationDate = i.CreationDate,
-        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M, includes: i => i.Include(m => m.ManyToOneEntities));
+        }, conditionAfterProjection: i => i.SomeDecimalProp > 9M, includes: i => i.Include(m => m.ManyToOneEntities), cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result[0].Should().NotBeNull();
@@ -1886,18 +1882,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetAllAsync();
+        // Act
+        var result = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1917,18 +1913,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetAllAsync(i => i.SomeDecimalProp > 10M);
+        // Act
+        var result = await entityRepository.GetAllAsync(i => i.SomeDecimalProp > 10M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1948,23 +1944,23 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1984,23 +1980,23 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        }, i => i.SomeDecimalProp > 20M);
+        }, i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -2020,10 +2016,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2037,8 +2033,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = AggregationType.Sum }] }
         };
 
-        // Act 
-        var result = await entityRepository.GetAllAsync(listRequest);
+        // Act
+        var result = await entityRepository.GetAllAsync(listRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -2066,10 +2062,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2083,8 +2079,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = AggregationType.Sum }] }
         };
 
-        // Act 
-        var result = await entityRepository.GetAllAsync(listRequest, i => i.SomeDecimalProp > 10M);
+        // Act
+        var result = await entityRepository.GetAllAsync(listRequest, i => i.SomeDecimalProp > 10M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -2112,10 +2108,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2129,13 +2125,13 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = AggregationType.Sum }] }
         };
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(listRequest, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -2163,10 +2159,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2201,21 +2197,21 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             }
         };
 
-        await dbContext.SomeMultiTenantEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
+        await dbContext.SomeMultiTenantEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         var listRequest = new ListRequest
         {
             PageNumber = 1,
             RowCount = 2,
         };
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(listRequest, i => i.SomeDecimalProp > 10M, i => new SomeMultiTenantTestEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -2236,10 +2232,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2253,13 +2249,13 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = AggregationType.Sum }] }
         };
 
-        // Act 
+        // Act
         var result = await entityRepository.GetAllAsync(listRequest, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        }, i => i.SomeDecimalProp > 20M);
+        }, i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -2291,18 +2287,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetSomeAsync(2);
+        // Act
+        var result = await entityRepository.GetSomeAsync(2, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -2322,18 +2318,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        var result = await entityRepository.GetSomeAsync(1, i => i.SomeDecimalProp > 10M);
+        // Act
+        var result = await entityRepository.GetSomeAsync(1, i => i.SomeDecimalProp > 10M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -2353,23 +2349,23 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetSomeAsync(1, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -2389,23 +2385,23 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         var result = await entityRepository.GetSomeAsync(3, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
         {
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        }, i => i.SomeDecimalProp > 20M);
+        }, i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -2429,18 +2425,18 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
 
         SomeFullAuditableEntityFixture entity = null;
 
-        // Act 
-        Func<Task> act = async () => await entityRepository.AddAsync(entity);
+        // Act
+        Func<Task> act = async () => await entityRepository.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<ArgumentNullException>();
@@ -2458,10 +2454,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
@@ -2474,9 +2470,9 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             SomeStringProp = "somestring1"
         };
 
-        // Act 
-        await entityRepository.AddAsync(entity);
-        var addedEntity = await entityRepository.GetByIdAsync(1);
+        // Act
+        await entityRepository.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        var addedEntity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         addedEntity.Should().NotBeNull();
@@ -2499,10 +2495,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2510,9 +2506,9 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
-        await entityRepository.AddRangeAsync(entities);
-        var count = await dbContext.FullAuditableEntities.CountAsync();
+        // Act
+        await entityRepository.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        var count = await dbContext.FullAuditableEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         count.Should().Be(0);
@@ -2530,10 +2526,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2555,10 +2551,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             }
         };
 
-        // Act 
-        await entityRepository.AddRangeAsync(entities);
-        var count = await dbContext.FullAuditableEntities.CountAsync();
-        var addedEntity = await entityRepository.GetByIdAsync(1);
+        // Act
+        await entityRepository.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        var count = await dbContext.FullAuditableEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var addedEntity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         count.Should().Be(2);
@@ -2582,10 +2578,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2594,8 +2590,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
 
         SomeFullAuditableEntityFixture entity = null;
 
-        // Act 
-        Func<Task> act = async () => await entityRepository.UpdateAsync(entity);
+        // Act
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<ArgumentNullException>();
@@ -2613,10 +2609,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2631,8 +2627,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             SomeStringProp = "somestring1"
         };
 
-        // Act 
-        Func<Task> act = async () => await entityRepository.UpdateAsync(entity);
+        // Act
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
@@ -2650,24 +2646,24 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entity = await entityRepository.GetByIdAsync(1);
+        var entity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
-        // Act 
+        // Act
         entity.SomeStringProp = "stringpropupdated";
-        await entityRepository.UpdateAsync(entity);
+        await entityRepository.UpdateAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         entityAfterUpdate.SomeStringProp.Should().Be("stringpropupdated");
     }
 
@@ -2683,10 +2679,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2695,9 +2691,9 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
-        await entityRepository.UpdateAsync(entities);
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+        // Act
+        await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         allEntities[0].LastModificationDate.Should().BeNull();
@@ -2718,10 +2714,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2746,8 +2742,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             }
         ];
 
-        // Act 
-        Func<Task> act = async () => await entityRepository.UpdateAsync(entities);
+        // Act
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
@@ -2765,25 +2761,25 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[1].SomeStringProp = "stringpropupdated";
-        await entityRepository.UpdateAsync(entities);
+        await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
     }
@@ -2800,10 +2796,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2814,8 +2810,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
-        Func<Task> act = async () => await entityRepository.UpdateAsync(entity, default, projections);
+        // Act
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entity, cancellationToken: TestContext.Current.CancellationToken, projections);
 
         // Assert
         await act.Should().ThrowAsync<ArgumentNullException>();
@@ -2833,10 +2829,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2853,8 +2849,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
-        Func<Task> act = async () => await entityRepository.UpdateAsync(entity, default, projections);
+        // Act
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entity, cancellationToken: TestContext.Current.CancellationToken, projections);
 
         // Assert
         await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
@@ -2872,26 +2868,26 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entity = await entityRepository.GetByIdAsync(1);
+        var entity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = null;
 
-        // Act 
+        // Act
         entity.SomeStringProp = "stringpropupdated";
         entity.SomeDecimalProp = 20M;
-        await entityRepository.UpdateAsync(entity, default, projections);
+        await entityRepository.UpdateAsync(entity, cancellationToken: TestContext.Current.CancellationToken, projections);
 
         // Assert
-        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         entityAfterUpdate.SomeStringProp.Should().Be("somestring1");
         entityAfterUpdate.SomeDecimalProp.Should().Be(10);
     }
@@ -2908,27 +2904,27 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entity = await entityRepository.GetByIdAsync(1);
+        var entity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         entity.SomeStringProp = "stringpropupdated";
         entity.SomeDecimalProp = 20M;
-        await entityRepository.UpdateAsync(entity, default, projections);
+        await entityRepository.UpdateAsync(entity, cancellationToken: TestContext.Current.CancellationToken, projections);
 
         // Assert
-        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         entityAfterUpdate.SomeStringProp.Should().Be("stringpropupdated");
         entityAfterUpdate.SomeDecimalProp.Should().Be(10);
     }
@@ -2945,10 +2941,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -2959,9 +2955,9 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
-        await entityRepository.UpdateAsync(entities, default, projections);
+        // Act
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
+        await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken, projections);
 
         // Assert
         allEntities[0].LastModificationDate.Should().BeNull();
@@ -2982,10 +2978,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -3012,8 +3008,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
-        Func<Task> act = async () => await entityRepository.UpdateAsync(entities, default, projections);
+        // Act
+        Func<Task> act = async () => await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken, projections);
 
         // Assert
         await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
@@ -3031,28 +3027,28 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = null;
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[0].SomeDecimalProp = 20M;
         entities[1].SomeStringProp = "stringpropupdated";
         entities[1].SomeDecimalProp = 20M;
-        await entityRepository.UpdateAsync(entities, default, projections);
+        await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken, projections);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("somestring1");
         entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10M);
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("somestring2");
@@ -3071,29 +3067,29 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[0].SomeDecimalProp = 20M;
         entities[1].SomeStringProp = "stringpropupdated";
         entities[1].SomeDecimalProp = 20M;
-        await entityRepository.UpdateAsync(entities, default, projections);
+        await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken, projections);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10M);
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
@@ -3116,10 +3112,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -3128,8 +3124,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
 
         SomeFullAuditableEntityFixture entity = null;
 
-        // Act 
-        Func<Task> act = async () => await entityRepository.DeleteAsync(entity);
+        // Act
+        Func<Task> act = async () => await entityRepository.DeleteAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<ArgumentNullException>();
@@ -3147,10 +3143,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -3165,8 +3161,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             SomeStringProp = "somestring1"
         };
 
-        // Act 
-        Func<Task> act = async () => await entityRepository.DeleteAsync(entity);
+        // Act
+        Func<Task> act = async () => await entityRepository.DeleteAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
@@ -3184,23 +3180,23 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entity = await entityRepository.GetByIdAsync(1);
+        var entity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
-        // Act 
-        await entityRepository.DeleteAsync(entity);
+        // Act
+        await entityRepository.DeleteAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         entityAfterUpdate.Should().BeNull();
     }
 
@@ -3216,10 +3212,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -3228,9 +3224,9 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
-        await entityRepository.DeleteAsync(entities);
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+        // Act
+        await entityRepository.DeleteAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         allEntities[0].Should().NotBeNull();
@@ -3251,10 +3247,10 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
@@ -3279,8 +3275,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             }
         ];
 
-        // Act 
-        Func<Task> act = async () => await entityRepository.DeleteAsync(entities);
+        // Act
+        Func<Task> act = async () => await entityRepository.DeleteAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
@@ -3298,23 +3294,23 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
 
-        // Act 
-        await entityRepository.DeleteAsync(entities);
+        // Act
+        await entityRepository.DeleteAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate.Should().BeEmpty();
     }
 
@@ -3334,28 +3330,28 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         var newEntities = entities.ToList();
         newEntities[0].Id = 5;
         newEntities[0].SomeStringProp = "stringpropupdated";
         newEntities[1].Id = 6;
         newEntities[1].SomeStringProp = "stringpropupdated";
 
-        // Act 
-        await entityRepository.ReplaceOldsWithNewsAsync(entities, newEntities);
+        // Act
+        await entityRepository.ReplaceOldsWithNewsAsync(entities, newEntities, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 5 || i.Id == 6);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 5 || i.Id == 6, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
     }
@@ -3376,26 +3372,26 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         var newEntities = entities.ToList();
         foreach (var entity in newEntities)
             entity.SomeStringProp = "stringpropupdated";
 
-        // Act 
-        await entityRepository.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(entities, newEntities);
+        // Act
+        await entityRepository.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(entities, newEntities, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
     }
@@ -3416,19 +3412,19 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
 
-        // Act 
-        await entityRepository.RemoveAllAsync();
+        // Act
+        await entityRepository.RemoveAllAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync();
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate.Should().BeEmpty();
     }
 
@@ -3444,21 +3440,21 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             services.ConfigureMilvaDataAccess();
 
             services.AddDbContext<MilvaBulkDbContextFixture>(x =>
-                        {
-                            x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
-                            x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
-                        });
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
         });
 
         var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
-        await entityRepository.RemoveAllAsync();
+        // Act
+        await entityRepository.RemoveAllAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync();
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate.Should().BeEmpty();
     }
 
@@ -3512,8 +3508,8 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
             }
         };
 
-        await dbContextFixture.FullAuditableEntities.AddRangeAsync(entities);
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.FullAuditableEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
     }
 
     #endregion

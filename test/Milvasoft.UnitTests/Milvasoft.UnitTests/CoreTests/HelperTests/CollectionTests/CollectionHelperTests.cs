@@ -10,6 +10,7 @@ namespace Milvasoft.UnitTests.CoreTests.HelperTests.CollectionTests;
 
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
 [Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
+#pragma warning disable xUnit1050 // The class referenced by the ClassData attribute returns untyped data rows
 public partial class CollectionHelperTests
 {
 
@@ -471,3 +472,4 @@ public partial class CollectionHelperTests
 
     #endregion
 }
+#pragma warning restore xUnit1050 // The class referenced by the ClassData attribute returns untyped data rows

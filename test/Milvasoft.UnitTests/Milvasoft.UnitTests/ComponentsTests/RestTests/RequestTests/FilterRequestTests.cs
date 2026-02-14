@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.RequestTests;
 
 [Trait("Rest Components Unit Tests", "Milvasoft.Components.Rest project unit tests.")]
+#pragma warning disable xUnit1045 // Avoid using TheoryData type arguments that might not be serializable
 public class FilterRequestTests
 {
     #region BuildFilterExpression
@@ -68,12 +69,12 @@ public class FilterRequestTests
 
         // Arrange
         await using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(FilterRequest)).GetDbContextFixture();
-        await dbContextFixture.TestEntities.AddRangeAsync(source);
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.TestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextFixture.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
         var resultExpression = filterRequest.BuildFilterExpression<RestTestEntityFixture>();
-        var result = await dbContextFixture.TestEntities.Where(resultExpression).ToListAsync();
+        var result = await dbContextFixture.TestEntities.Where(resultExpression).ToListAsync(TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(expectedIdList.Count);
@@ -82,3 +83,4 @@ public class FilterRequestTests
 
     #endregion
 }
+#pragma warning restore xUnit1045 // Avoid using TheoryData type arguments that might not be serializable

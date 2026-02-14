@@ -20,7 +20,6 @@ namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests.RepositoryBaseT
 
 [Collection(nameof(UtcTrueDatabaseTestCollection))]
 [Trait("BulkRepositoryBase Sync Integration Tests", "Integration tests for Milvasoft.DataAccess.EfCore integration tests.")]
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6966:Awaitable method should be used", Justification = "<Pending>")]
 public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : DataAccessIntegrationTestBase(factory)
 {
     public override Task InitializeAsync(Action<IServiceCollection> configureServices = null, Action<IApplicationBuilder> configureApp = null)
@@ -85,9 +84,9 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         entityRepository.BulkAdd(entities);
-        var count = await dbContext.FullAuditableEntities.CountAsync();
+        var count = await dbContext.FullAuditableEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         count.Should().Be(0);
@@ -146,10 +145,10 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
             }
         };
 
-        // Act 
+        // Act
         entityRepository.BulkAdd(entities);
-        var count = await dbContext.FullAuditableEntities.CountAsync();
-        var addedEntity = await entityRepository.GetByIdAsync(1);
+        var count = await dbContext.FullAuditableEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var addedEntity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         count.Should().Be(2);
@@ -181,9 +180,9 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         entityRepository.BulkAddWithSaveChanges(entities);
-        var count = await dbContext.FullAuditableEntities.CountAsync();
+        var count = await dbContext.FullAuditableEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         count.Should().Be(0);
@@ -226,10 +225,10 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
             }
         };
 
-        // Act 
+        // Act
         entityRepository.BulkAddWithSaveChanges(entities);
-        var count = await dbContext.FullAuditableEntities.CountAsync();
-        var addedEntity = await entityRepository.GetByIdAsync(1);
+        var count = await dbContext.FullAuditableEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var addedEntity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         count.Should().Be(2);
@@ -281,9 +280,9 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
             }
         };
 
-        // Act 
+        // Act
         entityRepository.BulkAddWithSaveChanges(entities);
-        var count = await dbContext.FullAuditableEntities.CountAsync();
+        var count = await dbContext.FullAuditableEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         count.Should().Be(0);
@@ -333,11 +332,11 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
             }
         };
 
-        // Act 
+        // Act
         entityRepository.BulkAddWithSaveChanges(entities);
         entityRepository.SaveChangesBulk();
-        var count = await dbContext.FullAuditableEntities.CountAsync();
-        var addedEntity = await entityRepository.GetByIdAsync(1);
+        var count = await dbContext.FullAuditableEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var addedEntity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         count.Should().Be(2);
@@ -373,9 +372,9 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         entityRepository.BulkUpdate(entities);
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         allEntities[0].LastModificationDate.Should().BeNull();
@@ -422,15 +421,15 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[1].SomeStringProp = "stringpropupdated";
         entityRepository.BulkUpdate(entities);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[0].LastModificationDate.Should().NotBeNull();
@@ -462,9 +461,9 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         entityRepository.BulkUpdateWithSaveChanges(entities);
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         allEntities[0].LastModificationDate.Should().BeNull();
@@ -495,15 +494,15 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
 
-        // Act 
+        // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[1].SomeStringProp = "stringpropupdated";
         entityRepository.BulkUpdateWithSaveChanges(entities);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[0].LastModificationDate.Should().NotBeNull();
@@ -538,9 +537,9 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         entityRepository.BulkDelete(entities);
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         allEntities[0].Should().NotBeNull();
@@ -571,14 +570,14 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
 
-        // Act 
+        // Act
         entityRepository.BulkDelete(entities);
 
         // Assert
         entityRepository.FetchSoftDeletedEntities(true);
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate.Should().BeEmpty();
     }
 
@@ -621,14 +620,14 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
 
-        // Act 
+        // Act
         entityRepository.BulkDelete(entities);
 
         // Assert
         entityRepository.FetchSoftDeletedEntities(true);
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate.Should().NotBeEmpty();
         entitiesAfterUpdate[0].DeletionDate.Should().NotBeNull();
         entitiesAfterUpdate[0].DeleterUserName.Should().Be("testuser");
@@ -661,9 +660,9 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
 
         List<SomeFullAuditableEntityFixture> entities = null;
 
-        // Act 
+        // Act
         entityRepository.BulkDeleteWithSaveChanges(entities);
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         allEntities[0].Should().NotBeNull();
@@ -694,14 +693,14 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
 
-        // Act 
+        // Act
         entityRepository.BulkDeleteWithSaveChanges(entities);
 
         // Assert
         entityRepository.FetchSoftDeletedEntities(true);
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate.Should().BeEmpty();
     }
 
@@ -727,14 +726,14 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
 
-        // Act 
+        // Act
         entityRepository.BulkDeleteWithSaveChanges(entities);
 
         // Assert
         entityRepository.FetchSoftDeletedEntities(true);
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate.Should().NotBeEmpty();
         entitiesAfterUpdate[0].DeletionDate.Should().NotBeNull();
         entitiesAfterUpdate[1].DeletionDate.Should().NotBeNull();
@@ -771,9 +770,9 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
         propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
 
-        // Act 
+        // Act
         entityRepository.ExecuteUpdate(id: 5, propBuilder);
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         allEntities[0].LastModificationDate.Should().BeNull();
@@ -822,11 +821,11 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
         propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
 
-        // Act 
+        // Act
         entityRepository.ExecuteUpdate(1, propBuilder);
 
         // Assert
-        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         entityAfterUpdate.SomeStringProp.Should().Be("stringpropupdated");
         entityAfterUpdate.SomeDecimalProp.Should().Be(10M);
         entityAfterUpdate.LastModificationDate.Should().NotBeNull();
@@ -873,11 +872,11 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
         propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
 
-        // Act 
+        // Act
         entityRepository.ExecuteUpdate(i => i.Id == 1 || i.Id == 2, propBuilder);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10M);
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
@@ -914,9 +913,9 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         entityRepository.ExecuteDelete(5);
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         allEntities[0].Should().NotBeNull();
@@ -947,12 +946,12 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         entityRepository.ExecuteDelete(1);
 
         // Assert
         entityRepository.FetchSoftDeletedEntities(true);
-        var entitiesAfterDelete = await entityRepository.GetByIdAsync(1);
+        var entitiesAfterDelete = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterDelete.Should().BeNull();
     }
 
@@ -995,12 +994,12 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         entityRepository.ExecuteDelete(1);
 
         // Assert
         entityRepository.FetchSoftDeletedEntities(true);
-        var entityAfterDelete = await entityRepository.GetByIdAsync(1);
+        var entityAfterDelete = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         entityAfterDelete.Should().NotBeNull();
         entityAfterDelete.DeletionDate.Should().NotBeNull();
         entityAfterDelete.DeleterUserName.Should().Be("testuser");
@@ -1029,12 +1028,12 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await SeedAsync(dbContext);
 
-        // Act 
+        // Act
         entityRepository.ExecuteDelete(i => i.Id == 1 || i.Id == 2);
 
         // Assert
         entityRepository.FetchSoftDeletedEntities(true);
-        var entitiesAfterDelete = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterDelete = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterDelete.Should().BeEmpty();
     }
 
@@ -1080,12 +1079,12 @@ public class BulkBaseRepositorySyncTests(CustomWebApplicationFactory factory) : 
         var propBuilder = new SetPropertyBuilder<SomeFullAuditableEntityFixture>();
         propBuilder.SetPropertyValue(i => i.SomeStringProp, "stringpropupdated");
 
-        // Act 
+        // Act
         entityRepository.ExecuteDelete(i => i.Id == 1 || i.Id == 2, propBuilder);
 
         // Assert
         entityRepository.FetchSoftDeletedEntities(true);
-        var entitiesAfterDelete = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterDelete = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterDelete.Should().NotBeEmpty();
         entitiesAfterDelete[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterDelete[1].SomeStringProp.Should().Be("stringpropupdated");

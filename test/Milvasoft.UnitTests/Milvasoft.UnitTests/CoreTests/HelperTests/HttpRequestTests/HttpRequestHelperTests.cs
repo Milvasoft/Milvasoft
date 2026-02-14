@@ -28,7 +28,7 @@ public partial class HttpRequestHelperTests
         requestMessage.Content.Should().NotBeNull();
         requestMessage.Content.Headers.ContentType.MediaType.Should().Be($"application/json-{httpMethod}+{MimeTypeNames.Json}");
         requestMessage.Content.Headers.ContentType.CharSet.Should().Be(Encoding.UTF8.WebName);
-        (await requestMessage.Content.ReadAsStringAsync()).Should().BeEmpty();
+        (await requestMessage.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken)).Should().BeEmpty();
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public partial class HttpRequestHelperTests
         requestMessage.Content.Should().NotBeNull();
         requestMessage.Content.Headers.ContentType.MediaType.Should().Be($"application/json-{httpMethod}+{mediaType}");
         requestMessage.Content.Headers.ContentType.CharSet.Should().Be(encoding.WebName);
-        (await requestMessage.Content.ReadAsStringAsync()).Should().Be("{\"Name\":\"John\",\"Age\":30}");
+        (await requestMessage.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken)).Should().Be("{\"Name\":\"John\",\"Age\":30}");
     }
 
     #endregion

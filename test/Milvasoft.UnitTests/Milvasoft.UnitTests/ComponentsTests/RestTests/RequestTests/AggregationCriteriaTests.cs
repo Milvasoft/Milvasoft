@@ -180,7 +180,7 @@ public class AggregationCriteriaTests
         }.AsQueryable();
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(validQueryable, false);
+        var result = await criteria.ApplyAggregationAsync(validQueryable, false, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Result.Should().BeNull();
@@ -198,7 +198,7 @@ public class AggregationCriteriaTests
         IQueryable<RestTestEntityFixture> validQueryable = null;
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(validQueryable, false);
+        var result = await criteria.ApplyAggregationAsync(validQueryable, false, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Result.Should().BeNull();
@@ -224,7 +224,7 @@ public class AggregationCriteriaTests
         // Arrange
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(query, false);
+        var result = await criteria.ApplyAggregationAsync(query, false, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEquivalentTo(expectedResult, options => options.RespectingRuntimeTypes());
@@ -429,11 +429,11 @@ public class AggregationCriteriaTests
             }
         };
         await using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
-        await dbContextFixture.TestEntities.AddRangeAsync(entities);
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.TestEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true);
+        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Result.Should().BeNull();
@@ -450,10 +450,10 @@ public class AggregationCriteriaTests
         };
         await using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
         dbContextFixture.TestEntities = null;
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true);
+        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Result.Should().BeNull();
@@ -465,8 +465,8 @@ public class AggregationCriteriaTests
     {
         // Arrange
         await using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
-        await dbContextFixture.TestEntities.AddRangeAsync(entities);
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.TestEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
         Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true);
@@ -481,11 +481,11 @@ public class AggregationCriteriaTests
     {
         // Arrange
         await using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
-        await dbContextFixture.TestEntities.AddRangeAsync(entities);
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.TestEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true);
+        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEquivalentTo(expectedResult, options => options.RespectingRuntimeTypes());
@@ -513,11 +513,11 @@ public class AggregationCriteriaTests
             }
         };
         await using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
-        await dbContextFixture.TestEntities.AddRangeAsync(entities);
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.TestEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, false);
+        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, false, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Result.Should().BeNull();
@@ -534,10 +534,10 @@ public class AggregationCriteriaTests
         };
         await using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
         dbContextFixture.TestEntities = null;
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, false);
+        var result = await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, false, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Result.Should().BeNull();
@@ -549,8 +549,8 @@ public class AggregationCriteriaTests
     {
         // Arrange
         await using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
-        await dbContextFixture.TestEntities.AddRangeAsync(entities);
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.TestEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
         Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, false);
@@ -565,11 +565,11 @@ public class AggregationCriteriaTests
     {
         // Arrange
         await using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(AggregationCriteria)).GetDbContextFixture();
-        await dbContextMock.TestEntities.AddRangeAsync(entities);
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.TestEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await criteria.ApplyAggregationAsync(dbContextMock.TestEntities, false);
+        var result = await criteria.ApplyAggregationAsync(dbContextMock.TestEntities, false, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEquivalentTo(expectedResult, options => options.RespectingRuntimeTypes());

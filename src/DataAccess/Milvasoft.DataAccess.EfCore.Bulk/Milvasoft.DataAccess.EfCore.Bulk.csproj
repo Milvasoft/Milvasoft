@@ -16,7 +16,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Azure.Identity" Version="1.17.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Abstractions" Version="10.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Abstractions" Version="10.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

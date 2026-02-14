@@ -34,4 +34,12 @@ public abstract class DataAccessIntegrationTestBase(CustomWebApplicationFactory 
     }
 
     public virtual Task DisposeAsync() => _factory.ResetDatabase();
+
+    async ValueTask IAsyncLifetime.InitializeAsync() => await InitializeAsync();
+
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        await DisposeAsync();
+        GC.SuppressFinalize(this);
+    }
 }

@@ -28,13 +28,13 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
     /// <param name="function"></param>
     /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    public async Task ApplyTransactionAsync(Func<Task> function, bool startTransaction = true)
+    public Task ApplyTransactionAsync(Func<Task> function, bool startTransaction = true)
     {
         if (startTransaction)
         {
             var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
 
-            await executionStrategy.ExecuteAsync(async () =>
+            return executionStrategy.ExecuteAsync(async () =>
             {
                 await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
@@ -52,7 +52,7 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
             });
         }
         else
-            await function();
+            return function();
     }
 
     /// <summary>
@@ -98,13 +98,13 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
     /// <param name="rollbackFunction"></param>
     /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    public async Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollbackFunction, bool startTransaction = true)
+    public Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollbackFunction, bool startTransaction = true)
     {
         if (startTransaction)
         {
             var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
 
-            await executionStrategy.ExecuteAsync(async () =>
+            return executionStrategy.ExecuteAsync(async () =>
             {
                 var transaction = await _dbContext.Database.BeginTransactionAsync();
                 try
@@ -121,7 +121,7 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
             });
         }
         else
-            await function();
+            return function();
     }
 
     /// <summary>
@@ -167,13 +167,13 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
     /// <param name="rollbackFunction"></param>
     /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
     /// <returns></returns>
-    public async Task ApplyTransactionAsync(Func<Task> function, Action rollbackFunction, bool startTransaction = true)
+    public Task ApplyTransactionAsync(Func<Task> function, Action rollbackFunction, bool startTransaction = true)
     {
         if (startTransaction)
         {
             var executionStrategy = _dbContext.Database.CreateExecutionStrategy();
 
-            await executionStrategy.ExecuteAsync(async () =>
+            return executionStrategy.ExecuteAsync(async () =>
             {
                 var transaction = await _dbContext.Database.BeginTransactionAsync();
                 try
@@ -190,7 +190,7 @@ public class ContextRepository<TContext>(TContext dbContext) : IContextRepositor
             });
         }
         else
-            await function();
+            return function();
     }
 
     /// <summary>

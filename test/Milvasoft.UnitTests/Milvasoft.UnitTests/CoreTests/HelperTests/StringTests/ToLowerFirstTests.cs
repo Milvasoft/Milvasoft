@@ -5,6 +5,7 @@ using System.Globalization;
 
 namespace Milvasoft.UnitTests.CoreTests.HelperTests.StringTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1050:The class referenced by the ClassData attribute returns untyped data rows", Justification = "<Pending>")]
 [Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
 public partial class StringHelperTests
 {

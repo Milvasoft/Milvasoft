@@ -71,7 +71,7 @@ public class S3UploadStream : Stream
     }
 
     public override void Flush() => FlushAsync(false).Wait();
-    public override async Task FlushAsync(CancellationToken cancellationToken) => await FlushAsync(false, cancellationToken);
+    public override Task FlushAsync(CancellationToken cancellationToken) => FlushAsync(false, cancellationToken);
 
     public override async ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
     {
@@ -194,6 +194,7 @@ public class S3UploadStream : Stream
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("AsyncUsage", "AsyncFixer03:Fire-and-forget async-void methods or delegates", Justification = "<Pending>")]
     protected override async void Dispose(bool disposing)
     {
         if (disposing && _metadata != null)

@@ -11,7 +11,6 @@ using System.Linq.Expressions;
 namespace Milvasoft.UnitTests.CoreTests.MultiLanguageTests;
 
 [Trait("Core Unit Tests", "Milvasoft.Core project unit tests.")]
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3358:Ternary operators should not be nested", Justification = "<Pending>")]
 public class MultiLanguageManagerTests
 {
     #region UpdateLanguagesList

@@ -32,12 +32,11 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
-
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         getAllData.Should().HaveCount(3);
         getSomeData.Should().HaveCount(3);
@@ -65,12 +64,11 @@ public class BaseRepositoryAsyncTests
         entityRepository.FetchSoftDeletedEntities(true);
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
-
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         getAllData.Should().HaveCount(4);
         getSomeData.Should().HaveCount(4);
@@ -99,12 +97,12 @@ public class BaseRepositoryAsyncTests
         entityRepository.SoftDeleteFetchStateResetAfterOperation(false);
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
         entityRepository.ResetSoftDeletedEntityFetchResetState();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         getAllData.Should().HaveCount(4);
@@ -133,12 +131,11 @@ public class BaseRepositoryAsyncTests
         entityRepository.FetchSoftDeletedEntities(true);
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
-
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         getAllData.Should().HaveCount(4);
         getSomeData.Should().HaveCount(3);
@@ -167,12 +164,11 @@ public class BaseRepositoryAsyncTests
         entityRepository.SoftDeleteFetchStateResetAfterOperation(true);
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
-
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         getAllData.Should().HaveCount(4);
         getSomeData.Should().HaveCount(3);
@@ -202,11 +198,11 @@ public class BaseRepositoryAsyncTests
         entityRepository.ResetSoftDeletedEntityFetchState();
 
         // Act
-        var getAllData = await entityRepository.GetAllAsync();
-        var getSomeData = await entityRepository.GetSomeAsync(4);
-        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4);
-        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4);
-        var getByIdData = await entityRepository.GetByIdAsync(4);
+        var getAllData = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var getSomeData = await entityRepository.GetSomeAsync(4, cancellationToken: TestContext.Current.CancellationToken);
+        var firstData = await entityRepository.GetFirstOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var singleData = await entityRepository.GetSingleOrDefaultAsync(i => i.Id == 4, cancellationToken: TestContext.Current.CancellationToken);
+        var getByIdData = await entityRepository.GetByIdAsync(4, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         getAllData.Should().HaveCount(3);
@@ -237,22 +233,22 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act & Assert
-        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1);
+        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataBeforeUpdate.SomeStringProp = "somestring11";
         dataBeforeUpdate.CreationDate.Should().NotBeNull();
 
-        await entityRepository.UpdateAsync(dataBeforeUpdate);
+        await entityRepository.UpdateAsync(dataBeforeUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var dataAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataAfterUpdate.SomeStringProp.Should().Be("somestring11");
         dataAfterUpdate.CreationDate.Should().NotBeNull();
         dataAfterUpdate.LastModificationDate.Should().NotBeNull();
 
-        await entityRepository.DeleteAsync(dataAfterUpdate);
+        await entityRepository.DeleteAsync(dataAfterUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterDelete = await entityRepository.GetByIdAsync(1);
+        var dataAfterDelete = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataAfterDelete.Should().BeNull();
     }
@@ -278,27 +274,27 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act & Assert
-        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1);
+        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataBeforeUpdate.SomeStringProp = "somestring11";
         dataBeforeUpdate.CreationDate.Should().NotBeNull();
 
-        await entityRepository.UpdateAsync(dataBeforeUpdate);
+        await entityRepository.UpdateAsync(dataBeforeUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var dataAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataAfterUpdate.SomeStringProp.Should().Be("somestring1");
         dataAfterUpdate.CreationDate.Should().NotBeNull();
         dataAfterUpdate.LastModificationDate.Should().BeNull();
 
-        await entityRepository.DeleteAsync(dataAfterUpdate);
+        await entityRepository.DeleteAsync(dataAfterUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterDelete = await entityRepository.GetByIdAsync(1);
+        var dataAfterDelete = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         dataAfterDelete.Should().NotBeNull();
 
-        await entityRepository.SaveChangesAsync();
+        await entityRepository.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterSaveChanges = await entityRepository.GetByIdAsync(1);
+        var dataAfterSaveChanges = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         dataAfterSaveChanges.Should().BeNull();
     }
 
@@ -324,27 +320,27 @@ public class BaseRepositoryAsyncTests
         entityRepository.ChangeSaveChangesChoice(SaveChangesChoice.Manual);
 
         // Act & Assert
-        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1);
+        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataBeforeUpdate.SomeStringProp = "somestring11";
         dataBeforeUpdate.CreationDate.Should().NotBeNull();
 
-        await entityRepository.UpdateAsync(dataBeforeUpdate);
+        await entityRepository.UpdateAsync(dataBeforeUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var dataAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataAfterUpdate.SomeStringProp.Should().Be("somestring1");
         dataAfterUpdate.CreationDate.Should().NotBeNull();
         dataAfterUpdate.LastModificationDate.Should().BeNull();
 
-        await entityRepository.DeleteAsync(dataAfterUpdate);
+        await entityRepository.DeleteAsync(dataAfterUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterDelete = await entityRepository.GetByIdAsync(1);
+        var dataAfterDelete = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         dataAfterDelete.Should().NotBeNull();
 
-        await entityRepository.SaveChangesAsync();
+        await entityRepository.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterSaveChanges = await entityRepository.GetByIdAsync(1);
+        var dataAfterSaveChanges = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         dataAfterSaveChanges.Should().BeNull();
     }
 
@@ -370,14 +366,14 @@ public class BaseRepositoryAsyncTests
         entityRepository.ChangeSaveChangesChoice(SaveChangesChoice.Manual);
 
         // Act & Assert
-        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1);
+        var dataBeforeUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataBeforeUpdate.SomeStringProp = "somestring11";
         dataBeforeUpdate.CreationDate.Should().NotBeNull();
 
-        await entityRepository.UpdateAsync(dataBeforeUpdate);
+        await entityRepository.UpdateAsync(dataBeforeUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var dataAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         dataAfterUpdate.SomeStringProp.Should().Be("somestring1");
         dataAfterUpdate.CreationDate.Should().NotBeNull();
@@ -385,9 +381,9 @@ public class BaseRepositoryAsyncTests
 
         entityRepository.ResetSaveChangesChoiceToDefault();
 
-        await entityRepository.DeleteAsync(dataAfterUpdate);
+        await entityRepository.DeleteAsync(dataAfterUpdate, cancellationToken: TestContext.Current.CancellationToken);
 
-        var dataAfterDelete = await entityRepository.GetByIdAsync(1);
+        var dataAfterDelete = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         dataAfterDelete.Should().BeNull();
     }
 
@@ -406,7 +402,7 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act
-        var result = await entityRepository.GetFirstOrDefaultAsync();
+        var result = await entityRepository.GetFirstOrDefaultAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -425,7 +421,7 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act
-        var result = await entityRepository.GetFirstOrDefaultAsync(i => i.SomeDecimalProp > 20M);
+        var result = await entityRepository.GetFirstOrDefaultAsync(i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -449,7 +445,7 @@ public class BaseRepositoryAsyncTests
         {
             Id = i.Id,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -473,7 +469,7 @@ public class BaseRepositoryAsyncTests
         {
             Id = i.Id,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -497,7 +493,7 @@ public class BaseRepositoryAsyncTests
         {
             Id = i.Id,
             CreationDate = i.CreationDate,
-        }, i => i.SomeDecimalProp > 1);
+        }, i => i.SomeDecimalProp > 1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -535,7 +531,7 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act
-        var result = await entityRepository.GetSingleOrDefaultAsync(i => i.SomeDecimalProp > 20M);
+        var result = await entityRepository.GetSingleOrDefaultAsync(i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -559,7 +555,7 @@ public class BaseRepositoryAsyncTests
         {
             Id = i.Id,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -583,7 +579,7 @@ public class BaseRepositoryAsyncTests
         {
             Id = i.Id,
             CreationDate = i.CreationDate,
-        }, i => i.SomeDecimalProp > 1);
+        }, i => i.SomeDecimalProp > 1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -604,7 +600,7 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act
-        var result = await entityRepository.GetByIdAsync(1);
+        var result = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -623,7 +619,7 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act
-        var result = await entityRepository.GetByIdAsync(1, i => i.SomeDecimalProp > 20M);
+        var result = await entityRepository.GetByIdAsync(1, i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -644,7 +640,7 @@ public class BaseRepositoryAsyncTests
         {
             Id = i.Id,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -668,7 +664,7 @@ public class BaseRepositoryAsyncTests
         {
             Id = i.Id,
             CreationDate = i.CreationDate,
-        }, i => i.SomeDecimalProp > 1);
+        }, i => i.SomeDecimalProp > 1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -689,7 +685,7 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act
-        var result = await entityRepository.GetAllAsync();
+        var result = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -708,7 +704,7 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act
-        var result = await entityRepository.GetAllAsync(i => i.SomeDecimalProp > 10M);
+        var result = await entityRepository.GetAllAsync(i => i.SomeDecimalProp > 10M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -732,7 +728,7 @@ public class BaseRepositoryAsyncTests
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -756,7 +752,7 @@ public class BaseRepositoryAsyncTests
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        }, i => i.SomeDecimalProp > 20M);
+        }, i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -782,7 +778,7 @@ public class BaseRepositoryAsyncTests
         };
 
         // Act
-        var result = await entityRepository.GetAllAsync(listRequest);
+        var result = await entityRepository.GetAllAsync(listRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -816,7 +812,7 @@ public class BaseRepositoryAsyncTests
         };
 
         // Act
-        var result = await entityRepository.GetAllAsync(listRequest, i => i.SomeDecimalProp > 10M);
+        var result = await entityRepository.GetAllAsync(listRequest, i => i.SomeDecimalProp > 10M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -855,7 +851,7 @@ public class BaseRepositoryAsyncTests
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -894,7 +890,7 @@ public class BaseRepositoryAsyncTests
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        }, i => i.SomeDecimalProp > 20M);
+        }, i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -925,7 +921,7 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act
-        var result = await entityRepository.GetSomeAsync(2);
+        var result = await entityRepository.GetSomeAsync(2, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -944,7 +940,7 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act
-        var result = await entityRepository.GetSomeAsync(1, i => i.SomeDecimalProp > 10M);
+        var result = await entityRepository.GetSomeAsync(1, i => i.SomeDecimalProp > 10M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -968,7 +964,7 @@ public class BaseRepositoryAsyncTests
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -992,7 +988,7 @@ public class BaseRepositoryAsyncTests
             Id = i.Id,
             SomeDecimalProp = i.SomeDecimalProp,
             CreationDate = i.CreationDate,
-        }, i => i.SomeDecimalProp > 20M);
+        }, i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1042,8 +1038,8 @@ public class BaseRepositoryAsyncTests
         };
 
         // Act
-        await entityRepository.AddAsync(entity);
-        var addedEntity = await entityRepository.GetByIdAsync(1);
+        await entityRepository.AddAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
+        var addedEntity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         addedEntity.Should().NotBeNull();
@@ -1067,8 +1063,8 @@ public class BaseRepositoryAsyncTests
         List<SomeFullAuditableEntityFixture> entities = null;
 
         // Act
-        await entityRepository.AddRangeAsync(entities);
-        var count = await dbContext.FullAuditableEntities.CountAsync();
+        await entityRepository.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        var count = await dbContext.FullAuditableEntities.CountAsync(TestContext.Current.CancellationToken);
 
         // Assert
         count.Should().Be(0);
@@ -1101,9 +1097,9 @@ public class BaseRepositoryAsyncTests
         };
 
         // Act
-        await entityRepository.AddRangeAsync(entities);
-        var count = await dbContext.FullAuditableEntities.CountAsync();
-        var addedEntity = await entityRepository.GetByIdAsync(1);
+        await entityRepository.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        var count = await dbContext.FullAuditableEntities.CountAsync(TestContext.Current.CancellationToken);
+        var addedEntity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         count.Should().Be(2);
@@ -1169,14 +1165,13 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        var entity = await entityRepository.GetByIdAsync(1);
+        var entity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
         entity.SomeStringProp = "stringpropupdated";
-        await entityRepository.UpdateAsync(entity);
-
+        await entityRepository.UpdateAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
         // Assert
-        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         entityAfterUpdate.SomeStringProp.Should().Be("stringpropupdated");
     }
 
@@ -1193,8 +1188,8 @@ public class BaseRepositoryAsyncTests
         List<SomeFullAuditableEntityFixture> entities = null;
 
         // Act
-        await entityRepository.UpdateAsync(entities);
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+        await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(TestContext.Current.CancellationToken);
 
         // Assert
         allEntities[0].LastModificationDate.Should().BeNull();
@@ -1248,15 +1243,15 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
         entities[0].SomeStringProp = "stringpropupdated";
         entities[1].SomeStringProp = "stringpropupdated";
-        await entityRepository.UpdateAsync(entities);
+        await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
     }
@@ -1319,16 +1314,16 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        var entity = await entityRepository.GetByIdAsync(1);
+        var entity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = null;
 
         // Act
         entity.SomeStringProp = "stringpropupdated";
         entity.SomeDecimalProp = 20M;
-        await entityRepository.UpdateAsync(entity, default, projections);
+        await entityRepository.UpdateAsync(entity, cancellationToken: TestContext.Current.CancellationToken, propertySelectors: projections);
 
         // Assert
-        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         entityAfterUpdate.SomeStringProp.Should().Be("somestring1");
         entityAfterUpdate.SomeDecimalProp.Should().Be(10);
     }
@@ -1343,17 +1338,17 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        var entity = await entityRepository.GetByIdAsync(1);
+        var entity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
         // Act
         entity.SomeStringProp = "stringpropupdated";
         entity.SomeDecimalProp = 20M;
-        await entityRepository.UpdateAsync(entity, default, projections);
+        await entityRepository.UpdateAsync(entity, cancellationToken: TestContext.Current.CancellationToken, propertySelectors: projections);
 
         // Assert
-        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         entityAfterUpdate.SomeStringProp.Should().Be("stringpropupdated");
         entityAfterUpdate.SomeDecimalProp.Should().Be(10);
     }
@@ -1373,8 +1368,8 @@ public class BaseRepositoryAsyncTests
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
         // Act
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
-        await entityRepository.UpdateAsync(entities, default, projections);
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(TestContext.Current.CancellationToken);
+        await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken, propertySelectors: projections);
 
         // Assert
         allEntities[0].LastModificationDate.Should().BeNull();
@@ -1430,7 +1425,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = null;
 
         // Act
@@ -1438,10 +1433,10 @@ public class BaseRepositoryAsyncTests
         entities[0].SomeDecimalProp = 20M;
         entities[1].SomeStringProp = "stringpropupdated";
         entities[1].SomeDecimalProp = 20M;
-        await entityRepository.UpdateAsync(entities, default, projections);
+        await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken, propertySelectors: projections);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("somestring1");
         entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10M);
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("somestring2");
@@ -1458,7 +1453,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         Expression<Func<SomeFullAuditableEntityFixture, object>> projection = i => i.SomeStringProp;
         Expression<Func<SomeFullAuditableEntityFixture, object>>[] projections = [projection];
 
@@ -1467,10 +1462,10 @@ public class BaseRepositoryAsyncTests
         entities[0].SomeDecimalProp = 20M;
         entities[1].SomeStringProp = "stringpropupdated";
         entities[1].SomeDecimalProp = 20M;
-        await entityRepository.UpdateAsync(entities, default, projections);
+        await entityRepository.UpdateAsync(entities, cancellationToken: TestContext.Current.CancellationToken, propertySelectors: projections);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[0].SomeDecimalProp.Should().Be(10M);
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
@@ -1535,13 +1530,13 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        var entity = await entityRepository.GetByIdAsync(1);
+        var entity = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        await entityRepository.DeleteAsync(entity);
+        await entityRepository.DeleteAsync(entity, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entityAfterUpdate = await entityRepository.GetByIdAsync(1);
+        var entityAfterUpdate = await entityRepository.GetByIdAsync(1, cancellationToken: TestContext.Current.CancellationToken);
         entityAfterUpdate.Should().BeNull();
     }
 
@@ -1558,8 +1553,8 @@ public class BaseRepositoryAsyncTests
         List<SomeFullAuditableEntityFixture> entities = null;
 
         // Act
-        await entityRepository.DeleteAsync(entities);
-        var allEntities = await dbContext.FullAuditableEntities.ToListAsync();
+        await entityRepository.DeleteAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        var allEntities = await dbContext.FullAuditableEntities.ToListAsync(TestContext.Current.CancellationToken);
 
         // Assert
         allEntities[0].Should().NotBeNull();
@@ -1613,13 +1608,13 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        await entityRepository.DeleteAsync(entities);
+        await entityRepository.DeleteAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate.Should().BeEmpty();
     }
 
@@ -1637,7 +1632,7 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         var newEntities = entities.ToList();
         newEntities[0].Id = 5;
         newEntities[0].SomeStringProp = "stringpropupdated";
@@ -1645,10 +1640,10 @@ public class BaseRepositoryAsyncTests
         newEntities[1].SomeStringProp = "stringpropupdated";
 
         // Act
-        await entityRepository.ReplaceOldsWithNewsAsync(entities, newEntities);
+        await entityRepository.ReplaceOldsWithNewsAsync(entities, newEntities, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 5 || i.Id == 6);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 5 || i.Id == 6, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
     }
@@ -1667,16 +1662,16 @@ public class BaseRepositoryAsyncTests
         var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
         await ResetDatabaseAndSeedAsync(dbContext);
 
-        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entities = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         var newEntities = entities.ToList();
         foreach (var entity in newEntities)
             entity.SomeStringProp = "stringpropupdated";
 
         // Act
-        await entityRepository.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(entities, newEntities);
+        await entityRepository.ReplaceOldsWithNewsInSeperateDatabaseProcessAsync(entities, newEntities, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2);
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(i => i.Id == 1 || i.Id == 2, cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate[0].SomeStringProp.Should().Be("stringpropupdated");
         entitiesAfterUpdate[1].SomeStringProp.Should().Be("stringpropupdated");
     }
@@ -1696,10 +1691,10 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAsync(dbContext);
 
         // Act
-        await entityRepository.RemoveAllAsync();
+        await entityRepository.RemoveAllAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync();
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate.Should().BeEmpty();
     }
 
@@ -1714,10 +1709,10 @@ public class BaseRepositoryAsyncTests
         await ResetDatabaseAndSeedAsync(dbContext);
 
         // Act
-        await entityRepository.RemoveAllAsync();
+        await entityRepository.RemoveAllAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        var entitiesAfterUpdate = await entityRepository.GetAllAsync();
+        var entitiesAfterUpdate = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
         entitiesAfterUpdate.Should().BeEmpty();
     }
 

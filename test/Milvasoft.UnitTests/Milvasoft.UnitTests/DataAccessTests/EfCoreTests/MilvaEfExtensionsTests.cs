@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
@@ -16,8 +15,10 @@ using System.Reflection;
 
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1050:The class referenced by the ClassData attribute returns untyped data rows", Justification = "<Pending>")]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
 [Trait("EF Core Data Access Unit Tests", "Unit tests for Milvasoft.DataAccess.EfCore unit testable parts.")]
+#pragma warning disable xUnit1045 // Avoid using TheoryData type arguments that might not be serializable
 public class MilvaEfExtensionsTests
 {
     #region WithFiltering
@@ -140,11 +141,11 @@ public class MilvaEfExtensionsTests
     {
         // Arrange
         using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
-        await dbContextFixture.TestEntities.AddRangeAsync(source);
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.TestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContextFixture.TestEntities.WithFiltering(filterRequest).ToListAsync();
+        var result = await dbContextFixture.TestEntities.WithFiltering(filterRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(expectedIdList.Count);
@@ -156,15 +157,15 @@ public class MilvaEfExtensionsTests
     {
         // Arrange
         using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
-        await dbContextFixture.TestEntities.AddAsync(new RestTestEntityFixture { Id = 1, Name = "john" });
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.TestEntities.AddAsync(new RestTestEntityFixture { Id = 1, Name = "john" }, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         ListRequest listRequest = null;
 
         // Act
-        var result = await dbContextFixture.TestEntities.WithFiltering(listRequest).ToListAsync();
+        var result = await dbContextFixture.TestEntities.WithFiltering(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        result.Should().HaveCount(await dbContextFixture.TestEntities.CountAsync());
+        result.Should().HaveCount(await dbContextFixture.TestEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Theory]
@@ -173,15 +174,15 @@ public class MilvaEfExtensionsTests
     {
         // Arrange
         using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
-        await dbContextFixture.TestEntities.AddRangeAsync(source);
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.TestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         var listRequest = new ListRequest
         {
             Filtering = filterRequest
         };
 
         // Act
-        var result = await dbContextFixture.TestEntities.WithFiltering(listRequest).ToListAsync();
+        var result = await dbContextFixture.TestEntities.WithFiltering(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(expectedIdList.Count);
@@ -282,11 +283,11 @@ public class MilvaEfExtensionsTests
     {
         // Arrange
         using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
-        await dbContextMock.TestEntities.AddRangeAsync(source);
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.TestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContextMock.TestEntities.WithSorting(sortRequest).ToListAsync();
+        var result = await dbContextMock.TestEntities.WithSorting(sortRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeInAscendingOrder(expectedExpression);
@@ -298,11 +299,11 @@ public class MilvaEfExtensionsTests
     {
         // Arrange
         using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
-        await dbContextMock.TestEntities.AddRangeAsync(source);
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.TestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContextMock.TestEntities.WithSorting(sortRequest).ToListAsync();
+        var result = await dbContextMock.TestEntities.WithSorting(sortRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeInDescendingOrder(expectedExpression);
@@ -314,14 +315,14 @@ public class MilvaEfExtensionsTests
         // Arrange
         ListRequest listRequest = null;
         using var dbContextFixture = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
-        await dbContextFixture.TestEntities.AddAsync(new RestTestEntityFixture { Id = 1, Name = "john" });
-        await dbContextFixture.SaveChangesAsync();
+        await dbContextFixture.TestEntities.AddAsync(new RestTestEntityFixture { Id = 1, Name = "john" }, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextFixture.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContextFixture.TestEntities.WithSorting(listRequest).ToListAsync();
+        var result = await dbContextFixture.TestEntities.WithSorting(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        result.Should().HaveCount(await dbContextFixture.TestEntities.CountAsync());
+        result.Should().HaveCount(await dbContextFixture.TestEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Theory]
@@ -335,11 +336,11 @@ public class MilvaEfExtensionsTests
         };
 
         using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
-        await dbContextMock.TestEntities.AddRangeAsync(source);
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.TestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContextMock.TestEntities.WithSorting(listRequest).ToListAsync();
+        var result = await dbContextMock.TestEntities.WithSorting(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeInAscendingOrder(expectedExpression);
@@ -355,11 +356,11 @@ public class MilvaEfExtensionsTests
             Sorting = sortRequest
         };
         using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
-        await dbContextMock.TestEntities.AddRangeAsync(source);
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.TestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContextMock.TestEntities.WithSorting(listRequest).ToListAsync();
+        var result = await dbContextMock.TestEntities.WithSorting(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeInDescendingOrder(expectedExpression);
@@ -495,14 +496,14 @@ public class MilvaEfExtensionsTests
         ListRequest listRequest = null;
 
         using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
-        await dbContextMock.TestEntities.AddRangeAsync(validQueryable);
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.TestEntities.AddRangeAsync(validQueryable, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContextMock.TestEntities.WithSorting(listRequest).ToListAsync();
+        var result = await dbContextMock.TestEntities.WithSorting(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        result.Should().HaveCount(await dbContextMock.TestEntities.CountAsync());
+        result.Should().HaveCount(await dbContextMock.TestEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -660,11 +661,11 @@ public class MilvaEfExtensionsTests
         };
 
         using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
-        await dbContextMock.TestEntities.AddRangeAsync(list);
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.TestEntities.AddRangeAsync(list, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContextMock.TestEntities.WithFilteringAndSorting(listRequest).ToListAsync();
+        var result = await dbContextMock.TestEntities.WithFilteringAndSorting(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(4);
@@ -872,10 +873,10 @@ public class MilvaEfExtensionsTests
         };
         using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
         dbContextMock.TestEntities = null;
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContextMock.TestEntities.ToListResponseAsync(listRequest);
+        var result = await dbContextMock.TestEntities.ToListResponseAsync(listRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -890,11 +891,11 @@ public class MilvaEfExtensionsTests
     {
         // Arrange
         using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
-        await dbContextMock.TestEntities.AddRangeAsync(source);
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.TestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContextMock.TestEntities.ToListResponseAsync(listRequest);
+        var result = await dbContextMock.TestEntities.ToListResponseAsync(listRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEquivalentTo(expectedResponse, opt => opt.RespectingRuntimeTypes());
@@ -1227,3 +1228,4 @@ public class MilvaEfExtensionsTests
 
     #endregion
 }
+#pragma warning restore xUnit1045 // Avoid using TheoryData type arguments that might not be serializable

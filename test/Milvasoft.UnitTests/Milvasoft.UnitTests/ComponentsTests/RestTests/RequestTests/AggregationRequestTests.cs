@@ -30,7 +30,7 @@ public class AggregationRequestTests
         }.AsQueryable();
 
         // Act
-        var result = await request.ApplyAggregationAsync(validQueryable, false);
+        var result = await request.ApplyAggregationAsync(validQueryable, false, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -56,7 +56,7 @@ public class AggregationRequestTests
         }.AsQueryable();
 
         // Act
-        var result = await request.ApplyAggregationAsync(validQueryable, false);
+        var result = await request.ApplyAggregationAsync(validQueryable, false, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -76,10 +76,10 @@ public class AggregationRequestTests
         };
         var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(AggregationRequest)).GetDbContextFixture();
         dbContextMock.TestEntities = null;
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await request.ApplyAggregationAsync(dbContextMock.TestEntities, true);
+        var result = await request.ApplyAggregationAsync(dbContextMock.TestEntities, true, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
@@ -95,10 +95,10 @@ public class AggregationRequestTests
         };
         var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(AggregationRequest)).GetDbContextFixture();
         dbContextMock.TestEntities = null;
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await request.ApplyAggregationAsync(dbContextMock.TestEntities, true);
+        var result = await request.ApplyAggregationAsync(dbContextMock.TestEntities, true, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();

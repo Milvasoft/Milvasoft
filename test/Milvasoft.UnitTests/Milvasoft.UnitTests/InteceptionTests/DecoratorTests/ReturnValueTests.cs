@@ -1,4 +1,4 @@
-﻿using AutoFixture.Xunit2;
+﻿using AutoFixture.Xunit3;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Interception.Builder;

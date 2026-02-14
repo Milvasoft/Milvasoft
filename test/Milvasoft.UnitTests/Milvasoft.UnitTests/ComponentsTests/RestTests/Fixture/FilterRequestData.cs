@@ -1,17 +1,16 @@
 ﻿using ExpressionBuilder.Common;
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.Request;
-using System.Collections;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
 
-internal class ValidListSourceForBuildFilterExpressionMethodData : IEnumerable<object[]>
+internal class ValidListSourceForBuildFilterExpressionMethodData : TheoryData<IQueryable<RestTestEntityFixture>, FilterRequest, List<int>>
 {
     /// <summary>
     /// source , filter request, expected filtered result id list
     /// </summary>
     /// <returns></returns>
-    public IEnumerator<object[]> GetEnumerator()
+    public ValidListSourceForBuildFilterExpressionMethodData()
     {
         IQueryable<RestTestEntityFixture> validQueryable = new List<RestTestEntityFixture>
         {
@@ -98,136 +97,119 @@ internal class ValidListSourceForBuildFilterExpressionMethodData : IEnumerable<o
         }.AsQueryable();
 
         //1
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.IsNull }]},
-            new List<int> { 5 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.IsNull }] },
+            [5]
+        );
 
         //2
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.Contains, Value = "J"}]},
-            new List<int> { 1, 3 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.Contains, Value = "J" }] },
+            [1, 3]
+        );
 
         //3
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.Contains, Value = "y"}]},
-            new List<int> { 4 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.Contains, Value = "y" }] },
+            [4]
+        );
 
         //4
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.EqualTo, Value = "Mary"}]},
-            new List<int> { 4 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.EqualTo, Value = "Mary" }] },
+            [4]
+        );
 
         //5
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Count), Type = FilterType.GreaterThanOrEqualTo, Value = 90}]},
-            new List<int> { 3, 4, 5 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Count), Type = FilterType.GreaterThanOrEqualTo, Value = 90 }] },
+            [3, 4, 5]
+        );
 
         //6
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Count), Type = FilterType.Between, Value = 90, OtherValue = 100 }]},
-            new List<int> { 3 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Count), Type = FilterType.Between, Value = 90, OtherValue = 100 }] },
+            [3]
+        );
 
         //7
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.IsActive), Type = FilterType.EqualTo, Value = true }]},
-            new List<int> { 1 , 4 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.IsActive), Type = FilterType.EqualTo, Value = true }] },
+            [1, 4]
+        );
 
         //8
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.IsActive), Type = FilterType.NotEqualTo, Value = true }]},
-            new List<int> { 2, 3 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.IsActive), Type = FilterType.NotEqualTo, Value = true }] },
+            [2, 3]
+        );
 
         //9
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.InsertDate), Type = FilterType.Between, Value = DateTime.Now.AddDays(-1), OtherValue = DateTime.Now.AddDays(2)}]},
-            new List<int> { 1, 3, 4 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.InsertDate), Type = FilterType.Between, Value = DateTime.Now.AddDays(-1), OtherValue = DateTime.Now.AddDays(2) }] },
+            [1, 3, 4]
+        );
 
         //10
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.UpdateDate), Type = FilterType.Between, Value = DateTime.Now.AddDays(-1), OtherValue = DateTime.Now.AddDays(2)}]},
-            new List<int> { 1 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.UpdateDate), Type = FilterType.Between, Value = DateTime.Now.AddDays(-1), OtherValue = DateTime.Now.AddDays(2) }] },
+            [1]
+        );
 
         //11
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.UpdateDate), Type = FilterType.DateEqualTo, Value = null }]},
-            new List<int> { 3 , 4 , 5}
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.UpdateDate), Type = FilterType.DateEqualTo, Value = null }] },
+            [3, 4, 5]
+        );
 
         //12
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{  Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.IsActive), Type = FilterType.EqualTo, Value = null }]},
-            new List<int> { 5 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.IsActive), Type = FilterType.EqualTo, Value = null }] },
+            [5]
+        );
 
         //13
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{  Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.IsNullOrWhiteSpace }]},
-            new List<int> { 5 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.IsNullOrWhiteSpace }] },
+            [5]
+        );
 
         //14
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{  Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Number), Type = FilterType.EqualTo, Value = RestTestEnumFixture.Two }]},
-            new List<int> { 1 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Number), Type = FilterType.EqualTo, Value = RestTestEnumFixture.Two }] },
+            [1]
+        );
 
         //15
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{  Criterias = [ new FilterCriteria{ FilterBy = $"{nameof(RestTestEntityFixture.Children)}.Name", Type = FilterType.EqualTo, Value = "Jack" }]},
-            new List<int> { 1 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = $"{nameof(RestTestEntityFixture.Children)}.Name", Type = FilterType.EqualTo, Value = "Jack" }] },
+            [1]
+        );
 
         //16
-        yield return new object[]
-        {
+        Add(
             validQueryable,
-            new FilterRequest{  Criterias = [ new FilterCriteria{ FilterBy = $"{nameof(RestTestEntityFixture.Childrens)}[Name]", Type = FilterType.EqualTo, Value = "John" }]},
-            new List<int> { 2 }
-        };
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = $"{nameof(RestTestEntityFixture.Childrens)}[Name]", Type = FilterType.EqualTo, Value = "John" }] },
+            [2]
+        );
 
         //17
-        yield return new object[]
-        {
+        Add(
             validQueryable,
             new FilterRequest
             {
@@ -254,12 +236,11 @@ internal class ValidListSourceForBuildFilterExpressionMethodData : IEnumerable<o
                 ],
                 MergeType = Connector.And
             },
-            new List<int> { 4 }
-        };
+            [4]
+        );
 
         //18
-        yield return new object[]
-        {
+        Add(
             validQueryable,
             new FilterRequest
             {
@@ -280,23 +261,20 @@ internal class ValidListSourceForBuildFilterExpressionMethodData : IEnumerable<o
                 ],
                 MergeType = Connector.Or
             },
-            new List<int> { 2,4 }
-        };
+            [2, 4]
+        );
     }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
-internal class InvalidListSourceForBuildFilterExpressionMethodData : IEnumerable<object[]>
+internal class InvalidListSourceForBuildFilterExpressionMethodData : TheoryData<FilterRequest>
 {
     /// <summary>
     /// filter request
     /// </summary>
     /// <returns></returns>
-    public IEnumerator<object[]> GetEnumerator()
+    public InvalidListSourceForBuildFilterExpressionMethodData()
     {
-        yield return new object[]
-        {
+        Add(
             new FilterRequest
             {
                 Criterias =
@@ -344,30 +322,24 @@ internal class InvalidListSourceForBuildFilterExpressionMethodData : IEnumerable
                     }
                 ]
             }
-        };
+        );
     }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
-internal class ValidListSourceButFilterValuesNotValidForBuildFilterExpressionMethodData : IEnumerable<object[]>
+internal class ValidListSourceButFilterValuesNotValidForBuildFilterExpressionMethodData : TheoryData<FilterRequest>
 {
     /// <summary>
     /// filter request
     /// </summary>
     /// <returns></returns>
-    public IEnumerator<object[]> GetEnumerator()
+    public ValidListSourceButFilterValuesNotValidForBuildFilterExpressionMethodData()
     {
-        yield return new object[]
-        {
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Count), Type = FilterType.EqualTo, Value = null }]}
-        };
+        Add(
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Count), Type = FilterType.EqualTo, Value = null }] }
+        );
 
-        yield return new object[]
-        {
-            new FilterRequest{ Criterias = [ new FilterCriteria{ FilterBy = nameof(RestTestEntityFixture.Count), Type = FilterType.Between, Value = 90, OtherValue = null }]}
-        };
+        Add(
+            new FilterRequest { Criterias = [new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Count), Type = FilterType.Between, Value = 90, OtherValue = null }] }
+        );
     }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

@@ -29,7 +29,7 @@ public partial class WithNoLockInterceptor(IServiceProvider serviceProvider) : I
     /// </summary>
     /// <param name="call"></param>
     /// <returns></returns>
-    public async Task OnInvoke(Call call)
+    public Task OnInvoke(Call call)
     {
         var withNoLockAttribute = call.GetInterceptorAttribute<WithNoLockAttribute>();
 
@@ -51,7 +51,7 @@ public partial class WithNoLockInterceptor(IServiceProvider serviceProvider) : I
         {
             var executionStrategy = context.Database.CreateExecutionStrategy();
 
-            await executionStrategy.ExecuteAsync(async () =>
+            return executionStrategy.ExecuteAsync(async () =>
             {
                 using var transactionScope = new TransactionScope(TransactionScopeOption.Required, _transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
 
@@ -61,6 +61,6 @@ public partial class WithNoLockInterceptor(IServiceProvider serviceProvider) : I
             });
         }
         else
-            await call.NextAsync();
+            return call.NextAsync();
     }
 }

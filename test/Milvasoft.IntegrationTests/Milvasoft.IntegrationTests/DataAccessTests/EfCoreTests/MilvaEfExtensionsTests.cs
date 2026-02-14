@@ -25,6 +25,7 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1050:The class referenced by the ClassData attribute returns untyped data rows", Justification = "<Pending>")]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1042:The member referenced by the MemberData attribute returns untyped data rows", Justification = "<Pending>")]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>")]
 [Collection(nameof(UtcTrueDatabaseTestCollection))]
@@ -95,7 +96,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         };
 
         // Act
-        var result = await dbContext.RestTestEntities.WithFiltering(filterRequest).ToListAsync();
+        var result = await dbContext.RestTestEntities.WithFiltering(filterRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEmpty();
@@ -120,11 +121,11 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         });
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.RestTestEntities.AddRangeAsync(source);
-        await dbContext.SaveChangesAsync();
+        await dbContext.RestTestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.RestTestEntities.WithFiltering(filterRequest).ToListAsync();
+        var result = await dbContext.RestTestEntities.WithFiltering(filterRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(expectedIdList.Count);
@@ -149,15 +150,15 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         });
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.RestTestEntities.AddAsync(new RestTestEntityFixture { Id = 1, Name = "john" });
-        await dbContext.SaveChangesAsync();
+        await dbContext.RestTestEntities.AddAsync(new RestTestEntityFixture { Id = 1, Name = "john" }, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         ListRequest listRequest = null;
 
         // Act
-        var result = await dbContext.RestTestEntities.WithFiltering(listRequest).ToListAsync();
+        var result = await dbContext.RestTestEntities.WithFiltering(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        result.Should().HaveCount(await dbContext.RestTestEntities.CountAsync());
+        result.Should().HaveCount(await dbContext.RestTestEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Theory]
@@ -179,15 +180,15 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         });
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.RestTestEntities.AddRangeAsync(source);
-        await dbContext.SaveChangesAsync();
+        await dbContext.RestTestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         var listRequest = new ListRequest
         {
             Filtering = filterRequest
         };
 
         // Act
-        var result = await dbContext.RestTestEntities.WithFiltering(listRequest).ToListAsync();
+        var result = await dbContext.RestTestEntities.WithFiltering(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(expectedIdList.Count);
@@ -219,7 +220,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         var sortRequest = new SortRequest { SortBy = nameof(RestTestEntityFixture.Name), Type = SortType.Asc };
 
         // Act
-        var result = await dbContext.RestTestEntities.WithSorting(sortRequest).ToListAsync();
+        var result = await dbContext.RestTestEntities.WithSorting(sortRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEmpty();
@@ -249,12 +250,11 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
             .ToList();
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.RestTestEntities.AddRangeAsync(source);
-        await dbContext.SaveChangesAsync();
+        await dbContext.RestTestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.RestTestEntities.WithSorting(sortRequest).ToListAsync();
-
+        var result = await dbContext.RestTestEntities.WithSorting(sortRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression).Using<DateTime>(ctx =>
         {
@@ -282,8 +282,8 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         });
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.RestTestEntities.AddRangeAsync(source);
-        await dbContext.SaveChangesAsync();
+        await dbContext.RestTestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // null first
         var expectedSorted = source
@@ -292,7 +292,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
             .ToList();
 
         // Act
-        var result = await dbContext.RestTestEntities.WithSorting(sortRequest).ToListAsync();
+        var result = await dbContext.RestTestEntities.WithSorting(sortRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression).Using<DateTime>(ctx =>
@@ -321,14 +321,14 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         });
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.RestTestEntities.AddAsync(new RestTestEntityFixture { Id = 1, Name = "john" });
-        await dbContext.SaveChangesAsync();
+        await dbContext.RestTestEntities.AddAsync(new RestTestEntityFixture { Id = 1, Name = "john" }, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.RestTestEntities.WithSorting(listRequest).ToListAsync();
+        var result = await dbContext.RestTestEntities.WithSorting(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
-        result.Should().HaveCount(await dbContext.RestTestEntities.CountAsync());
+        result.Should().HaveCount(await dbContext.RestTestEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Theory]
@@ -350,8 +350,8 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         });
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.RestTestEntities.AddRangeAsync(source);
-        await dbContext.SaveChangesAsync();
+        await dbContext.RestTestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         var listRequest = new ListRequest
         {
@@ -365,7 +365,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
             .ToList();
 
         // Act
-        var result = await dbContext.RestTestEntities.WithSorting(listRequest).ToListAsync();
+        var result = await dbContext.RestTestEntities.WithSorting(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression).Using<DateTime>(ctx =>
@@ -393,8 +393,8 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         });
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.RestTestEntities.AddRangeAsync(source);
-        await dbContext.SaveChangesAsync();
+        await dbContext.RestTestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
         // null first
         var expectedSorted = source
             .OrderByDescending(x => expectedExpression.Compile()(x) == null ? 0 : 1)
@@ -407,7 +407,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         };
 
         // Act
-        var result = await dbContext.RestTestEntities.WithSorting(listRequest).ToListAsync();
+        var result = await dbContext.RestTestEntities.WithSorting(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEquivalentTo(expectedSorted, options => options.WithStrictOrderingFor(expectedExpression).Using<DateTime>(ctx =>
@@ -494,14 +494,13 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         });
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.RestTestEntities.AddRangeAsync(list);
-        await dbContext.SaveChangesAsync();
+        await dbContext.RestTestEntities.AddRangeAsync(list, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.RestTestEntities.WithSorting(listRequest).ToListAsync();
-
+        var result = await dbContext.RestTestEntities.WithSorting(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
         // Assert
-        result.Should().HaveCount(await dbContext.RestTestEntities.CountAsync());
+        result.Should().HaveCount(await dbContext.RestTestEntities.CountAsync(cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -592,11 +591,11 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         });
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.RestTestEntities.AddRangeAsync(list);
-        await dbContext.SaveChangesAsync();
+        await dbContext.RestTestEntities.AddRangeAsync(list, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.RestTestEntities.WithFilteringAndSorting(listRequest).ToListAsync();
+        var result = await dbContext.RestTestEntities.WithFilteringAndSorting(listRequest).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(4);
@@ -788,10 +787,10 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
         dbContext.RestTestEntities = null;
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.RestTestEntities.ToListResponseAsync(listRequest);
+        var result = await dbContext.RestTestEntities.ToListResponseAsync(listRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -819,11 +818,11 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         });
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.RestTestEntities.AddRangeAsync(source);
-        await dbContext.SaveChangesAsync();
+        await dbContext.RestTestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.RestTestEntities.ToListResponseAsync(listRequest);
+        var result = await dbContext.RestTestEntities.ToListResponseAsync(listRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEquivalentTo(expectedResponse, opt => opt.RespectingRuntimeTypes().Using<DateTime>(ctx =>
@@ -864,7 +863,7 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
         dbContext.RestTestEntities = null;
-        await dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
         var result = dbContext.RestTestEntities.ToListResponse(listRequest);
@@ -896,10 +895,10 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
 
-        await dbContext.BulkInsertAsync(source);
+        await dbContext.BulkInsertAsync(source, cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.RestTestEntities.ToListResponseAsync(listRequest);
+        var result = await dbContext.RestTestEntities.ToListResponseAsync(listRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEquivalentTo(expectedResponse, opt => opt.RespectingRuntimeTypes().Using<DateTime>(ctx =>
@@ -981,12 +980,11 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         };
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.FullAuditableEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
+        await dbContext.FullAuditableEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.FullAuditableEntities.IncludeAll(dbContext).ToListAsync();
-
+        var result = await dbContext.FullAuditableEntities.IncludeAll(dbContext).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         result.Should().HaveCount(entities.Count);
         result[0].ManyToOneEntities.Count.Should().Be(2);
@@ -1063,11 +1061,11 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         };
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.FullAuditableEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
+        await dbContext.FullAuditableEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.FullAuditableEntities.IncludeAll(dbContext, maxDepth: 3).ToListAsync();
+        var result = await dbContext.FullAuditableEntities.IncludeAll(dbContext, maxDepth: 3).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(entities.Count);
@@ -1108,12 +1106,11 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         };
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.HasTranslationEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
+        await dbContext.HasTranslationEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.HasTranslationEntities.IncludeTranslations(dbContext).ToListAsync();
-
+        var result = await dbContext.HasTranslationEntities.IncludeTranslations(dbContext).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         result.Should().HaveCount(entities.Count);
         result[0].Translations.Should().BeNull();
@@ -1157,12 +1154,11 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         };
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.HasTranslationEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
+        await dbContext.HasTranslationEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.HasTranslationEntities.IncludeTranslations(dbContext).ToListAsync();
-
+        var result = await dbContext.HasTranslationEntities.IncludeTranslations(dbContext).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
         // Assert
         result.Should().HaveCount(entities.Count);
         result[0].Translations.Should().BeNull();
@@ -1219,11 +1215,11 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         };
 
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
-        await dbContext.HasTranslationEntities.AddRangeAsync(entities);
-        await dbContext.SaveChangesAsync();
+        await dbContext.HasTranslationEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.HasTranslationEntities.IncludeTranslations(dbContext).ToListAsync();
+        var result = await dbContext.HasTranslationEntities.IncludeTranslations(dbContext).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(entities.Count);

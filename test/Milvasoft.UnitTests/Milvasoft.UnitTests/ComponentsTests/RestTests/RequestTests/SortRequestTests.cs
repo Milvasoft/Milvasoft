@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.ComponentsTests.RestTests.RequestTests;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "xUnit1050:The class referenced by the ClassData attribute returns untyped data rows", Justification = "<Pending>")]
 [Trait("Rest Components Unit Tests", "Milvasoft.Components.Rest project unit tests.")]
 public class SortRequestTests
 {
@@ -87,12 +88,12 @@ public class SortRequestTests
     {
         // Arrange
         await using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(SortRequest)).GetDbContextFixture();
-        await dbContextMock.TestEntities.AddRangeAsync(source);
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.TestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
         var resultExpression = sortRequest.BuildPropertySelectorExpression<RestTestEntityFixture>();
-        var result = await dbContextMock.TestEntities.OrderBy(resultExpression).ToListAsync();
+        var result = await dbContextMock.TestEntities.OrderBy(resultExpression).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         var expressionEquality = ExpressionEqualityComparer.Instance.Equals(resultExpression, expectedExpression);
@@ -106,12 +107,12 @@ public class SortRequestTests
     {
         // Arrange
         await using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(SortRequest)).GetDbContextFixture();
-        await dbContextMock.TestEntities.AddRangeAsync(source);
-        await dbContextMock.SaveChangesAsync();
+        await dbContextMock.TestEntities.AddRangeAsync(source, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
         var resultExpression = sortRequest.BuildPropertySelectorExpression<RestTestEntityFixture>();
-        var result = await dbContextMock.TestEntities.OrderByDescending(resultExpression).ToListAsync();
+        var result = await dbContextMock.TestEntities.OrderByDescending(resultExpression).ToListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         var expressionEquality = ExpressionEqualityComparer.Instance.Equals(resultExpression, expectedExpression);

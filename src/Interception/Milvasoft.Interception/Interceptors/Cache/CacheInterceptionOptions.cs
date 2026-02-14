@@ -6,7 +6,6 @@ namespace Milvasoft.Interception.Interceptors.Cache;
 /// <summary>
 /// Represents the options for cache interception.
 /// </summary>
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S2696:Instance members should not write to \"static\" fields", Justification = "<Pending>")]
 public class CacheInterceptionOptions : ICacheInterceptionOptions
 {
     private static Type _accessorType = null;
@@ -63,8 +62,8 @@ public interface ICacheInterceptionOptions : IInterceptionOptions
 {
     /// <summary>
     /// Keys ​​of the headers to be included in the cache key creation process. If this property is null or empty; request headers will not included.
-    /// 
-    /// When a return value is to be cached, a cache key is created with the method name and the values of the method request parameters. 
+    ///
+    /// When a return value is to be cached, a cache key is created with the method name and the values of the method request parameters.
     /// In cases where HttpRequestHeaders may cause differences in the requests made, the value returned by this delegate is appended to the cache key.
     /// </summary>
     public HashSet<string> IncludedRequestHeaderKeys { get; set; }
@@ -81,7 +80,7 @@ public interface ICacheInterceptionOptions : IInterceptionOptions
     public Type CacheAccessorType { get; set; }
 
     /// <summary>
-    /// When a return value is to be cached, a cache key is created with the method name and the values of the method request parameters. 
+    /// When a return value is to be cached, a cache key is created with the method name and the values of the method request parameters.
     /// In cases where HttpRequestHeaders may cause differences in the requests made, the value returned by this delegate is appended to the cache key.
     /// </summary>
     public Func<IServiceProvider, string> CacheKeyConfigurator { get; set; }
