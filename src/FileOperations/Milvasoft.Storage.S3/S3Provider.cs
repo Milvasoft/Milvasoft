@@ -275,7 +275,7 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
     /// <summary>
     /// Generates a pre-signed URL for uploading a file to an S3 bucket.
     /// </summary>
-    /// <remarks>The generated pre-signed URL allows the caller to perform an HTTP PUT operation to upload 
+    /// <remarks>The generated pre-signed URL allows the caller to perform an HTTP PUT operation to upload
     /// the specified file to the S3 bucket. The URL is valid for the duration specified by  <paramref
     /// name="expiresIn"/>.</remarks>
     /// <param name="filePath">The path of the file within the S3 bucket. This is used as the key to identify the file.</param>

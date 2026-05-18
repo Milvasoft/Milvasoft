@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Components.Rest.Enums;
@@ -1225,6 +1225,388 @@ public class MilvaEfExtensionsTests
         resultMatchingEntityProp.Should().BeNull();
         resultValue.Should().BeNull();
     }
+
+    #endregion
+
+    #region ToCursorListResponseAsync
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithNullQuery_ShouldReturnSuccess()
+    {
+        // Arrange
+        IQueryable<RestTestEntityFixture> queryable = null;
+        var cursorRequest = new CursorListRequest { RowCount = 2 };
+
+        // Act
+        var result = await queryable.ToCursorListResponseAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithNullRequest_ShouldReturnAllItems()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(ToCursorListResponseAsync_WithNullRequest_ShouldReturnAllItems)).GetDbContextFixture();
+        dbContextMock.TestEntities.AddRange(GetRestTestEntities());
+        dbContextMock.SaveChanges();
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(null, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().HaveCount(5);
+        result.HasNextPage.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithoutRowCount_ShouldReturnAllItems()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(ToCursorListResponseAsync_WithoutRowCount_ShouldReturnAllItems)).GetDbContextFixture();
+        dbContextMock.TestEntities.AddRange(GetRestTestEntities());
+        dbContextMock.SaveChanges();
+        var cursorRequest = new CursorListRequest
+        {
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(5);
+        result.HasNextPage.Should().BeFalse();
+        result.NextCursor.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithRowCount_WhenDataExceedsRowCount_ShouldReturnPageWithNextCursor()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(ToCursorListResponseAsync_WithRowCount_WhenDataExceedsRowCount_ShouldReturnPageWithNextCursor)).GetDbContextFixture();
+        dbContextMock.TestEntities.AddRange(GetRestTestEntities());
+        dbContextMock.SaveChanges();
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[1].Id.Should().Be(2);
+        result.HasNextPage.Should().BeTrue();
+        result.NextCursor.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithRowCount_WhenDataFitsInOnePage_ShouldHaveNoNextPage()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(ToCursorListResponseAsync_WithRowCount_WhenDataFitsInOnePage_ShouldHaveNoNextPage)).GetDbContextFixture();
+        dbContextMock.TestEntities.AddRange(GetRestTestEntities());
+        dbContextMock.SaveChanges();
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 10,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(5);
+        result.HasNextPage.Should().BeFalse();
+        result.NextCursor.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithCursor_ShouldReturnItemsAfterCursor()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(ToCursorListResponseAsync_WithCursor_ShouldReturnItemsAfterCursor)).GetDbContextFixture();
+        dbContextMock.TestEntities.AddRange(GetRestTestEntities());
+        dbContextMock.SaveChanges();
+        var firstPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+        var firstPage = await dbContextMock.TestEntities.ToCursorListResponseAsync(firstPageRequest, cancellationToken: TestContext.Current.CancellationToken);
+        var secondPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(secondPageRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(3);
+        result.Data[1].Id.Should().Be(4);
+        result.HasNextPage.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithDescendingSort_ShouldReturnItemsInDescendingOrder()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(ToCursorListResponseAsync_WithDescendingSort_ShouldReturnItemsInDescendingOrder)).GetDbContextFixture();
+        dbContextMock.TestEntities.AddRange(GetRestTestEntities());
+        dbContextMock.SaveChanges();
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Price), Type = SortType.Desc }
+        };
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data.Should().BeInDescendingOrder(e => e.Price);
+        result.HasNextPage.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithAggregation_ShouldReturnAggregationResults()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(ToCursorListResponseAsync_WithAggregation_ShouldReturnAggregationResults)).GetDbContextFixture();
+        dbContextMock.TestEntities.AddRange(GetRestTestEntities());
+        dbContextMock.SaveChanges();
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc },
+            Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(RestTestEntityFixture.Price), Type = AggregationType.Sum }] }
+        };
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.AggregationResults.Should().HaveCount(1);
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithProjection_WithFirstPage_ShouldReturnProjectedItems()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(ToCursorListResponseAsync_WithProjection_WithFirstPage_ShouldReturnProjectedItems)).GetDbContextFixture();
+        dbContextMock.TestEntities.AddRange(GetRestTestEntities());
+        dbContextMock.SaveChanges();
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(cursorRequest, e => new RestChildrenTestEntityFixture
+        {
+            Id = e.Id,
+            Name = e.Name
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[0].Name.Should().NotBeNull();
+        result.HasNextPage.Should().BeTrue();
+        result.NextCursor.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithProjection_WithNextCursor_ShouldReturnNextProjectedPage()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(ToCursorListResponseAsync_WithProjection_WithNextCursor_ShouldReturnNextProjectedPage)).GetDbContextFixture();
+        dbContextMock.TestEntities.AddRange(GetRestTestEntities());
+        dbContextMock.SaveChanges();
+        var firstPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+        var firstPage = await dbContextMock.TestEntities.ToCursorListResponseAsync(firstPageRequest, e => new RestChildrenTestEntityFixture
+        {
+            Id = e.Id,
+            Name = e.Name
+        }, cancellationToken: TestContext.Current.CancellationToken);
+        var secondPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(secondPageRequest, e => new RestChildrenTestEntityFixture
+        {
+            Id = e.Id,
+            Name = e.Name
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(3);
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithProjection_WithConditionAfterProjection_ShouldFilterProjectedResult()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(ToCursorListResponseAsync_WithProjection_WithConditionAfterProjection_ShouldFilterProjectedResult)).GetDbContextFixture();
+        dbContextMock.TestEntities.AddRange(GetRestTestEntities());
+        dbContextMock.SaveChanges();
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 10,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(
+            cursorRequest,
+            e => new RestChildrenTestEntityFixture { Id = e.Id, Name = e.Name },
+            conditionAfterProjection: p => p.Id > 2,
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(3);
+        result.Data.Should().OnlyContain(e => e.Id > 2);
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_FirstPage_ShouldHaveNoPreviousPageAndNonNullPrevCursorIsNull()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
+        await dbContextMock.TestEntities.AddRangeAsync(GetRestTestEntities(), cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var request = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(request, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.HasPreviousPage.Should().BeFalse();
+        result.PrevCursor.Should().BeNull();
+        result.HasNextPage.Should().BeTrue();
+        result.NextCursor.Should().NotBeNullOrEmpty();
+        result.Data[0].Id.Should().Be(1);
+        result.Data[1].Id.Should().Be(2);
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_SecondPageForward_ShouldHavePreviousPage()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
+        await dbContextMock.TestEntities.AddRangeAsync(GetRestTestEntities(), cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var firstRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+        var firstPage = await dbContextMock.TestEntities.ToCursorListResponseAsync(firstRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Act
+        var secondRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc }
+        };
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(secondRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.HasPreviousPage.Should().BeTrue();
+        result.PrevCursor.Should().NotBeNullOrEmpty();
+        result.Data[0].Id.Should().Be(3);
+        result.Data[1].Id.Should().Be(4);
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_BackwardFromSecondPage_ShouldReturnFirstPage()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
+        await dbContextMock.TestEntities.AddRangeAsync(GetRestTestEntities(), cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc };
+        var firstPage = await dbContextMock.TestEntities.ToCursorListResponseAsync(new CursorListRequest { RowCount = 2, Sorting = sorting }, cancellationToken: TestContext.Current.CancellationToken);
+        var secondPage = await dbContextMock.TestEntities.ToCursorListResponseAsync(new CursorListRequest { RowCount = 2, Cursor = firstPage.NextCursor, Sorting = sorting }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(
+            new CursorListRequest { RowCount = 2, Cursor = secondPage.PrevCursor, Sorting = sorting },
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[1].Id.Should().Be(2);
+        result.HasPreviousPage.Should().BeFalse();
+        result.HasNextPage.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_Projection_BackwardFromSecondPage_ShouldReturnFirstPage()
+    {
+        // Arrange
+        using var dbContextMock = new DbContextMock<RestDbContextFixture>(nameof(MilvaEfExtensions)).GetDbContextFixture();
+        await dbContextMock.TestEntities.AddRangeAsync(GetRestTestEntities(), cancellationToken: TestContext.Current.CancellationToken);
+        await dbContextMock.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+        var sorting = new SortRequest { SortBy = nameof(RestTestEntityFixture.Id), Type = SortType.Asc };
+        Expression<Func<RestTestEntityFixture, RestTestEntityFixture>> proj = e => new RestTestEntityFixture { Id = e.Id, Price = e.Price };
+
+        var firstPage = await dbContextMock.TestEntities.ToCursorListResponseAsync(new CursorListRequest { RowCount = 2, Sorting = sorting }, proj, cancellationToken: TestContext.Current.CancellationToken);
+        var secondPage = await dbContextMock.TestEntities.ToCursorListResponseAsync(new CursorListRequest { RowCount = 2, Cursor = firstPage.NextCursor, Sorting = sorting }, proj, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Act
+        var result = await dbContextMock.TestEntities.ToCursorListResponseAsync(
+            new CursorListRequest { RowCount = 2, Cursor = secondPage.PrevCursor, Sorting = sorting },
+            proj,
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[1].Id.Should().Be(2);
+        result.HasPreviousPage.Should().BeFalse();
+        result.HasNextPage.Should().BeTrue();
+    }
+
+    private static List<RestTestEntityFixture> GetRestTestEntities() => [
+        new() { Id = 1, Name = "Entity1", Price = 10M, Count = 1, InsertDate = DateTime.Now.AddDays(1) },
+        new() { Id = 2, Name = "Entity2", Price = 20M, Count = 2, InsertDate = DateTime.Now.AddDays(2) },
+        new() { Id = 3, Name = "Entity3", Price = 30M, Count = 3, InsertDate = DateTime.Now.AddDays(3) },
+        new() { Id = 4, Name = "Entity4", Price = 40M, Count = 4, InsertDate = DateTime.Now.AddDays(4) },
+        new() { Id = 5, Name = "Entity5", Price = 50M, Count = 5, InsertDate = DateTime.Now.AddDays(5) },
+    ];
 
     #endregion
 }

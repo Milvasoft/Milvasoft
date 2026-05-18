@@ -1227,4 +1227,286 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
     }
 
     #endregion
+
+    #region ToCursorListResponseAsync
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithNullQuery_ShouldReturnSuccess()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration { UseUtcForDateTime = true };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString());
+            });
+        });
+
+        IQueryable<SomeFullAuditableEntityFixture> queryable = null;
+        var cursorRequest = new CursorListRequest { RowCount = 2 };
+
+        // Act
+        var result = await queryable.ToCursorListResponseAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithNullRequest_ShouldReturnAllItems()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration { UseUtcForDateTime = true };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString());
+            });
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await SeedFullAuditableEntitiesAsync(dbContext);
+
+        // Act
+        var result = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(null, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().HaveCount(4);
+        result.HasNextPage.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithRowCount_WhenDataExceedsRowCount_ShouldReturnPageWithNextCursor()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration { UseUtcForDateTime = true };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString());
+            });
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await SeedFullAuditableEntitiesAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[1].Id.Should().Be(2);
+        result.HasNextPage.Should().BeTrue();
+        result.NextCursor.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithCursor_ShouldReturnItemsAfterCursor()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration { UseUtcForDateTime = true };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString());
+            });
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await SeedFullAuditableEntitiesAsync(dbContext);
+        var sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc };
+        var firstPage = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = sorting
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Act
+        var result = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = sorting
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(3);
+        result.Data[1].Id.Should().Be(4);
+        result.HasNextPage.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithRowCount_WhenDataFitsInOnePage_ShouldHaveNoNextPage()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration { UseUtcForDateTime = true };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString());
+            });
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await SeedFullAuditableEntitiesAsync(dbContext);
+
+        // Act
+        var result = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(new CursorListRequest
+        {
+            RowCount = 10,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(4);
+        result.HasNextPage.Should().BeFalse();
+        result.NextCursor.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithProjection_WithFirstPage_ShouldReturnProjectedItemsAndNextCursor()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration { UseUtcForDateTime = true };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString());
+            });
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await SeedFullAuditableEntitiesAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(cursorRequest, e => new SomeBaseEntityFixture
+        {
+            Id = e.Id,
+            SomeDecimalProp = e.SomeDecimalProp
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[0].SomeStringProp.Should().BeNull();
+        result.Data[0].SomeDecimalProp.Should().Be(10M);
+        result.HasNextPage.Should().BeTrue();
+        result.NextCursor.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithProjection_WithNextCursor_ShouldReturnNextProjectedPage()
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration { UseUtcForDateTime = true };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString());
+            });
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await SeedFullAuditableEntitiesAsync(dbContext);
+        var sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc };
+        var firstPage = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = sorting
+        }, e => new SomeBaseEntityFixture
+        {
+            Id = e.Id,
+            SomeDecimalProp = e.SomeDecimalProp
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Act
+        var result = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = sorting
+        }, e => new SomeBaseEntityFixture
+        {
+            Id = e.Id,
+            SomeDecimalProp = e.SomeDecimalProp
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(3);
+        result.HasNextPage.Should().BeFalse();
+    }
+
+    private static async Task SeedFullAuditableEntitiesAsync(MilvaBulkDbContextFixture dbContext)
+    {
+        var entities = new List<SomeFullAuditableEntityFixture>
+        {
+            new() { Id = 1, SomeDateProp = DateTime.Now.AddYears(1), SomeDecimalProp = 10M, SomeStringProp = "somestring1" },
+            new() { Id = 2, SomeDateProp = DateTime.Now.AddYears(2), SomeDecimalProp = 20M, SomeStringProp = "somestring2" },
+            new() { Id = 3, SomeDateProp = DateTime.Now.AddYears(3), SomeDecimalProp = 30M, SomeStringProp = "somestring3" },
+            new() { Id = 4, SomeDateProp = DateTime.Now.AddYears(4), SomeDecimalProp = 40M, SomeStringProp = "somestring4" },
+        };
+
+        await dbContext.FullAuditableEntities.AddRangeAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
+    }
+
+    #endregion
 }

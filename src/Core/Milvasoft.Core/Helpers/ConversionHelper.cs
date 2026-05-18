@@ -2,6 +2,7 @@
 using System.Text.Json;
 
 namespace Milvasoft.Core.Helpers;
+
 public static partial class CommonHelper
 {
     /// <summary>

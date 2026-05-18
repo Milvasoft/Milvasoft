@@ -5,6 +5,7 @@ using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Types.Structs;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
@@ -105,7 +106,8 @@ public static class MilvaEfExtensions
     /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
     /// <param name="query">The source IQueryable data.</param>
     /// <param name="listRequest">The list request containing pagination, filtering, and sorting options.</param>
-    /// <param name="cancellationToken"></param>
+    /// <param name="preCalculatedTotalCount">An optional pre-calculated total count of the data. If provided, it will be used instead of querying the database for the count. (for postgresql performance use cases)</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the asynchronous operation.</param>
     /// <returns>
     /// A Task representing the asynchronous operation that yields a ListResponse containing the paginated list result.
     /// </returns>
@@ -115,7 +117,7 @@ public static class MilvaEfExtensions
     /// The ListResponse object contains the retrieved data along with pagination metadata such as total data count, total page count, and current page number.
     /// If no pagination parameters are specified, the method returns the entire result set without pagination.
     /// </remarks>
-    public static async Task<ListResponse<TEntity>> ToListResponseAsync<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest, CancellationToken cancellationToken = default) where TEntity : class
+    public static async Task<ListResponse<TEntity>> ToListResponseAsync<TEntity>(this IQueryable<TEntity> query, ListRequest listRequest, int? preCalculatedTotalCount = null, CancellationToken cancellationToken = default) where TEntity : class
     {
         if (query == null)
             return ListResponse<TEntity>.Success();
@@ -126,12 +128,14 @@ public static class MilvaEfExtensions
 
         var aggregationResults = listRequest.Aggregation != null ? await listRequest.Aggregation.ApplyAggregationAsync(query, cancellationToken: cancellationToken) : null;
 
-        int? totalDataCount = null;
+        int? totalDataCount = preCalculatedTotalCount;
         int? totalPageCount = null;
 
         if (listRequest.PageNumber.HasValue && listRequest.RowCount.HasValue)
         {
-            totalDataCount = await query.CountAsync(cancellationToken);
+            if (!totalDataCount.HasValue)
+                totalDataCount = await query.CountAsync(cancellationToken);
+
             totalPageCount = listRequest.CalculatePageCountAndCompareWithRequested(totalDataCount);
 
             query = query.Skip((listRequest.PageNumber.Value - 1) * listRequest.RowCount.Value)
@@ -145,6 +149,237 @@ public static class MilvaEfExtensions
         listResult.AggregationResults = aggregationResults;
 
         return listResult;
+    }
+
+    /// <summary>
+    /// Retrieves a cursor-paginated result asynchronously from the provided IQueryable data source.
+    /// Applies filtering, sorting, and cursor-based pagination. Fetches <c>RowCount + 1</c> items to detect whether a next page exists.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
+    /// <param name="query">The source IQueryable data.</param>
+    /// <param name="cursorListRequest">The cursor list request containing pagination, filtering, and sorting options.</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>A <see cref="CursorListResponse{TEntity}"/> containing the page data, <c>NextCursor</c>, and <c>HasNextPage</c>.</returns>
+    public static async Task<CursorListResponse<TEntity>> ToCursorListResponseAsync<TEntity>(this IQueryable<TEntity> query,
+                                                                                              CursorListRequest cursorListRequest,
+                                                                                              CancellationToken cancellationToken = default) where TEntity : class
+    {
+        if (query == null)
+            return CursorListResponse<TEntity>.Success();
+
+        cursorListRequest ??= new CursorListRequest();
+        cursorListRequest.Sorting ??= new SortRequest { SortBy = EntityPropertyNames.Id, Type = SortType.Desc };
+
+        query = query.WithFiltering(cursorListRequest.Filtering).WithSorting(cursorListRequest.Sorting);
+
+        var aggregationResults = cursorListRequest.Aggregation != null ? await cursorListRequest.Aggregation.ApplyAggregationAsync(query, cancellationToken: cancellationToken) : null;
+
+        var totalDataCount = cursorListRequest.PreCalculatedTotalCount.HasValue ? cursorListRequest.PreCalculatedTotalCount : null;
+
+        CursorData cursorData = null;
+
+        if (!string.IsNullOrEmpty(cursorListRequest.Cursor))
+        {
+            cursorData = CursorData.Decode(cursorListRequest.Cursor);
+            query = CursorExtensions.ApplyCursorCondition(query, cursorData, cursorData.IsBackward);
+        }
+
+        var isBackward = cursorData?.IsBackward ?? false;
+
+        // For backward paging we reverse the sort so the DB returns items closest to the cursor first, then we flip the list back to the original order before returning it.
+        if (isBackward)
+            query = query.WithSorting(CursorExtensions.ReversedSorting(cursorListRequest.Sorting));
+
+        string nextCursor = null;
+        string prevCursor = null;
+        bool hasNextPage = false;
+        bool hasPreviousPage = false;
+        List<TEntity> list;
+
+        if (cursorListRequest.RowCount.HasValue)
+        {
+            var items = await query.Take(cursorListRequest.RowCount.Value + 1).ToListAsync(cancellationToken);
+            var hasExtra = items.Count > cursorListRequest.RowCount.Value;
+
+            if (hasExtra)
+                items.RemoveAt(items.Count - 1);
+
+            if (isBackward)
+            {
+                items.Reverse();
+                hasPreviousPage = hasExtra;
+                hasNextPage = cursorData != null; // there is a page after (we came from it)
+
+                if (hasPreviousPage)
+                    prevCursor = CursorExtensions.BuildCursor(items[0], cursorListRequest.Sorting, isBackward: true);
+
+                if (hasNextPage)
+                    nextCursor = CursorExtensions.BuildCursor(items[^1], cursorListRequest.Sorting, isBackward: false);
+            }
+            else
+            {
+                hasNextPage = hasExtra;
+                hasPreviousPage = cursorData != null;
+
+                if (hasNextPage)
+                    nextCursor = CursorExtensions.BuildCursor(items[^1], cursorListRequest.Sorting, isBackward: false);
+
+                if (hasPreviousPage)
+                    prevCursor = CursorExtensions.BuildCursor(items[0], cursorListRequest.Sorting, isBackward: true);
+            }
+
+            list = items;
+        }
+        else
+        {
+            list = await query.ToListAsync(cancellationToken);
+
+            if (isBackward)
+                list.Reverse();
+        }
+
+        var result = CursorListResponse<TEntity>.Success(list);
+
+        result.NextCursor = nextCursor;
+        result.PrevCursor = prevCursor;
+        result.HasNextPage = hasNextPage;
+        result.HasPreviousPage = hasPreviousPage;
+        result.AggregationResults = aggregationResults;
+        result.TotalDataCount = totalDataCount;
+
+        return result;
+    }
+
+    /// <summary>
+    /// Retrieves a cursor-paginated result asynchronously from the provided IQueryable data source with projection.
+    /// Applies filtering, sorting, cursor-based pagination, and projection. Fetches <c>RowCount + 1</c> entities to detect
+    /// whether a next page exists and to extract the cursor value before projection is applied.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
+    /// <typeparam name="TResult">The projected result type.</typeparam>
+    /// <param name="query">The source IQueryable data.</param>
+    /// <param name="cursorListRequest">The cursor list request containing pagination, filtering, and sorting options.</param>
+    /// <param name="projection">Projection expression applied to each entity.</param>
+    /// <param name="conditionAfterProjection">Optional filter applied after projection.</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>A <see cref="CursorListResponse{TResult}"/> containing the projected page data, <c>NextCursor</c>, and <c>HasNextPage</c>.</returns>
+    public static async Task<CursorListResponse<TResult>> ToCursorListResponseAsync<TEntity, TResult>(this IQueryable<TEntity> query,
+                                                                                                       CursorListRequest cursorListRequest,
+                                                                                                       Expression<Func<TEntity, TResult>> projection,
+                                                                                                       Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                                                                                       CancellationToken cancellationToken = default) where TEntity : class where TResult : class
+    {
+        if (query == null)
+            return CursorListResponse<TResult>.Success();
+
+        cursorListRequest ??= new CursorListRequest();
+        cursorListRequest.Sorting ??= new SortRequest { SortBy = EntityPropertyNames.Id, Type = SortType.Desc };
+
+        query = query.WithFiltering(cursorListRequest.Filtering).WithSorting(cursorListRequest.Sorting);
+
+        var aggregationResults = cursorListRequest.Aggregation != null ? await cursorListRequest.Aggregation.ApplyAggregationAsync(query, cancellationToken: cancellationToken) : null;
+
+        var totalDataCount = cursorListRequest.PreCalculatedTotalCount.HasValue ? cursorListRequest.PreCalculatedTotalCount : null;
+
+        CursorData cursorData = null;
+
+        if (!string.IsNullOrEmpty(cursorListRequest.Cursor))
+        {
+            cursorData = CursorData.Decode(cursorListRequest.Cursor);
+            query = CursorExtensions.ApplyCursorCondition(query, cursorData, cursorData.IsBackward);
+        }
+
+        var isBackward = cursorData?.IsBackward ?? false;
+
+        if (isBackward)
+            query = query.WithSorting(CursorExtensions.ReversedSorting(cursorListRequest.Sorting));
+
+        string nextCursor = null;
+        string prevCursor = null;
+        bool hasNextPage = false;
+        bool hasPreviousPage = false;
+        List<TResult> list;
+
+        var meta = projection != null ? CursorExtensions.GetCursorPropertyMetadata(typeof(TEntity), cursorListRequest.Sorting.SortBy) : null;
+
+        if (cursorListRequest.RowCount.HasValue)
+        {
+            List<CursorProjectionCarrier<TResult>> carriers;
+
+            if (projection != null && meta != null)
+            {
+                var combinedExpr = CursorExtensions.BuildCombinedProjection(meta, projection);
+
+                carriers = await query.Select(combinedExpr).Take(cursorListRequest.RowCount.Value + 1).ToListAsync(cancellationToken);
+
+                // conditionAfterProjection cannot be SQL-translated when applied to a carrier wrapper, so evaluate it in-memory after materialization.
+                if (conditionAfterProjection != null)
+                {
+                    var compiledCondition = conditionAfterProjection.Compile();
+                    carriers = [.. carriers.Where(c => compiledCondition(c.Result))];
+                }
+            }
+            else
+            {
+                // No projection: build carrier with null sort-value (will use BuildCursor fallback on entity)
+                var entityItems = await query.Take(cursorListRequest.RowCount.Value + 1).ToListAsync(cancellationToken);
+                carriers = [.. entityItems.Select(e => new CursorProjectionCarrier<TResult> { SortValue = null, Result = (TResult)(object)e })];
+            }
+
+            var hasExtra = carriers.Count > cursorListRequest.RowCount.Value;
+
+            if (hasExtra)
+                carriers.RemoveAt(carriers.Count - 1);
+
+            if (isBackward)
+            {
+                carriers.Reverse();
+
+                hasPreviousPage = hasExtra;
+                hasNextPage = cursorData != null;
+
+                if (hasPreviousPage)
+                    prevCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[0].SortValue, cursorListRequest.Sorting, isBackward: true);
+
+                if (hasNextPage)
+                    nextCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[^1].SortValue, cursorListRequest.Sorting, isBackward: false);
+            }
+            else
+            {
+                hasNextPage = hasExtra;
+                hasPreviousPage = cursorData != null;
+
+                if (hasNextPage)
+                    nextCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[^1].SortValue, cursorListRequest.Sorting, isBackward: false);
+
+                if (hasPreviousPage)
+                    prevCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[0].SortValue, cursorListRequest.Sorting, isBackward: true);
+            }
+
+            list = [.. carriers.Select(c => c.Result)];
+        }
+        else
+        {
+            var projectedQuery = projection != null ? query.Select(projection) : query.Cast<TResult>();
+
+            list = conditionAfterProjection != null
+                ? await projectedQuery.Where(conditionAfterProjection).ToListAsync(cancellationToken)
+                : await projectedQuery.ToListAsync(cancellationToken);
+
+            if (isBackward)
+                list.Reverse();
+        }
+
+        var result = CursorListResponse<TResult>.Success(list);
+
+        result.NextCursor = nextCursor;
+        result.PrevCursor = prevCursor;
+        result.HasNextPage = hasNextPage;
+        result.HasPreviousPage = hasPreviousPage;
+        result.AggregationResults = aggregationResults;
+        result.TotalDataCount = totalDataCount;
+
+        return result;
     }
 
     /// <summary>
@@ -181,8 +416,7 @@ public static class MilvaEfExtensions
             totalDataCount = query.Count();
             totalPageCount = listRequest.CalculatePageCountAndCompareWithRequested(totalDataCount);
 
-            query = query.Skip((listRequest.PageNumber.Value - 1) * listRequest.RowCount.Value)
-                         .Take(listRequest.RowCount.Value);
+            query = query.Skip((listRequest.PageNumber.Value - 1) * listRequest.RowCount.Value).Take(listRequest.RowCount.Value);
         }
 
         var list = query.ToList();

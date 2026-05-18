@@ -12,6 +12,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Milvasoft.DataAccess.EfCore.Utils;
+
 internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration dataAccessConfiguration)
 {
     private readonly MilvaDbContext _dbContext = dbContext;

@@ -6,7 +6,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
+		<PackageReference Include="ConfigureAwait.Fody" Version="3.4.0" PrivateAssets="All" />
 		<PackageReference Include="Fody" Version="6.9.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,7 +20,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Milvasoft.Caching\Milvasoft.Caching.csproj" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-		<PackageReference Include="StackExchange.Redis" Version="2.11.0" />
+		<PackageReference Include="StackExchange.Redis" Version="2.13.1" />
 	</ItemGroup>
 
 	<ItemGroup>

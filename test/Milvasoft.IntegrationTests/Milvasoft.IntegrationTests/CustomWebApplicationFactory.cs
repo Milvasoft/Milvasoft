@@ -54,6 +54,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         TablesToIgnore = ["__EFMigrationsHistory"]
     });
 
+    public string GetConnectionString() => _dbContainer.GetConnectionString();
+
     public async Task ResetDatabase()
     {
         if (_respawner != null)
@@ -68,8 +70,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
         await _connection.CloseAsync();
         await _dbContainer.DisposeAsync();
     }
-
-    public string GetConnectionString() => _dbContainer.GetConnectionString();
 
     async ValueTask IAsyncLifetime.InitializeAsync() => await InitializeAsync();
 }

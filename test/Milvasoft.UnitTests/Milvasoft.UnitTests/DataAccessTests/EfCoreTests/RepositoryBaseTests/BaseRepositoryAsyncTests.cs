@@ -908,6 +908,493 @@ public class BaseRepositoryAsyncTests
 
     #endregion
 
+    #region GetAllAsync (Cursor)
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequest_WithNullRequest_ShouldReturnAllNonDeletedEntities()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+
+        // Act
+        var result = await entityRepository.GetAllAsync((CursorListRequest)null, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().HaveCount(3);
+        result.HasNextPage.Should().BeFalse();
+        result.NextCursor.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequest_WithFirstPage_ShouldReturnFirstPageAndNextCursor()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[1].Id.Should().Be(2);
+        result.HasNextPage.Should().BeTrue();
+        result.NextCursor.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequest_WithNextCursorFromFirstPage_ShouldReturnSecondPage()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var firstPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+        var firstPage = await entityRepository.GetAllAsync(firstPageRequest, cancellationToken: TestContext.Current.CancellationToken);
+        var secondPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(secondPageRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().HaveCount(1);
+        result.Data[0].Id.Should().Be(3);
+        result.HasNextPage.Should().BeFalse();
+        result.NextCursor.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequest_WhenAllDataFitsInOnePage_ShouldHaveNoNextPage()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 10,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Data.Should().HaveCount(3);
+        result.HasNextPage.Should().BeFalse();
+        result.NextCursor.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequest_WithDescendingSort_ShouldReturnItemsInDescendingOrder()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = Components.Rest.Enums.SortType.Desc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Data.Should().HaveCount(2);
+        result.Data[0].SomeDecimalProp.Should().Be(30M);
+        result.Data[1].SomeDecimalProp.Should().Be(20M);
+        result.HasNextPage.Should().BeTrue();
+        result.NextCursor.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequest_WithDescendingSort_WithNextCursor_ShouldReturnRemainingItemsInDescendingOrder()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var firstPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = Components.Rest.Enums.SortType.Desc }
+        };
+        var firstPage = await entityRepository.GetAllAsync(firstPageRequest, cancellationToken: TestContext.Current.CancellationToken);
+        var secondPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = Components.Rest.Enums.SortType.Desc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(secondPageRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Data.Should().HaveCount(1);
+        result.Data[0].SomeDecimalProp.Should().Be(10M);
+        result.HasNextPage.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequest_WithCondition_ShouldFilterCorrectly()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 5,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, i => i.SomeDecimalProp > 10M, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Data.Should().HaveCount(2);
+        result.Data.Should().OnlyContain(e => e.SomeDecimalProp > 10M);
+        result.HasNextPage.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequest_ShouldNotReturnSoftDeletedEntities()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 10,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().NotContain(e => e.IsDeleted);
+        result.Data.Should().HaveCount(3);
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequest_WithAggregation_ShouldReturnAggregationResults()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc },
+            Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = Components.Rest.Enums.AggregationType.Sum }] }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Data.Should().HaveCount(2);
+        result.AggregationResults.Should().HaveCount(1);
+        result.AggregationResults[0].Result.Should().Be(60M);
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequestAndProjection_WithFirstPage_ShouldReturnProjectedFirstPage()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, projection: i => new SomeBaseEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp,
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[0].SomeStringProp.Should().BeNull();
+        result.Data[0].SomeDecimalProp.Should().Be(10M);
+        result.HasNextPage.Should().BeTrue();
+        result.NextCursor.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequestAndProjection_WithNextCursor_ShouldReturnProjectedSecondPage()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var firstPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+        var firstPage = await entityRepository.GetAllAsync(firstPageRequest, projection: i => new SomeBaseEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp,
+        }, cancellationToken: TestContext.Current.CancellationToken);
+        var secondPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(secondPageRequest, projection: i => new SomeBaseEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp,
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Data.Should().HaveCount(1);
+        result.Data[0].Id.Should().Be(3);
+        result.Data[0].SomeDecimalProp.Should().Be(30M);
+        result.HasNextPage.Should().BeFalse();
+        result.NextCursor.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequestAndProjection_WithConditionAndProjection_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 5,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp,
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Data.Should().HaveCount(2);
+        result.Data.Should().OnlyContain(e => e.SomeDecimalProp > 10M);
+        result.Data[0].SomeStringProp.Should().BeNull();
+        result.HasNextPage.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequestAndProjection_WithConditionAndProjectionAndConditionAfterProjection_ShouldReturnCorrectResult()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 5,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp,
+        }, i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Data.Should().HaveCount(1);
+        result.Data[0].SomeDecimalProp.Should().Be(30M);
+        result.HasNextPage.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequest_WithPrevCursorFromSecondPage_ShouldReturnFirstPage()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var firstPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+        var firstPage = await entityRepository.GetAllAsync(firstPageRequest, cancellationToken: TestContext.Current.CancellationToken);
+        var secondPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+        var secondPage = await entityRepository.GetAllAsync(secondPageRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Act — navigate back using PrevCursor
+        var backRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = secondPage.PrevCursor,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+        var result = await entityRepository.GetAllAsync(backRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[1].Id.Should().Be(2);
+        result.HasPreviousPage.Should().BeFalse();
+        result.HasNextPage.Should().BeTrue();
+        result.NextCursor.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequest_BackwardFromFirstPage_ShouldHaveNoPreviousPage()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert — first page has no previous page
+        result.HasPreviousPage.Should().BeFalse();
+        result.PrevCursor.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetAllAsync_WithCursorRequestAndProjection_WithPrevCursor_ShouldReturnPreviousProjectedPage()
+    {
+        // Arrange
+        var configuration = new DataAccessConfiguration();
+        var services = GetServices(configuration);
+        var dbContext = services.GetService<SomeMilvaDbContextFixture>();
+        var entityRepository = services.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await ResetDatabaseAndSeedAsync(dbContext);
+        var firstPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+        var firstPage = await entityRepository.GetAllAsync(firstPageRequest, projection: i => new SomeBaseEntityFixture { Id = i.Id, SomeDecimalProp = i.SomeDecimalProp }, cancellationToken: TestContext.Current.CancellationToken);
+        var secondPageRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+        var secondPage = await entityRepository.GetAllAsync(secondPageRequest, projection: i => new SomeBaseEntityFixture { Id = i.Id, SomeDecimalProp = i.SomeDecimalProp }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Act
+        var backRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = secondPage.PrevCursor,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = Components.Rest.Enums.SortType.Asc }
+        };
+        var result = await entityRepository.GetAllAsync(backRequest, projection: i => new SomeBaseEntityFixture { Id = i.Id, SomeDecimalProp = i.SomeDecimalProp }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[1].Id.Should().Be(2);
+        result.HasPreviousPage.Should().BeFalse();
+        result.HasNextPage.Should().BeTrue();
+    }
+
+    #endregion
+
     #region GetSomeAsync
 
     [Fact]

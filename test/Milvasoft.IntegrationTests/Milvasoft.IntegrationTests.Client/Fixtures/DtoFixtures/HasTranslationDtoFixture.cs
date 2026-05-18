@@ -1,4 +1,5 @@
 ﻿namespace Milvasoft.IntegrationTests.Client.Fixtures.DtoFixtures;
+
 public class HasTranslationDtoFixture
 {
     public int Id { get; set; }

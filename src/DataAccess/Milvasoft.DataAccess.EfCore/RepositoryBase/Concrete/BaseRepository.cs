@@ -134,7 +134,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
     #region Async Data Access
 
-    #region Async FirstOrDefault 
+    #region Async FirstOrDefault
 
     /// <summary>
     /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
@@ -300,7 +300,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <summary>
     /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
     /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
-    /// Be careful when using projection while soft delete is active. 
+    /// Be careful when using projection while soft delete is active.
     /// If projection is applied to a soft deleteable entity, properties not included in the project are written to the database with their default values.
     /// </summary>
     /// <param name="id"></param>
@@ -366,7 +366,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <summary>
     /// Returns entities from database asynchronously for delete with navigation properties.
     /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
-    /// Be careful when using projection while soft delete is active. 
+    /// Be careful when using projection while soft delete is active.
     /// If projection is applied to a soft deleteable entity, properties not included in the project are written to the database with their default values.
     /// </summary>
     /// <param name="includes"></param>
@@ -409,6 +409,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="listRequest"></param>
     /// <param name="tracking"></param>
     /// <param name="splitQuery"></param>
+    /// <param name="preCalculatedTotalCount"> Pre-calculated total count of the entities. </param>
     /// <param name="conditionExpression"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
@@ -416,10 +417,11 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                            Expression<Func<TEntity, bool>> conditionExpression = null,
                                                            bool tracking = false,
                                                            bool splitQuery = false,
+                                                           int? preCalculatedTotalCount = null,
                                                            CancellationToken cancellationToken = default)
         => QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
-                       .ToListResponseAsync(listRequest, cancellationToken);
+                       .ToListResponseAsync(listRequest, preCalculatedTotalCount, cancellationToken);
 
     /// <summary>
     /// Returns all entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
@@ -431,6 +433,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
     /// <param name="splitQuery"></param>
+    /// <param name="preCalculatedTotalCount"> Pre-calculated total count of the entities. </param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual Task<ListResponse<TResult>> GetAllAsync<TResult>(ListRequest listRequest,
@@ -439,12 +442,13 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                     Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                                     bool tracking = false,
                                                                     bool splitQuery = false,
+                                                                    int? preCalculatedTotalCount = null,
                                                                     CancellationToken cancellationToken = default) where TResult : class
         => QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
                        .Select(UpdateProjectionExpression(projection))
                        .Where(conditionAfterProjection ?? (entity => true))
-                       .ToListResponseAsync(listRequest, cancellationToken);
+                       .ToListResponseAsync(listRequest, preCalculatedTotalCount, cancellationToken);
 
     /// <summary>
     /// Returns entities which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
@@ -455,9 +459,9 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public virtual Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> conditionExpression = null,
-                                                         bool tracking = false,
-                                                         bool splitQuery = false,
-                                                         CancellationToken cancellationToken = default)
+                                                   bool tracking = false,
+                                                   bool splitQuery = false,
+                                                   CancellationToken cancellationToken = default)
         => QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
                        .ToListAsync(cancellationToken);
@@ -484,6 +488,49 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                        .Select(UpdateProjectionExpression(projection))
                        .Where(conditionAfterProjection ?? (entity => true))
                        .ToListAsync(cancellationToken);
+
+    /// <summary>
+    /// Returns cursor-paginated entities from the database asynchronously.
+    /// Fetches <c>RowCount + 1</c> items to determine whether a next page exists.
+    /// </summary>
+    /// <param name="cursorListRequest"></param>
+    /// <param name="conditionExpression"></param>
+    /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual Task<CursorListResponse<TEntity>> GetAllAsync(CursorListRequest cursorListRequest,
+                                                                 Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                                 bool tracking = false,
+                                                                 bool splitQuery = false,
+                                                                 CancellationToken cancellationToken = default)
+        => QueryWithOptions(tracking, splitQuery)
+                       .Where(CreateConditionExpression(conditionExpression) ?? (entity => true))
+                       .ToCursorListResponseAsync(cursorListRequest, cancellationToken);
+
+    /// <summary>
+    /// Returns cursor-paginated projected entities from the database asynchronously.
+    /// Fetches <c>RowCount + 1</c> entities to determine whether a next page exists and to extract the cursor value before projection.
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="cursorListRequest"></param>
+    /// <param name="condition"></param>
+    /// <param name="projection"></param>
+    /// <param name="conditionAfterProjection"></param>
+    /// <param name="tracking"></param>
+    /// <param name="splitQuery"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public virtual Task<CursorListResponse<TResult>> GetAllAsync<TResult>(CursorListRequest cursorListRequest,
+                                                                          Expression<Func<TEntity, bool>> condition = null,
+                                                                          Expression<Func<TEntity, TResult>> projection = null,
+                                                                          Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                                                          bool tracking = false,
+                                                                          bool splitQuery = false,
+                                                                          CancellationToken cancellationToken = default) where TResult : class
+        => QueryWithOptions(tracking, splitQuery)
+                       .Where(CreateConditionExpression(condition) ?? (entity => true))
+                       .ToCursorListResponseAsync(cursorListRequest, UpdateProjectionExpression(projection), conditionAfterProjection, cancellationToken);
 
     #endregion
 
@@ -538,7 +585,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     #region Async Insert/Update/Delete
 
     /// <summary>
-    ///  Adds single entity to database asynchronously. 
+    ///  Adds single entity to database asynchronously.
     /// </summary>
     /// <param name="entity"></param>
     /// <param name="cancellationToken"></param>
@@ -553,7 +600,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     }
 
     /// <summary>
-    ///  Adds multiple entities to database asynchronously. 
+    ///  Adds multiple entities to database asynchronously.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="cancellationToken"></param>
@@ -790,7 +837,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     }
 
     /// <summary>
-    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity.
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="id"></param>
@@ -801,7 +848,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         => ExecuteDeleteAsync(i => i.Id == id, propertyBuilder, cancellationToken: cancellationToken);
 
     /// <summary>
-    /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity.
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="predicate"></param>
@@ -838,18 +885,18 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <typeparam name="TDto"></typeparam>
     /// <param name="dto"></param>
     /// <remarks>
-    /// 
+    ///
     /// This method is used to update the entity object with the values of the updatable properties in the DTO object.
     /// It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
     /// If a matching property is found and the property value is an instance of <see cref="IUpdateProperty"/> and IsUpdated property is true,
     /// the specified action is performed on the matching property in the entity object.
-    /// 
+    ///
     /// <para></para>
-    /// 
+    ///
     /// If entity implements <see cref="IHasModificationDate"/>, <see cref="EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
     /// If entity implements <see cref="IHasModifier"/>, <see cref="EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
     /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTime"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
-    /// 
+    ///
     /// </remarks>
     public virtual SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TDto>(TDto dto) where TDto : DtoBase
         => _dbContext.GetUpdatablePropertiesBuilder<TEntity, TDto>(dto);
@@ -974,7 +1021,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     #region Auditing
 
     /// <summary>
-    /// Adds perform time, performer and IsDeleted proeperty calls to <paramref name="propertyBuilder"/>. 
+    /// Adds perform time, performer and IsDeleted proeperty calls to <paramref name="propertyBuilder"/>.
     /// </summary>
     /// <param name="propertyBuilder"></param>
     protected internal virtual void AddDeletionPropertyCalls(SetPropertyBuilder<TEntity> propertyBuilder)

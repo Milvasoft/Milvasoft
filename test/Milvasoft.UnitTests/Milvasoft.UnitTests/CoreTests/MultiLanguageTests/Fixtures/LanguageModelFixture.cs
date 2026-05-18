@@ -1,6 +1,7 @@
 ﻿using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
 
 namespace Milvasoft.UnitTests.CoreTests.MultiLanguageTests.Fixtures;
+
 public class LanguageModelFixture : ILanguage
 {
     public int Id { get; set; }

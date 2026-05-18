@@ -1,4 +1,5 @@
 ﻿namespace Milvasoft.UnitTests.CoreTests.MultiLanguageTests.Fixtures;
+
 public class HasTranslationDtoFixture
 {
     public int Id { get; set; }

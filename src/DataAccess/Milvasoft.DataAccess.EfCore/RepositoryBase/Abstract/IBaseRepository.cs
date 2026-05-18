@@ -74,7 +74,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
 
     #region Async Data Access
 
-    #region Async FirstOrDefault 
+    #region Async FirstOrDefault
 
     /// <summary>
     /// Returns first entity or default value which IsDeleted condition is true from database asynchronously. If the condition is requested, it also provides that condition.
@@ -268,6 +268,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="listRequest"></param>
     /// <param name="tracking"></param>
     /// <param name="splitQuery"></param>
+    /// <param name="preCalculatedTotalCount">Pre-calculated total count of the entities.</param>
     /// <param name="conditionExpression"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
@@ -275,6 +276,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
                                             Expression<Func<TEntity, bool>> conditionExpression = null,
                                             bool tracking = false,
                                             bool splitQuery = false,
+                                            int? preCalculatedTotalCount = null,
                                             CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -287,6 +289,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <param name="projection"></param>
     /// <param name="tracking"></param>
     /// <param name="splitQuery"></param>
+    /// <param name="preCalculatedTotalCount">Pre-calculated total count of the entities.</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<ListResponse<TResult>> GetAllAsync<TResult>(ListRequest listRequest,
@@ -295,6 +298,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
                                                      Expression<Func<TResult, bool>> conditionAfterProjection = null,
                                                      bool tracking = false,
                                                      bool splitQuery = false,
+                                                     int? preCalculatedTotalCount = null,
                                                      CancellationToken cancellationToken = default) where TResult : class;
 
     /// <summary>
@@ -327,6 +331,43 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
                                              bool tracking = false,
                                              bool splitQuery = false,
                                              CancellationToken cancellationToken = default) where TResult : class;
+
+    /// <summary>
+    /// Returns cursor-paginated entities from the database asynchronously.
+    /// Fetches <c>RowCount + 1</c> items to determine whether a next page exists.
+    /// </summary>
+    /// <param name="cursorListRequest">Cursor pagination request containing cursor, row count, filtering, and sorting.</param>
+    /// <param name="conditionExpression">Optional filter condition.</param>
+    /// <param name="tracking">Whether to track entities.</param>
+    /// <param name="splitQuery">Whether to use split queries for includes.</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>A <see cref="CursorListResponse{TEntity}"/> with page data, <c>NextCursor</c>, and <c>HasNextPage</c>.</returns>
+    Task<CursorListResponse<TEntity>> GetAllAsync(CursorListRequest cursorListRequest,
+                                                  Expression<Func<TEntity, bool>> conditionExpression = null,
+                                                  bool tracking = false,
+                                                  bool splitQuery = false,
+                                                  CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Returns cursor-paginated projected entities from the database asynchronously.
+    /// Fetches <c>RowCount + 1</c> entities to determine whether a next page exists and to extract the cursor value before projection.
+    /// </summary>
+    /// <typeparam name="TResult">The projected result type.</typeparam>
+    /// <param name="cursorListRequest">Cursor pagination request containing cursor, row count, filtering, and sorting.</param>
+    /// <param name="condition">Optional filter condition applied before projection.</param>
+    /// <param name="projection">Projection expression applied to each entity.</param>
+    /// <param name="conditionAfterProjection">Optional filter condition applied after projection.</param>
+    /// <param name="tracking">Whether to track entities.</param>
+    /// <param name="splitQuery">Whether to use split queries for includes.</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>A <see cref="CursorListResponse{TResult}"/> with projected page data, <c>NextCursor</c>, and <c>HasNextPage</c>.</returns>
+    Task<CursorListResponse<TResult>> GetAllAsync<TResult>(CursorListRequest cursorListRequest,
+                                                           Expression<Func<TEntity, bool>> condition = null,
+                                                           Expression<Func<TEntity, TResult>> projection = null,
+                                                           Expression<Func<TResult, bool>> conditionAfterProjection = null,
+                                                           bool tracking = false,
+                                                           bool splitQuery = false,
+                                                           CancellationToken cancellationToken = default) where TResult : class;
 
     #endregion
 
@@ -371,7 +412,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     #region Async Insert/Update/Delete
 
     /// <summary>
-    ///  Adds single entity to database asynchronously. 
+    ///  Adds single entity to database asynchronously.
     /// </summary>
     /// <param name="entity"></param>
     /// <param name="cancellationToken"></param>
@@ -379,7 +420,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     Task<int> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
 
     /// <summary>
-    ///  Adds multiple entities to database asynchronously. 
+    ///  Adds multiple entities to database asynchronously.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="cancellationToken"></param>
@@ -490,7 +531,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     Task<int> ExecuteUpdateAsync(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity.
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="id"></param>
@@ -500,7 +541,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     Task<int> ExecuteDeleteAsync(object id, SetPropertyBuilder<TEntity> propertyBuilder = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity.
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="predicate"></param>
@@ -526,7 +567,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
 
     #region Sync Data Access
 
-    #region FirstOrDefault 
+    #region FirstOrDefault
 
     /// <summary>
     /// Returns first entity or default value which IsDeleted condition is true from database synchronously. If the condition is requested, it also provides that condition.
@@ -785,14 +826,14 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     #region Insert/Update/Delete
 
     /// <summary>
-    ///  Adds single entity to database synchronously. 
+    ///  Adds single entity to database synchronously.
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
     int Add(TEntity entity);
 
     /// <summary>
-    ///  Adds multiple entities to database synchronously. 
+    ///  Adds multiple entities to database synchronously.
     /// </summary>
     /// <param name="entities"></param>
     /// <returns></returns>
@@ -864,7 +905,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <returns></returns>
     int RemoveAll();
 
-    #region Bulk 
+    #region Bulk
 
     /// <summary>
     /// Runs execute update. Adds performer and perform time to to be updated properties.
@@ -884,7 +925,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     int ExecuteUpdate(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder);
 
     /// <summary>
-    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity.
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="id"></param>
@@ -893,7 +934,7 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     int ExecuteDelete(object id, SetPropertyBuilder<TEntity> propertyBuilder = null);
 
     /// <summary>
-    /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity. 
+    /// Deletes all records that given <paramref name="predicate"/>. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity.
     /// Note that this will not work with navigation properties.
     /// </summary>
     /// <param name="predicate"></param>
@@ -919,18 +960,18 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
     /// <typeparam name="TDto"></typeparam>
     /// <param name="dto"></param>
     /// <remarks>
-    /// 
+    ///
     /// This method is used to update the entity object with the values of the updatable properties in the DTO object.
     /// It iterates over the updatable properties in the DTO object and finds the matching property in the entity class.
     /// If a matching property is found and the property value is an instance of <see cref="IUpdateProperty"/> and IsUpdated property is true,
     /// the specified action is performed on the matching property in the entity object.
-    /// 
+    ///
     /// <para></para>
-    /// 
+    ///
     /// If entity implements <see cref="IHasModificationDate"/>, <see cref="EntityPropertyNames.LastModificationDate"/> property call will be added automatically.
     /// If entity implements <see cref="IHasModifier"/>, <see cref="EntityPropertyNames.LastModifierUserName"/> property call will be added automatically.
     /// If utc conversion requested in <see cref="DbContextConfiguration.UseUtcForDateTime"/>, <see cref="DateTime"/> typed property call will be added after converted to utc.
-    /// 
+    ///
     /// </remarks>
     public SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TDto>(TDto dto) where TDto : DtoBase;
 }

@@ -281,7 +281,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
 
         var currentUserName = _dbContextConfiguration.DbContext.GetCurrentUserNameMethod?.Invoke(ServiceProvider);
 
-        if (!string.IsNullOrWhiteSpace(currentUserName) && entry.HasProperty(propertyName))
+        if (!string.IsNullOrWhiteSpace(currentUserName) && entry.HasProperty(propertyName) && entry.Property(propertyName).CurrentValue == null)
         {
             entry.Property(propertyName).CurrentValue = currentUserName;
             entry.Property(propertyName).IsModified = true;

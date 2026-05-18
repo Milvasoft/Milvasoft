@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
-using Microsoft.EntityFrameworkCore.Query;
 using Milvasoft.DataAccess.EfCore.Utils;
 using Milvasoft.UnitTests.ComponentsTests.RestTests.Fixture;
-using System.Linq.Expressions;
 
 namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests;
 

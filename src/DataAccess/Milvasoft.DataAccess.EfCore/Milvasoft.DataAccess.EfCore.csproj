@@ -17,7 +17,7 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" PrivateAssets="All" />
+		<PackageReference Include="ConfigureAwait.Fody" Version="3.4.0" PrivateAssets="All" />
 		<PackageReference Include="Fody" Version="6.9.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,9 +25,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.3" />
-	  <PackageReference Include="MongoDB.Bson" Version="3.6.0" />
-	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.8" />
+	  <PackageReference Include="MongoDB.Bson" Version="3.8.1" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

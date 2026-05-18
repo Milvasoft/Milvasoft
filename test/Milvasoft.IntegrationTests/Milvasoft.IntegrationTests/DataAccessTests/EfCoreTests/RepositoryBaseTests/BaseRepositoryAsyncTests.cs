@@ -2411,6 +2411,401 @@ public class BaseRepositoryAsyncTests(CustomWebApplicationFactory factory) : Dat
 
     #endregion
 
+    #region GetAllAsync (Cursor)
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetAllAsync_WithCursorRequest_WithNullRequest_ShouldReturnAllNonDeletedEntities(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act
+        var result = await entityRepository.GetAllAsync((CursorListRequest)null, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().HaveCount(3);
+        result.HasNextPage.Should().BeFalse();
+        result.NextCursor.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetAllAsync_WithCursorRequest_WithFirstPage_ShouldReturnFirstPageAndNextCursor(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[1].Id.Should().Be(2);
+        result.HasNextPage.Should().BeTrue();
+        result.NextCursor.Should().NotBeNullOrEmpty();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetAllAsync_WithCursorRequest_WithNextCursorFromFirstPage_ShouldReturnSecondPage(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+        var firstPage = await entityRepository.GetAllAsync(new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Act
+        var result = await entityRepository.GetAllAsync(new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Data.Should().HaveCount(1);
+        result.Data[0].Id.Should().Be(3);
+        result.HasNextPage.Should().BeFalse();
+        result.NextCursor.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetAllAsync_WithCursorRequest_WhenAllDataFitsInOnePage_ShouldHaveNoNextPage(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act
+        var result = await entityRepository.GetAllAsync(new CursorListRequest
+        {
+            RowCount = 10,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(3);
+        result.HasNextPage.Should().BeFalse();
+        result.NextCursor.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetAllAsync_WithCursorRequest_WithCondition_ShouldFilterCorrectly(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act
+        var result = await entityRepository.GetAllAsync(new CursorListRequest
+        {
+            RowCount = 5,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        }, i => i.SomeDecimalProp > 10M, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.Data.Should().OnlyContain(e => e.SomeDecimalProp > 10M);
+        result.HasNextPage.Should().BeFalse();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetAllAsync_WithCursorRequest_ShouldNotReturnSoftDeletedEntities(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act
+        var result = await entityRepository.GetAllAsync(new CursorListRequest
+        {
+            RowCount = 10,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().NotContain(e => e.IsDeleted);
+        result.Data.Should().HaveCount(3);
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetAllAsync_WithCursorRequest_WithAggregation_ShouldReturnAggregationResults(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act
+        var result = await entityRepository.GetAllAsync(new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc },
+            Aggregation = new AggregationRequest { Criterias = [new AggregationCriteria { AggregateBy = nameof(SomeFullAuditableEntityFixture.SomeDecimalProp), Type = AggregationType.Sum }] }
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(2);
+        result.AggregationResults.Should().HaveCount(1);
+        result.AggregationResults[0].Result.Should().Be(60M);
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetAllAsync_WithCursorRequestAndProjection_WithFirstPage_ShouldReturnProjectedFirstPage(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+        var cursorRequest = new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        };
+
+        // Act
+        var result = await entityRepository.GetAllAsync(cursorRequest, projection: i => new SomeBaseEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Data.Should().HaveCount(2);
+        result.Data[0].Id.Should().Be(1);
+        result.Data[0].SomeStringProp.Should().BeNull();
+        result.Data[0].SomeDecimalProp.Should().Be(10M);
+        result.HasNextPage.Should().BeTrue();
+        result.NextCursor.Should().NotBeNullOrEmpty();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetAllAsync_WithCursorRequestAndProjection_WithNextCursor_ShouldReturnProjectedSecondPage(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+        var firstPage = await entityRepository.GetAllAsync(new CursorListRequest
+        {
+            RowCount = 2,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        }, projection: i => new SomeBaseEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Act
+        var result = await entityRepository.GetAllAsync(new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        }, projection: i => new SomeBaseEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(1);
+        result.Data[0].Id.Should().Be(3);
+        result.Data[0].SomeDecimalProp.Should().Be(30M);
+        result.HasNextPage.Should().BeFalse();
+        result.NextCursor.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
+    [InlineData(QueryTrackingBehavior.NoTracking)]
+    [InlineData(QueryTrackingBehavior.TrackAll)]
+    public async Task GetAllAsync_WithCursorRequestAndProjection_WithConditionAndProjectionAndConditionAfterProjection_ShouldReturnCorrectResult(QueryTrackingBehavior queryTrackingBehavior)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess();
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString()).UseQueryTrackingBehavior(queryTrackingBehavior);
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+
+        // Act
+        var result = await entityRepository.GetAllAsync(new CursorListRequest
+        {
+            RowCount = 5,
+            Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc }
+        }, i => i.SomeDecimalProp > 10M, i => new SomeBaseEntityFixture
+        {
+            Id = i.Id,
+            SomeDecimalProp = i.SomeDecimalProp
+        }, i => i.SomeDecimalProp > 20M, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Should().HaveCount(1);
+        result.Data[0].SomeDecimalProp.Should().Be(30M);
+        result.HasNextPage.Should().BeFalse();
+    }
+
+    #endregion
+
     #region AddAsync
 
     [Theory]

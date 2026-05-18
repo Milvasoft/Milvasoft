@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 
 namespace Milvasoft.UnitTests;
+
 internal static class UnitTestAssembly
 {
     /// <summary>
