@@ -8,8 +8,8 @@
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.8" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="10.0.8" />
-	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
-	  <PackageReference Include="SharpCompress" Version="0.48.1" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
+	  <PackageReference Include="SharpCompress" Version="0.49.1" />
 	</ItemGroup>
 
 	<ItemGroup>

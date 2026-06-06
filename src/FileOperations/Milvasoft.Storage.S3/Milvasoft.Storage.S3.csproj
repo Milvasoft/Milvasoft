@@ -4,8 +4,8 @@
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.10" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.8" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
-		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.40" />
-		<PackageReference Include="AWSSDK.S3" Version="4.0.23.3" />
+		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.4.4" />
+		<PackageReference Include="AWSSDK.S3" Version="4.0.24.1" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
 	</ItemGroup>
 
@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ConfigureAwait.Fody" Version="3.4.0" PrivateAssets="All" />
+		<PackageReference Include="ConfigureAwait.Fody" Version="3.4.1" PrivateAssets="All" />
 		<PackageReference Include="Fody" Version="6.9.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
