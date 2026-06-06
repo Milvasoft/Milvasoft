@@ -27,9 +27,7 @@ public static class ServiceCollectionExtensions
         if (string.IsNullOrWhiteSpace(config.CronExpression))
             throw new MilvaDeveloperException("Empty Cron Expression is not allowed.");
 
-        services.AddSingleton<IScheduleConfig>(config);
-
-        services.AddHostedService<TJob>();
+        services.AddHostedService(sp => ActivatorUtilities.CreateInstance<TJob>(sp, config));
 
         return services;
     }
