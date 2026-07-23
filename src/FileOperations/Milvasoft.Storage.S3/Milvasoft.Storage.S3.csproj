@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.10" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.8" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
-		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.4.4" />
-		<PackageReference Include="AWSSDK.S3" Version="4.0.24.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.11" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.10" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
+		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.100.6" />
+		<PackageReference Include="AWSSDK.S3" Version="4.0.101.4" />
 		<PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
 	</ItemGroup>
 
