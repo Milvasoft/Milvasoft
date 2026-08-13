@@ -10,9 +10,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="10.0.10" />
-		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.21.0" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.21.0" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="10.0.11" />
+		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.22.0" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.22.0" />
 		<ProjectReference Include="..\..\Components\Milvasoft.Attributes\Milvasoft.Attributes.csproj" />
 	</ItemGroup>
 

@@ -10,7 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MongoDB.Driver" Version="3.10.0" />
+		<PackageReference Include="MongoDB.Driver" Version="3.11.0" />
 	</ItemGroup>
 
 
@@ -20,7 +20,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="SharpCompress" Version="0.50.0" />
+		<PackageReference Include="SharpCompress" Version="0.50.4" />
 	</ItemGroup>
 
 	<ItemGroup>
