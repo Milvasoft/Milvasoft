@@ -25,6 +25,10 @@ public static class ServiceCollectionExtension
             if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(IConnectionMultiplexer)) && cachingOptions.ConfigurationOptions != null)
             {
                 //Configure other services up here
+
+                //Never abort when Redis is unreachable: connect lazily and keep retrying in the background (circuit-breaker style) so a Redis outage degrades caching instead of crashing the app on startup.
+                cachingOptions.ConfigurationOptions.AbortOnConnectFail = false;
+
                 var multiplexer = ConnectionMultiplexer.Connect(cachingOptions.ConfigurationOptions);
 
                 cacheBuilder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
