@@ -170,25 +170,28 @@ public static class MilvaEfExtensions
         cursorListRequest ??= new CursorListRequest();
         cursorListRequest.Sorting ??= new SortRequest { SortBy = EntityPropertyNames.Id, Type = SortType.Desc };
 
-        query = query.WithFiltering(cursorListRequest.Filtering).WithSorting(cursorListRequest.Sorting);
+        CursorData cursorData = !string.IsNullOrEmpty(cursorListRequest.Cursor) ? CursorData.Decode(cursorListRequest.Cursor) : null;
+
+        // A cursor captures the sort it was built with; honor it (ignoring any client SortBy override on
+        // later pages) so the ordering stays consistent with the cursor filter — otherwise equal-value rows
+        // are skipped or duplicated.
+        if (cursorData != null)
+            cursorListRequest.Sorting = new SortRequest { SortBy = cursorData.SortBy, Type = cursorData.SortType };
+
+        query = CursorExtensions.ApplyCursorSorting(query.WithFiltering(cursorListRequest.Filtering), cursorListRequest.Sorting);
 
         var aggregationResults = cursorListRequest.Aggregation != null ? await cursorListRequest.Aggregation.ApplyAggregationAsync(query, cancellationToken: cancellationToken) : null;
 
         var totalDataCount = cursorListRequest.PreCalculatedTotalCount.HasValue ? cursorListRequest.PreCalculatedTotalCount : null;
 
-        CursorData cursorData = null;
-
-        if (!string.IsNullOrEmpty(cursorListRequest.Cursor))
-        {
-            cursorData = CursorData.Decode(cursorListRequest.Cursor);
+        if (cursorData != null)
             query = CursorExtensions.ApplyCursorCondition(query, cursorData, cursorData.IsBackward);
-        }
 
         var isBackward = cursorData?.IsBackward ?? false;
 
         // For backward paging we reverse the sort so the DB returns items closest to the cursor first, then we flip the list back to the original order before returning it.
         if (isBackward)
-            query = query.WithSorting(CursorExtensions.ReversedSorting(cursorListRequest.Sorting));
+            query = CursorExtensions.ApplyCursorSorting(query, CursorExtensions.ReversedSorting(cursorListRequest.Sorting));
 
         string nextCursor = null;
         string prevCursor = null;
@@ -275,24 +278,27 @@ public static class MilvaEfExtensions
         cursorListRequest ??= new CursorListRequest();
         cursorListRequest.Sorting ??= new SortRequest { SortBy = EntityPropertyNames.Id, Type = SortType.Desc };
 
-        query = query.WithFiltering(cursorListRequest.Filtering).WithSorting(cursorListRequest.Sorting);
+        CursorData cursorData = !string.IsNullOrEmpty(cursorListRequest.Cursor) ? CursorData.Decode(cursorListRequest.Cursor) : null;
+
+        // A cursor captures the sort it was built with; honor it (ignoring any client SortBy override on
+        // later pages) so the ordering stays consistent with the cursor filter — otherwise equal-value rows
+        // are skipped or duplicated.
+        if (cursorData != null)
+            cursorListRequest.Sorting = new SortRequest { SortBy = cursorData.SortBy, Type = cursorData.SortType };
+
+        query = CursorExtensions.ApplyCursorSorting(query.WithFiltering(cursorListRequest.Filtering), cursorListRequest.Sorting);
 
         var aggregationResults = cursorListRequest.Aggregation != null ? await cursorListRequest.Aggregation.ApplyAggregationAsync(query, cancellationToken: cancellationToken) : null;
 
         var totalDataCount = cursorListRequest.PreCalculatedTotalCount.HasValue ? cursorListRequest.PreCalculatedTotalCount : null;
 
-        CursorData cursorData = null;
-
-        if (!string.IsNullOrEmpty(cursorListRequest.Cursor))
-        {
-            cursorData = CursorData.Decode(cursorListRequest.Cursor);
+        if (cursorData != null)
             query = CursorExtensions.ApplyCursorCondition(query, cursorData, cursorData.IsBackward);
-        }
 
         var isBackward = cursorData?.IsBackward ?? false;
 
         if (isBackward)
-            query = query.WithSorting(CursorExtensions.ReversedSorting(cursorListRequest.Sorting));
+            query = CursorExtensions.ApplyCursorSorting(query, CursorExtensions.ReversedSorting(cursorListRequest.Sorting));
 
         string nextCursor = null;
         string prevCursor = null;
@@ -339,10 +345,10 @@ public static class MilvaEfExtensions
                 hasNextPage = cursorData != null;
 
                 if (hasPreviousPage)
-                    prevCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[0].SortValue, cursorListRequest.Sorting, isBackward: true);
+                    prevCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[0].SortValue, carriers[0].IdValue, cursorListRequest.Sorting, isBackward: true);
 
                 if (hasNextPage)
-                    nextCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[^1].SortValue, cursorListRequest.Sorting, isBackward: false);
+                    nextCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[^1].SortValue, carriers[^1].IdValue, cursorListRequest.Sorting, isBackward: false);
             }
             else
             {
@@ -350,10 +356,10 @@ public static class MilvaEfExtensions
                 hasPreviousPage = cursorData != null;
 
                 if (hasNextPage)
-                    nextCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[^1].SortValue, cursorListRequest.Sorting, isBackward: false);
+                    nextCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[^1].SortValue, carriers[^1].IdValue, cursorListRequest.Sorting, isBackward: false);
 
                 if (hasPreviousPage)
-                    prevCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[0].SortValue, cursorListRequest.Sorting, isBackward: true);
+                    prevCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[0].SortValue, carriers[0].IdValue, cursorListRequest.Sorting, isBackward: true);
             }
 
             list = [.. carriers.Select(c => c.Result)];
