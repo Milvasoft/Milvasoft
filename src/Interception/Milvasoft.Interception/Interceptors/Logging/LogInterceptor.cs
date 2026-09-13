@@ -1,11 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Components.Rest.MilvaResponse;
+using Milvasoft.Core.Utils.Converters;
 using Milvasoft.Interception.Decorator;
 using Milvasoft.Interception.Decorator.Internal;
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Cache;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Milvasoft.Interception.Interceptors.Logging;
 
@@ -162,7 +165,7 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
             logObjectPropDic.Add("Namespace", body.Method.DeclaringType.Namespace);
             logObjectPropDic.Add("ClassName", body.Method.DeclaringType.Name);
             logObjectPropDic.Add("MethodName", methodName);
-            logObjectPropDic.Add("MethodParams", argumentValues.ToJson());
+            logObjectPropDic.Add("MethodParams", argumentValues.ToJson(GetMaskingSerializerOptions()));
         }
         else
         {
@@ -171,10 +174,76 @@ public partial class LogInterceptor(IServiceProvider serviceProvider) : IMilvaIn
             logObjectPropDic.Add("Namespace", call.MethodImplementation.DeclaringType.Namespace);
             logObjectPropDic.Add("ClassName", call.MethodImplementation.DeclaringType.Name);
             logObjectPropDic.Add("MethodName", call.MethodImplementation.Name);
-            logObjectPropDic.Add("MethodParams", methodParameters?.ToJson());
+            logObjectPropDic.Add("MethodParams", methodParameters?.ToJson(GetMaskingSerializerOptions()));
         }
 
-        logObjectPropDic.Add("MethodResult", call.ReturnValue?.ToJson());
+        logObjectPropDic.Add("MethodResult", call.ReturnValue?.ToJson(GetMaskingSerializerOptions()));
+    }
+
+    private static JsonSerializerOptions _maskingSerializerOptions;
+    private static JsonSerializerOptions _maskingSerializerBaseOptions;
+    private static readonly object _maskingSerializerOptionsLock = new();
+
+    /// <summary>
+    /// Builds (and caches) a <see cref="JsonSerializerOptions"/> based on the library's current options
+    /// with an added type-info modifier that masks properties marked with <see cref="LogMaskedAttribute"/>.
+    /// The instance is rebuilt only when the underlying <see cref="MilvaJsonConverterOptions.Current"/>
+    /// changes (i.e. reconfigured at startup). Masking is applied only to log serialization; the library's
+    /// own serialization options are left untouched.
+    /// </summary>
+    private static JsonSerializerOptions GetMaskingSerializerOptions()
+    {
+        var current = MilvaJsonConverterOptions.Current;
+
+        if (_maskingSerializerOptions != null && ReferenceEquals(_maskingSerializerBaseOptions, current))
+            return _maskingSerializerOptions;
+
+        lock (_maskingSerializerOptionsLock)
+        {
+            if (_maskingSerializerOptions != null && ReferenceEquals(_maskingSerializerBaseOptions, current))
+                return _maskingSerializerOptions;
+
+            var options = new JsonSerializerOptions(current)
+            {
+                TypeInfoResolver = (current.TypeInfoResolver ?? new DefaultJsonTypeInfoResolver()).WithAddedModifier(ApplyLogMasking)
+            };
+
+            _maskingSerializerBaseOptions = current;
+            _maskingSerializerOptions = options;
+
+            return options;
+        }
+    }
+
+    /// <summary>
+    /// Type-info modifier that replaces the getter of every string property marked with
+    /// <see cref="LogMaskedAttribute"/> with one returning the mask placeholder (never the real value).
+    /// The replacement getter cannot throw, so it is safe to run inside the interceptor's finally block.
+    /// </summary>
+    /// <param name="typeInfo">The type metadata being customized.</param>
+    private static void ApplyLogMasking(JsonTypeInfo typeInfo)
+    {
+        if (typeInfo.Kind != JsonTypeInfoKind.Object)
+            return;
+
+        foreach (var property in typeInfo.Properties)
+        {
+            if (property.PropertyType != typeof(string))
+                continue;
+
+            var attributes = property.AttributeProvider?.GetCustomAttributes(typeof(LogMaskedAttribute), true);
+
+            if (attributes == null || attributes.Length == 0)
+                continue;
+
+            var mask = ((LogMaskedAttribute)attributes[0]).Mask;
+            var originalGetter = property.Get;
+
+            if (originalGetter == null)
+                continue;
+
+            property.Get = obj => originalGetter(obj) is null ? null : mask;
+        }
     }
 
     /// <summary>
