@@ -1,4 +1,4 @@
-﻿using Milvasoft.Core.EntityBases.Concrete;
+using Milvasoft.Core.EntityBases.Concrete;
 
 namespace Milvasoft.Storage.Models;
 
@@ -38,6 +38,13 @@ public class FileInformation : EntityBase<string>
     public string AltText { get; set; }
 
     /// <summary>
+    /// Free-form dynamic metadata for this file, serialized as a JSON string. Persisted verbatim inside
+    /// the owning jsonb column, so callers can attach display hints (such as a cover focal point) without
+    /// a schema change.
+    /// </summary>
+    public string Data { get; set; }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="FileInformation"/> class with a new unique identifier.
     /// </summary>
     public FileInformation()
@@ -45,7 +52,7 @@ public class FileInformation : EntityBase<string>
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="FileInformation"/> class with a new unique identifier. 
+    /// Initializes a new instance of the <see cref="FileInformation"/> class with a new unique identifier.
     /// </summary>
     public FileInformation(string id = null)
     {
