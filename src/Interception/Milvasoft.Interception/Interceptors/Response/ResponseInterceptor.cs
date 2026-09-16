@@ -48,6 +48,8 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
     /// <summary>
     /// Translates <see cref="IResponse.Messages"/> <see cref="ResponseMessage.Message"/> property.
+    /// The untranslated value is preserved in <see cref="ResponseMessage.Key"/> (when it is empty) so callers
+    /// can still reason about the original message key after localization (e.g. mapping keys to HTTP status codes).
     /// </summary>
     /// <param name="response"></param>
     private void TranslateResultMessages(IResponse response)
@@ -56,7 +58,11 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
         if (localizer != null)
             foreach (var message in response.Messages)
-                message.Message = localizer[message.Message];
+            {
+                if (string.IsNullOrEmpty(message.Key))
+                    message.Key = message.Message;
 
+                message.Message = localizer[message.Message];
+            }
     }
 }

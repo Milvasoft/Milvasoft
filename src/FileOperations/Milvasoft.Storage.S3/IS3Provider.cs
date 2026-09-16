@@ -41,10 +41,15 @@ public interface IS3Provider : IStorageProvider
     /// <param name="cacheControlHeader">The value of the Cache-Control header to be included in the request. Defaults to  "public, max-age=86400".</param>
     /// <param name="contentType"></param>
     /// <param name="metadatas"></param>
+    /// <param name="contentLength">
+    /// When set, the <c>Content-Length</c> header is included in the signature, so S3 rejects (403) any PUT whose body
+    /// size differs from this value. Use it to enforce a declared upload size server-side.
+    /// </param>
     /// <returns>A string containing the pre-signed URL that can be used to upload the file.</returns>
     public string GeneratePreSignedUrl(string filePath,
                                        int expiresIn = 2,
                                        string cacheControlHeader = "public, max-age=86400",
                                        string contentType = null,
-                                       Dictionary<string, string> metadatas = null);
+                                       Dictionary<string, string> metadatas = null,
+                                       long? contentLength = null);
 }
