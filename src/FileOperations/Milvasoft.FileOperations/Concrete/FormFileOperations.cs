@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Milvasoft.FileOperations.Enums;
 using Milvasoft.Storage.Models;
 using System.Text.RegularExpressions;
@@ -71,30 +71,32 @@ public static partial class FormFileOperations
         //We created the path to the folder of this Id (folderNameOfItem).
         var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
 
+        Directory.CreateDirectory(folderPathOfItem);
+
+        var fileNameWithExtension = $"{folderNameOfItem}{fileExtension}";
+        var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
+        var tempFilePath = Path.Combine(folderPathOfItem, $".{Guid.NewGuid():N}.tmp");
+
         try
         {
-            //If there is no such folder in this path (folderPathOfItem), we created it.
-            if (!Directory.Exists(folderPathOfItem))
-                Directory.CreateDirectory(folderPathOfItem);
-            else
-            {
-                Directory.Delete(folderPathOfItem, true);
-                Directory.CreateDirectory(folderPathOfItem);
-            }
-
-            var fileNameWithExtension = $"{folderNameOfItem}{fileExtension}";
-            var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
-            using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
+            // Write the new file first so a failed upload never destroys the previous file.
+            await using (var fileStream = new FileStream(tempFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 81920, useAsync: true))
             {
                 await file.CopyToAsync(fileStream);
             }
 
+            // The folder holds a single file per item; remove the previous one (it may have another extension).
+            foreach (var oldFile in Directory.EnumerateFiles(folderPathOfItem).Where(f => f != tempFilePath && f != filePathOfItem).ToList())
+                File.Delete(oldFile);
+
+            File.Move(tempFilePath, filePathOfItem, overwrite: true);
+
             return filePathOfItem;
         }
-        catch (Exception)
+        finally
         {
-            Directory.Delete(folderPathOfItem, true);
-            throw;
+            if (File.Exists(tempFilePath))
+                File.Delete(tempFilePath);
         }
     }
 
@@ -127,9 +129,6 @@ public static partial class FormFileOperations
         if (files.IsNullOrEmpty())
             return [];
 
-        //Gets file extension.
-        var fileExtension = Path.GetExtension(files[0].FileName);
-
         //Gets the class name. E.g. If class is ProductDTO then sets the value of this variable as "Product".
         var folderNameOfClass = folderNameCreator.Invoke(entity.GetType());
 
@@ -144,36 +143,30 @@ public static partial class FormFileOperations
         //We created the path to the folder of this Id (folderNameOfItem).
         var folderPathOfItem = Path.Combine(folderPathOfClass, folderNameOfItem);
 
+        Directory.CreateDirectory(folderPathOfItem);
+
+        // Existing files are named "{item}_{marker}{extension}". Files with other names (e.g. a GUID) are ignored.
+        var markerNo = Directory.EnumerateFiles(folderPathOfItem)
+                                .Select(f => int.TryParse(Path.GetFileNameWithoutExtension(f).Split('_')[^1], out var marker) ? marker : 0)
+                                .DefaultIfEmpty(0)
+                                .Max() + 1;
+
+        var folderPaths = new List<string>(files.Count);
+
         try
         {
-            //If there is no such folder in this path (folderPathOfClass), we created it.
-            if (!Directory.Exists(folderPathOfClass))
-                Directory.CreateDirectory(folderPathOfClass);
-
-            //If there is no such folder in this path (folderPathOfItem), we created it.
-            if (!Directory.Exists(folderPathOfItem))
-                Directory.CreateDirectory(folderPathOfItem);
-
-            DirectoryInfo directory = new(folderPathOfItem);
-
-            var directoryFiles = directory.GetFiles();
-
-            int markerNo = directoryFiles.IsNullOrEmpty()
-                            ? 1
-                            : directoryFiles.Max(fileInDir => Convert.ToInt32(Path.GetFileNameWithoutExtension(fileInDir.FullName).Split('_').LastOrDefault() ?? "0")) + 1;
-
-            var folderPaths = new List<string>(files.Count);
-
             foreach (var item in files)
             {
-                var fileNameWithExtension = $"{folderNameOfItem}_{markerNo}{fileExtension}";
+                var fileNameWithExtension = $"{folderNameOfItem}_{markerNo}{Path.GetExtension(item.FileName)}";
                 var filePathOfItem = Path.Combine(folderPathOfItem, fileNameWithExtension);
-                using (var fileStream = new FileStream(filePathOfItem, FileMode.Create))
+
+                await using (var fileStream = new FileStream(filePathOfItem, FileMode.CreateNew, FileAccess.Write, FileShare.None, 81920, useAsync: true))
                 {
+                    folderPaths.Add(filePathOfItem);
+
                     await item.CopyToAsync(fileStream);
                 }
 
-                folderPaths.Add(filePathOfItem);
                 markerNo++;
             }
 
@@ -181,8 +174,10 @@ public static partial class FormFileOperations
         }
         catch (Exception)
         {
-            Directory.Delete(folderPathOfClass);
-            Directory.Delete(folderPathOfItem);
+            // Remove only the files written by this call; other files of the item stay untouched.
+            foreach (var writtenFile in folderPaths.Where(File.Exists))
+                File.Delete(writtenFile);
+
             throw;
         }
     }
@@ -287,11 +282,10 @@ public static partial class FormFileOperations
 
         allowedFileExtensions ??= GetDefaultFileExtensions(fileType);
 
-        allowedFileExtensions = allowedFileExtensions.ConvertAll(d => d.ToLower());
-
         var fileExtension = Path.GetExtension(file.FileName);
 
-        if (!allowedFileExtensions.Contains(fileExtension.ToLower()))
+        // Ordinal, culture-independent comparison: "GIF".ToLower() is "gıf" on tr-TR.
+        if (string.IsNullOrEmpty(fileExtension) || !allowedFileExtensions.Exists(e => string.Equals(e, fileExtension, StringComparison.OrdinalIgnoreCase)))
             return FileValidationResult.InvalidFileExtension;
 
         // Get length of file in bytes
@@ -360,14 +354,8 @@ public static partial class FormFileOperations
         if (string.IsNullOrWhiteSpace(path))
             return null;
 
-        await using var memory = new MemoryStream();
-
-        using (var stream = new FileStream(path, FileMode.Open))
-        {
-            await stream.CopyToAsync(memory);
-        }
-
-        memory.Position = 0;
+        // The returned FormFile reads from this stream later, so it must not be disposed here.
+        var memory = new MemoryStream(await File.ReadAllBytesAsync(path), writable: false);
 
         var file = new FormFile(memory, 0, memory.Length, fileType.ToString(), Path.GetFileName(path))
         {
@@ -383,9 +371,15 @@ public static partial class FormFileOperations
     /// </summary>
     /// <param name="dataUriBase64"></param>
     /// <returns></returns>
+    /// <exception cref="ArgumentException">If <paramref name="dataUriBase64"/> is not a base64 data URI.</exception>
     public static IFormFile ConvertToFormFile(string dataUriBase64)
     {
-        var base64String = dataUriBase64?.Split(";base64,")[1];
+        var parts = dataUriBase64?.Split(";base64,");
+
+        if (parts == null || parts.Length != 2)
+            throw new ArgumentException("Value is not a base64 data URI.", nameof(dataUriBase64));
+
+        var base64String = parts[1];
 
         var regex = @"[^:]\w+\/[\w-+\d.]+(?=;|,)";
 
@@ -395,7 +389,7 @@ public static partial class FormFileOperations
 
         var fileType = splittedContentType?[0];
 
-        var fileExtension = splittedContentType?[1];
+        var fileExtension = splittedContentType?.Length > 1 ? splittedContentType[1] : string.Empty;
 
         var array = Convert.FromBase64String(base64String);
 
@@ -581,7 +575,7 @@ public static partial class FormFileOperations
     /// <param name="input"></param>
     /// <param name="regexString"></param>
     /// <returns></returns>
-    private static string GetExtension(string input, string regexString) => new Regex(regexString, RegexOptions.None, TimeSpan.FromSeconds(60)).Match(input).Captures?.FirstOrDefault()?.Value;
+    private static string GetExtension(string input, string regexString) => new Regex(regexString, RegexOptions.None, TimeSpan.FromSeconds(1)).Match(input[..Math.Min(input.Length, 256)]).Captures?.FirstOrDefault()?.Value;
 
     /// <summary>
     /// File types to be accepted.
@@ -618,39 +612,19 @@ public static partial class FormFileOperations
     /// </summary>
     /// <param name="fileType"></param>
     /// <returns></returns>
-    private static List<string> GetDefaultFileExtensions(FileType fileType) => [.. new Dictionary<FileType, string>
+    private static List<string> GetDefaultFileExtensions(FileType fileType) => _defaultFileExtensions.TryGetValue(fileType, out var extensions) ? [.. extensions] : [];
+
+    private static readonly Dictionary<FileType, string[]> _defaultFileExtensions = new()
     {
-       {FileType.Image, ".ai"},                {FileType.Video, ".3g2"},             {FileType.Audio, ".aif"},                       {FileType.EMail, ".email"},
-       {FileType.Image, ".bmp"},               {FileType.Video, ".3gp"},             {FileType.Audio, ".cda"},                       {FileType.EMail, ".eml"},
-       {FileType.Image, ".gif"},               {FileType.Video, ".h264"},            {FileType.Audio, ".mid"},                       {FileType.EMail, ".emlx"},
-       {FileType.Image, ".ico"},               {FileType.Video, ".m4v"},             {FileType.Audio, ".mp3"},                       {FileType.EMail, ".msg"},
-       {FileType.Image, ".jpeg"},              {FileType.Video, ".mkv"},             {FileType.Audio, ".mpa"},                       {FileType.EMail, ".oft"},
-       {FileType.Image, ".jpg"},               {FileType.Video, ".mov"},             {FileType.Audio, ".ogg"},                       {FileType.EMail, ".ost"},
-       {FileType.Image, ".png"},               {FileType.Video, ".mp4"},             {FileType.Audio, ".wav"},                       {FileType.EMail, ".pst"},
-       {FileType.Image, ".ps"},                {FileType.Video, ".mpg"},             {FileType.Audio, ".wma"},                       {FileType.EMail, ".vcf"},
-       {FileType.Image, ".svg"},               {FileType.Video, ".mpeg"},            {FileType.Audio, ".wpl"},
-       {FileType.Image, ".tif"},               {FileType.Video, ".wmv"},
-       {FileType.Image, ".tiff"},
-
-       {FileType.Document, ".doc"},           {FileType.Compressed, ".arj"},         {FileType.InternetRelated, ".ai"},              {FileType.Font, ".fnt"},
-       {FileType.Document, ".docx"},          {FileType.Compressed, ".deb"},         {FileType.InternetRelated, ".bmp"},             {FileType.Font, ".fon"},
-       {FileType.Document, ".odt"},           {FileType.Compressed, ".pkg"},         {FileType.InternetRelated, ".gif"},             {FileType.Font, ".otf"},
-       {FileType.Document, ".pdf"},           {FileType.Compressed, ".rar"},         {FileType.InternetRelated, ".ico"},             {FileType.Font, ".ttf"},
-       {FileType.Document, ".rtf"},           {FileType.Compressed, ".rpm"},         {FileType.InternetRelated, ".jpeg"},
-       {FileType.Document, ".tex"},           {FileType.Compressed, ".zip"},         {FileType.InternetRelated, ".jpg"},
-       {FileType.Document, ".txt"},                                                  {FileType.InternetRelated, ".png"},
-       {FileType.Document, ".wpd"},                                                  {FileType.InternetRelated, ".ps"},
-       {FileType.Document, ".ods"},                                                  {FileType.InternetRelated, ".psd"},
-       {FileType.Document, ".xls"},                                                  {FileType.InternetRelated, ".svg"},
-       {FileType.Document, ".xlsm"},                                                 {FileType.InternetRelated, ".tif"},
-       {FileType.Document, ".xlsx"},                                                 {FileType.InternetRelated, ".tiff"},
-       {FileType.Document, ".key"},
-       {FileType.Document, ".odp"},
-       {FileType.Document, ".pps"},
-       {FileType.Document, ".ppt"},
-       {FileType.Document, ".pptx"},
-
-    }.ToLookup(i => i.Key, i => i.Value).Where(i => i.Key == fileType).Select(i => i.First())];
+        [FileType.Image] = [".ai", ".bmp", ".gif", ".ico", ".jpeg", ".jpg", ".png", ".ps", ".svg", ".tif", ".tiff"],
+        [FileType.Video] = [".3g2", ".3gp", ".h264", ".m4v", ".mkv", ".mov", ".mp4", ".mpg", ".mpeg", ".wmv"],
+        [FileType.Audio] = [".aif", ".cda", ".mid", ".mp3", ".mpa", ".ogg", ".wav", ".wma", ".wpl"],
+        [FileType.EMail] = [".email", ".eml", ".emlx", ".msg", ".oft", ".ost", ".pst", ".vcf"],
+        [FileType.Document] = [".doc", ".docx", ".odt", ".pdf", ".rtf", ".tex", ".txt", ".wpd", ".ods", ".xls", ".xlsm", ".xlsx", ".key", ".odp", ".pps", ".ppt", ".pptx"],
+        [FileType.Compressed] = [".arj", ".deb", ".pkg", ".rar", ".rpm", ".zip"],
+        [FileType.InternetRelated] = [".ai", ".bmp", ".gif", ".ico", ".jpeg", ".jpg", ".png", ".ps", ".psd", ".svg", ".tif", ".tiff"],
+        [FileType.Font] = [".fnt", ".fon", ".otf", ".ttf"],
+    };
 
     /// <summary>
     /// URL-encodes illegal characters but not reserved characters.
@@ -660,7 +634,7 @@ public static partial class FormFileOperations
     {
         ArgumentNullException.ThrowIfNull(parts);
 
-        var resultBuilder = new StringBuilder();
+        var result = string.Empty;
         bool inQuery = false, inFragment = false;
 
         static string CombineEnsureSingleSeparator(string a, string b, char separator)
@@ -677,16 +651,17 @@ public static partial class FormFileOperations
             if (string.IsNullOrWhiteSpace(part))
                 continue;
 
-            if (resultBuilder.ToString().EndsWith('?') || part.StartsWith('?'))
-                resultBuilder.Append(CombineEnsureSingleSeparator(resultBuilder.ToString(), part, '?'));
-            else if (resultBuilder.ToString().EndsWith('#') || part.StartsWith('#'))
-                resultBuilder.Append(CombineEnsureSingleSeparator(resultBuilder.ToString(), part, '#'));
+            // Each step yields the whole combined string, so it replaces the previous result (appending duplicated it).
+            if (result.EndsWith('?') || part.StartsWith('?'))
+                result = CombineEnsureSingleSeparator(result, part, '?');
+            else if (result.EndsWith('#') || part.StartsWith('#'))
+                result = CombineEnsureSingleSeparator(result, part, '#');
             else if (inFragment)
-                resultBuilder.Append(part);
+                result += part;
             else if (inQuery)
-                resultBuilder.Append(CombineEnsureSingleSeparator(resultBuilder.ToString(), part, '&'));
+                result = CombineEnsureSingleSeparator(result, part, '&');
             else
-                resultBuilder.Append(CombineEnsureSingleSeparator(resultBuilder.ToString(), part, '/'));
+                result = CombineEnsureSingleSeparator(result, part, '/');
 
             if (part.Contains('#'))
             {
@@ -699,12 +674,12 @@ public static partial class FormFileOperations
             }
         }
 
-        return EncodeIllegalCharacters(resultBuilder.ToString());
+        return EncodeIllegalCharacters(result);
     }
 
     /// <summary>
-    /// URL-encodes characters in a string that are neither reserved nor unreserved. 
-    /// Avoids encoding reserved characters such as '/' and '?'. Avoids encoding '%' if it begins a %-hex-hex sequence (i.e. avoids double-encoding).
+    /// URL-encodes characters in a string that are neither reserved nor unreserved (RFC 3986).
+    /// Reserved characters such as '/' and '?' are kept. '%' is kept if it begins a %-hex-hex sequence (avoids double-encoding).
     /// </summary>
     /// <param name="s">The string to encode.</param>
     /// <param name="encodeSpaceAsPlus">If true, spaces will be encoded as + signs. Otherwise, they'll be encoded as %20.</param>
@@ -717,24 +692,32 @@ public static partial class FormFileOperations
         if (encodeSpaceAsPlus)
             s = s.Replace(" ", "+");
 
-        // Uri.EscapeUriString mostly does what we want - encodes illegal characters only - but it has a quirk
-        // in that % isn't illegal if it's the start of a %-encoded sequence https://stackoverflow.com/a/47636037/62600
+        var builder = new StringBuilder(s.Length);
+        Span<byte> utf8 = stackalloc byte[4];
 
-        // no % characters, so avoid the regex overhead
-        if (!s.Contains('%'))
-            return Uri.EscapeDataString(s);
-
-        // pick out all %-hex-hex matches and avoid double-encoding 
-        return IllegalCharsRegex().Replace(s, c =>
+        for (var i = 0; i < s.Length; i++)
         {
-            var a = c.Groups[1].Value; // group 1 is a sequence with no %-encoding - encode illegal characters
-            var b = c.Groups[2].Value; // group 2 is a valid 3-character %-encoded sequence - leave it alone!
-            return Uri.EscapeDataString(a) + b;
-        });
-    }
+            var c = s[i];
 
-    [GeneratedRegex("(.*?)((%[0-9A-Fa-f]{2})|$)")]
-    private static partial Regex IllegalCharsRegex();
+            if (IsUnreservedOrReserved(c) || c == '%' && i + 2 < s.Length && Uri.IsHexDigit(s[i + 1]) && Uri.IsHexDigit(s[i + 2]))
+            {
+                builder.Append(c);
+                continue;
+            }
+
+            var charCount = char.IsHighSurrogate(c) && i + 1 < s.Length && char.IsLowSurrogate(s[i + 1]) ? 2 : 1;
+            var byteCount = Encoding.UTF8.GetBytes(s.AsSpan(i, charCount), utf8);
+
+            foreach (var b in utf8[..byteCount])
+                builder.Append('%').Append(b.ToString("X2", System.Globalization.CultureInfo.InvariantCulture));
+
+            i += charCount - 1;
+        }
+
+        return builder.ToString();
+
+        static bool IsUnreservedOrReserved(char c) => char.IsAsciiLetterOrDigit(c) || "-._~:/?#[]@!$&'()*+,;=".Contains(c);
+    }
 
     #endregion
 }
