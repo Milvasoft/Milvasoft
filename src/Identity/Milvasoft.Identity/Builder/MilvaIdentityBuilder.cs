@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Identity.Abstract;
 using Milvasoft.Identity.Concrete;
 using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.Concrete.Options;
-using Milvasoft.Identity.TokenProvider;
 using Milvasoft.Identity.TokenProvider.AuthToken;
 
 namespace Milvasoft.Identity.Builder;
@@ -31,7 +30,8 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
     /// <param name="configurationManager"></param>
     public MilvaIdentityBuilder(IServiceCollection services, IConfigurationManager configurationManager)
     {
-        services.AddScoped<IMilvaPasswordHasher, MilvaPasswordHasher>();
+        // Hasher options come from the registered MilvaIdentityOptions (Password.Hasher), not from IOptions<MilvaPasswordHasherOptions>.
+        services.AddScoped<IMilvaPasswordHasher>(sp => new MilvaPasswordHasher(sp.GetService<MilvaIdentityOptions>()?.Password?.Hasher));
         services.AddDataProtection();
         _services = services;
         _configurationManager = configurationManager;
@@ -98,8 +98,6 @@ public class MilvaIdentityBuilder<TUser, TKey> where TUser : MilvaUser<TKey> whe
         config.Token.TokenValidationParameters.IssuerSigningKey = config.Token.GetSecurityKey();
 
         _services.AddSingleton(config);
-
-        Rfc6238AuthenticationService.UseUtcForDateTimes = config.Token.UseUtcForDateTimes;
 
         IdentityOptions = config;
 
