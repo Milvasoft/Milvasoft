@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Milvasoft.Attributes.Annotations;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.DataAccess.EfCore.Utils.LookupModels;
 using Milvasoft.Types.Structs;
 using System.Collections;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Milvasoft.DataAccess.EfCore.DbContextBase;
 
@@ -220,11 +222,17 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// <see cref="EntityPropertyNames.DeleterUserName"/>; no other column of the soft deleted entity is written.
     /// </para>
     /// <para>
-    /// Soft deletion only propagates from a principal to its dependents through relationships whose delete behavior is
-    /// <see cref="DeleteBehavior.Cascade"/> or <see cref="DeleteBehavior.ClientCascade"/>. It never propagates to principals
-    /// (e.g. the parent of a deleted child) and never through many-to-many skip navigations (e.g. tags of a deleted post).
-    /// Soft deletable dependents are soft deleted; dependents that are not soft deletable, join entities and owned entities are kept as they are,
-    /// because the soft deleted row they depend on still exists.
+    /// Soft deletion only propagates from a principal to its dependents, through relationships whose delete behavior is
+    /// <see cref="DeleteBehavior.Cascade"/> or <see cref="DeleteBehavior.ClientCascade"/>, or whose principal side navigation
+    /// (e.g. <c>Blog.Attachments</c>) is marked with <see cref="CascadeOnDeleteAttribute"/>. The attribute on a dependent side navigation
+    /// (e.g. <c>Attachment.Blog</c>) is ignored, a soft deletion never propagates to principals (e.g. the parent of a deleted child)
+    /// and never through many-to-many skip navigations (e.g. tags of a deleted post).
+    /// </para>
+    /// <para>
+    /// Soft deletable dependents are soft deleted and keep their foreign key values. Dependents that are not soft deletable are
+    /// hard deleted if they are reached through a <see cref="CascadeOnDeleteAttribute"/> marked navigation (the explicit "delete with the parent" marker,
+    /// as in previous versions), otherwise they are kept as they are, because the soft deleted row they depend on still exists.
+    /// Join entities and owned entities are always kept.
     /// </para>
     /// <para>
     /// When an entity is removed, EF Core (with the default <see cref="Microsoft.EntityFrameworkCore.ChangeTracking.CascadeTiming.Immediate"/> cascade timing)
@@ -291,17 +299,27 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
 
         RestoreForeignKeysNulledByCascade(restoredEntries);
 
-        // Dependents which are not marked as deleted by EF (e.g. when the cascade delete timing is not immediate) are soft deleted here.
+        // Dependents which are not marked as deleted by EF are handled here: dependents of optional [CascadeOnDelete] relationships
+        // (EF only sets their foreign keys to null, which is restored above) and all dependents when the cascade delete timing is not immediate.
         while (propagationQueue.TryDequeue(out var principalEntry))
         {
-            foreach (var dependentEntry in GetTrackedCascadeDependents(principalEntry))
+            foreach (var (dependentEntry, isMarkedCascadeOnDelete) in GetTrackedCascadeDependents(principalEntry))
             {
-                if (dependentEntry.State is EntityState.Unchanged or EntityState.Modified
-                    && IsSoftDeletable(dependentEntry)
-                    && softDeletedEntities.Add(dependentEntry.Entity))
+                if (dependentEntry.State is not (EntityState.Unchanged or EntityState.Modified) || dependentEntry.Metadata.IsOwned())
+                    continue;
+
+                if (IsSoftDeletable(dependentEntry))
                 {
-                    AuditDeletion(dependentEntry);
-                    propagationQueue.Enqueue(dependentEntry);
+                    if (softDeletedEntities.Add(dependentEntry.Entity))
+                    {
+                        AuditDeletion(dependentEntry);
+                        propagationQueue.Enqueue(dependentEntry);
+                    }
+                }
+                else if (isMarkedCascadeOnDelete)
+                {
+                    // Not soft deletable dependent of an explicitly marked relationship is hard deleted, EF cascades the deletion to its own dependents.
+                    dependentEntry.State = EntityState.Deleted;
                 }
             }
         }
@@ -426,16 +444,30 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     private static bool IsCascade(IReadOnlyForeignKey foreignKey) => foreignKey.DeleteBehavior is DeleteBehavior.Cascade or DeleteBehavior.ClientCascade;
 
     /// <summary>
+    /// Whether the principal side navigation of <paramref name="foreignKey"/> (e.g. <c>Blog.Attachments</c>) is marked with <see cref="CascadeOnDeleteAttribute"/>.
+    /// </summary>
+    private static bool IsMarkedCascadeOnDelete(IReadOnlyForeignKey foreignKey)
+        => !foreignKey.IsOwnership
+           && foreignKey.PrincipalToDependent?.PropertyInfo is PropertyInfo navigationProperty
+           && Attribute.IsDefined(navigationProperty, typeof(CascadeOnDeleteAttribute));
+
+    /// <summary>
+    /// Whether soft deletion of a principal propagates to its dependents through <paramref name="foreignKey"/>.
+    /// </summary>
+    private static bool IsSoftDeletionCascade(IReadOnlyForeignKey foreignKey) => IsCascade(foreignKey) || IsMarkedCascadeOnDelete(foreignKey);
+
+    /// <summary>
     /// Decides what happens to each deleted entry when soft deletion is active.
     /// </summary>
     /// <remarks>
-    /// The "parents" of a deleted entry are the deleted entries it depends on through a cascade (or ownership) relationship,
-    /// i.e. the principals whose removal made EF mark it as deleted.
+    /// The "parents" of a deleted entry are the deleted entries it depends on through a cascade, <see cref="CascadeOnDeleteAttribute"/> marked
+    /// or ownership relationship, i.e. the principals whose removal made EF mark it as deleted.
     /// <list type="bullet">
     /// <item> Entry without deleted parents (deleted explicitly): soft deleted if soft deletable (and not owned), otherwise hard deleted. </item>
     /// <item> Entry with a hard deleted parent: hard deleted, because its principal row will not exist anymore. </item>
     /// <item> Owned entry of a soft deleted/kept owner: kept, it is a part of its owner. </item>
     /// <item> Soft deletable entry with a soft deleted parent: soft deleted. </item>
+    /// <item> Not soft deletable entry with a soft deleted parent through a <see cref="CascadeOnDeleteAttribute"/> marked navigation: hard deleted. </item>
     /// <item> Other entries with soft deleted/kept parents: kept. </item>
     /// </list>
     /// </remarks>
@@ -443,7 +475,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     {
         var keyIndex = new EntryKeyIndex(deletedEntries);
 
-        var parents = new List<int>[deletedEntries.Count];
+        var parents = new List<(int Index, bool IsMarkedCascadeOnDelete)>[deletedEntries.Count];
 
         for (int i = 0; i < deletedEntries.Count; i++)
         {
@@ -453,11 +485,11 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
 
             foreach (var foreignKey in entry.Metadata.GetForeignKeys())
             {
-                if (!foreignKey.IsOwnership && !IsCascade(foreignKey))
+                if (!foreignKey.IsOwnership && !IsSoftDeletionCascade(foreignKey))
                     continue;
 
                 if (keyIndex.TryFind(foreignKey, GetCurrentValues(entry, foreignKey.Properties), out var parentIndex) && parentIndex != i)
-                    parents[i].Add(parentIndex);
+                    parents[i].Add((parentIndex, IsMarkedCascadeOnDelete(foreignKey)));
             }
         }
 
@@ -471,7 +503,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
 
             for (int i = 0; i < deletedEntries.Count; i++)
             {
-                if (fates[i] != DeletionFate.Undetermined || parents[i].Exists(p => fates[p] == DeletionFate.Undetermined))
+                if (fates[i] != DeletionFate.Undetermined || parents[i].Exists(p => fates[p.Index] == DeletionFate.Undetermined))
                     continue;
 
                 fates[i] = parents[i].Count == 0 ? ResolveRootFate(deletedEntries[i]) : ResolveDependentFate(deletedEntries[i], parents[i], fates);
@@ -488,15 +520,18 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
 
         static DeletionFate ResolveRootFate(EntityEntry entry) => IsSoftDeletable(entry) && !entry.Metadata.IsOwned() ? DeletionFate.Soft : DeletionFate.Hard;
 
-        static DeletionFate ResolveDependentFate(EntityEntry entry, List<int> parentIndexes, DeletionFate[] fates)
+        static DeletionFate ResolveDependentFate(EntityEntry entry, List<(int Index, bool IsMarkedCascadeOnDelete)> parentLinks, DeletionFate[] fates)
         {
-            if (parentIndexes.Exists(p => fates[p] == DeletionFate.Hard))
+            if (parentLinks.Exists(p => fates[p.Index] == DeletionFate.Hard))
                 return DeletionFate.Hard;
 
-            if (!entry.Metadata.IsOwned() && IsSoftDeletable(entry) && parentIndexes.Exists(p => fates[p] == DeletionFate.Soft))
-                return DeletionFate.Soft;
+            if (entry.Metadata.IsOwned())
+                return DeletionFate.Keep;
 
-            return DeletionFate.Keep;
+            if (IsSoftDeletable(entry))
+                return parentLinks.Exists(p => fates[p.Index] == DeletionFate.Soft) ? DeletionFate.Soft : DeletionFate.Keep;
+
+            return parentLinks.Exists(p => p.IsMarkedCascadeOnDelete && fates[p.Index] == DeletionFate.Soft) ? DeletionFate.Hard : DeletionFate.Keep;
         }
     }
 
@@ -556,18 +591,21 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     }
 
     /// <summary>
-    /// Gets tracked dependents of <paramref name="principalEntry"/> which are reachable through its loaded cascade (non-ownership) navigations.
+    /// Gets tracked dependents of <paramref name="principalEntry"/> which are reachable through its loaded soft deletion cascade (non-ownership) navigations.
+    /// See <see cref="IsSoftDeletionCascade(IReadOnlyForeignKey)"/>.
     /// </summary>
     /// <param name="principalEntry"></param>
-    /// <returns></returns>
-    private List<EntityEntry> GetTrackedCascadeDependents(EntityEntry principalEntry)
+    /// <returns> Dependent entries and whether they are reached through a <see cref="CascadeOnDeleteAttribute"/> marked navigation. </returns>
+    private List<(EntityEntry Entry, bool IsMarkedCascadeOnDelete)> GetTrackedCascadeDependents(EntityEntry principalEntry)
     {
-        var dependents = new List<EntityEntry>();
+        var dependents = new List<(EntityEntry, bool)>();
 
         foreach (var navigation in principalEntry.Metadata.GetNavigations())
         {
-            if (navigation.IsOnDependent || navigation.ForeignKey.IsOwnership || !IsCascade(navigation.ForeignKey))
+            if (navigation.IsOnDependent || navigation.ForeignKey.IsOwnership || !IsSoftDeletionCascade(navigation.ForeignKey))
                 continue;
+
+            var isMarkedCascadeOnDelete = IsMarkedCascadeOnDelete(navigation.ForeignKey);
 
             var navigationValue = principalEntry.Navigation(navigation.Name).CurrentValue;
 
@@ -577,15 +615,15 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
             if (navigation.IsCollection)
             {
                 foreach (var dependent in (IEnumerable)navigationValue)
-                    AddIfTracked(dependent);
+                    AddIfTracked(dependent, isMarkedCascadeOnDelete);
             }
             else
-                AddIfTracked(navigationValue);
+                AddIfTracked(navigationValue, isMarkedCascadeOnDelete);
         }
 
         return dependents;
 
-        void AddIfTracked(object dependent)
+        void AddIfTracked(object dependent, bool isMarkedCascadeOnDelete)
         {
             if (dependent is null)
                 return;
@@ -593,7 +631,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
             var dependentEntry = Entry(dependent);
 
             if (dependentEntry.State != EntityState.Detached)
-                dependents.Add(dependentEntry);
+                dependents.Add((dependentEntry, isMarkedCascadeOnDelete));
         }
     }
 

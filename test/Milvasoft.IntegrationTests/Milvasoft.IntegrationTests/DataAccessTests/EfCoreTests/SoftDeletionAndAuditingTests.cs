@@ -1,10 +1,12 @@
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Milvasoft.Attributes.Annotations;
 using Milvasoft.Core.EntityBases.Concrete.Auditing;
 using Milvasoft.DataAccess.EfCore.Configuration;
 using Milvasoft.DataAccess.EfCore.DbContextBase;
 using Milvasoft.DataAccess.EfCore.Utils.Enums;
+using Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 using Npgsql;
 
 namespace Milvasoft.IntegrationTests.DataAccessTests.EfCoreTests;
@@ -57,6 +59,8 @@ public class SoftDeletionAndAuditingTests(CustomWebApplicationFactory factory) :
                                           .Include(b => b.Posts).ThenInclude(p => p.Comments)
                                           .Include(b => b.Notes)
                                           .Include(b => b.Translations)
+                                          .Include(b => b.Attachments)
+                                          .Include(b => b.Links)
                                           .SingleAsync(b => b.Id == ids.BlogId, ct);
 
             // Act
@@ -109,6 +113,64 @@ public class SoftDeletionAndAuditingTests(CustomWebApplicationFactory factory) :
         var translationInDb = await assertContext.Translations.AsNoTracking().SingleAsync(ct);
         translationInDb.BlogId.Should().Be(ids.BlogId);
         translationInDb.Value.Should().Be("translation");
+
+        await AssertCascadeOnDeleteChildrenAsync(assertContext, ids.BlogId);
+    }
+
+    [Fact]
+    public async Task SoftDeletion_DeletingThroughRepositoryWithCascadeOnDeleteIncludes_ShouldSoftDeleteMarkedChildrenAndKeepForeignKeys()
+    {
+        // Arrange
+        var ids = await SeedGraphAsync();
+        var ct = TestContext.Current.CancellationToken;
+
+        await using (var context = CreateContext())
+        {
+            var repository = new SdBlogRepository(context);
+
+            // Includes [CascadeOnDelete] marked navigations (Attachments, Links).
+            var blog = await repository.GetForDeleteAsync(ids.BlogId, cancellationToken: ct);
+
+            blog.Attachments.Should().ContainSingle();
+            blog.Links.Should().ContainSingle();
+
+            // Act
+            await repository.DeleteAsync(blog, ct);
+        }
+
+        // Assert
+        await using var assertContext = CreateContext();
+
+        (await assertContext.Blogs.AsNoTracking().SingleAsync(ct)).IsDeleted.Should().BeTrue();
+
+        // Optional child without the attribute: kept with its foreign key.
+        var noteInDb = await assertContext.Notes.AsNoTracking().SingleAsync(ct);
+        noteInDb.IsDeleted.Should().BeFalse();
+        noteInDb.BlogId.Should().Be(ids.BlogId);
+
+        // Required cascade children (not included) are not tracked, so they are not touched.
+        (await assertContext.Posts.AsNoTracking().ToListAsync(ct)).Should().HaveCount(2).And.OnlyContain(p => !p.IsDeleted);
+
+        await AssertCascadeOnDeleteChildrenAsync(assertContext, ids.BlogId);
+    }
+
+    /// <summary>
+    /// Optional soft deletable [CascadeOnDelete] child is soft deleted with its foreign key unchanged,
+    /// optional not soft deletable [CascadeOnDelete] child is hard deleted.
+    /// </summary>
+    private static async Task AssertCascadeOnDeleteChildrenAsync(SoftDeletionTestDbContext assertContext, int blogId)
+    {
+        var ct = TestContext.Current.CancellationToken;
+
+        var attachmentInDb = await assertContext.Attachments.AsNoTracking().SingleAsync(ct);
+        attachmentInDb.IsDeleted.Should().BeTrue();
+        attachmentInDb.DeletionDate.Should().NotBeNull();
+        attachmentInDb.DeleterUserName.Should().Be("user1");
+        attachmentInDb.BlogId.Should().Be(blogId);
+        attachmentInDb.Name.Should().Be("attachment");
+        attachmentInDb.LastModificationDate.Should().BeNull();
+
+        (await assertContext.Links.AsNoTracking().CountAsync(ct)).Should().Be(0);
     }
 
     [Fact]
@@ -180,6 +242,8 @@ public class SoftDeletionAndAuditingTests(CustomWebApplicationFactory factory) :
             var blog = await context.Blogs.Include(b => b.Posts).ThenInclude(p => p.Comments)
                                           .Include(b => b.Notes)
                                           .Include(b => b.Translations)
+                                          .Include(b => b.Attachments)
+                                          .Include(b => b.Links)
                                           .SingleAsync(b => b.Id == ids.BlogId, ct);
 
             // Act
@@ -197,6 +261,7 @@ public class SoftDeletionAndAuditingTests(CustomWebApplicationFactory factory) :
         noteInDb.IsDeleted.Should().BeFalse();
         noteInDb.BlogId.Should().Be(ids.BlogId);
         (await assertContext.Translations.AsNoTracking().CountAsync(ct)).Should().Be(1);
+        await AssertCascadeOnDeleteChildrenAsync(assertContext, ids.BlogId);
     }
 
     [Fact]
@@ -454,7 +519,9 @@ public class SoftDeletionAndAuditingTests(CustomWebApplicationFactory factory) :
                 new SdPost { Title = "post2", Tags = [secondTag] },
             ],
             Notes = [new SdNote { Text = "note" }],
-            Translations = [new SdBlogTranslation { Value = "translation" }]
+            Translations = [new SdBlogTranslation { Value = "translation" }],
+            Attachments = [new SdAttachment { Name = "attachment" }],
+            Links = [new SdBlogLink { Url = "link" }]
         };
 
         context.Blogs.Add(blog);
@@ -479,6 +546,8 @@ public class SoftDeletionTestDbContext(DbContextOptions<SoftDeletionTestDbContex
     public DbSet<SdTag> Tags { get; set; }
     public DbSet<SdNote> Notes { get; set; }
     public DbSet<SdBlogTranslation> Translations { get; set; }
+    public DbSet<SdAttachment> Attachments { get; set; }
+    public DbSet<SdBlogLink> Links { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -505,6 +574,14 @@ public class SdBlog : FullAuditableEntity<int>
     public List<SdPost> Posts { get; set; } = [];
     public List<SdNote> Notes { get; set; } = [];
     public List<SdBlogTranslation> Translations { get; set; } = [];
+
+    /// <summary> Optional (ClientSetNull) soft deletable children explicitly deleted with the blog. </summary>
+    [CascadeOnDelete]
+    public List<SdAttachment> Attachments { get; set; } = [];
+
+    /// <summary> Optional (ClientSetNull) not soft deletable children explicitly deleted with the blog. </summary>
+    [CascadeOnDelete]
+    public List<SdBlogLink> Links { get; set; } = [];
 }
 
 public class SdAddress
@@ -551,5 +628,22 @@ public class SdBlogTranslation
     public int BlogId { get; set; }
     public SdBlog Blog { get; set; }
 }
+
+public class SdAttachment : FullAuditableEntity<int>
+{
+    public string Name { get; set; }
+    public int? BlogId { get; set; }
+    public SdBlog Blog { get; set; }
+}
+
+public class SdBlogLink
+{
+    public int Id { get; set; }
+    public string Url { get; set; }
+    public int? BlogId { get; set; }
+    public SdBlog Blog { get; set; }
+}
+
+public class SdBlogRepository(SoftDeletionTestDbContext dbContext) : BaseRepository<SdBlog, SoftDeletionTestDbContext>(dbContext);
 
 #endregion
