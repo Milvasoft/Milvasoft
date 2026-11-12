@@ -24,14 +24,16 @@ public static class ServiceCollectionExtension
         if (!cacheBuilder.Services.Any(s => s.ServiceType == typeof(IMemoryCache)))
             cacheBuilder.Services.AddMemoryCache(opt =>
             {
-                if (cachingOptions != null)
+                var memoryCacheOptions = cachingOptions?.MemoryCacheOptions;
+
+                if (memoryCacheOptions != null)
                 {
-                    opt.ExpirationScanFrequency = cachingOptions.MemoryCacheOptions.ExpirationScanFrequency;
-                    opt.TrackLinkedCacheEntries = cachingOptions.MemoryCacheOptions.TrackLinkedCacheEntries;
-                    opt.CompactionPercentage = cachingOptions.MemoryCacheOptions.CompactionPercentage;
-                    opt.TrackStatistics = cachingOptions.MemoryCacheOptions.TrackStatistics;
-                    opt.SizeLimit = cachingOptions.MemoryCacheOptions.SizeLimit;
-                    opt.Clock = cachingOptions.MemoryCacheOptions.Clock;
+                    opt.ExpirationScanFrequency = memoryCacheOptions.ExpirationScanFrequency;
+                    opt.TrackLinkedCacheEntries = memoryCacheOptions.TrackLinkedCacheEntries;
+                    opt.CompactionPercentage = memoryCacheOptions.CompactionPercentage;
+                    opt.TrackStatistics = memoryCacheOptions.TrackStatistics;
+                    opt.SizeLimit = memoryCacheOptions.SizeLimit;
+                    opt.Clock = memoryCacheOptions.Clock;
                 }
             });
 

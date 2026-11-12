@@ -17,7 +17,8 @@ public class InMemoryCacheOptions : ICacheOptions<InMemoryCacheOptions>
     public ServiceLifetime AccessorLifetime { get; set; } = ServiceLifetime.Singleton;
 
     /// <summary>
-    /// In memory cache specific options.
+    /// In memory cache specific options. Optional; defaults are used when null.
+    /// <see cref="MemoryCacheOptions.SizeLimit"/> is the maximum entry count, because the accessor stores every entry with size 1.
     /// </summary>
     public MemoryCacheOptions MemoryCacheOptions { get; set; }
 }
