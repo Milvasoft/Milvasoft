@@ -36,7 +36,17 @@ public class SetPropertyBuilder<TSource>
     /// <param name="propertyExpression"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public SetPropertyBuilder<TSource> SetPropertyValue<TProperty>(Expression<Func<TSource, TProperty>> propertyExpression, TProperty value) => SetProperty(propertyExpression, _ => value);
+    public SetPropertyBuilder<TSource> SetPropertyValue<TProperty>(Expression<Func<TSource, TProperty>> propertyExpression, TProperty value)
+    {
+        if (propertyExpression == null)
+            return this;
+
+        LogPropertyCall(propertyExpression);
+
+        UpdateSettersBuilder += builder => builder.SetProperty(propertyExpression, value);
+
+        return this;
+    }
 
     /// <summary>
     /// Appends expressions to <see cref="UpdateSettersBuilder"/>
@@ -50,29 +60,27 @@ public class SetPropertyBuilder<TSource>
         if (propertyExpression == null || valueExpression == null)
             return this;
 
-        // Extract property name for logging
-        string propName = null;
-        if (propertyExpression.Body is MemberExpression m)
-            propName = m.Member.Name;
-        else if (propertyExpression.Body is UnaryExpression u && u.Operand is MemberExpression um)
-            propName = um.Member.Name;
+        LogPropertyCall(propertyExpression);
 
-        if (!string.IsNullOrWhiteSpace(propName))
-            _setPropertyCallsLog.Add(propName);
-
-        // Find the generic method definition on UpdateSettersBuilder<TSource>
-        var methodDef = typeof(UpdateSettersBuilder<TSource>)
-                        .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                        .First(mi => mi.Name == "SetProperty" && mi.IsGenericMethodDefinition && mi.GetParameters().Length == 2);
-
-        var genericMethod = methodDef.MakeGenericMethod(typeof(TProperty));
-
-        // Create an action that invokes the generic SetProperty on the builder instance using reflection.
-        void action(UpdateSettersBuilder<TSource> builder) => genericMethod.Invoke(builder, [propertyExpression, valueExpression]);
+        // Direct generic call (no reflection), so EF Core overload changes are caught at compile time.
+        void action(UpdateSettersBuilder<TSource> builder) => builder.SetProperty(propertyExpression, valueExpression);
 
         // Append the new action so multiple SetProperty calls are executed in order.
         UpdateSettersBuilder += action;
 
         return this;
+    }
+
+    private void LogPropertyCall<TProperty>(Expression<Func<TSource, TProperty>> propertyExpression)
+    {
+        var propertyName = propertyExpression.Body switch
+        {
+            MemberExpression member => member.Member.Name,
+            UnaryExpression { Operand: MemberExpression member } => member.Member.Name,
+            _ => null
+        };
+
+        if (!string.IsNullOrWhiteSpace(propertyName))
+            _setPropertyCallsLog.Add(propertyName);
     }
 }

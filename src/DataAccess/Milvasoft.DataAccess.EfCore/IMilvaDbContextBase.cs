@@ -71,6 +71,12 @@ public interface IMilvaDbContextBase
     void SetSoftDeletionStateToDefault();
 
     /// <summary>
+    /// Sets soft deletion state to default state if soft deletion state reset after every operation is enabled.
+    /// Called after every save and execute delete operation.
+    /// </summary>
+    void ResetSoftDeletionStateAfterOperation();
+
+    /// <summary>
     /// It updates the state that determines whether soft delete state reset to default occurs after any operation.
     /// </summary>
     /// <param name="state">Soft delete reset state.</param>

@@ -82,5 +82,22 @@ public class SetPropertyBuilderTests
         result.SetPropertyCallsLog.Should().ContainSingle().Which.Should().Be("UpdateDate");
     }
 
+    [Fact]
+    public void SetPropertyValue_WithNullPropertyExpression_ShouldNotAddSetter()
+    {
+        // Arrange
+        var builder = new SetPropertyBuilder<RestTestEntityFixture>();
+        var initialSetters = builder.UpdateSettersBuilder;
+
+        // Act
+        var result = builder.SetPropertyValue<string>(null, "name")
+                            .SetPropertyValue(i => i.Name, "name")
+                            .SetPropertyValue(i => i.UpdateDate, null);
+
+        // Assert
+        result.SetPropertyCallsLog.Should().Equal("Name", "UpdateDate");
+        result.UpdateSettersBuilder.GetInvocationList().Should().HaveCount(initialSetters.GetInvocationList().Length + 2);
+    }
+
     #endregion
 }

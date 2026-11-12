@@ -170,6 +170,9 @@ public static class MilvaEfExtensions
         cursorListRequest ??= new CursorListRequest();
         cursorListRequest.Sorting ??= new SortRequest { SortBy = EntityPropertyNames.Id, Type = SortType.Desc };
 
+        if (cursorListRequest.RowCount <= 0)
+            throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
+
         CursorData cursorData = !string.IsNullOrEmpty(cursorListRequest.Cursor) ? CursorData.Decode(cursorListRequest.Cursor) : null;
 
         // A cursor captures the sort it was built with; honor it (ignoring any client SortBy override on
@@ -212,18 +215,16 @@ public static class MilvaEfExtensions
                 items.Reverse();
                 hasPreviousPage = hasExtra;
                 hasNextPage = cursorData != null; // there is a page after (we came from it)
-
-                if (hasPreviousPage)
-                    prevCursor = CursorExtensions.BuildCursor(items[0], cursorListRequest.Sorting, isBackward: true);
-
-                if (hasNextPage)
-                    nextCursor = CursorExtensions.BuildCursor(items[^1], cursorListRequest.Sorting, isBackward: false);
             }
             else
             {
                 hasNextPage = hasExtra;
                 hasPreviousPage = cursorData != null;
+            }
 
+            // A page can be empty (e.g. rows after the cursor were deleted); then there is no boundary row to build a cursor from.
+            if (items.Count > 0)
+            {
                 if (hasNextPage)
                     nextCursor = CursorExtensions.BuildCursor(items[^1], cursorListRequest.Sorting, isBackward: false);
 
@@ -278,6 +279,9 @@ public static class MilvaEfExtensions
         cursorListRequest ??= new CursorListRequest();
         cursorListRequest.Sorting ??= new SortRequest { SortBy = EntityPropertyNames.Id, Type = SortType.Desc };
 
+        if (cursorListRequest.RowCount <= 0)
+            throw new MilvaUserFriendlyException(MilvaException.WrongRequestedItemCount);
+
         CursorData cursorData = !string.IsNullOrEmpty(cursorListRequest.Cursor) ? CursorData.Decode(cursorListRequest.Cursor) : null;
 
         // A cursor captures the sort it was built with; honor it (ignoring any client SortBy override on
@@ -314,22 +318,32 @@ public static class MilvaEfExtensions
 
             if (projection != null && meta != null)
             {
-                var combinedExpr = CursorExtensions.BuildCombinedProjection(meta, projection);
+                var carrierQuery = query.Select(CursorExtensions.BuildCombinedProjection(meta, projection));
 
-                carriers = await query.Select(combinedExpr).Take(cursorListRequest.RowCount.Value + 1).ToListAsync(cancellationToken);
-
-                // conditionAfterProjection cannot be SQL-translated when applied to a carrier wrapper, so evaluate it in-memory after materialization.
+                // Filter before Take in the database, so pages are full and HasNextPage is correct.
                 if (conditionAfterProjection != null)
-                {
-                    var compiledCondition = conditionAfterProjection.Compile();
-                    carriers = [.. carriers.Where(c => compiledCondition(c.Result))];
-                }
+                    carrierQuery = carrierQuery.Where(CursorExtensions.BuildCarrierCondition(conditionAfterProjection));
+
+                carriers = await carrierQuery.Take(cursorListRequest.RowCount.Value + 1).ToListAsync(cancellationToken);
+            }
+            else if (projection != null)
+            {
+                // Unknown sort property: there is no sort value to build cursors from.
+                var projectedQuery = query.Select(projection);
+
+                if (conditionAfterProjection != null)
+                    projectedQuery = projectedQuery.Where(conditionAfterProjection);
+
+                var results = await projectedQuery.Take(cursorListRequest.RowCount.Value + 1).ToListAsync(cancellationToken);
+                carriers = [.. results.Select(r => new CursorProjectionCarrier<TResult> { Result = r })];
             }
             else
             {
-                // No projection: build carrier with null sort-value (will use BuildCursor fallback on entity)
-                var entityItems = await query.Take(cursorListRequest.RowCount.Value + 1).ToListAsync(cancellationToken);
-                carriers = [.. entityItems.Select(e => new CursorProjectionCarrier<TResult> { SortValue = null, Result = (TResult)(object)e })];
+                // No projection: TResult is TEntity. Carry the sort/tie-break values read from the entity itself.
+                var entityQuery = conditionAfterProjection != null ? query.Where((Expression<Func<TEntity, bool>>)(object)conditionAfterProjection) : query;
+
+                var entityItems = await entityQuery.Take(cursorListRequest.RowCount.Value + 1).ToListAsync(cancellationToken);
+                carriers = [.. entityItems.Select(e => CursorExtensions.CreateCarrier(e, (TResult)(object)e, cursorListRequest.Sorting))];
             }
 
             var hasExtra = carriers.Count > cursorListRequest.RowCount.Value;
@@ -343,18 +357,16 @@ public static class MilvaEfExtensions
 
                 hasPreviousPage = hasExtra;
                 hasNextPage = cursorData != null;
-
-                if (hasPreviousPage)
-                    prevCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[0].SortValue, carriers[0].IdValue, cursorListRequest.Sorting, isBackward: true);
-
-                if (hasNextPage)
-                    nextCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[^1].SortValue, carriers[^1].IdValue, cursorListRequest.Sorting, isBackward: false);
             }
             else
             {
                 hasNextPage = hasExtra;
                 hasPreviousPage = cursorData != null;
+            }
 
+            // A page can be empty (e.g. rows after the cursor were deleted); then there is no boundary row to build a cursor from.
+            if (carriers.Count > 0)
+            {
                 if (hasNextPage)
                     nextCursor = CursorExtensions.BuildCursorFromBoxedValue(carriers[^1].SortValue, carriers[^1].IdValue, cursorListRequest.Sorting, isBackward: false);
 

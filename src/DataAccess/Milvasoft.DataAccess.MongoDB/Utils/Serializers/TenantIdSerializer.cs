@@ -35,6 +35,9 @@ public class TenantIdSerializer : SerializerBase<TenantId>
         }
         else
         {
+            // Consume the value, otherwise the reader is left on it and the rest of the document can not be read.
+            context.Reader.SkipValue();
+
             return TenantId.Empty;
         }
     }
@@ -67,30 +70,16 @@ public class NullableTenantIdSerializer : SerializerBase<TenantId?>
         {
             var s = context.Reader.ReadString();
 
-            if (s.Equals("N/A", StringComparison.InvariantCultureIgnoreCase))
-            {
+            if (string.IsNullOrWhiteSpace(s) || s.Equals("N/A", StringComparison.InvariantCultureIgnoreCase))
                 return null;
-            }
-            else if (context.Reader.CurrentBsonType == BsonType.Null)
-            {
-                context.Reader.ReadNull();
-                return null;
-            }
-            else
-            {
-                if (string.IsNullOrWhiteSpace(s))
-                    return null;
 
-                return TenantId.Parse(s);
-            }
+            return TenantId.Parse(s);
         }
-        else if (type == BsonType.Null)
-        {
-            context.Reader.ReadNull();
-            return null;
-        }
-        else
-            return BsonSerializer.Deserialize<TenantId?>(context.Reader);
+
+        // Consume the value (null or an unsupported type). Deserializing TenantId? again through BsonSerializer would resolve this serializer and recurse forever.
+        context.Reader.SkipValue();
+
+        return null;
     }
 
     /// <summary>

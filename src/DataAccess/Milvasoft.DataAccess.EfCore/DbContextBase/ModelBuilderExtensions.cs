@@ -254,62 +254,155 @@ public static class ModelBuilderExtensions
     }
 
     /// <summary>
-    /// Enable the query filter for indelible entities.
+    /// Enable the query filter for indelible entities. Filters out entities whose <see cref="EntityPropertyNames.IsDeleted"/> is true.
     /// </summary>
+    /// <remarks>
+    /// The filter is added to the root entity type of each hierarchy (EF Core only allows query filters on root entity types) and
+    /// does not overwrite the other query filters of the entity type. See <see cref="AddQueryFilter(IMutableEntityType, string, LambdaExpression)"/>.
+    /// </remarks>
     /// <param name="modelBuilder"></param>
     public static ModelBuilder UseSoftDeleteQueryFilter(this ModelBuilder modelBuilder)
     {
-        var indelibleEntites = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.FindProperty(EntityPropertyNames.IsDeleted) != null);
-
-        foreach (var entityType in indelibleEntites)
+        foreach (var entityType in GetQueryFilterableEntityTypes(modelBuilder))
         {
+            var isDeletedProperty = entityType.FindProperty(EntityPropertyNames.IsDeleted);
+
+            if (isDeletedProperty?.ClrType != typeof(bool))
+                continue;
+
             var parameter = Expression.Parameter(entityType.ClrType, "entity");
 
-            var prop = entityType.FindProperty(EntityPropertyNames.IsDeleted);
+            // EF.Property also works for shadow properties.
+            var filterExpression = Expression.Equal(CreatePropertyAccess(parameter, isDeletedProperty), Expression.Constant(false));
 
-            var filterExpression = Expression.Equal(Expression.Property(parameter, prop.PropertyInfo), Expression.Constant(false, typeof(bool)));
-
-            var dynamicLambda = Expression.Lambda(filterExpression, parameter);
-
-            entityType.SetQueryFilter(dynamicLambda);
+            AddQueryFilter(entityType, SoftDeleteQueryFilterName, Expression.Lambda(filterExpression, parameter));
         }
 
         return modelBuilder;
     }
 
     /// <summary>
-    /// Enable the query filter for single database multi tenancy scenarios.
+    /// Enable the query filter for single database multi tenancy scenarios with a fixed tenant id.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b> <paramref name="tenantId"/> is a part of the model, and EF Core caches the model once per context type. </b>
+    /// So the tenant id of the first created context is used by every context instance. Use this overload only when the tenant is fixed for the application.
+    /// For per request (per context instance) tenants use <see cref="UseTenantIdQueryFilter{TContext}(ModelBuilder, TContext, Expression{Func{TContext, TenantId}})"/>.
+    /// </para>
+    /// <para> The filter does not overwrite the other query filters of the entity type. See <see cref="AddQueryFilter(IMutableEntityType, string, LambdaExpression)"/>. </para>
+    /// </remarks>
     /// <param name="modelBuilder"></param>
     /// <param name="tenantId"></param>
     public static ModelBuilder UseTenantIdQueryFilter(this ModelBuilder modelBuilder, TenantId tenantId)
+        => modelBuilder.UseTenantIdQueryFilter(Expression.Constant(tenantId, typeof(TenantId)));
+
+    /// <summary>
+    /// Enable the query filter for single database multi tenancy scenarios. The current tenant id is read from <paramref name="context"/>
+    /// with <paramref name="currentTenantIdSelector"/> on every query, so each context instance is filtered by its own tenant.
+    /// </summary>
+    /// <remarks>
+    /// Call it in OnModelCreating and pass the context itself. e.g. <c>modelBuilder.UseTenantIdQueryFilter(this, c => c.CurrentTenantId);</c>
+    /// The filter does not overwrite the other query filters of the entity type. See <see cref="AddQueryFilter(IMutableEntityType, string, LambdaExpression)"/>.
+    /// </remarks>
+    /// <typeparam name="TContext"></typeparam>
+    /// <param name="modelBuilder"></param>
+    /// <param name="context"> The context that is building the model (this). </param>
+    /// <param name="currentTenantIdSelector"> Selects current tenant id member of the context. </param>
+    public static ModelBuilder UseTenantIdQueryFilter<TContext>(this ModelBuilder modelBuilder, TContext context, Expression<Func<TContext, TenantId>> currentTenantIdSelector) where TContext : DbContext
     {
-        // Get entities that have the tenant id property
-        var tenantEntities = modelBuilder.Model.GetEntityTypes().Where(entityType => entityType.ClrType.IsAssignableTo(typeof(IHasTenantId)));
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(currentTenantIdSelector);
 
-        foreach (var entityType in tenantEntities)
+        // A member access on the context instance constant is parameterized by EF Core with the executing context instance.
+        var currentTenantId = new ParameterReplacer(currentTenantIdSelector.Parameters[0], Expression.Constant(context, typeof(TContext))).Visit(currentTenantIdSelector.Body);
+
+        return modelBuilder.UseTenantIdQueryFilter(currentTenantId);
+    }
+
+    private static ModelBuilder UseTenantIdQueryFilter(this ModelBuilder modelBuilder, Expression currentTenantId)
+    {
+        foreach (var entityType in GetQueryFilterableEntityTypes(modelBuilder).Where(e => e.ClrType.IsAssignableTo(typeof(IHasTenantId))))
         {
-            var parameter = Expression.Parameter(entityType.ClrType, "entity");
+            var tenantIdProperty = entityType.FindProperty(EntityPropertyNames.TenantId);
 
-            // Find the property that matches the tenant ID property name
-            var property = entityType.FindProperty(EntityPropertyNames.TenantId);
-
-            if (property?.PropertyInfo == null)
+            if (tenantIdProperty is null || (tenantIdProperty.ClrType != typeof(TenantId) && tenantIdProperty.ClrType != typeof(TenantId?)))
                 continue;
 
-            // Create the expression: entity.TenantId == tenantId
-            var propertyAccess = Expression.Property(parameter, property.PropertyInfo);
-            var tenantIdValue = Expression.Constant(tenantId, property.ClrType);
-            var filterExpression = Expression.Equal(propertyAccess, tenantIdValue);
+            var parameter = Expression.Parameter(entityType.ClrType, "entity");
 
-            // Build the lambda expression: entity => entity.TenantId == tenantId
-            var lambda = Expression.Lambda(filterExpression, parameter);
+            var tenantIdValue = tenantIdProperty.ClrType == currentTenantId.Type ? currentTenantId : Expression.Convert(currentTenantId, tenantIdProperty.ClrType);
 
-            entityType.SetQueryFilter(lambda);
+            // entity => entity.TenantId == tenantId
+            var filterExpression = Expression.Equal(CreatePropertyAccess(parameter, tenantIdProperty), tenantIdValue);
+
+            AddQueryFilter(entityType, TenantIdQueryFilterName, Expression.Lambda(filterExpression, parameter));
         }
 
         return modelBuilder;
     }
+
+    /// <summary>
+    /// Query filter name used by <see cref="UseSoftDeleteQueryFilter(ModelBuilder)"/> when the entity type uses named query filters.
+    /// </summary>
+    public const string SoftDeleteQueryFilterName = "MilvaSoftDelete";
+
+    /// <summary>
+    /// Query filter name used by tenant id query filters when the entity type uses named query filters.
+    /// </summary>
+    public const string TenantIdQueryFilterName = "MilvaTenantId";
+
+    /// <summary>
+    /// Adds <paramref name="filter"/> to the query filters of <paramref name="entityType"/> without overwriting the existing ones.
+    /// </summary>
+    /// <remarks>
+    /// EF Core does not allow combining an anonymous query filter with named query filters, and setting an anonymous filter replaces the existing one.
+    /// <list type="bullet">
+    /// <item> If the entity type has named query filters, <paramref name="filter"/> is added as a named filter with <paramref name="filterName"/>. </item>
+    /// <item> Otherwise it is combined (AND) with the existing anonymous filter (if any) and set as the anonymous filter, which keeps
+    ///        compatibility with anonymous filters configured with <c>HasQueryFilter</c>. Configure anonymous filters before calling this method,
+    ///        an anonymous filter configured later replaces the combined filter. </item>
+    /// </list>
+    /// </remarks>
+    /// <param name="entityType"></param>
+    /// <param name="filterName"></param>
+    /// <param name="filter"></param>
+    public static void AddQueryFilter(this IMutableEntityType entityType, string filterName, LambdaExpression filter)
+    {
+        ArgumentNullException.ThrowIfNull(entityType);
+        ArgumentNullException.ThrowIfNull(filter);
+
+        var existingFilters = entityType.GetDeclaredQueryFilters();
+
+        if (existingFilters.Any(f => !f.IsAnonymous))
+        {
+            entityType.SetQueryFilter(filterName, filter);
+            return;
+        }
+
+        var existingAnonymousFilter = existingFilters.FirstOrDefault(f => f.IsAnonymous)?.Expression;
+
+        if (existingAnonymousFilter is not null)
+        {
+            var parameter = existingAnonymousFilter.Parameters[0];
+            var filterBody = new ParameterReplacer(filter.Parameters[0], parameter).Visit(filter.Body);
+
+            filter = Expression.Lambda(Expression.AndAlso(existingAnonymousFilter.Body, filterBody), parameter);
+        }
+
+        entityType.SetQueryFilter(filter);
+    }
+
+    /// <summary>
+    /// Root, not owned entity types. EF Core only allows query filters on them.
+    /// </summary>
+    private static List<IMutableEntityType> GetQueryFilterableEntityTypes(ModelBuilder modelBuilder)
+        => [.. modelBuilder.Model.GetEntityTypes().Where(e => e.BaseType is null && !e.IsOwned())];
+
+    private static Expression CreatePropertyAccess(ParameterExpression parameter, IReadOnlyProperty property)
+        => property.PropertyInfo is not null && property.DeclaringType.ClrType.IsAssignableFrom(parameter.Type)
+            ? Expression.Property(parameter, property.PropertyInfo)
+            : Expression.Call(typeof(EF), nameof(EF.Property), [property.ClrType], parameter, Expression.Constant(property.Name));
 
     /// <summary>
     /// Configures the decimal property of entities with decimal properties in decimal default(18,2) format.
@@ -493,7 +586,8 @@ public static class ModelBuilderExtensions
             if (tenantIdProperty == null)
                 continue;
 
-            var properties = entityType.GetProperties().Where(p => p.PropertyInfo.GetCustomAttribute<WithTenantIdIndexAttribute>() != null).ToArray();
+            // Shadow properties have no PropertyInfo.
+            var properties = entityType.GetProperties().Where(p => p.PropertyInfo?.GetCustomAttribute<WithTenantIdIndexAttribute>() != null).ToArray();
 
             var mutableEntity = modelBuilder.Entity(entityType.ClrType);
 
@@ -553,28 +647,41 @@ public static class ModelBuilderExtensions
 
         foreach (var entityType in entitiesWithTenantId)
         {
-            var tenantIdProperty = entityType.ClrType.GetProperties().First(p => p.Name == EntityPropertyNames.TenantId);
-
-            if (tenantIdProperty == null)
+            if (entityType.FindProperty(EntityPropertyNames.TenantId) is null)
                 continue;
 
             var mutableEntity = modelBuilder.Entity(entityType.ClrType);
 
-            foreach (var index in entityType.GetIndexes().ToList())
+            foreach (var index in entityType.GetDeclaredIndexes().ToList())
             {
-                var props = index.Properties;
-
                 // If the index already contains TenantId, skip it.
-                if (props.Any(p => p.Name == EntityPropertyNames.TenantId))
+                if (index.Properties.Any(p => p.Name == EntityPropertyNames.TenantId))
                     continue;
+
+                // Property names also work for shadow properties.
+                var propertyNames = index.Properties.Select(p => p.Name).Append(EntityPropertyNames.TenantId).ToArray();
+
+                var isUnique = index.IsUnique;
+                var isDescending = index.IsDescending;
+                var filter = index.GetFilter();
+                var databaseName = index.GetDatabaseName();
+                var hasExplicitName = index.Name is not null;
 
                 entityType.RemoveIndex(index);
 
-                var newProps = props.Select(p => p.PropertyInfo).ToList();
+                // Keep the configuration of the original index (uniqueness, filter, sort order and name).
+                var newIndex = hasExplicitName ? mutableEntity.HasIndex(propertyNames, index.Name) : mutableEntity.HasIndex(propertyNames);
 
-                newProps.Add(tenantIdProperty);
+                newIndex.IsUnique(isUnique);
 
-                mutableEntity.HasIndex([.. newProps.Select(p => p.Name)]);
+                if (isDescending is not null)
+                    newIndex.IsDescending([.. isDescending, false]);
+
+                if (filter is not null)
+                    newIndex.HasFilter(filter);
+
+                if (hasExplicitName)
+                    newIndex.HasDatabaseName(databaseName);
             }
         }
 

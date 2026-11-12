@@ -431,9 +431,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         if (entities.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             _dbSet.Update(entity);
         }
 
@@ -474,9 +475,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         if (entities.IsNullOrEmpty() || propertySelectors.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             var entry = _dbSet.Entry(entity);
 
             foreach (var includeProperty in propertySelectors)
@@ -511,9 +513,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         if (entities.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             _dbSet.Remove(entity);
         }
 
@@ -529,11 +532,12 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     public virtual int ReplaceOldsWithNews(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
     {
         if (!oldEntities.IsNullOrEmpty())
+        {
+            DetachFromLocalIfExists(oldEntities);
+
             foreach (var entity in oldEntities)
-            {
-                DetachFromLocalIfExists(entity);
                 _dbSet.Remove(entity);
-            }
+        }
 
         if (!newEntities.IsNullOrEmpty())
             _dbSet.AddRange(newEntities);
@@ -566,13 +570,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <returns></returns>
     public virtual int RemoveAll()
     {
-        var entities = _dbSet.AsEnumerable();
+        // Tracking query returns the already tracked instances, so nothing needs to be detached.
+        var entities = _dbSet.AsTracking().ToList();
 
-        foreach (var entity in entities)
-        {
-            DetachFromLocalIfExists(entity);
-            _dbSet.Remove(entity);
-        }
+        _dbSet.RemoveRange(entities);
 
         return InternalSaveChanges();
     }
@@ -629,18 +630,28 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     public virtual int ExecuteDelete(Expression<Func<TEntity, bool>> predicate,
                                      SetPropertyBuilder<TEntity> propertyBuilder = null)
     {
-        // If soft deletion active and entity is soft deletable.
-        if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
+        try
         {
-            propertyBuilder ??= new SetPropertyBuilder<TEntity>();
+            // If soft deletion active and entity is soft deletable.
+            if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
+            {
+                propertyBuilder ??= new SetPropertyBuilder<TEntity>();
 
-            //Soft delete
-            AddDeletionPropertyCalls(propertyBuilder);
+                //Soft delete
+                AddDeletionPropertyCalls(propertyBuilder);
 
-            return _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.UpdateSettersBuilder);
+                // Already soft deleted records are not deleted again, so their deletion audit values are kept.
+                return _dbSet.Where(predicate)
+                             .Where(MilvaDbContextCache.GetIsDeletedFilter<TEntity>())
+                             .ExecuteUpdate(propertyBuilder.UpdateSettersBuilder);
+            }
+
+            return _dbSet.Where(predicate).ExecuteDelete();
         }
-
-        return _dbSet.Where(predicate).ExecuteDelete();
+        finally
+        {
+            _dbContext.ResetSoftDeletionStateAfterOperation();
+        }
     }
 
     #endregion

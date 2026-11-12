@@ -15,8 +15,9 @@ public interface IContextRepository
     /// </summary>
     /// <param name="function"></param>
     /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
+    /// <param name="cancellationToken"> Cancels starting and committing the transaction. </param>
     /// <returns></returns>
-    Task ApplyTransactionAsync(Func<Task> function, bool startTransaction = true);
+    Task ApplyTransactionAsync(Func<Task> function, bool startTransaction = true, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Applies transaction process to requested function.
@@ -24,8 +25,9 @@ public interface IContextRepository
     /// <typeparam name="TResult"></typeparam>
     /// <param name="function"></param>
     /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
+    /// <param name="cancellationToken"> Cancels starting and committing the transaction. </param>
     /// <returns></returns>
-    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, bool startTransaction = true);
+    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, bool startTransaction = true, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Applies transaction process to requested function.
@@ -33,27 +35,9 @@ public interface IContextRepository
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
     /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
+    /// <param name="cancellationToken"> Cancels starting and committing the transaction. </param>
     /// <returns></returns>
-    Task ApplyTransactionAsync(Func<Task> function, Action rollbackFunction, bool startTransaction = true);
-
-    /// <summary>
-    /// Applies transaction process to requested function.
-    /// </summary>
-    /// <typeparam name="TResult"></typeparam>
-    /// <param name="function"></param>
-    /// <param name="rollbackFunction"></param>
-    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
-    /// <returns></returns>
-    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Action rollbackFunction, bool startTransaction = true);
-
-    /// <summary>
-    /// Applies transaction process to requested function.
-    /// </summary>
-    /// <param name="function"></param>
-    /// <param name="rollbackFunction"></param>
-    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
-    /// <returns></returns>
-    Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollbackFunction, bool startTransaction = true);
+    Task ApplyTransactionAsync(Func<Task> function, Action rollbackFunction, bool startTransaction = true, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Applies transaction process to requested function.
@@ -62,6 +46,28 @@ public interface IContextRepository
     /// <param name="function"></param>
     /// <param name="rollbackFunction"></param>
     /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
+    /// <param name="cancellationToken"> Cancels starting and committing the transaction. </param>
     /// <returns></returns>
-    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Func<Task> rollbackFunction, bool startTransaction = true);
+    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Action rollbackFunction, bool startTransaction = true, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Applies transaction process to requested function.
+    /// </summary>
+    /// <param name="function"></param>
+    /// <param name="rollbackFunction"></param>
+    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
+    /// <param name="cancellationToken"> Cancels starting and committing the transaction. </param>
+    /// <returns></returns>
+    Task ApplyTransactionAsync(Func<Task> function, Func<Task> rollbackFunction, bool startTransaction = true, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Applies transaction process to requested function.
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="function"></param>
+    /// <param name="rollbackFunction"></param>
+    /// <param name="startTransaction"> When nested conditional transactions are desired, a transaction cannot be started for the transaction it contains. </param>
+    /// <param name="cancellationToken"> Cancels starting and committing the transaction. </param>
+    /// <returns></returns>
+    Task<TResult> ApplyTransactionAsync<TResult>(Func<Task<TResult>> function, Func<Task> rollbackFunction, bool startTransaction = true, CancellationToken cancellationToken = default);
 }

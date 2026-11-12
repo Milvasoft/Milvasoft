@@ -785,8 +785,8 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
     [Theory]
     [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution, false)]
     [InlineData(QueryTrackingBehavior.NoTracking, false)]
-    [InlineData(QueryTrackingBehavior.TrackAll, true)]
-    public async Task SoftDeletion_WithSoftDeletionIsActiveAndBothSideSoftDeletableAndAsNoTrackingAndNotIncludedRelatedEntity_ShouldDoNothingOnRelatedEntity(QueryTrackingBehavior queryTrackingBehavior, bool expectedRelatedIsDeleted)
+    [InlineData(QueryTrackingBehavior.TrackAll, false)]
+    public async Task SoftDeletion_WithSoftDeletionIsActiveAndBothSideSoftDeletableAndAsNoTrackingAndNotIncludedRelatedEntity_ShouldNotSoftDeleteOptionalRelatedEntity(QueryTrackingBehavior queryTrackingBehavior, bool expectedRelatedIsDeleted)
     {
         // Arrange
         await InitializeAsync(services =>
@@ -939,7 +939,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
     [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
     [InlineData(QueryTrackingBehavior.NoTracking)]
     [InlineData(QueryTrackingBehavior.TrackAll)]
-    public async Task SoftDeletion_WithSoftDeletionIsActiveAndEntityIsSoftDeletableAndAsNoTrackingAndIncludedRelatedEntity_ShouldSoftDeleteRelatedEntity(QueryTrackingBehavior queryTrackingBehavior)
+    public async Task SoftDeletion_WithSoftDeletionIsActiveAndEntityIsSoftDeletableAndOptionalRelatedEntityIsTracked_ShouldNotSoftDeleteRelatedEntityAndKeepItsForeignKey(QueryTrackingBehavior queryTrackingBehavior)
     {
         // Arrange
         await InitializeAsync(services =>
@@ -1005,9 +1005,11 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         entityInDb.Should().NotBeNull();
         entityInDb.IsDeleted.Should().BeTrue();
         entityInDb.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
+        // Optional (ClientSetNull) dependent is not a cascade dependent: it is neither soft deleted nor detached from the soft deleted principal.
         relatedEntityInDb.Should().NotBeNull();
-        relatedEntityInDb.IsDeleted.Should().BeTrue();
-        relatedEntityInDb.DeletionDate.Should().BeCloseTo(now, TimeSpan.FromSeconds(5));
+        relatedEntityInDb.IsDeleted.Should().BeFalse();
+        relatedEntityInDb.DeletionDate.Should().BeNull();
+        relatedEntityInDb.FullAuditableEntityId.Should().Be(1);
     }
 
     #endregion

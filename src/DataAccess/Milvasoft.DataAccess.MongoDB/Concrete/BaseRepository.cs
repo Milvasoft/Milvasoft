@@ -99,7 +99,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
             Projection = Builders<TEntity>.Projection.Expression(projectExpression ?? (entity => entity))
         };
 
-        return (await _collection.FindAsync(filterDefinition, options)).FirstOrDefault();
+        return await (await _collection.FindAsync(filterDefinition, options)).FirstOrDefaultAsync();
     }
 
     /// <summary>
@@ -504,7 +504,10 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         if (_useUtcForDateTimes)
             ConvertDateTimePropertiesToUtc(document);
 
-        return _collection.UpdateOneAsync(filter, updateDefinition);
+        // Only the update definition is sent to the database, so the modification date must be a part of it.
+        var update = Builders<TEntity>.Update.Combine(updateDefinition, Builders<TEntity>.Update.Set(doc => doc.LastModificationDate, document.LastModificationDate));
+
+        return _collection.UpdateOneAsync(filter, update);
     }
 
     /// <summary>
@@ -521,54 +524,44 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     public virtual Task UpdateAsync(FilterDefinition<TEntity> filterDefinition, UpdateDefinition<TEntity> updateDefinition) => _collection.UpdateOneAsync(filterDefinition, updateDefinition);
 
     /// <summary>
-    /// Updates the data in multiple.
-    /// 
-    /// <para> You can only update one property in multiple. </para>
-    /// 
+    /// Updates the properties selected with <paramref name="fieldDefinitions"/> of each document with a single update per document.
+    /// <see cref="DateTime"/> values are converted to UTC. LastModificationDate is set too.
     /// </summary>
     /// <param name="documents"></param>
     /// <param name="fieldDefinitions"></param>
     /// <returns></returns>
     public Task UpdateRangeAsync(List<TEntity> documents, params Expression<Func<TEntity, object>>[] fieldDefinitions)
     {
-        var listWrites = new List<WriteModel<TEntity>>();
+        if (documents.IsNullOrEmpty())
+            return Task.CompletedTask;
+
+        fieldDefinitions ??= [];
+
+        var valueGetters = Array.ConvertAll(fieldDefinitions, f => f.Compile());
+
+        var now = CommonHelper.GetNow(_useUtcForDateTimes);
+
+        var listWrites = new List<WriteModel<TEntity>>(documents.Count);
 
         foreach (var entity in documents)
         {
             var filterDef = Builders<TEntity>.Filter.Eq(p => p.Id, entity.Id);
 
-            foreach (var fieldDef in fieldDefinitions)
+            var updates = new List<UpdateDefinition<TEntity>>(fieldDefinitions.Length + 1);
+
+            for (int i = 0; i < fieldDefinitions.Length; i++)
             {
-                if (fieldDef.ReturnType == typeof(DateTime))
-                {
-                    var propValue = (DateTime)entity.GetType().GetProperty(fieldDef.GetPropertyName()).GetValue(entity);
+                var value = valueGetters[i](entity);
 
-                    var updateDef = Builders<TEntity>.Update.Set(fieldDef, propValue.ToUniversalTime());
+                if (value is DateTime dateTime)
+                    value = dateTime.ToUniversalTime();
 
-                    listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDef));
-                }
-                else if (fieldDef.ReturnType == typeof(DateTime?))
-                {
-                    var propValue = (DateTime?)entity.GetType().GetProperty(fieldDef.GetPropertyName()).GetValue(entity);
-
-                    if (propValue.HasValue)
-                    {
-                        var updateDef = Builders<TEntity>.Update.Set(fieldDef, propValue.Value.ToUniversalTime());
-
-                        listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDef));
-                    }
-                }
-                else
-                {
-                    var updateDef = Builders<TEntity>.Update.Set(fieldDef, entity.GetType().GetProperty(fieldDef.GetPropertyName()).GetValue(entity));
-
-                    listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDef));
-                }
+                updates.Add(Builders<TEntity>.Update.Set(fieldDefinitions[i], value));
             }
 
-            var updateDefForLastModificationDate = Builders<TEntity>.Update.Set(i => i.LastModificationDate, CommonHelper.GetNow(_useUtcForDateTimes));
+            updates.Add(Builders<TEntity>.Update.Set(i => i.LastModificationDate, now));
 
-            listWrites.Add(new UpdateOneModel<TEntity>(filterDef, updateDefForLastModificationDate));
+            listWrites.Add(new UpdateOneModel<TEntity>(filterDef, Builders<TEntity>.Update.Combine(updates)));
         }
 
         return _collection.BulkWriteAsync(listWrites);
@@ -626,37 +619,37 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
         var propertyNames = projectExpressions.IsNullOrEmpty() ? typeof(TEmbedded).GetProperties().Select(p => p.Name).ToList() : [.. projectExpressions.Select(e => e.GetPropertyName())];
         propertyNames.Remove(EntityPropertyNames.Id);
-        var queryProp = GetUnwindType();
-        queries.Add($"_id:'{queryProp}._id'");
+        var unwindPath = GetUnwindPath(unwindExpression);
+        queries.Add($"_id:'{unwindPath}._id'");
 
         foreach (var propName in propertyNames)
-            queries.Add(ConvertToQueryParameter(propName));
+            queries.Add($"{propName}:'{unwindPath}.{propName}'");
 
         return string.Join(',', queries);
+    }
 
-        #region Local Functions
+    /// <summary>
+    /// Returns the field path of <paramref name="unwindExpression"/> for aggregation stages. e.g. <c>e => e.Order.Items</c> returns <c>$Order.Items</c>.
+    /// </summary>
+    /// <param name="unwindExpression"></param>
+    /// <returns></returns>
+    protected static string GetUnwindPath(Expression<Func<TEntity, object>> unwindExpression)
+    {
+        List<string> memberNames = [];
 
-        string ConvertToQueryParameter(string propName) => $"{propName}:'{GetUnwindType()}.{propName}'";
+        var currentExpression = unwindExpression.Body is UnaryExpression { NodeType: ExpressionType.Convert or ExpressionType.ConvertChecked } convert
+            ? convert.Operand
+            : unwindExpression.Body;
 
-        string GetUnwindType()
+        while (currentExpression is MemberExpression memberExpression)
         {
-            List<string> unwindNesteds = [];
-
-            do
-            {
-                if (unwindExpression.Body is not MemberExpression memberExpression)
-                    break;
-
-                unwindNesteds.Add(memberExpression.Member.Name);
-
-            } while (true);
-
-            unwindNesteds.Reverse();
-
-            return string.Join('.', unwindNesteds).Insert(0, "$");
+            memberNames.Add(memberExpression.Member.Name);
+            currentExpression = memberExpression.Expression;
         }
 
-        #endregion
+        memberNames.Reverse();
+
+        return $"${string.Join('.', memberNames)}";
     }
 
     /// <summary>

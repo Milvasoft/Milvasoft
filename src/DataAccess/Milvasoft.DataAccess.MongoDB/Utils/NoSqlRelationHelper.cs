@@ -311,7 +311,7 @@ public static class NoSqlRelationHelper
     }
 
     /// <summary>
-    /// Creates contains query.
+    /// Creates case insensitive contains query. <paramref name="value"/> is matched literally (regex special characters are escaped).
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <param name="filterDefinitionBuilder"></param>
@@ -319,7 +319,7 @@ public static class NoSqlRelationHelper
     /// <param name="value"></param>
     /// <returns></returns>
     public static FilterDefinition<TEntity> Contains<TEntity>(this FilterDefinitionBuilder<TEntity> filterDefinitionBuilder, Expression<Func<TEntity, object>> field, string value)
-        => filterDefinitionBuilder.Regex(field, new BsonRegularExpression(value, "i"));
+        => filterDefinitionBuilder.Regex(field, new BsonRegularExpression(System.Text.RegularExpressions.Regex.Escape(value ?? string.Empty), "i"));
 
     /// <summary>
     /// Returns collection name.

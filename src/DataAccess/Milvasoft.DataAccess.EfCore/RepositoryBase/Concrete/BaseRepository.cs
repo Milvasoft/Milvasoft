@@ -8,6 +8,7 @@ using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using Milvasoft.Types.Structs;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Linq.Expressions;
 
 namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
@@ -206,7 +207,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                   bool tracking = false,
                                                                   bool splitQuery = false,
                                                                   CancellationToken cancellationToken = default)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        => QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
                        .Select(UpdateProjectionExpression(projection))
                        .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
@@ -292,7 +293,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                .IncludeMultiple(includes)
                                .FirstOrDefaultAsync(cancellationToken);
 
-        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
+        var query = QueryWithOptions(tracking, splitQuery).Where(mainCondition);
 
         return IncludeNavigationProperties(query).FirstOrDefaultAsync(cancellationToken);
     }
@@ -300,8 +301,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <summary>
     /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
     /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
-    /// Be careful when using projection while soft delete is active.
-    /// If projection is applied to a soft deleteable entity, properties not included in the project are written to the database with their default values.
+    /// Soft deletion only writes the soft deletion properties, so projected entities can be deleted safely; but only the loaded (and tracked) cascade dependents are soft deleted together with the entity.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="includes"></param>
@@ -366,8 +366,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <summary>
     /// Returns entities from database asynchronously for delete with navigation properties.
     /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
-    /// Be careful when using projection while soft delete is active.
-    /// If projection is applied to a soft deleteable entity, properties not included in the project are written to the database with their default values.
+    /// Soft deletion only writes the soft deletion properties, so projected entities can be deleted safely; but only the loaded (and tracked) cascade dependents are soft deleted together with the entity.
     /// </summary>
     /// <param name="includes"></param>
     /// <param name="condition"></param>
@@ -642,9 +641,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         if (entities.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             _dbSet.Update(entity);
         }
 
@@ -691,9 +691,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         if (entities.IsNullOrEmpty() || propertySelectors.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             var entry = _dbSet.Entry(entity);
 
             foreach (var includeProperty in propertySelectors)
@@ -730,9 +731,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         if (entities.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             _dbSet.Remove(entity);
         }
 
@@ -751,11 +753,12 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                             CancellationToken cancellationToken = default)
     {
         if (!oldEntities.IsNullOrEmpty())
+        {
+            DetachFromLocalIfExists(oldEntities);
+
             foreach (var entity in oldEntities)
-            {
-                DetachFromLocalIfExists(entity);
                 _dbSet.Remove(entity);
-            }
+        }
 
         if (!newEntities.IsNullOrEmpty())
             _dbSet.AddRange(newEntities);
@@ -789,17 +792,14 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Removes all entities from database.
     /// </summary>
     /// <returns></returns>
-    public virtual Task<int> RemoveAllAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<int> RemoveAllAsync(CancellationToken cancellationToken = default)
     {
-        var entities = _dbSet.AsEnumerable();
+        // Tracking query returns the already tracked instances, so nothing needs to be detached.
+        var entities = await _dbSet.AsTracking().ToListAsync(cancellationToken);
 
-        foreach (var entity in entities)
-        {
-            DetachFromLocalIfExists(entity);
-            _dbSet.Remove(entity);
-        }
+        _dbSet.RemoveRange(entities);
 
-        return InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     #region Bulk Async
@@ -855,22 +855,32 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="propertyBuilder"> If soft delete is active you may want to update some properties. etc. image in database</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual Task<int> ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate,
+    public virtual async Task<int> ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate,
                                                       SetPropertyBuilder<TEntity> propertyBuilder = null,
                                                       CancellationToken cancellationToken = default)
     {
-        // If soft deletion active and entity is soft deletable.
-        if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
+        try
         {
-            propertyBuilder ??= new SetPropertyBuilder<TEntity>();
+            // If soft deletion active and entity is soft deletable.
+            if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
+            {
+                propertyBuilder ??= new SetPropertyBuilder<TEntity>();
 
-            //Soft delete
-            AddDeletionPropertyCalls(propertyBuilder);
+                //Soft delete
+                AddDeletionPropertyCalls(propertyBuilder);
 
-            return _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.UpdateSettersBuilder, cancellationToken: cancellationToken);
+                // Already soft deleted records are not deleted again, so their deletion audit values are kept.
+                return await _dbSet.Where(predicate)
+                                   .Where(MilvaDbContextCache.GetIsDeletedFilter<TEntity>())
+                                   .ExecuteUpdateAsync(propertyBuilder.UpdateSettersBuilder, cancellationToken: cancellationToken);
+            }
+
+            return await _dbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken: cancellationToken);
         }
-
-        return _dbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken: cancellationToken);
+        finally
+        {
+            _dbContext.ResetSoftDeletionStateAfterOperation();
+        }
     }
 
     #endregion
@@ -914,15 +924,42 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Detach entity if found in local store.
     /// </summary>
     /// <param name="entity"></param>
-    protected virtual void DetachFromLocalIfExists(TEntity entity)
+    protected virtual void DetachFromLocalIfExists(TEntity entity) => DetachFromLocalIfExists([entity]);
+
+    /// <summary>
+    /// Detaches tracked entities which have the same keys with <paramref name="entities"/>.
+    /// Changes are detected once and tracked entries are found by key, instead of scanning every tracked entry for each entity.
+    /// </summary>
+    /// <param name="entities"></param>
+    protected virtual void DetachFromLocalIfExists(IEnumerable<TEntity> entities)
     {
-        var keyValue = entity.GetUniqueIdentifier();
+        var changeTracker = _dbContext.ChangeTracker;
+        var autoDetectChanges = changeTracker.AutoDetectChangesEnabled;
 
-        var entry = _dbContext.ChangeTracker
-                              .Entries<TEntity>()
-                              .FirstOrDefault(e => e.Entity.GetUniqueIdentifier().Equals(keyValue));
+        if (autoDetectChanges)
+            changeTracker.DetectChanges();
 
-        entry?.State = EntityState.Detached;
+        changeTracker.AutoDetectChangesEnabled = false;
+
+        try
+        {
+            var hasSingleKey = _dbSet.EntityType.FindPrimaryKey()?.Properties.Count == 1;
+
+            foreach (var entity in entities)
+            {
+                var keyValue = entity.GetUniqueIdentifier();
+
+                var entry = hasSingleKey
+                    ? _dbSet.Local.FindEntryUntyped([keyValue])
+                    : changeTracker.Entries<TEntity>().FirstOrDefault(e => e.Entity.GetUniqueIdentifier().Equals(keyValue));
+
+                entry?.State = EntityState.Detached;
+            }
+        }
+        finally
+        {
+            changeTracker.AutoDetectChangesEnabled = autoDetectChanges;
+        }
     }
 
     /// <summary>
@@ -935,9 +972,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     {
         Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(key);
 
-        var mainCondition = idCondition.Append(CreateConditionExpression(conditionExpression) ?? (entity => true), ExpressionType.AndAlso);
-
-        return mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
+        // CreateConditionExpression already contains conditionExpression.
+        return idCondition.Append(CreateConditionExpression(conditionExpression), ExpressionType.AndAlso);
     }
 
     /// <summary>
@@ -1081,28 +1117,26 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     protected static IQueryable<TEntity> IncludeNavigationProperties(IQueryable<TEntity> query)
     {
-        var cascadePropertyPaths = GetCascadePropertyPaths<TEntity>();
-
-        var duplications = new List<string>();
-
-        for (int i = 0; i < cascadePropertyPaths.Count; i++)
-        {
-            var cascadePropertyPath = cascadePropertyPaths[i];
-
-            if (cascadePropertyPaths.Exists(c => c != cascadePropertyPath && c.StartsWith(cascadePropertyPath)))
-                duplications.Add(cascadePropertyPath);
-        }
-
-        foreach (var cascadeProp in cascadePropertyPaths)
-        {
-            if (duplications.Contains(cascadeProp))
-                continue;
-
-            query = query.Include(cascadeProp);
-        }
+        foreach (var includePath in GetCascadeIncludePaths(typeof(TEntity)))
+            query = query.Include(includePath);
 
         return query;
     }
+
+    /// <summary>
+    /// Gets the include paths of <see cref="CascadeOnDeleteAttribute"/> marked navigation properties of <paramref name="type"/>.
+    /// Paths which are already covered by a deeper path (e.g. "Items" by "Items.Children") are removed. Results are cached per type.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    protected static IReadOnlyList<string> GetCascadeIncludePaths(Type type) => _cascadeIncludePathsCache.GetOrAdd(type, static t =>
+    {
+        var paths = GetCascadePropertyPaths(t);
+
+        return [.. paths.Distinct().Where(path => !paths.Exists(other => other.StartsWith(path + ".", StringComparison.Ordinal)))];
+    });
+
+    private static readonly ConcurrentDictionary<Type, string[]> _cascadeIncludePathsCache = new();
 
     /// <summary>
     /// Gets property paths.
@@ -1114,7 +1148,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     protected static List<string> GetCascadePropertyPaths<T>(string parentPath = null, int maxDepth = 5) => GetCascadePropertyPaths(typeof(T), parentPath, maxDepth);
 
     /// <summary>
-    /// Gets property paths.
+    /// Gets paths of <see cref="CascadeOnDeleteAttribute"/> marked reference and collection (e.g. <see cref="List{T}"/>, <see cref="ICollection{T}"/>)
+    /// navigation properties, recursively for the navigation target types. A type is not visited again in the same path.
     /// </summary>
     /// <param name="type"></param>
     /// <param name="parentPath"></param>
@@ -1123,34 +1158,49 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     protected static List<string> GetCascadePropertyPaths(Type type, string parentPath = null, int maxDepth = 5, int currentDepth = 0)
     {
-        var properties = type.GetProperties().Where(p => p.IsDefined(typeof(CascadeOnDeleteAttribute), inherit: false));
-
         var paths = new List<string>();
 
-        if (currentDepth > maxDepth)
-            return paths;
+        CollectCascadePropertyPaths(type, parentPath, maxDepth, currentDepth, [type], paths);
 
-        foreach (var property in properties)
+        return paths;
+
+        static void CollectCascadePropertyPaths(Type type, string parentPath, int maxDepth, int currentDepth, HashSet<Type> typesInPath, List<string> paths)
         {
-            var propertyType = property.PropertyType;
+            if (currentDepth > maxDepth)
+                return;
 
-            if (!propertyType.IsClass || propertyType == typeof(string) || propertyType == typeof(decimal))
-                continue;
-
-            var currentPath = string.IsNullOrEmpty(parentPath) ? property.Name : $"{parentPath}.{property.Name}";
-
-            paths.Add(currentPath);
-
-            // Eğer property bir sınıfsa ve string değilse, alt property'leri rekrüzyonla getir
-            if (propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType))
+            foreach (var property in type.GetProperties().Where(p => p.IsDefined(typeof(CascadeOnDeleteAttribute), inherit: false)))
             {
-                var genericArgumentType = propertyType.GetGenericArguments()[0];
+                var navigationType = GetNavigationTargetType(property.PropertyType);
 
-                paths.AddRange(GetCascadePropertyPaths(genericArgumentType, currentPath, maxDepth, currentDepth + 1));
+                if (navigationType is null)
+                    continue;
+
+                var currentPath = string.IsNullOrEmpty(parentPath) ? property.Name : $"{parentPath}.{property.Name}";
+
+                paths.Add(currentPath);
+
+                if (typesInPath.Add(navigationType))
+                {
+                    CollectCascadePropertyPaths(navigationType, currentPath, maxDepth, currentDepth + 1, typesInPath, paths);
+                    typesInPath.Remove(navigationType);
+                }
             }
         }
 
-        return paths;
+        static Type GetNavigationTargetType(Type propertyType)
+        {
+            if (propertyType == typeof(string))
+                return null;
+
+            var elementType = propertyType.IsArray
+                ? propertyType.GetElementType()
+                : Array.Find([propertyType, .. propertyType.GetInterfaces()], i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))?.GetGenericArguments()[0];
+
+            var targetType = elementType ?? propertyType;
+
+            return targetType.IsClass && targetType != typeof(string) ? targetType : null;
+        }
     }
 
     /// <summary>

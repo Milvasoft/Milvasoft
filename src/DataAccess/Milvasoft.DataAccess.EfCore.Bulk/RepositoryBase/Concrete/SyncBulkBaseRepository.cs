@@ -25,10 +25,10 @@ public abstract partial class BulkBaseRepository<TEntity, TContext> where TEntit
     {
         if (!entities.IsNullOrEmpty())
         {
-            if (_dataAccessConfiguration.Auditing.AuditModificationDate)
+            if (_dataAccessConfiguration.Auditing.AuditCreationDate)
                 SetPerformTimeValues(entities, EntityPropertyNames.CreationDate);
 
-            if (_dataAccessConfiguration.Auditing.AuditModifier)
+            if (_dataAccessConfiguration.Auditing.AuditCreator)
                 SetPerformerUserValues(entities, EntityPropertyNames.CreatorUserName);
 
             _dbContext.BulkInsert(entities, bulkConfig);
@@ -63,7 +63,10 @@ public abstract partial class BulkBaseRepository<TEntity, TContext> where TEntit
     /// <returns></returns>
     public virtual void BulkDelete(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
     {
-        if (!entities.IsNullOrEmpty())
+        if (entities.IsNullOrEmpty())
+            return;
+
+        try
         {
             // If soft deletion active and entity is soft deletable.
             if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
@@ -76,6 +79,10 @@ public abstract partial class BulkBaseRepository<TEntity, TContext> where TEntit
             }
 
             _dbContext.BulkDelete(entities, bulkConfig);
+        }
+        finally
+        {
+            _dbContext.ResetSoftDeletionStateAfterOperation();
         }
     }
 
