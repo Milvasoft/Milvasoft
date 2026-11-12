@@ -1,9 +1,10 @@
-﻿using Microsoft.IO;
+using Microsoft.IO;
 using Milvasoft.Cryptography.Builder;
 using Milvasoft.Cryptography.Concrete;
 using Milvasoft.FileOperations.Abstract;
 using Milvasoft.FileOperations.Builder;
 using Newtonsoft.Json;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
@@ -66,6 +67,7 @@ public class JsonOperations : IJsonOperations
 {
     private readonly string _basePath;
     private string _encryptionKey;
+    private MilvaCryptographyProvider _cryptographyProvider;
     private Encoding _encoding;
     private readonly JsonSerializerSettings _jsonSerializerSettings;
     private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
@@ -112,7 +114,11 @@ public class JsonOperations : IJsonOperations
     /// If you change encryption key after object creation, use this method.
     /// </summary>
     /// <param name="encryptionKey"></param>
-    public void SetEncryptionKey(string encryptionKey) => _encryptionKey = encryptionKey;
+    public void SetEncryptionKey(string encryptionKey)
+    {
+        _encryptionKey = encryptionKey;
+        _cryptographyProvider = null;
+    }
 
     /// <summary>
     /// If you change encoding after object creation, use this method.
@@ -136,9 +142,7 @@ public class JsonOperations : IJsonOperations
     /// <returns> A content as type <typeparamref name="T"/>. </returns>
     public async Task<T> GetContentAsync<T>(string filePath)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContent = await File.ReadAllTextAsync(filePath, _encoding);
+        var jsonContent = await ReadAsync(filePath, encrypted: false);
 
         return JsonConvert.DeserializeObject<T>(jsonContent, _jsonSerializerSettings);
     }
@@ -161,13 +165,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task AddContentAsync<T>(T content, string filePath, bool contentsHasId = false)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForAdd([content], jsonContentString, contentsHasId);
-
-        await File.WriteAllTextAsync(filePath, newJsonResult);
+        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForAdd([content], jsonContentString, contentsHasId));
     }
 
     /// <summary>
@@ -187,13 +185,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task AddContentsAsync<T>(List<T> contents, string filePath, bool contentsHasId = false)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForAdd(contents, jsonContentString, contentsHasId);
-
-        await File.WriteAllTextAsync(filePath, newJsonResult);
+        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForAdd(contents, jsonContentString, contentsHasId));
     }
 
     /// <summary>
@@ -219,13 +211,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task UpdateContentAsync<T>(T content, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForUpdate([content], jsonContentString, mappingProperty);
-
-        await File.WriteAllTextAsync(filePath, newJsonResult);
+        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForUpdate([content], jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -251,13 +237,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task UpdateContentsAsync<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForUpdate(contents, jsonContentString, mappingProperty);
-
-        await File.WriteAllTextAsync(filePath, newJsonResult);
+        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForUpdate(contents, jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -277,13 +257,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task DeleteContentAsync<T>(List<dynamic> mappingValue, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty);
-
-        await File.WriteAllTextAsync(filePath, newJsonResult);
+        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForDelete(mappingValue, jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -302,13 +276,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task DeleteContentsAsync<T>(List<dynamic> mappingValues, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = await File.ReadAllTextAsync(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty);
-
-        await File.WriteAllTextAsync(filePath, newJsonResult);
+        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -327,7 +295,7 @@ public class JsonOperations : IJsonOperations
     {
         string newJsonResult = JsonConvert.SerializeObject(content, Formatting.Indented, _jsonSerializerSettings);
 
-        return File.WriteAllTextAsync(GetFilePath(filePath), newJsonResult);
+        return WriteAsync(filePath, newJsonResult, encrypted: false);
     }
 
     /// <summary>
@@ -340,7 +308,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <returns></returns>
-    public Task ClearJSONFileAsync(string filePath) => File.WriteAllTextAsync(GetFilePath(filePath), "");
+    public Task ClearJSONFileAsync(string filePath) => WriteAsync(filePath, string.Empty, encrypted: false);
 
     #region With Encryption 
 
@@ -356,14 +324,14 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     ///
     /// <typeparam name="T"> Return type. </typeparam>
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <returns> A content list of type <typeparamref name="T"/>. </returns>
     public async Task<T> GetCryptedContentAsync<T>(string filePath)
     {
-        var jsonContent = await DecryptAndReadAsync(GetFilePath(filePath), _encryptionKey);
+        var jsonContent = await ReadAsync(filePath, encrypted: true);
 
         return JsonConvert.DeserializeObject<T>(jsonContent, _jsonSerializerSettings);
     }
@@ -382,7 +350,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="content"> Contents to be added. </param>
@@ -391,11 +359,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task AddCryptedContentAsync<T>(T content, string filePath, bool contentsHasId)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForAdd([content], jsonContentString, contentsHasId);
-
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
+        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForAdd([content], jsonContentString, contentsHasId));
     }
 
     /// <summary>
@@ -412,7 +376,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="contents"> Contents to be added. </param>
@@ -421,11 +385,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task AddCryptedContentsAsync<T>(List<T> contents, string filePath, bool contentsHasId)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForAdd(contents, jsonContentString, contentsHasId);
-
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
+        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForAdd(contents, jsonContentString, contentsHasId));
     }
 
     /// <summary>
@@ -446,7 +406,7 @@ public class JsonOperations : IJsonOperations
     /// <exception cref="Exception()"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.</exception>
     /// <exception cref="Exception()"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/> .</exception>
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="content"> Contents to be updated. </param>
@@ -455,11 +415,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task UpdateCryptedContentAsync<T>(T content, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForUpdate([content], jsonContentString, mappingProperty);
-
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
+        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForUpdate([content], jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -478,7 +434,7 @@ public class JsonOperations : IJsonOperations
     /// <exception cref="Exception()"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
     /// <exception cref="Exception()"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>. </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="contents"> Contents to be updated. </param>
@@ -487,11 +443,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public async Task UpdateCryptedContentsAsync<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForUpdate(contents, jsonContentString, mappingProperty);
-
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
+        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForUpdate(contents, jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -507,7 +459,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="mappingValue"> Mapping value of content to be deleted. </param>
@@ -516,11 +468,7 @@ public class JsonOperations : IJsonOperations
     /// <returns> Completed <see cref="Task"/> </returns>
     public async Task DeleteCryptedContentAsync<T>(dynamic mappingValue, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty);
-
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
+        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -535,7 +483,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="mappingValues"> Mapping values of contents to be deleted. </param>
@@ -544,11 +492,7 @@ public class JsonOperations : IJsonOperations
     /// <returns> Completed <see cref="Task"/> </returns>
     public async Task DeleteCryptedContentAsync<T>(List<dynamic> mappingValues, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = await DecryptAndReadAsync(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty);
-
-        await EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
+        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -558,7 +502,7 @@ public class JsonOperations : IJsonOperations
     /// 
     /// <para> This method support all structures in class remarks. </para> 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="content"> Content to be added or updated. </param>
@@ -568,7 +512,7 @@ public class JsonOperations : IJsonOperations
     {
         string newJsonResult = JsonConvert.SerializeObject(content, Formatting.Indented, _jsonSerializerSettings);
 
-        return EncryptAndWriteAsync(filePath, newJsonResult, _encryptionKey);
+        return WriteAsync(filePath, newJsonResult, encrypted: true);
     }
 
     #endregion
@@ -591,9 +535,7 @@ public class JsonOperations : IJsonOperations
     /// <returns> A content as type <typeparamref name="T"/>. </returns>
     public T GetContent<T>(string filePath)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContent = File.ReadAllText(filePath, _encoding);
+        var jsonContent = Read(filePath, encrypted: false);
 
         return JsonConvert.DeserializeObject<T>(jsonContent, _jsonSerializerSettings);
     }
@@ -616,13 +558,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public void AddContent<T>(T content, string filePath, bool contentsHasId = false)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = File.ReadAllText(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForAdd([content], jsonContentString, contentsHasId);
-
-        File.WriteAllText(filePath, newJsonResult);
+        Modify(filePath, encrypted: false, jsonContentString => GetJsonResultForAdd([content], jsonContentString, contentsHasId));
     }
 
     /// <summary>
@@ -642,13 +578,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public void AddContents<T>(List<T> contents, string filePath, bool contentsHasId = false)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = File.ReadAllText(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForAdd(contents, jsonContentString, contentsHasId);
-
-        File.WriteAllText(filePath, newJsonResult);
+        Modify(filePath, encrypted: false, jsonContentString => GetJsonResultForAdd(contents, jsonContentString, contentsHasId));
     }
 
     /// <summary>
@@ -674,13 +604,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public void UpdateContent<T>(T content, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = File.ReadAllText(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForUpdate([content], jsonContentString, mappingProperty);
-
-        File.WriteAllText(filePath, newJsonResult);
+        Modify(filePath, encrypted: false, jsonContentString => GetJsonResultForUpdate([content], jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -706,13 +630,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public void UpdateContents<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = File.ReadAllText(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForUpdate(contents, jsonContentString, mappingProperty);
-
-        File.WriteAllText(filePath, newJsonResult);
+        Modify(filePath, encrypted: false, jsonContentString => GetJsonResultForUpdate(contents, jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -732,13 +650,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public void DeleteContent<T>(List<dynamic> mappingValue, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = File.ReadAllText(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty);
-
-        File.WriteAllText(filePath, newJsonResult);
+        Modify(filePath, encrypted: false, jsonContentString => GetJsonResultForDelete(mappingValue, jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -757,13 +669,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public void DeleteContents<T>(List<dynamic> mappingValues, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        filePath = GetFilePath(filePath);
-
-        var jsonContentString = File.ReadAllText(filePath, _encoding);
-
-        string newJsonResult = GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty);
-
-        File.WriteAllText(filePath, newJsonResult);
+        Modify(filePath, encrypted: false, jsonContentString => GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -782,7 +688,7 @@ public class JsonOperations : IJsonOperations
     {
         string newJsonResult = JsonConvert.SerializeObject(content, Formatting.Indented, _jsonSerializerSettings);
 
-        File.WriteAllText(GetFilePath(filePath), newJsonResult);
+        Write(filePath, newJsonResult, encrypted: false);
     }
 
     /// <summary>
@@ -795,7 +701,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <returns></returns>
-    public void ClearJSONFile(string filePath) => File.WriteAllText(GetFilePath(filePath), "");
+    public void ClearJSONFile(string filePath) => Write(filePath, string.Empty, encrypted: false);
 
     #region With Encryption 
 
@@ -811,14 +717,14 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     ///
     /// <typeparam name="T"> Return type. </typeparam>
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <returns> A content list of type <typeparamref name="T"/>. </returns>
     public T GetCryptedContent<T>(string filePath)
     {
-        var jsonContent = DecryptAndRead(GetFilePath(filePath), _encryptionKey);
+        var jsonContent = Read(filePath, encrypted: true);
 
         return JsonConvert.DeserializeObject<T>(jsonContent, _jsonSerializerSettings);
     }
@@ -837,7 +743,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="content"> Contents to be added. </param>
@@ -846,11 +752,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public void AddCryptedContent<T>(T content, string filePath, bool contentsHasId)
     {
-        var jsonContentString = DecryptAndRead(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForAdd([content], jsonContentString, contentsHasId);
-
-        EncryptAndWrite(filePath, newJsonResult, _encryptionKey);
+        Modify(filePath, encrypted: true, jsonContentString => GetJsonResultForAdd([content], jsonContentString, contentsHasId));
     }
 
     /// <summary>
@@ -867,7 +769,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="contents"> Contents to be added. </param>
@@ -876,11 +778,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public void AddCryptedContents<T>(List<T> contents, string filePath, bool contentsHasId)
     {
-        var jsonContentString = DecryptAndRead(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForAdd(contents, jsonContentString, contentsHasId);
-
-        EncryptAndWrite(filePath, newJsonResult, _encryptionKey);
+        Modify(filePath, encrypted: true, jsonContentString => GetJsonResultForAdd(contents, jsonContentString, contentsHasId));
     }
 
     /// <summary>
@@ -901,7 +799,7 @@ public class JsonOperations : IJsonOperations
     /// <exception cref="Exception()"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>.</exception>
     /// <exception cref="Exception()"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="content"/> .</exception>
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="content"> Contents to be updated. </param>
@@ -910,11 +808,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public void UpdateCryptedContent<T>(T content, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = DecryptAndRead(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForUpdate([content], jsonContentString, mappingProperty);
-
-        EncryptAndWrite(filePath, newJsonResult, _encryptionKey);
+        Modify(filePath, encrypted: true, jsonContentString => GetJsonResultForUpdate([content], jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -933,7 +827,7 @@ public class JsonOperations : IJsonOperations
     /// <exception cref="Exception()"> Throwns when not valid <paramref name="mappingProperty"/> or requested Entity type does not have that <paramref name="mappingProperty"/>. </exception>
     /// <exception cref="Exception()"> Throwns when json file in <paramref name="filePath"/> not contains <paramref name="contents"/>. </exception>
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="contents"> Contents to be updated. </param>
@@ -942,11 +836,7 @@ public class JsonOperations : IJsonOperations
     /// <returns></returns>
     public void UpdateCryptedContents<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = DecryptAndRead(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForUpdate(contents, jsonContentString, mappingProperty);
-
-        EncryptAndWrite(filePath, newJsonResult, _encryptionKey);
+        Modify(filePath, encrypted: true, jsonContentString => GetJsonResultForUpdate(contents, jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -962,7 +852,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="mappingValue"> Mapping value of content to be deleted. </param>
@@ -971,11 +861,7 @@ public class JsonOperations : IJsonOperations
     /// <returns> Completed <see cref="Task"/> </returns>
     public void DeleteCryptedContent<T>(dynamic mappingValue, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = DecryptAndRead(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty);
-
-        EncryptAndWrite(filePath, newJsonResult, _encryptionKey);
+        Modify(filePath, encrypted: true, jsonContentString => GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -990,7 +876,7 @@ public class JsonOperations : IJsonOperations
     /// </remarks>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when encryption key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when encryption key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when encryption key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="mappingValues"> Mapping values of contents to be deleted. </param>
@@ -999,11 +885,7 @@ public class JsonOperations : IJsonOperations
     /// <returns> Completed <see cref="Task"/> </returns>
     public void DeleteCryptedContent<T>(List<dynamic> mappingValues, string filePath, Expression<Func<T, dynamic>> mappingProperty)
     {
-        var jsonContentString = DecryptAndRead(filePath, _encryptionKey);
-
-        string newJsonResult = GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty);
-
-        EncryptAndWrite(filePath, newJsonResult, _encryptionKey);
+        Modify(filePath, encrypted: true, jsonContentString => GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty));
     }
 
     /// <summary>
@@ -1013,7 +895,7 @@ public class JsonOperations : IJsonOperations
     /// 
     /// <para> This method support all structures in class remarks. </para> 
     /// <exception cref="ArgumentOutOfRangeException"> Throwns when key is not proper lenght. </exception>
-    /// <exception cref="ArgumentException"> Throwns when key is incorrect. </exception>
+    /// <exception cref="CryptographicException"> Throwns when key is incorrect or the file is corrupted. </exception>
     /// 
     /// <typeparam name="T"> Model type in json. </typeparam>
     /// <param name="content"> Content to be added or updated. </param>
@@ -1023,7 +905,7 @@ public class JsonOperations : IJsonOperations
     {
         string newJsonResult = JsonConvert.SerializeObject(content, Formatting.Indented, _jsonSerializerSettings);
 
-        EncryptAndWrite(filePath, newJsonResult, _encryptionKey);
+        Write(filePath, newJsonResult, encrypted: true);
     }
 
     #endregion
@@ -1144,92 +1026,253 @@ public class JsonOperations : IJsonOperations
         return JsonConvert.SerializeObject(jsonContent, Formatting.Indented);
     }
 
-    private async Task<string> DecryptAndReadAsync(string filePath, string key)
+
+    /// <summary>
+    /// One lock per file, shared by all <see cref="JsonOperations"/> instances, so read-modify-write operations on the same file do not lose updates.
+    /// </summary>
+    private static readonly ConcurrentDictionary<string, SemaphoreSlim> _fileLocks = new(OperatingSystem.IsWindows() ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
+
+    private static SemaphoreSlim GetFileLock(string fullPath) => _fileLocks.GetOrAdd(Path.GetFullPath(fullPath), _ => new SemaphoreSlim(1, 1));
+
+    private async Task<string> ReadAsync(string filePath, bool encrypted)
     {
-        var encryptionProvider = new MilvaCryptographyProvider(new MilvaCryptographyOptions { Key = key }, _recyclableMemoryStreamManager);
+        var fullPath = GetFilePath(filePath);
+        var fileLock = GetFileLock(fullPath);
 
-        var inputValue = await File.ReadAllTextAsync(filePath);
-
-        return await encryptionProvider.DecryptAsync(inputValue);
-    }
-
-    private async Task EncryptAndWriteAsync(string filePath, string content, string key)
-    {
-        var encryptionProvider = new MilvaCryptographyProvider(new MilvaCryptographyOptions { Key = key }, _recyclableMemoryStreamManager);
-
-        var encryptedContent = await encryptionProvider.EncryptAsync(content);
-
-        await File.WriteAllTextAsync(filePath, encryptedContent, Encoding.UTF8);
-    }
-
-    private string DecryptAndRead(string filePath, string key)
-    {
-        using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-        var memoryStream = _recyclableMemoryStreamManager.GetStream();
-
-        fileStream.CopyTo(memoryStream);
-
-        var plainContent = memoryStream.ToArray();
-
-        using var algorithm = Aes.Create();
-
-        var keyBytes = Encoding.UTF8.GetBytes(key);
-
-        if (keyBytes.Length != 16)
-            throw new ArgumentOutOfRangeException(key, "Key is not proper length. Key bit length must be 16.");
-
-        algorithm.IV = keyBytes;
-        algorithm.Key = keyBytes;
-        algorithm.Mode = CipherMode.CBC;
-        algorithm.Padding = PaddingMode.PKCS7;
-
-        using var memStream = new MemoryStream();
-
-        using var cryptoStream = new CryptoStream(memStream, algorithm.CreateDecryptor(), CryptoStreamMode.Write);
-
-        cryptoStream.Write(plainContent, 0, plainContent.Length);
+        await fileLock.WaitAsync();
 
         try
         {
-            cryptoStream.FlushFinalBlock();
+            return await ReadUnlockedAsync(fullPath, encrypted);
         }
-        catch (Exception)
+        finally
         {
-            throw new ArgumentException("Incorrect key.");
+            fileLock.Release();
         }
-
-        using var streamReader = new StreamReader(memStream);
-
-        if (memStream.CanSeek)
-            memStream.Seek(0, SeekOrigin.Begin);
-
-        return streamReader.ReadToEnd();
     }
 
-    private static void EncryptAndWrite(string filePath, string content, string key)
+    private string Read(string filePath, bool encrypted)
     {
-        byte[] plainContent = Encoding.ASCII.GetBytes(content);
+        var fullPath = GetFilePath(filePath);
+        var fileLock = GetFileLock(fullPath);
 
-        using var algorithm = Aes.Create();
+        fileLock.Wait();
 
-        var keyBytes = Encoding.UTF8.GetBytes(key);
+        try
+        {
+            return ReadUnlocked(fullPath, encrypted);
+        }
+        finally
+        {
+            fileLock.Release();
+        }
+    }
 
-        if (keyBytes.Length != 16)
-            throw new ArgumentOutOfRangeException(key, "Key is not proper length. Key bit length must be 16.");
+    private async Task WriteAsync(string filePath, string content, bool encrypted)
+    {
+        var fullPath = GetFilePath(filePath);
+        var fileLock = GetFileLock(fullPath);
 
-        algorithm.IV = keyBytes;
-        algorithm.Key = keyBytes;
-        algorithm.Mode = CipherMode.CBC;
-        algorithm.Padding = PaddingMode.PKCS7;
+        await fileLock.WaitAsync();
 
-        using var memStream = new MemoryStream();
+        try
+        {
+            await WriteUnlockedAsync(fullPath, content, encrypted);
+        }
+        finally
+        {
+            fileLock.Release();
+        }
+    }
 
-        using var cryptoStream = new CryptoStream(memStream, algorithm.CreateEncryptor(), CryptoStreamMode.Write);
+    private void Write(string filePath, string content, bool encrypted)
+    {
+        var fullPath = GetFilePath(filePath);
+        var fileLock = GetFileLock(fullPath);
 
-        cryptoStream.Write(plainContent, 0, plainContent.Length);
-        cryptoStream.FlushFinalBlock();
+        fileLock.Wait();
 
-        File.WriteAllBytes(filePath, memStream.ToArray());
+        try
+        {
+            WriteUnlocked(fullPath, content, encrypted);
+        }
+        finally
+        {
+            fileLock.Release();
+        }
+    }
+
+    private async Task ModifyAsync(string filePath, bool encrypted, Func<string, string> modify)
+    {
+        var fullPath = GetFilePath(filePath);
+        var fileLock = GetFileLock(fullPath);
+
+        await fileLock.WaitAsync();
+
+        try
+        {
+            var content = await ReadUnlockedAsync(fullPath, encrypted);
+
+            await WriteUnlockedAsync(fullPath, modify(content), encrypted);
+        }
+        finally
+        {
+            fileLock.Release();
+        }
+    }
+
+    private void Modify(string filePath, bool encrypted, Func<string, string> modify)
+    {
+        var fullPath = GetFilePath(filePath);
+        var fileLock = GetFileLock(fullPath);
+
+        fileLock.Wait();
+
+        try
+        {
+            var content = ReadUnlocked(fullPath, encrypted);
+
+            WriteUnlocked(fullPath, modify(content), encrypted);
+        }
+        finally
+        {
+            fileLock.Release();
+        }
+    }
+
+    private async Task<string> ReadUnlockedAsync(string fullPath, bool encrypted)
+    {
+        if (!encrypted)
+            return await File.ReadAllTextAsync(fullPath, _encoding);
+
+        return Decrypt(await File.ReadAllBytesAsync(fullPath));
+    }
+
+    private string ReadUnlocked(string fullPath, bool encrypted)
+    {
+        if (!encrypted)
+            return File.ReadAllText(fullPath, _encoding);
+
+        return Decrypt(File.ReadAllBytes(fullPath));
+    }
+
+    private async Task WriteUnlockedAsync(string fullPath, string content, bool encrypted)
+    {
+        var tempPath = GetTempPath(fullPath);
+
+        try
+        {
+            if (encrypted)
+                await File.WriteAllTextAsync(tempPath, await GetCryptographyProvider().EncryptAsync(content), _utf8WithoutBom);
+            else
+                await File.WriteAllTextAsync(tempPath, content, GetWriteEncoding());
+
+            File.Move(tempPath, fullPath, overwrite: true);
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+                File.Delete(tempPath);
+        }
+    }
+
+    private void WriteUnlocked(string fullPath, string content, bool encrypted)
+    {
+        var tempPath = GetTempPath(fullPath);
+
+        try
+        {
+            if (encrypted)
+                File.WriteAllText(tempPath, GetCryptographyProvider().Encrypt(content), _utf8WithoutBom);
+            else
+                File.WriteAllText(tempPath, content, GetWriteEncoding());
+
+            File.Move(tempPath, fullPath, overwrite: true);
+        }
+        finally
+        {
+            if (File.Exists(tempPath))
+                File.Delete(tempPath);
+        }
+    }
+
+    /// <summary>
+    /// Writes go to a temporary file in the same folder that replaces the target only when complete, so a crash never leaves a torn file.
+    /// </summary>
+    private static string GetTempPath(string fullPath) => Path.Combine(Path.GetDirectoryName(Path.GetFullPath(fullPath)), $".{Path.GetFileName(fullPath)}.{Guid.NewGuid():N}.tmp");
+
+    /// <summary>
+    /// Keeps the previous output format: UTF-8 without byte order mark.
+    /// </summary>
+    private Encoding GetWriteEncoding() => _encoding is UTF8Encoding ? _utf8WithoutBom : _encoding;
+
+    private static readonly UTF8Encoding _utf8WithoutBom = new(encoderShouldEmitUTF8Identifier: false);
+
+    private MilvaCryptographyProvider GetCryptographyProvider()
+    {
+        if (string.IsNullOrEmpty(_encryptionKey))
+            throw new MilvaDeveloperException("Please provide an encryption key for encrypted json operations.");
+
+        return _cryptographyProvider ??= new MilvaCryptographyProvider(new MilvaCryptographyOptions { Key = _encryptionKey }, _recyclableMemoryStreamManager);
+    }
+
+    /// <summary>
+    /// Decrypts an encrypted json file.
+    /// </summary>
+    /// <remarks>
+    /// Files are written by <see cref="MilvaCryptographyProvider"/> (UTF-8 text). Files written by the synchronous methods of
+    /// previous versions (raw AES-CBC bytes with IV = key, ASCII plaintext) are still readable; the next write stores them in the
+    /// current format.
+    /// </remarks>
+    private string Decrypt(byte[] fileContent)
+    {
+        Exception providerException;
+
+        try
+        {
+            return GetCryptographyProvider().Decrypt(_utf8WithoutBom.GetString(fileContent).Trim());
+        }
+        catch (Exception ex) when (ex is not MilvaDeveloperException)
+        {
+            providerException = ex;
+        }
+
+        if (TryDecryptLegacySyncFormat(fileContent, _encryptionKey, out var legacyContent))
+            return legacyContent;
+
+        // Never put the key into the exception.
+        throw new CryptographicException("The file could not be decrypted. The encryption key is incorrect or the file is corrupted.", providerException);
+    }
+
+    /// <summary>
+    /// Decrypts the format written by the synchronous encryption methods of previous versions: raw AES-128-CBC/PKCS7 bytes
+    /// with IV = key. Used only for reading, so existing files stay readable.
+    /// </summary>
+    internal static bool TryDecryptLegacySyncFormat(byte[] cipherText, string key, out string plainText)
+    {
+        plainText = null;
+
+        var keyBytes = Encoding.UTF8.GetBytes(key ?? string.Empty);
+
+        if (keyBytes.Length != 16 || cipherText.Length == 0 || cipherText.Length % 16 != 0)
+            return false;
+
+        try
+        {
+            using var aes = Aes.Create();
+
+            aes.Key = keyBytes;
+
+            var plainBytes = aes.DecryptCbc(cipherText, keyBytes, PaddingMode.PKCS7);
+
+            plainText = Encoding.UTF8.GetString(plainBytes);
+
+            return true;
+        }
+        catch (CryptographicException)
+        {
+            return false;
+        }
     }
 
     private string GetFilePath(string filePath) => !string.IsNullOrWhiteSpace(_basePath) ? Path.Combine(_basePath, filePath) : filePath;
