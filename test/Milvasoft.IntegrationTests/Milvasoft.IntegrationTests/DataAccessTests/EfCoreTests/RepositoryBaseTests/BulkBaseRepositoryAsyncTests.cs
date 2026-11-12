@@ -163,6 +163,54 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         addedEntity.CreatorUserName.Should().Be("testuser");
     }
 
+    [Theory]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    public async Task BulkAddAsync_WithOnlyCreationOrOnlyModificationAuditing_ShouldAuditCreationAccordingToCreationAuditing(bool auditCreation, bool auditModification)
+    {
+        // Arrange
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    GetCurrentUserNameMethod = (sp) => "testuser"
+                };
+
+                opt.Auditing = new AuditConfiguration
+                {
+                    AuditCreationDate = auditCreation,
+                    AuditCreator = auditCreation,
+                    AuditModificationDate = auditModification,
+                    AuditModifier = auditModification,
+                };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString());
+            });
+        });
+
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+
+        var entities = new List<SomeFullAuditableEntityFixture> { new() { Id = 1, SomeDateProp = DateTime.UtcNow, SomeStringProp = "somestring1" } };
+
+        // Act
+        await entityRepository.BulkAddAsync(entities, cancellationToken: TestContext.Current.CancellationToken);
+        entityRepository.BulkAdd([new() { Id = 2, SomeDateProp = DateTime.UtcNow, SomeStringProp = "somestring2" }]);
+        var addedEntities = await entityRepository.GetAllAsync(cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        addedEntities.Should().HaveCount(2);
+        addedEntities.Should().OnlyContain(e => (e.CreationDate != null) == auditCreation
+                                                && (e.CreatorUserName == "testuser") == auditCreation
+                                                && e.LastModificationDate == null
+                                                && e.LastModifierUserName == null);
+    }
+
     [Theory(Skip = "Need migration.")]
     [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
     [InlineData(QueryTrackingBehavior.NoTracking)]

@@ -29,10 +29,10 @@ public abstract partial class BulkBaseRepository<TEntity, TContext>(TContext dbC
     {
         if (!entities.IsNullOrEmpty())
         {
-            if (_dataAccessConfiguration.Auditing.AuditModificationDate)
+            if (_dataAccessConfiguration.Auditing.AuditCreationDate)
                 SetPerformTimeValues(entities, EntityPropertyNames.CreationDate);
 
-            if (_dataAccessConfiguration.Auditing.AuditModifier)
+            if (_dataAccessConfiguration.Auditing.AuditCreator)
                 SetPerformerUserValues(entities, EntityPropertyNames.CreatorUserName);
 
             await _dbContext.BulkInsertAsync(entities, bulkConfig, cancellationToken: cancellationToken);
