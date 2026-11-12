@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Interception.Decorator;
+using Milvasoft.Interception.Ef.Builder;
 using System.Transactions;
 
 namespace Milvasoft.Interception.Ef.WithNoLock;
@@ -9,6 +10,9 @@ namespace Milvasoft.Interception.Ef.WithNoLock;
 /// <summary>
 /// Interceptor that adds "WITH(NOLOCK)" hint to select queries made in methods marked with <see cref="WithNoLockAttribute"/>.
 /// </summary>
+/// <remarks>
+/// If no DbContext can be found a <see cref="Core.Exceptions.MilvaDeveloperException"/> is thrown and the method is not run.
+/// </remarks>
 [ConfigureAwait(false)]
 public partial class WithNoLockInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
@@ -33,34 +37,21 @@ public partial class WithNoLockInterceptor(IServiceProvider serviceProvider) : I
     {
         var withNoLockAttribute = call.GetInterceptorAttribute<WithNoLockAttribute>();
 
-        DbContext context = null;
+        DbContext context = InterceptedDbContextResolver.Resolve(call,
+                                                                 withNoLockAttribute?.GetDbContextFromServiceProvider ?? true,
+                                                                 _withNoLockInterceptionOptions,
+                                                                 _serviceProvider,
+                                                                 nameof(WithNoLockInterceptor));
 
-        if (!withNoLockAttribute.GetDbContextFromServiceProvider)
+        var executionStrategy = context.Database.CreateExecutionStrategy();
+
+        return executionStrategy.ExecuteAsync(async () =>
         {
-            if (call.MethodImplementation.DeclaringType.IsAssignableFrom(typeof(ICanRetrieveDbContext)))
-            {
-                var canRetrieveDbContext = call.MethodImplementation.DeclaringType as ICanRetrieveDbContext;
+            using var transactionScope = new TransactionScope(TransactionScopeOption.Required, _transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
 
-                context = canRetrieveDbContext.GetDbContext(_withNoLockInterceptionOptions.GetDbContextType());
-            }
-        }
-        else
-            context = _serviceProvider.GetService(_withNoLockInterceptionOptions.GetDbContextType()) as DbContext;
+            await call.NextAsync();
 
-        if (context != null)
-        {
-            var executionStrategy = context.Database.CreateExecutionStrategy();
-
-            return executionStrategy.ExecuteAsync(async () =>
-            {
-                using var transactionScope = new TransactionScope(TransactionScopeOption.Required, _transactionOptions, TransactionScopeAsyncFlowOption.Enabled);
-
-                await call.NextAsync();
-
-                transactionScope.Complete();
-            });
-        }
-        else
-            return call.NextAsync();
+            transactionScope.Complete();
+        });
     }
 }
