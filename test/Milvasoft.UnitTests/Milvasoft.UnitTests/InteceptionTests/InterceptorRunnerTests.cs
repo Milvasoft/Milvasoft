@@ -19,13 +19,14 @@ public class InterceptorRunnerTests
         // Arrange
         var services = GetServices();
         var sut = services.GetService<ISomeInterface>();
+        var logger = (TestLogger)services.GetService<IMilvaLogger>();
 
         // Act & Assert
         sut.Invoking(x =>
         {
             var result = x.Method();
 
-            var logs = TestLogger.Logs.Where(i => i.Value.TransactionId == result);
+            var logs = logger.Logs.Where(i => i.Value.TransactionId == result);
 
             logs.Should().HaveCount(2);
             logs.Should().AllSatisfy(i => i.Value.IsSuccess.Should().BeTrue());
@@ -40,14 +41,16 @@ public class InterceptorRunnerTests
         // Arrange
         var services = GetServices();
         var sut = services.GetService<ISomeInterface>();
+        var logger = (TestLogger)services.GetService<IMilvaLogger>();
 
         // Act & Assert
         sut.Invoking(x =>
         {
             _ = x.AnotherMethod();
 
-            TestLogger.Logs.Should().HaveCount(2);
-            var transactionIdEquality = TestLogger.Logs.First().Value.TransactionId == TestLogger.Logs.Last().Value.TransactionId;
+            // Logs belong to this test's logger instance (a static store was shared with the other tests of this class).
+            logger.Logs.Should().HaveCount(2);
+            var transactionIdEquality = logger.Logs.First().Value.TransactionId == logger.Logs.Last().Value.TransactionId;
             transactionIdEquality.Should().BeFalse();
 
         }).Should().NotThrow();
@@ -104,7 +107,7 @@ public class InterceptorRunnerTests
 
     public class TestLogger : IMilvaLogger
     {
-        public static Dictionary<int, TestLogEntity> Logs { get; set; } = [];
+        public Dictionary<int, TestLogEntity> Logs { get; } = [];
 
         public void Log(string logEntry)
         {
