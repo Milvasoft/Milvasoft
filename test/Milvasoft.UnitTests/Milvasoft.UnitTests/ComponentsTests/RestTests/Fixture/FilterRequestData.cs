@@ -290,39 +290,27 @@ internal class InvalidListSourceForBuildFilterExpressionMethodData : TheoryData<
                     new()
                     {
                         FilterBy = " "
-                    },
-                    new()
-                    {
-                        FilterBy = "NotExistsPropertyName"
-                    },
-                    new()
-                    {
-                        FilterBy = nameof(RestTestEntityFixture.Name),
-                        Type = FilterType.Between
-                    },
-                    new()
-                    {
-                        FilterBy = nameof(RestTestEntityFixture.Count),
-                        Type = FilterType.Contains
-                    },
-                    new()
-                    {
-                        FilterBy = nameof(RestTestEntityFixture.IsActive),
-                        Type = FilterType.GreaterThan
-                    },
-                    new()
-                    {
-                        FilterBy = nameof(RestTestEntityFixture.InsertDate),
-                        Type = FilterType.EndsWith
-                    },
-                    new()
-                    {
-                        FilterBy = nameof(RestTestEntityFixture.InsertDate),
-                        Type = FilterType.IsNullOrWhiteSpace
                     }
                 ]
             }
         );
+    }
+}
+
+/// <summary>
+/// Criteria that refer to unknown properties or use filter types the property type does not support. They must be rejected, not silently dropped.
+/// </summary>
+internal class UnsupportedCriteriaForBuildFilterExpressionMethodData : TheoryData<FilterCriteria>
+{
+    public UnsupportedCriteriaForBuildFilterExpressionMethodData()
+    {
+        Add(new FilterCriteria { FilterBy = "NotExistsPropertyName" });
+        Add(new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Name), Type = FilterType.Between });
+        Add(new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.Count), Type = FilterType.Contains });
+        Add(new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.IsActive), Type = FilterType.GreaterThan });
+        Add(new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.InsertDate), Type = FilterType.EndsWith });
+        Add(new FilterCriteria { FilterBy = nameof(RestTestEntityFixture.InsertDate), Type = FilterType.IsNullOrWhiteSpace });
+        Add(new FilterCriteria { FilterBy = $"{nameof(RestTestEntityFixture.Children)}.NotExists", Type = FilterType.EqualTo, Value = "x" });
     }
 }
 

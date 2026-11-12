@@ -214,7 +214,7 @@ public class AggregationCriteriaTests
         Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(query, false);
 
         // Assert
-        return act.Should().ThrowAsync<MilvaDeveloperException>();
+        return act.Should().ThrowAsync<MilvaUserFriendlyException>();
     }
 
     [Theory]
@@ -472,7 +472,7 @@ public class AggregationCriteriaTests
         Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, true);
 
         // Assert
-        await act.Should().ThrowAsync<MilvaDeveloperException>();
+        await act.Should().ThrowAsync<MilvaUserFriendlyException>();
     }
 
     [Theory]
@@ -556,7 +556,7 @@ public class AggregationCriteriaTests
         Func<Task<AggregationResult>> act = async () => await criteria.ApplyAggregationAsync(dbContextFixture.TestEntities, false);
 
         // Assert
-        await act.Should().ThrowAsync<MilvaDeveloperException>();
+        await act.Should().ThrowAsync<MilvaUserFriendlyException>();
     }
 
     [Theory]

@@ -11,9 +11,11 @@ public record CursorListRequest
     public string Cursor { get; set; }
 
     /// <summary>
-    /// Number of rows per page.
+    /// Number of rows per page. Values above <see cref="RequestQueryOptions.MaxRowCount"/> are reduced to it.
     /// </summary>
-    public int? RowCount { get; set; }
+    public int? RowCount { get => RequestQueryOptions.CapRowCount(_rowCount); set => _rowCount = value; }
+
+    private int? _rowCount;
 
     /// <summary>
     /// Filter criterias.

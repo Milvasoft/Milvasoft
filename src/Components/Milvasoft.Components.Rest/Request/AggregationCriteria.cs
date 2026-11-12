@@ -118,7 +118,7 @@ public class AggregationCriteria
 
         // Get the aggregation method that contains the desired type in its parameters
         MethodInfo aggregationMethod = relatedMethods.FirstOrDefault(method => IsMethodParametersContainsDesiredType(method.GetParameters().Select(i => i.ParameterType)))
-                                            ?? throw new MilvaDeveloperException("Aggregation by property type not supported with this aggregation method.");
+                                            ?? throw new MilvaUserFriendlyException($"Aggregation type '{Type}' is not supported for '{AggregateBy}'.", MilvaException.InvalidParameter);
 
         // If the aggregation method is not a generic method, return it
         if (!aggregationMethod.IsGenericMethod)
@@ -221,7 +221,10 @@ public class AggregationCriteria
         _runAsync = runAsync;
         _entityType = typeof(TEntity);
 
-        var prop = _entityType.ThrowIfPropertyNotExists(AggregateBy);
+        var prop = _entityType.GetPublicPropertyIgnoreCase(AggregateBy);
+
+        if (prop == null || !RequestPropertyPolicy.IsAllowed(prop, RequestPropertyUsage.Aggregate))
+            throw RequestPropertyPolicy.NotAllowed(AggregateBy, RequestPropertyUsage.Aggregate);
 
         _propType = prop.PropertyType.IsNonNullableValueType() ? typeof(Nullable<>).MakeGenericType(prop.PropertyType) : prop.PropertyType;
 

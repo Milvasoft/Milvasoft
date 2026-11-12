@@ -47,7 +47,7 @@ public class SortRequestTests
         Action act = () => sortRequest.BuildPropertySelectorExpression<RestTestEntityFixture>();
 
         // Assert
-        act.Should().Throw<MilvaDeveloperException>();
+        act.Should().Throw<MilvaUserFriendlyException>();
     }
 
     [Theory]
