@@ -46,7 +46,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
         ValidateRequestParameters(lookupRequest);
 
         var resultList = new List<object>(lookupRequest.Parameters.Count);
-        var assemblyTypes = _dataAccessConfiguration.DbContext.DynamicFetch.GetEntityAssembly().GetTypes();
+        var assemblyTypes = _dataAccessConfiguration.DbContext.DynamicFetch.GetEntityAssemblyTypes();
         var multiLanguageManager = _dbContext.ServiceProvider?.GetService<IMultiLanguageManager>();
 
         foreach (var parameter in lookupRequest.Parameters)

@@ -31,4 +31,25 @@ public class DynamicFetchConfiguration
     /// </summary>
     /// <returns></returns>
     public Assembly GetEntityAssembly() => _entityAssembly ??= Assembly.Load(EntityAssemblyName);
+
+    /// <summary>
+    /// Gets types of <see cref="GetEntityAssembly"/>. Types are loaded once and cached, instead of scanning the assembly on every request.
+    /// </summary>
+    /// <returns></returns>
+    public Type[] GetEntityAssemblyTypes()
+    {
+        var assembly = GetEntityAssembly();
+
+        var cache = _entityAssemblyTypes;
+
+        if (cache?.Item1 != assembly)
+        {
+            cache = Tuple.Create(assembly, assembly.GetTypes());
+            _entityAssemblyTypes = cache;
+        }
+
+        return cache.Item2;
+    }
+
+    private static Tuple<Assembly, Type[]> _entityAssemblyTypes;
 }
