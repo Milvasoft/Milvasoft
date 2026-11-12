@@ -431,9 +431,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         if (entities.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             _dbSet.Update(entity);
         }
 
@@ -474,9 +475,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         if (entities.IsNullOrEmpty() || propertySelectors.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             var entry = _dbSet.Entry(entity);
 
             foreach (var includeProperty in propertySelectors)
@@ -511,9 +513,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
         if (entities.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             _dbSet.Remove(entity);
         }
 
@@ -529,11 +532,12 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     public virtual int ReplaceOldsWithNews(IEnumerable<TEntity> oldEntities, IEnumerable<TEntity> newEntities)
     {
         if (!oldEntities.IsNullOrEmpty())
+        {
+            DetachFromLocalIfExists(oldEntities);
+
             foreach (var entity in oldEntities)
-            {
-                DetachFromLocalIfExists(entity);
                 _dbSet.Remove(entity);
-            }
+        }
 
         if (!newEntities.IsNullOrEmpty())
             _dbSet.AddRange(newEntities);
@@ -566,13 +570,10 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <returns></returns>
     public virtual int RemoveAll()
     {
-        var entities = _dbSet.AsEnumerable();
+        // Tracking query returns the already tracked instances, so nothing needs to be detached.
+        var entities = _dbSet.AsTracking().ToList();
 
-        foreach (var entity in entities)
-        {
-            DetachFromLocalIfExists(entity);
-            _dbSet.Remove(entity);
-        }
+        _dbSet.RemoveRange(entities);
 
         return InternalSaveChanges();
     }

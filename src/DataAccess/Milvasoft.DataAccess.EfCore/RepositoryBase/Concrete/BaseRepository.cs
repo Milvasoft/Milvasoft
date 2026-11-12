@@ -207,7 +207,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                                   bool tracking = false,
                                                                   bool splitQuery = false,
                                                                   CancellationToken cancellationToken = default)
-        => _dbSet.AsTracking(GetQueryTrackingBehavior(tracking))
+        => QueryWithOptions(tracking, splitQuery)
                        .Where(CreateConditionExpression(condition) ?? (entity => true))
                        .Select(UpdateProjectionExpression(projection))
                        .SingleOrDefaultAsync(conditionAfterProjection ?? (entity => true), cancellationToken);
@@ -293,7 +293,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                .IncludeMultiple(includes)
                                .FirstOrDefaultAsync(cancellationToken);
 
-        var query = _dbSet.AsTracking(GetQueryTrackingBehavior(tracking)).Where(mainCondition);
+        var query = QueryWithOptions(tracking, splitQuery).Where(mainCondition);
 
         return IncludeNavigationProperties(query).FirstOrDefaultAsync(cancellationToken);
     }
@@ -641,9 +641,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         if (entities.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             _dbSet.Update(entity);
         }
 
@@ -690,9 +691,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         if (entities.IsNullOrEmpty() || propertySelectors.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             var entry = _dbSet.Entry(entity);
 
             foreach (var includeProperty in propertySelectors)
@@ -729,9 +731,10 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
         if (entities.IsNullOrEmpty())
             return 0;
 
+        DetachFromLocalIfExists(entities);
+
         foreach (var entity in entities)
         {
-            DetachFromLocalIfExists(entity);
             _dbSet.Remove(entity);
         }
 
@@ -750,11 +753,12 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
                                                             CancellationToken cancellationToken = default)
     {
         if (!oldEntities.IsNullOrEmpty())
+        {
+            DetachFromLocalIfExists(oldEntities);
+
             foreach (var entity in oldEntities)
-            {
-                DetachFromLocalIfExists(entity);
                 _dbSet.Remove(entity);
-            }
+        }
 
         if (!newEntities.IsNullOrEmpty())
             _dbSet.AddRange(newEntities);
@@ -788,17 +792,14 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Removes all entities from database.
     /// </summary>
     /// <returns></returns>
-    public virtual Task<int> RemoveAllAsync(CancellationToken cancellationToken = default)
+    public virtual async Task<int> RemoveAllAsync(CancellationToken cancellationToken = default)
     {
-        var entities = _dbSet.AsEnumerable();
+        // Tracking query returns the already tracked instances, so nothing needs to be detached.
+        var entities = await _dbSet.AsTracking().ToListAsync(cancellationToken);
 
-        foreach (var entity in entities)
-        {
-            DetachFromLocalIfExists(entity);
-            _dbSet.Remove(entity);
-        }
+        _dbSet.RemoveRange(entities);
 
-        return InternalSaveChangesAsync(cancellationToken);
+        return await InternalSaveChangesAsync(cancellationToken);
     }
 
     #region Bulk Async
@@ -923,15 +924,42 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// Detach entity if found in local store.
     /// </summary>
     /// <param name="entity"></param>
-    protected virtual void DetachFromLocalIfExists(TEntity entity)
+    protected virtual void DetachFromLocalIfExists(TEntity entity) => DetachFromLocalIfExists([entity]);
+
+    /// <summary>
+    /// Detaches tracked entities which have the same keys with <paramref name="entities"/>.
+    /// Changes are detected once and tracked entries are found by key, instead of scanning every tracked entry for each entity.
+    /// </summary>
+    /// <param name="entities"></param>
+    protected virtual void DetachFromLocalIfExists(IEnumerable<TEntity> entities)
     {
-        var keyValue = entity.GetUniqueIdentifier();
+        var changeTracker = _dbContext.ChangeTracker;
+        var autoDetectChanges = changeTracker.AutoDetectChangesEnabled;
 
-        var entry = _dbContext.ChangeTracker
-                              .Entries<TEntity>()
-                              .FirstOrDefault(e => e.Entity.GetUniqueIdentifier().Equals(keyValue));
+        if (autoDetectChanges)
+            changeTracker.DetectChanges();
 
-        entry?.State = EntityState.Detached;
+        changeTracker.AutoDetectChangesEnabled = false;
+
+        try
+        {
+            var hasSingleKey = _dbSet.EntityType.FindPrimaryKey()?.Properties.Count == 1;
+
+            foreach (var entity in entities)
+            {
+                var keyValue = entity.GetUniqueIdentifier();
+
+                var entry = hasSingleKey
+                    ? _dbSet.Local.FindEntryUntyped([keyValue])
+                    : changeTracker.Entries<TEntity>().FirstOrDefault(e => e.Entity.GetUniqueIdentifier().Equals(keyValue));
+
+                entry?.State = EntityState.Detached;
+            }
+        }
+        finally
+        {
+            changeTracker.AutoDetectChangesEnabled = autoDetectChanges;
+        }
     }
 
     /// <summary>
@@ -944,9 +972,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     {
         Expression<Func<TEntity, bool>> idCondition = i => i.Id.Equals(key);
 
-        var mainCondition = idCondition.Append(CreateConditionExpression(conditionExpression) ?? (entity => true), ExpressionType.AndAlso);
-
-        return mainCondition.Append(conditionExpression, ExpressionType.AndAlso);
+        // CreateConditionExpression already contains conditionExpression.
+        return idCondition.Append(CreateConditionExpression(conditionExpression), ExpressionType.AndAlso);
     }
 
     /// <summary>
