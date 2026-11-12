@@ -12,10 +12,10 @@ namespace Milvasoft.MultiTenancy.EfCore.RepositoryBase.Concrete;
 /// </summary>
 public abstract partial class MultiTenantBaseRepository<TEntity, TContext> where TEntity : class, IMilvaEntity where TContext : DbContext, IMilvaBulkDbContextBase, IMultiTenantDbContext
 {
-    #region Bulk 
+    #region Bulk
 
     /// <summary>
-    /// Bulk add operation. 
+    /// Bulk add operation.
     /// </summary>
     /// <param name="entities"></param>
     /// <param name="bulkConfig"></param>
@@ -34,6 +34,36 @@ public abstract partial class MultiTenantBaseRepository<TEntity, TContext> where
 
             _dbContext.BulkInsert(entities, bulkConfig);
         }
+    }
+
+    /// <summary>
+    /// Bulk update operation. Rows are matched by primary key and the current tenant id.
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="bulkConfig"></param>
+    public override void BulkUpdate(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
+    {
+        if (entities.IsNullOrEmpty())
+            return;
+
+        EnsureBelongsToCurrentTenant(entities);
+
+        base.BulkUpdate(entities, MatchByTenant(bulkConfig));
+    }
+
+    /// <summary>
+    /// Bulk delete operation. Rows are matched by primary key and the current tenant id.
+    /// </summary>
+    /// <param name="entities"></param>
+    /// <param name="bulkConfig"></param>
+    public override void BulkDelete(List<TEntity> entities, Action<BulkConfig> bulkConfig = null)
+    {
+        if (entities.IsNullOrEmpty())
+            return;
+
+        EnsureBelongsToCurrentTenant(entities);
+
+        base.BulkDelete(entities, MatchByTenant(bulkConfig));
     }
 
     #endregion

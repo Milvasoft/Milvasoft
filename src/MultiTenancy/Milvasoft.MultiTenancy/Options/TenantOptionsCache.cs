@@ -25,9 +25,14 @@ public class TenantOptionsCache<TOptions, TTenant, TKey>(ITenantAccessor<TTenant
     private readonly TenantOptionsCacheDictionary<TOptions, TKey> _tenantSpecificOptionsCache = new();
 
     /// <summary>
+    /// Key of the current tenant's cache; requests without a tenant share the default key.
+    /// </summary>
+    private TKey CurrentTenantKey => _tenantAccessor.Tenant?.Id ?? default;
+
+    /// <summary>
     /// Clears tenant options cache.
     /// </summary>
-    public void Clear() => _tenantSpecificOptionsCache.Get(_tenantAccessor.Tenant.Id).Clear();
+    public void Clear() => _tenantSpecificOptionsCache.Get(CurrentTenantKey).Clear();
 
     /// <summary>
     /// Adds a key/value pair to the <see cref="ConcurrentDictionary{TKey, TValue}"/>      
@@ -37,7 +42,7 @@ public class TenantOptionsCache<TOptions, TTenant, TKey>(ITenantAccessor<TTenant
     /// <param name="name"></param>
     /// <param name="createOptions"></param>
     /// <returns></returns>
-    public TOptions GetOrAdd(string name, Func<TOptions> createOptions) => _tenantSpecificOptionsCache.Get(_tenantAccessor.Tenant.Id).GetOrAdd(name, createOptions);
+    public TOptions GetOrAdd(string name, Func<TOptions> createOptions) => _tenantSpecificOptionsCache.Get(CurrentTenantKey).GetOrAdd(name, createOptions);
 
     /// <summary>
     /// Tries to adds a new option to the cache, will return false if the name already exists.
@@ -45,12 +50,12 @@ public class TenantOptionsCache<TOptions, TTenant, TKey>(ITenantAccessor<TTenant
     /// <param name="name"></param>
     /// <param name="options"></param>
     /// <returns></returns>
-    public bool TryAdd(string name, TOptions options) => _tenantSpecificOptionsCache.Get(_tenantAccessor.Tenant.Id).TryAdd(name, options);
+    public bool TryAdd(string name, TOptions options) => _tenantSpecificOptionsCache.Get(CurrentTenantKey).TryAdd(name, options);
 
     /// <summary>
     /// Try to remove an options instance.
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public bool TryRemove(string name) => _tenantSpecificOptionsCache.Get(_tenantAccessor.Tenant.Id).TryRemove(name);
+    public bool TryRemove(string name) => _tenantSpecificOptionsCache.Get(CurrentTenantKey).TryRemove(name);
 }
