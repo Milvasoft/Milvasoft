@@ -17,18 +17,17 @@ public sealed class BearerSecuritySchemaTransformer(IAuthenticationSchemeProvide
 
         if (authenticationSchemes.Any(authScheme => authScheme.Name == "Bearer"))
         {
-            var requirements = new Dictionary<string, IOpenApiSecurityScheme>
-            {
-                ["Bearer"] = new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "Bearer",
-                    In = ParameterLocation.Header,
-                    BearerFormat = "Json Web Token",
-                },
-            };
             document.Components ??= new OpenApiComponents();
-            document.Components.SecuritySchemes = requirements;
+            document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+
+            // Add (or replace) only the bearer scheme; schemes added by other transformers are kept.
+            document.Components.SecuritySchemes["Bearer"] = new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "Bearer",
+                In = ParameterLocation.Header,
+                BearerFormat = "Json Web Token",
+            };
         }
     }
 }

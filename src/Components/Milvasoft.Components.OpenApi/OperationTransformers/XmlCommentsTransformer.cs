@@ -85,9 +85,22 @@ public class XmlDocumentationService
 
     private XElement GetMemberElement(MemberInfo memberInfo)
     {
-        var memberName = GetMemberName(memberInfo);
+        if (memberInfo == null)
+            return null;
 
-        return _memberElements.TryGetValue(memberName, out var element) ? element : null;
+        string memberName;
+
+        try
+        {
+            memberName = GetMemberName(memberInfo);
+        }
+        catch (Exception)
+        {
+            // Documentation is optional; an unsupported member must never fail document generation.
+            return null;
+        }
+
+        return memberName != null && _memberElements.TryGetValue(memberName, out var element) ? element : null;
     }
 
     /// <summary>
@@ -98,7 +111,10 @@ public class XmlDocumentationService
     /// <exception cref="ArgumentException"></exception>
     private static string GetMemberName(MemberInfo member)
     {
-        string memberName = (member is Type type) ? type.FullName : (member.DeclaringType.FullName + "." + member.Name);
+        string memberName = (member is Type type) ? GetTypeDefinitionName(type) : (GetTypeDefinitionName(member.DeclaringType) + "." + member.Name);
+
+        if (memberName == null)
+            return null;
 
         var prefixCode = member.MemberType switch
         {
@@ -117,17 +133,62 @@ public class XmlDocumentationService
         // Retrieve method parameters for methods and constructors
         if (member is MethodInfo methodInfo)
         {
+            if (methodInfo.IsGenericMethod)
+                memberName += $"``{methodInfo.GetGenericArguments().Length}";
+
             var parameters = methodInfo.GetParameters();
 
             if (parameters.Length > 0)
             {
-                var paramStrings = parameters.Select(p => p.ParameterType.FullName).ToArray();
+                var paramStrings = parameters.Select(p => GetParameterTypeName(p.ParameterType)).ToArray();
 
                 memberName += "(" + string.Join(",", paramStrings) + ")";
             }
         }
 
         return $"{prefixCode}:{memberName}";
+    }
+
+    /// <summary>
+    /// Name of a type (definition) in documentation ids: nested types are separated with '.', generic arity is kept (Foo`1).
+    /// </summary>
+    private static string GetTypeDefinitionName(Type type)
+    {
+        if (type == null)
+            return null;
+
+        if (type.IsGenericType && !type.IsGenericTypeDefinition)
+            type = type.GetGenericTypeDefinition();
+
+        return type.FullName?.Replace('+', '.');
+    }
+
+    /// <summary>
+    /// Name of a parameter type in documentation ids (generic arguments in braces, generic parameters as `N / ``N).
+    /// </summary>
+    private static string GetParameterTypeName(Type type)
+    {
+        if (type.IsByRef)
+            return GetParameterTypeName(type.GetElementType()) + "@";
+
+        if (type.IsArray)
+            return GetParameterTypeName(type.GetElementType()) + "[]";
+
+        if (type.IsGenericParameter)
+            return (type.DeclaringMethod != null ? "``" : "`") + type.GenericParameterPosition;
+
+        if (type.IsGenericType)
+        {
+            var definitionName = GetTypeDefinitionName(type);
+            var arityIndex = definitionName.LastIndexOf('`');
+
+            if (arityIndex > 0)
+                definitionName = definitionName[..arityIndex];
+
+            return $"{definitionName}{{{string.Join(",", type.GetGenericArguments().Select(GetParameterTypeName))}}}";
+        }
+
+        return type.FullName?.Replace('+', '.') ?? type.Name;
     }
 }
 
@@ -139,24 +200,34 @@ public class XmlDocumentationService
 /// parameter details, as well as schema and property descriptions, using XML comments from the codebase. It is
 /// typically used to improve the quality and accuracy of generated API documentation in tools such as Swagger or
 /// NSwag.</remarks>
-/// <param name="xmlService">The service used to retrieve XML documentation comments for reflected members.</param>
-public class XmlCommentsTransformer(XmlDocumentationService xmlService) : IOpenApiOperationTransformer, IOpenApiSchemaTransformer
+/// <remarks>
+/// When no <see cref="XmlDocumentationService"/> is registered (see <see cref="OpenApiExtensions.AddXmlComponentsForOpenApi"/>) the transformer does nothing.
+/// ASP.NET Core 10 can also apply XML comments with its built-in source generator when the API project references Microsoft.AspNetCore.OpenApi
+/// and generates documentation files; prefer that and drop this transformer when it covers your assemblies.
+/// </remarks>
+/// <param name="serviceProvider">Service provider to get the optional <see cref="XmlDocumentationService"/> from.</param>
+public class XmlCommentsTransformer(IServiceProvider serviceProvider) : IOpenApiOperationTransformer, IOpenApiSchemaTransformer
 {
+    private readonly XmlDocumentationService _xmlService = serviceProvider?.GetService(typeof(XmlDocumentationService)) as XmlDocumentationService;
+
     /// <inheritdoc/>
     public Task TransformAsync(OpenApiOperation operation, OpenApiOperationTransformerContext context, CancellationToken cancellationToken)
     {
+        if (_xmlService == null)
+            return Task.CompletedTask;
+
         if (context.Description.ActionDescriptor is ControllerActionDescriptor actionDescriptor)
         {
             var methodInfo = actionDescriptor.MethodInfo;
 
             // Summary
-            var summary = xmlService.GetSummary(methodInfo);
+            var summary = _xmlService.GetSummary(methodInfo);
 
             if (!string.IsNullOrWhiteSpace(summary))
                 operation.Summary = summary;
 
             // Remarks -> Description
-            var remarks = xmlService.GetRemarks(methodInfo);
+            var remarks = _xmlService.GetRemarks(methodInfo);
 
             if (!string.IsNullOrWhiteSpace(remarks))
                 operation.Description = remarks;
@@ -165,7 +236,7 @@ public class XmlCommentsTransformer(XmlDocumentationService xmlService) : IOpenA
             if (operation.Parameters != null)
                 foreach (var param in operation.Parameters)
                 {
-                    var desc = xmlService.GetParamDescription(methodInfo, param.Name);
+                    var desc = _xmlService.GetParamDescription(methodInfo, param.Name);
 
                     if (!string.IsNullOrWhiteSpace(desc))
                         param.Description = desc;
@@ -178,19 +249,22 @@ public class XmlCommentsTransformer(XmlDocumentationService xmlService) : IOpenA
     /// <inheritdoc/>
     public Task TransformAsync(OpenApiSchema schema, OpenApiSchemaTransformerContext context, CancellationToken cancellationToken)
     {
+        if (_xmlService == null)
+            return Task.CompletedTask;
+
         if (context.JsonPropertyInfo != null)
         {
             if (context.JsonPropertyInfo.AttributeProvider is PropertyInfo propertyInfo)
             {
-                var summary = xmlService.GetSummary(propertyInfo);
+                var summary = _xmlService.GetSummary(propertyInfo);
 
                 if (!string.IsNullOrWhiteSpace(summary))
                     schema.Description = summary;
             }
         }
-        else if (context.JsonTypeInfo.Type != null)
+        else if (context.JsonTypeInfo?.Type != null)
         {
-            var summary = xmlService.GetSummary(context.JsonTypeInfo.Type);
+            var summary = _xmlService.GetSummary(context.JsonTypeInfo.Type);
 
             if (!string.IsNullOrWhiteSpace(summary))
                 schema.Description = summary;
