@@ -763,6 +763,55 @@ public class TenantIdTests
         deserializedObject.Should().BeEquivalentTo(expectedObject);
     }
 
+    [Fact]
+    public void Equals_WithEmptyTenantIds_ShouldReturnTrue()
+    {
+        // Arrange
+        var empty = TenantId.Empty;
+        var defaultTenantId = default(TenantId);
+
+        // Act & Assert
+        empty.Equals(defaultTenantId).Should().BeTrue();
+        (empty == defaultTenantId).Should().BeTrue();
+        empty.Equals((object)defaultTenantId).Should().BeTrue();
+        empty.GetHashCode().Should().Be(defaultTenantId.GetHashCode());
+    }
+
+    [Fact]
+    public void IncrementAndDecrementOperators_ShouldKeepEqualityAndHashConsistent()
+    {
+        // Arrange
+        var tenantId = new TenantId("milvasoft", 1);
+        var expected = new TenantId("milvasoft", 2);
+
+        // Act
+        var incremented = tenantId;
+        incremented++;
+        var decremented = incremented;
+        decremented--;
+
+        // Assert
+        (incremented == expected).Should().BeTrue();
+        incremented.Equals(expected).Should().BeTrue();
+        incremented.GetHashCode().Should().Be(expected.GetHashCode());
+        incremented.ToString("H").Should().Be(expected.ToString("H"));
+        (decremented == tenantId).Should().BeTrue();
+        (incremented == tenantId).Should().BeFalse();
+    }
+
+    [Theory]
+    [InlineData("milva_0")]
+    [InlineData("milva_-1")]
+    [InlineData("milva_99999999999")]
+    public void TryParse_WithNonPositiveOrOverflowingBranchNo_ShouldReturnFalse(string tenantIdString)
+    {
+        // Act
+        var result = TenantId.TryParse(tenantIdString);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
     private class TenantIdSerializationTestModel
     {
         public int Id { get; set; }
