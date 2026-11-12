@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Milvasoft.Core.Utils.Constants;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
 
 namespace Milvasoft.Storage.Models;
 
@@ -10,8 +10,16 @@ namespace Milvasoft.Storage.Models;
 /// </summary>
 public record FileUploadRequest
 {
-    private readonly IFormFile _formFile = null;
     private const string _base64Flag = ";base64,";
+    private const string _dataUriPrefix = "data:";
+
+
+    /// <summary>
+    /// Decoded content cache. Kept outside of the record's fields so record equality is not affected.
+    /// </summary>
+    private static readonly ConditionalWeakTable<FileUploadRequest, DecodedFile> _decodedFiles = new();
+
+    private sealed record DecodedFile(string Source, byte[] Bytes, string ContentType);
 
     /// <summary>
     /// Id of file.
@@ -52,13 +60,14 @@ public record FileUploadRequest
     /// File of the content.
     /// </summary>
     [JsonIgnore]
-    public byte[] File { get => !string.IsNullOrWhiteSpace(FileAsBase64) ? DataUriToPlainText() : []; }
+    public byte[] File { get => Decode()?.Bytes ?? []; }
 
     /// <summary>
     /// File of the content.
     /// </summary>
+    /// <remarks>Returns null if <see cref="FileAsBase64"/> is empty or is not a valid base64 data URI.</remarks>
     [JsonIgnore]
-    public IFormFile MediaAsFormFile { get => !string.IsNullOrWhiteSpace(FileAsBase64) ? _formFile ?? ConvertToFormFile() : null; }
+    public IFormFile MediaAsFormFile { get => Decode() is { } decoded ? ConvertToFormFile(decoded) : null; }
 
     /// <summary>
     /// Validates the file extension against allowed extensions for the specified file type.
@@ -69,8 +78,15 @@ public record FileUploadRequest
     /// <returns></returns>
     public FileOperationResult ValidateExtension(FileType fileType, List<string> allowedFileExtensions = null, long maxFileSize = 1024 * 1024)
     {
-        if (MediaAsFormFile != null)
-            return MediaAsFormFile.ValidateFileStrict(maxFileSize, allowedFileExtensions, fileType);
+        if (!string.IsNullOrWhiteSpace(FileAsBase64))
+        {
+            var formFile = MediaAsFormFile;
+
+            if (formFile == null)
+                return FileOperationResult.Failure(LocalizerKeys.UnsupportedMediaType);
+
+            return formFile.ValidateFileStrict(maxFileSize, allowedFileExtensions, fileType);
+        }
 
         allowedFileExtensions ??= StorageHelper.GetDefaultExtensions(fileType);
         allowedFileExtensions = allowedFileExtensions.ConvertAll(e => e.ToLowerInvariant());
@@ -82,59 +98,70 @@ public record FileUploadRequest
     }
 
     /// <summary>
-    /// Converts data uri base64 string to plain text base64 string.
+    /// Decodes <see cref="FileAsBase64"/> once and caches the result until the property changes.
     /// </summary>
-    /// <returns></returns>
-    private byte[] DataUriToPlainText()
+    /// <returns>Decoded file, or null if the value is empty or not a valid base64 data URI.</returns>
+    private DecodedFile Decode()
     {
-        if (string.IsNullOrEmpty(FileAsBase64))
-            return [];
+        var source = FileAsBase64;
 
-        var splitted = FileAsBase64.Split(_base64Flag);
+        if (string.IsNullOrWhiteSpace(source))
+            return null;
 
-        if (splitted.Length != 2)
-            return [];
+        if (_decodedFiles.TryGetValue(this, out var cached) && ReferenceEquals(cached.Source, source))
+            return cached.Bytes != null ? cached : null;
 
-        var base64String = splitted[1];
+        var decoded = DecodeDataUri(source);
 
-        var array = Convert.FromBase64String(base64String);
+        _decodedFiles.AddOrUpdate(this, decoded);
 
-        return array;
+        return decoded.Bytes != null ? decoded : null;
+    }
+
+    private static DecodedFile DecodeDataUri(string source)
+    {
+        var flagIndex = source.IndexOf(_base64Flag, StringComparison.Ordinal);
+
+        if (flagIndex < 0)
+            return new DecodedFile(source, null, null);
+
+        var header = source[..flagIndex];
+
+        if (header.StartsWith(_dataUriPrefix, StringComparison.OrdinalIgnoreCase))
+            header = header[_dataUriPrefix.Length..];
+
+        // Content type is the media type before any ";param=value" part.
+        var parameterIndex = header.IndexOf(';');
+
+        var contentType = (parameterIndex >= 0 ? header[..parameterIndex] : header).Trim();
+
+        try
+        {
+            return new DecodedFile(source, Convert.FromBase64String(source[(flagIndex + _base64Flag.Length)..]), contentType);
+        }
+        catch (FormatException)
+        {
+            return new DecodedFile(source, null, null);
+        }
     }
 
     /// <summary>
-    /// Converts data URI formatted base64 string to IFormFile.
+    /// Converts the decoded data URI to <see cref="IFormFile"/>.
     /// </summary>
-    /// <returns></returns>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1859:Use concrete types when possible for improved performance", Justification = "<Pending>")]
-    private IFormFile ConvertToFormFile()
+    private FormFile ConvertToFormFile(DecodedFile decoded)
     {
-        if (string.IsNullOrEmpty(FileAsBase64))
-            return default;
-
-        var base64String = FileAsBase64?.Split(_base64Flag)[1];
-
-        var contentType = GetExtension(FileAsBase64);
-
-        var splittedContentType = contentType?.Split('/');
+        var splittedContentType = decoded.ContentType?.Split('/');
 
         var fileType = splittedContentType?[0];
 
-        var fileExtension = splittedContentType?[1];
+        var fileExtension = splittedContentType?.Length > 1 ? splittedContentType[1] : string.Empty;
 
-        var array = Convert.FromBase64String(base64String);
-
-        var memoryStream = new MemoryStream(array)
-        {
-            Position = 0
-        };
+        var memoryStream = new MemoryStream(decoded.Bytes, writable: false);
 
         return new FormFile(memoryStream, 0, memoryStream.Length, fileType, $"{FileName ?? "file"}.{fileExtension}")
         {
             Headers = new HeaderDictionary(),
-            ContentType = contentType
+            ContentType = decoded.ContentType
         };
     }
-
-    private static string GetExtension(string input) => new Regex(@"[^:]\w+\/[\w-+\d.]+(?=;|,)", RegexOptions.None, TimeSpan.FromSeconds(60)).Match(input).Captures?.FirstOrDefault()?.Value;
 }
