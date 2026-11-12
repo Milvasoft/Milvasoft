@@ -916,6 +916,23 @@ public class MultiLanguageManagerTests
         result.Should().BeEmpty();
     }
 
+    [Fact]
+    public void GetTranslationPropertyValue_WithValidObjectButTranslationsContainOnlyNulls_ShouldReturnEmptyString()
+    {
+        // Arrange
+        HasTranslationEntityFixture obj = new()
+        {
+            Translations = [null, null]
+        };
+        var manager = new MilvaMultiLanguageManager();
+
+        // Act
+        var result = manager.GetTranslation(obj, nameof(TranslationEntityFixture.Name));
+
+        // Assert
+        result.Should().BeEmpty();
+    }
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]

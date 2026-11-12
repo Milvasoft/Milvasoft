@@ -63,14 +63,10 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
     /// <param name="languages">The list of languages to update.</param>
     public static void UpdateLanguagesList(List<ILanguage> languages)
     {
+        // Replace the bag instead of clearing the live instance, so concurrent readers never observe an empty list.
         lock (_statObjLocker)
         {
-            Languages.Clear();
-
-            if (languages != null)
-            {
-                Languages = [.. languages.OrderBy(l => l.Id)];
-            }
+            Languages = languages != null ? [.. languages.OrderBy(l => l.Id)] : [];
         }
     }
 
@@ -337,7 +333,7 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
 
         requestedLang ??= translations.FirstOrDefault();
 
-        return requestedLang?.GetType().GetPublicPropertyIgnoreCase(propertyName)?.GetValue(requestedLang, null)?.ToString();
+        return GetPropertyValue(requestedLang, propertyName)?.ToString();
 
         TTranslationEntity GetLanguageValue(int languageId) => translations.FirstOrDefault(t => (int)(GetPropertyValue(t, MultiLanguageEntityPropertyNames.LanguageId) ?? 0) == languageId);
     }
@@ -370,12 +366,12 @@ public abstract class MultiLanguageManager : IMultiLanguageManager
             return string.Empty;
 
         // For null item remove. OfTypes remove null items automatically.
-        var translationList = translations.OfType<object>();
+        var translationList = translations.OfType<object>().ToList();
 
-        if (translations.IsNullOrEmpty())
+        if (translationList.Count == 0)
             return string.Empty;
 
-        var translationEntityType = translationList.First().GetType();
+        var translationEntityType = translationList[0].GetType();
 
         // Cast to IEnumerable<translationEntityType>
         var castMethod = _enumerableCastCache.GetOrAdd(translationEntityType, t => _enumerableCastMethod.MakeGenericMethod(t));
