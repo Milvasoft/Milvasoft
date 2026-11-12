@@ -190,7 +190,7 @@ public partial class ConversionHelperTests
         Action act = () => valueKindObject.Deserialize(typeof(int));
 
         // Assert
-        act.Should().Throw<TargetInvocationException>();
+        act.Should().Throw<JsonException>();
     }
 
     [Fact]
