@@ -1,4 +1,4 @@
-﻿using System.Net.Mail;
+using System.Net.Mail;
 using System.Net.Mime;
 
 namespace Milvasoft.Notification.Mail.Smtp;
@@ -17,10 +17,12 @@ public interface IMilvaMailSender
     /// <param name="subject"></param>
     /// <param name="body"></param>
     /// <param name="isBodyHtml"></param>
+    /// <param name="cancellationToken"></param>
     Task MilvaSendMailAsync(string to,
                             string subject,
                             string body,
-                            bool isBodyHtml = false);
+                            bool isBodyHtml = false,
+                            CancellationToken cancellationToken = default);
 
     #region Send With Attachment
 
@@ -33,12 +35,14 @@ public interface IMilvaMailSender
     /// <param name="filePath"></param>
     /// <param name="contentType"></param>
     /// <param name="isBodyHtml"></param>
+    /// <param name="cancellationToken"></param>
     Task MilvaSendMailAsync(string to,
                             string subject,
                             string body,
                             string filePath,
                             ContentType contentType,
-                            bool isBodyHtml = false);
+                            bool isBodyHtml = false,
+                            CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Provides send mail with attachment.
@@ -48,11 +52,13 @@ public interface IMilvaMailSender
     /// <param name="body"></param>
     /// <param name="attachments"></param>
     /// <param name="isBodyHtml"></param>
+    /// <param name="cancellationToken"></param>
     Task MilvaSendMailAsync(string to,
                             string subject,
                             string body,
                             List<Attachment> attachments,
-                            bool isBodyHtml = false);
+                            bool isBodyHtml = false,
+                            CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Provides send mail with attachment.
@@ -63,12 +69,14 @@ public interface IMilvaMailSender
     /// <param name="base64String"> Data uri formatted base64 string.</param>
     /// <param name="attachmentName"></param>
     /// <param name="isBodyHtml"></param>
+    /// <param name="cancellationToken"></param>
     Task MilvaSendMailAsync(string to,
                             string subject,
                             string body,
                             string base64String,
                             string attachmentName,
-                            bool isBodyHtml = false);
+                            bool isBodyHtml = false,
+                            CancellationToken cancellationToken = default);
 
     #endregion
 
