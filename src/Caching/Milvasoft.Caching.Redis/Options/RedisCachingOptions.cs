@@ -21,16 +21,21 @@ public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
     public ServiceLifetime AccessorLifetime { get; set; } = ServiceLifetime.Singleton;
 
     /// <summary>
-    /// Redis connection string.
+    /// Redis connection string in StackExchange.Redis format. e.g. "localhost:6379,password=secret,ssl=false".
     /// </summary>
+    /// <remarks>
+    /// Setting this property replaces <see cref="ConfigurationOptions"/> with the options parsed from the connection string
+    /// (all endpoints and settings in it are honored). Configure further settings on <see cref="ConfigurationOptions"/> after setting this property.
+    /// </remarks>
     public string ConnectionString
     {
         get => _connectionString;
         set
         {
             _connectionString = value;
-            ConfigurationOptions ??= new();
-            ConfigurationOptions.EndPoints.Add(_connectionString);
+
+            if (!string.IsNullOrWhiteSpace(value))
+                ConfigurationOptions = ConfigurationOptions.Parse(value);
         }
     }
 
@@ -38,11 +43,6 @@ public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
     /// Redis configurations.
     /// </summary>
     public ConfigurationOptions ConfigurationOptions { get; set; } = new();
-
-    /// <summary>
-    /// Uses DateTime.UtcNow if its true.
-    /// </summary>
-    public bool UseUtcForExpirationDates { get; set; }
 
     /// <summary>
     /// Initializes new instance of <see cref="RedisCachingOptions"/>.
@@ -53,11 +53,11 @@ public class RedisCachingOptions : ICacheOptions<RedisCachingOptions>
 
     /// <summary>
     /// Initializes new instance of <see cref="RedisCachingOptions"/>.
-    /// <paramref name="connectionString"/> will be added in <see cref="ConfigurationOptions.EndPoints"/>.
+    /// <see cref="ConfigurationOptions"/> is parsed from <paramref name="connectionString"/>.
     /// </summary>
     /// <param name="connectionString"></param>
     public RedisCachingOptions(string connectionString)
     {
-        _connectionString = connectionString;
+        ConnectionString = connectionString;
     }
 }

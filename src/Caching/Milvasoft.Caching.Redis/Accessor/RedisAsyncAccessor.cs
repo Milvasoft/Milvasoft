@@ -4,39 +4,11 @@ using StackExchange.Redis;
 namespace Milvasoft.Caching.Redis;
 
 /// <summary>
-/// Provides redis cache operations. Redis connection multiplexer must be singleton.
+/// Provides redis cache operations.
 /// </summary>
 public partial class RedisAccessor
 {
-    /// <summary>
-    /// Connects redis database if there is no connection. Otherwise this method does nothing.
-    /// </summary>
-    /// <returns> Returns connected status. </returns>
-    public async ValueTask<bool> ConnectAsync()
-    {
-        if (!IsConnected())
-            _client = await ConnectionMultiplexer.ConnectAsync(_options);
-        return IsConnected();
-    }
-
-    /// <summary>
-    /// Close all connections.
-    /// If connection exists, closes the connection.
-    /// If connection not exists, disposes client object.
-    /// Do not use this method when application is running. Redis connection multiplexer must be singleton.
-    /// </summary>
-    /// <returns></returns>
-    public async ValueTask DisconnectAsync()
-    {
-        if (_client != null && IsConnected())
-        {
-            await _client.CloseAsync();
-        }
-        else if (_client != null && !IsConnected())
-        {
-            _client.Dispose();
-        }
-    }
+    private const string _cannotReachRedisMessage = "Cannot reach redis server.";
 
     /// <summary>
     /// Gets <paramref name="key"/>'s value.
@@ -62,74 +34,38 @@ public partial class RedisAccessor
     /// <param name="key"></param>
     /// <returns></returns>
     public async Task<string> GetAsync(string key)
-        => await _database.StringGetAsync(key);
+        => await _database.StringGetAsync(key).ConfigureAwait(false);
 
     /// <summary>
-    /// Gets <paramref name="keys"/> values.
+    /// Gets <paramref name="keys"/> values. Missing keys and values that cannot be deserialized to <typeparamref name="T"/> are skipped,
+    /// so the result is not positionally aligned with <paramref name="keys"/>.
     /// </summary>
     /// <returns></returns>
     public async Task<IEnumerable<T>> GetAsync<T>(IEnumerable<string> keys)
     {
-        if (keys.IsNullOrEmpty())
+        var redisKeys = ToRedisKeys(keys);
+
+        if (redisKeys.Length == 0)
             return [];
 
-        var filteredKeys = keys.Where(k => !string.IsNullOrWhiteSpace(k)).Distinct().ToArray();
+        var values = await _database.StringGetAsync(redisKeys).ConfigureAwait(false);
 
-        if (filteredKeys.Length == 0)
-            return [];
-
-        var redisKeys = Array.ConvertAll(filteredKeys, item => (RedisKey)item);
-
-        var values = await _database.StringGetAsync(redisKeys);
-
-        if (values.Length == 0 || Array.TrueForAll(values, v => !v.HasValue))
-            return [];
-
-        var redisValues = new List<T>(values.Length);
-
-        foreach (var value in values)
-        {
-            if (!value.HasValue)
-                continue;
-
-            try
-            {
-                var deserialized = JsonConvert.DeserializeObject<T>(value!);
-
-                if (deserialized is not null)
-                    redisValues.Add(deserialized);
-            }
-            catch
-            {
-                // Handle deserialization error.
-            }
-        }
-
-        return redisValues;
+        return DeserializeValues<T>(values);
     }
 
     /// <summary>
-    /// Gets <paramref name="keys"/> values.
+    /// Gets <paramref name="keys"/> values. Null or whitespace keys are ignored and duplicate keys are queried once.
+    /// Returns an empty array when there is nothing to query.
     /// </summary>
     /// <returns></returns>
     public async Task<RedisValue[]> GetAsync(IEnumerable<string> keys)
     {
-        if (keys.IsNullOrEmpty())
-            return null;
+        var redisKeys = ToRedisKeys(keys);
 
-        var filteredKeys = keys.Where(k => !string.IsNullOrWhiteSpace(k)).Distinct().ToArray();
-
-        if (filteredKeys.Length == 0)
+        if (redisKeys.Length == 0)
             return [];
 
-        var redisKeys = Array.ConvertAll(filteredKeys, item => (RedisKey)item);
-
-        var values = await _database.StringGetAsync(redisKeys);
-
-        if (values.IsNullOrEmpty())
-            return null;
-
-        return values;
+        return await _database.StringGetAsync(redisKeys).ConfigureAwait(false) ?? [];
     }
 
     /// <summary>
@@ -146,14 +82,15 @@ public partial class RedisAccessor
     /// </summary>
     /// <param name="key"></param>
     /// <param name="value"></param>
-    /// <param name="expiration"></param>
+    /// <param name="expiration">Relative time to live. It is a duration and is never time zone converted. If null, the key does not expire.</param>
     /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="expiration"/> is zero or negative.</exception>
     public Task<bool> SetAsync(string key, object value, TimeSpan? expiration)
     {
-        if (expiration.HasValue)
-            return _database.StringSetAsync(key, ToJson(value), new Expiration(_useUtcForDateTimes ? expiration.Value.ConvertToUtc() : expiration.Value));
-        else
+        if (!expiration.HasValue)
             return _database.StringSetAsync(key, ToJson(value));
+
+        return _database.StringSetAsync(key, ToJson(value), new Expiration(EnsurePositive(expiration.Value)));
     }
 
     /// <summary>
@@ -189,79 +126,52 @@ public partial class RedisAccessor
     /// Sets timeout on <paramref name="key"/>.
     /// </summary>
     /// <param name="key"></param>
-    /// <param name="expiration"></param>
+    /// <param name="expiration">Relative time to live. It is a duration and is never time zone converted.</param>
     /// <returns></returns>
     public Task<bool> KeyExpireAsync(string key, TimeSpan expiration)
-        => _database.KeyExpireAsync(key, _useUtcForDateTimes ? expiration.ConvertToUtc() : expiration);
+        => _database.KeyExpireAsync(key, expiration);
 
     /// <summary>
     /// Sets timeout on <paramref name="key"/>.
     /// </summary>
     /// <param name="key"></param>
-    /// <param name="expiration"></param>
+    /// <param name="expiration">
+    /// Absolute expiration time. Its <see cref="DateTime.Kind"/> must be <see cref="DateTimeKind.Utc"/> or <see cref="DateTimeKind.Local"/>.
+    /// If null, the existing timeout is removed and the key becomes persistent.
+    /// </param>
     /// <returns></returns>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="expiration"/> kind is <see cref="DateTimeKind.Unspecified"/>.</exception>
     public Task<bool> KeyExpireAsync(string key, DateTime? expiration)
-        => _database.KeyExpireAsync(key, expiration);
+        => _database.KeyExpireAsync(key, EnsureKindSpecified(expiration));
 
     /// <summary>
-    /// Flushs default database.
+    /// Removes all keys of the accessor's database on every connected primary server. Same as <see cref="PurgeAsync"/>.
+    /// The multiplexer must be configured with <see cref="ConfigurationOptions.AllowAdmin"/> at startup.
     /// </summary>
     /// <returns></returns>
-    public async Task FlushDatabaseAsync()
-    {
-        _options.AllowAdmin = true;
-
-        await DisconnectAsync();
-
-        var client = await ConnectionMultiplexer.ConnectAsync(_options);
-
-        try
-        {
-            if (client?.IsConnected ?? false)
-                await client.GetServer(client.GetEndPoints().FirstOrDefault()).FlushDatabaseAsync();
-
-            _options.AllowAdmin = false;
-        }
-        catch (Exception)
-        {
-            throw new MilvaUserFriendlyException("RedisError");
-        }
-    }
+    public Task FlushDatabaseAsync() => PurgeAsync();
 
     /// <summary>
-    /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
-    /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key.
-    /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
+    /// It performs the requested redis action.
+    /// If redis is not reachable (not connected, connection or timeout error), it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key.
+    /// Error logging if <paramref name="milvaLogger"/> object is not null.
     /// </summary>
     /// <param name="action"></param>
     /// <param name="userFriendlyMessageLocalizerKey"></param>
     /// <param name="milvaLogger"></param>
     /// <returns></returns>
-    public async Task PerformRedisActionAsync(Func<Task> action, string userFriendlyMessageLocalizerKey, IMilvaLogger milvaLogger = null)
-    {
-        try
+    public Task PerformRedisActionAsync(Func<Task> action, string userFriendlyMessageLocalizerKey, IMilvaLogger milvaLogger = null)
+        => PerformRedisActionAsync(async () =>
         {
-            await CheckClientAndConnectIfNotAsync();
+            await action().ConfigureAwait(false);
 
-            if (IsConnected())
-            {
-                await action();
-            }
-            else
-                throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey);
-        }
-        catch (MilvaUserFriendlyException)
-        {
-            milvaLogger?.Error("Cannot reach redis server.");
-
-            throw;
-        }
-    }
+            return true;
+        }, userFriendlyMessageLocalizerKey, milvaLogger);
 
     /// <summary>
-    /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
-    /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key.
-    /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
+    /// It performs the requested redis action.
+    /// If redis is not reachable (not connected, connection or timeout error), it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key.
+    /// Error logging if <paramref name="milvaLogger"/> object is not null.
     /// </summary>
     /// <param name="action"></param>
     /// <param name="userFriendlyMessageLocalizerKey"></param>
@@ -269,55 +179,44 @@ public partial class RedisAccessor
     /// <returns></returns>
     public async Task<T> PerformRedisActionAsync<T>(Func<Task<T>> action, string userFriendlyMessageLocalizerKey, IMilvaLogger milvaLogger = null)
     {
+        if (!IsConnected())
+        {
+            milvaLogger?.Error(_cannotReachRedisMessage);
+
+            throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey);
+        }
+
         try
         {
-            await CheckClientAndConnectIfNotAsync();
-
-            if (IsConnected())
-            {
-                return await action();
-            }
-            else
-                throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey);
+            return await action().ConfigureAwait(false);
         }
-        catch (MilvaUserFriendlyException)
+        catch (Exception ex) when (ex is RedisConnectionException or RedisTimeoutException)
         {
-            milvaLogger?.Error("Cannot reach redis server.");
+            milvaLogger?.Error(ex, _cannotReachRedisMessage);
 
-            throw;
+            throw new MilvaUserFriendlyException(userFriendlyMessageLocalizerKey, ex);
         }
     }
 
     /// <summary>
-    /// Checks redis connection and if connection close try to open connection.
+    /// Kept for backward compatibility. It does nothing.
     /// </summary>
+    /// <remarks>
+    /// The shared <see cref="IConnectionMultiplexer"/> is never closed or replaced by the accessor.
+    /// StackExchange.Redis reconnects automatically in the background; use <see cref="IsConnected"/> to check the current state.
+    /// </remarks>
     /// <returns></returns>
-    public async ValueTask CheckClientAndConnectIfNotAsync()
-    {
-        if (_client == null)
-        {
-            _client = await ConnectionMultiplexer.ConnectAsync(_options);
-            _database = _client.GetDatabase();
-        }
-        else if (!_client.IsConnected)
-        {
-            await _client.CloseAsync();
-            _client = await ConnectionMultiplexer.ConnectAsync(_options);
-            _database = _client.GetDatabase();
-        }
-    }
+    public ValueTask CheckClientAndConnectIfNotAsync() => ValueTask.CompletedTask;
 
     /// <summary>
-    /// Removes current database.
+    /// Removes all keys of the accessor's database on every connected primary server.
+    /// The multiplexer must be configured with <see cref="ConfigurationOptions.AllowAdmin"/> at startup.
     /// </summary>
     /// <returns></returns>
     public async Task PurgeAsync()
     {
-        _options.AllowAdmin = true;
-
-        await _client.GetServer(_options.EndPoints[0]).FlushDatabaseAsync(_database.Database);
-
-        _options.AllowAdmin = false;
+        foreach (var server in GetConnectedPrimaryServers())
+            await server.FlushDatabaseAsync(_database.Database).ConfigureAwait(false);
     }
 
     /// <summary>
