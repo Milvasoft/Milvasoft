@@ -51,7 +51,7 @@ public struct UpdateProperty<T> : IUpdateProperty, IEquatable<UpdateProperty<T>>
     public readonly object GetValue() => _value;
 
     /// <summary>
-    /// Combines Tenancy Name and BranchNo into a hash code.
+    /// Combines <see cref="Value"/> and <see cref="IsUpdated"/> into a hash code.
     /// </summary>
     /// <returns></returns>
     public override readonly int GetHashCode() => HashCode.Combine(_value, _isUpdated);
@@ -60,29 +60,15 @@ public struct UpdateProperty<T> : IUpdateProperty, IEquatable<UpdateProperty<T>>
     /// Compares two <see cref="UpdateProperty{T}"/> objects for equality.
     /// </summary>
     /// <param name="obj"></param>
-    /// <returns> If both hash are equals returns true, othewise false. </returns>
-    public override readonly bool Equals(object obj)
-    {
-        UpdateProperty<T> otherUpdateProp;
-
-        // Check that other is a UpdateProperty<T> first
-        if (obj is not UpdateProperty<T> prop)
-            return false;
-        else
-            otherUpdateProp = prop;
-
-        if (otherUpdateProp != this)
-            return false;
-
-        return true;
-    }
+    /// <returns> True if <paramref name="obj"/> is an <see cref="UpdateProperty{T}"/> with equal <see cref="Value"/> and <see cref="IsUpdated"/>. </returns>
+    public override readonly bool Equals(object obj) => obj is UpdateProperty<T> other && Equals(other);
 
     /// <summary>
     /// Compares two <see cref="UpdateProperty{T}"/> objects for equality.
     /// </summary>
     /// <param name="other"></param>
-    /// <returns> If both hash are equals returns true, othewise false. </returns>
-    public readonly bool Equals(UpdateProperty<T> other) => _value?.Equals(other._value) ?? false;
+    /// <returns> True if <see cref="Value"/> and <see cref="IsUpdated"/> are equal. </returns>
+    public readonly bool Equals(UpdateProperty<T> other) => _isUpdated == other._isUpdated && EqualityComparer<T>.Default.Equals(_value, other._value);
 
     /// <summary>
     /// Implicitly converts an <see cref="UpdateProperty{T}"/> to its underlying value.
@@ -101,14 +87,8 @@ public struct UpdateProperty<T> : IUpdateProperty, IEquatable<UpdateProperty<T>>
     /// </summary>
     /// <param name="a">The first <see cref="UpdateProperty{T}"/> to compare.</param>
     /// <param name="b">The second <see cref="UpdateProperty{T}"/> to compare.</param>
-    /// <returns>True if the two <see cref="UpdateProperty{T}"/> objects are equal; otherwise, false.</returns>
-    public static bool operator ==(UpdateProperty<T> a, UpdateProperty<T> b)
-    {
-        if (a._value == null && b._value == null)
-            return true;
-
-        return a._value?.Equals(b._value) ?? false;
-    }
+    /// <returns>True if <see cref="Value"/> and <see cref="IsUpdated"/> are equal; otherwise, false.</returns>
+    public static bool operator ==(UpdateProperty<T> a, UpdateProperty<T> b) => a.Equals(b);
 
     /// <summary>
     /// Compares two <see cref="UpdateProperty{T}"/> objects for equality.
