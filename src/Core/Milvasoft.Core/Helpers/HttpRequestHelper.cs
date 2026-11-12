@@ -1,25 +1,24 @@
-﻿using System.Text.Json;
-using System.Text.RegularExpressions;
+﻿using System.Net;
+using System.Text.Json;
 
 namespace Milvasoft.Core;
 
 /// <summary>
 /// Helper class for request processes.
 /// </summary>
-public static partial class HttpRequestHelper
+public static class HttpRequestHelper
 {
-    private static readonly string _applicationJson = $"{MimeTypeNames.ApplicationJson}-";
-
     /// <summary>
     /// Creates an HTTP request message with the specified HTTP method, URL, content, encoding, media type, version, and headers.
     /// </summary>
     /// <param name="httpMethod">The HTTP method of the request.</param>
     /// <param name="url">The URL of the request.</param>
-    /// <param name="content">The content of the request.</param>
+    /// <param name="content">The content of the request. It is serialized to JSON. If null, the request has no body.</param>
     /// <param name="encoding">The encoding to be used for the request content. Default is <see cref="Encoding.UTF8"/></param>
-    /// <param name="mediaType">The media type of the request content. Default is 'json'</param>
-    /// <param name="version">The version of the HTTP protocol to be used. Default is '1.0'</param>
+    /// <param name="mediaType">The media type of the request content. Default is <see cref="MimeTypeNames.ApplicationJson"/>.</param>
+    /// <param name="version">The version of the HTTP protocol to be used. Default is HTTP/1.1.</param>
     /// <param name="headers">The headers to be added to the request.</param>
+    /// <param name="jsonSerializerOptions">The options used to serialize <paramref name="content"/>. Default is <see cref="JsonSerializerOptions.Default"/>.</param>
     /// <returns>The created HttpRequestMessage object.</returns>
     public static HttpRequestMessage BuildRequestMessage(this HttpMethod httpMethod,
                                                          string url,
@@ -27,21 +26,18 @@ public static partial class HttpRequestHelper
                                                          List<KeyValuePair<string, string>> headers = null,
                                                          Encoding encoding = null,
                                                          string mediaType = null,
-                                                         Version version = null)
+                                                         Version version = null,
+                                                         JsonSerializerOptions jsonSerializerOptions = null)
     {
-        encoding ??= Encoding.UTF8;
-        mediaType ??= MimeTypeNames.Json;
-        version ??= new Version(1, 0);
-
-        var contentString = content != null ? JsonSerializer.Serialize(content) : string.Empty;
-
-        var requestMessage = new HttpRequestMessage
+        var requestMessage = new HttpRequestMessage(httpMethod, new Uri(url))
         {
-            Content = new StringContent(contentString, encoding, _applicationJson + httpMethod.ToString() + $"+{mediaType}"),
-            RequestUri = new Uri(url),
-            Method = httpMethod,
-            Version = version
+            Version = version ?? HttpVersion.Version11
         };
+
+        if (content != null)
+            requestMessage.Content = new StringContent(JsonSerializer.Serialize(content, jsonSerializerOptions ?? JsonSerializerOptions.Default),
+                                                       encoding ?? Encoding.UTF8,
+                                                       mediaType ?? MimeTypeNames.ApplicationJson);
 
         if (!headers.IsNullOrEmpty())
             for (var i = 0; i < headers.Count; i++)
@@ -85,15 +81,7 @@ public static partial class HttpRequestHelper
         hash = string.IsNullOrEmpty(hash) ? hash : string.Concat("#", hash);
         var requestUrl = $"{protocol}://{hostName}:{port}/{pathName}{query}{hash}";
 
-        // Create new Regex.
-        var regex = UriRegex();
-
-        // Call Match on Regex instance.
-        var match = regex.Match(requestUrl);
-
-        // Test for Success.
-        if (!match.Success)
-            throw new MilvaDeveloperException(LocalizerKeys.InvalidUrlErrorMessage);
+        ThrowIfNotValidUrl(requestUrl);
 
         return requestUrl;
     }
@@ -129,19 +117,17 @@ public static partial class HttpRequestHelper
         hash = string.IsNullOrEmpty(hash) ? hash : string.Concat("#", hash);
         var requestUrl = $"{address}/{pathName}{query}{hash}";
 
-        // Create new Regex.
-        var regex = UriRegex();
-
-        // Call Match on Regex instance.
-        var match = regex.Match(requestUrl);
-
-        // Test for Success.
-        if (!match.Success)
-            throw new MilvaDeveloperException(LocalizerKeys.InvalidUrlErrorMessage);
+        ThrowIfNotValidUrl(requestUrl);
 
         return requestUrl;
     }
 
-    [GeneratedRegex(@"^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\=\,\'\/\\\+&%\$#_]*)?$")]
-    private static partial Regex UriRegex();
+    /// <summary>
+    /// Validates that <paramref name="url"/> is an absolute http, https, ftp or ftps url with a host.
+    /// </summary>
+    private static void ThrowIfNotValidUrl(string url)
+    {
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) || uri.Scheme is not ("http" or "https" or "ftp" or "ftps") || string.IsNullOrEmpty(uri.Host))
+            throw new MilvaDeveloperException(LocalizerKeys.InvalidUrlErrorMessage);
+    }
 }
