@@ -327,6 +327,63 @@ public class SoftDeletionAndAuditingTests(CustomWebApplicationFactory factory) :
 
     #endregion
 
+    #region Transactions
+
+    [Fact]
+    public async Task ApplyTransactionAsync_WithFailingFunction_ShouldRollbackRunRollbackFunctionAndRethrowOriginalException()
+    {
+        // Arrange
+        var ct = TestContext.Current.CancellationToken;
+        await using var context = CreateContext();
+        var repository = new Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository<SoftDeletionTestDbContext>(context);
+        var asyncRollbackCalled = false;
+        var syncRollbackCalled = false;
+
+        // Act
+        var asyncAct = () => repository.ApplyTransactionAsync(async () =>
+        {
+            context.Authors.Add(new SdAuthor { Name = "rolled back" });
+            await context.SaveChangesAsync(ct);
+            throw new InvalidOperationException("original");
+        }, () => { asyncRollbackCalled = true; return Task.CompletedTask; }, cancellationToken: ct);
+
+        var syncAct = () => repository.ApplyTransactionAsync<int>(() => throw new ArgumentException("original"), () => syncRollbackCalled = true, cancellationToken: ct);
+
+        // Assert
+        await asyncAct.Should().ThrowAsync<InvalidOperationException>().WithMessage("original");
+        await syncAct.Should().ThrowAsync<ArgumentException>().WithMessage("original");
+        asyncRollbackCalled.Should().BeTrue();
+        syncRollbackCalled.Should().BeTrue();
+        context.Database.CurrentTransaction.Should().BeNull();
+
+        await using var assertContext = CreateContext();
+        (await assertContext.Authors.CountAsync(ct)).Should().Be(0);
+    }
+
+    [Fact]
+    public async Task ApplyTransactionAsync_WithSucceedingFunction_ShouldCommitAndReturnResult()
+    {
+        // Arrange
+        var ct = TestContext.Current.CancellationToken;
+        await using var context = CreateContext();
+        var repository = new Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository<SoftDeletionTestDbContext>(context);
+
+        // Act
+        var result = await repository.ApplyTransactionAsync(async () =>
+        {
+            context.Authors.Add(new SdAuthor { Name = "committed" });
+            return await context.SaveChangesAsync(ct);
+        }, cancellationToken: ct);
+
+        // Assert
+        result.Should().Be(1);
+        context.Database.CurrentTransaction.Should().BeNull();
+        await using var assertContext = CreateContext();
+        (await assertContext.Authors.SingleAsync(ct)).Name.Should().Be("committed");
+    }
+
+    #endregion
+
     #region Helpers
 
     public enum SaveMethod
