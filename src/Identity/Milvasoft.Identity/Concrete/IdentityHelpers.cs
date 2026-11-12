@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Milvasoft.Identity.Concrete.Options;
 using System.Security.Cryptography;
 
@@ -94,26 +94,30 @@ public static class IdentityHelpers
         if (characterPool.Count == 0)
             throw new ArgumentException("At least one character type must be enabled.");
 
-        StringBuilder password = new();
-        Random random = new();
+        // Use a cryptographically secure generator: generated passwords are credentials.
+        var password = new List<char>(Math.Max(randomGenerationOptions.Length, 4));
 
         // Ensure at least one of each required type
         if (randomGenerationOptions.Digit)
-            password.Append(digits[random.Next(digits.Length)]);
+            password.Add(digits[RandomNumberGenerator.GetInt32(digits.Length)]);
 
         if (randomGenerationOptions.Lowercase)
-            password.Append(lowers[random.Next(lowers.Length)]);
+            password.Add(lowers[RandomNumberGenerator.GetInt32(lowers.Length)]);
 
         if (randomGenerationOptions.Uppercase)
-            password.Append(uppers[random.Next(uppers.Length)]);
+            password.Add(uppers[RandomNumberGenerator.GetInt32(uppers.Length)]);
 
         if (randomGenerationOptions.NonAlphanumeric)
-            password.Append(symbols[random.Next(symbols.Length)]);
+            password.Add(symbols[RandomNumberGenerator.GetInt32(symbols.Length)]);
 
-        while (password.Length < randomGenerationOptions.Length)
-            password.Append(characterPool[random.Next(characterPool.Count)]);
+        while (password.Count < randomGenerationOptions.Length)
+            password.Add(characterPool[RandomNumberGenerator.GetInt32(characterPool.Count)]);
 
-        return new string([.. password.ToString().OrderBy(_ => random.Next())]);
+        var result = password.ToArray();
+
+        RandomNumberGenerator.Shuffle(result.AsSpan());
+
+        return new string(result);
     }
 
     /// <summary>
@@ -122,12 +126,6 @@ public static class IdentityHelpers
     /// <returns></returns>
     public static string CreateRefreshToken()
     {
-        byte[] number = new byte[32];
-
-        using var random = RandomNumberGenerator.Create();
-
-        random.GetBytes(number);
-
-        return Convert.ToBase64String(number);
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
     }
 }
