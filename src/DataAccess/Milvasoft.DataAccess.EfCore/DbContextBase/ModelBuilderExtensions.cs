@@ -586,7 +586,8 @@ public static class ModelBuilderExtensions
             if (tenantIdProperty == null)
                 continue;
 
-            var properties = entityType.GetProperties().Where(p => p.PropertyInfo.GetCustomAttribute<WithTenantIdIndexAttribute>() != null).ToArray();
+            // Shadow properties have no PropertyInfo.
+            var properties = entityType.GetProperties().Where(p => p.PropertyInfo?.GetCustomAttribute<WithTenantIdIndexAttribute>() != null).ToArray();
 
             var mutableEntity = modelBuilder.Entity(entityType.ClrType);
 
@@ -646,28 +647,41 @@ public static class ModelBuilderExtensions
 
         foreach (var entityType in entitiesWithTenantId)
         {
-            var tenantIdProperty = entityType.ClrType.GetProperties().First(p => p.Name == EntityPropertyNames.TenantId);
-
-            if (tenantIdProperty == null)
+            if (entityType.FindProperty(EntityPropertyNames.TenantId) is null)
                 continue;
 
             var mutableEntity = modelBuilder.Entity(entityType.ClrType);
 
-            foreach (var index in entityType.GetIndexes().ToList())
+            foreach (var index in entityType.GetDeclaredIndexes().ToList())
             {
-                var props = index.Properties;
-
                 // If the index already contains TenantId, skip it.
-                if (props.Any(p => p.Name == EntityPropertyNames.TenantId))
+                if (index.Properties.Any(p => p.Name == EntityPropertyNames.TenantId))
                     continue;
+
+                // Property names also work for shadow properties.
+                var propertyNames = index.Properties.Select(p => p.Name).Append(EntityPropertyNames.TenantId).ToArray();
+
+                var isUnique = index.IsUnique;
+                var isDescending = index.IsDescending;
+                var filter = index.GetFilter();
+                var databaseName = index.GetDatabaseName();
+                var hasExplicitName = index.Name is not null;
 
                 entityType.RemoveIndex(index);
 
-                var newProps = props.Select(p => p.PropertyInfo).ToList();
+                // Keep the configuration of the original index (uniqueness, filter, sort order and name).
+                var newIndex = hasExplicitName ? mutableEntity.HasIndex(propertyNames, index.Name) : mutableEntity.HasIndex(propertyNames);
 
-                newProps.Add(tenantIdProperty);
+                newIndex.IsUnique(isUnique);
 
-                mutableEntity.HasIndex([.. newProps.Select(p => p.Name)]);
+                if (isDescending is not null)
+                    newIndex.IsDescending([.. isDescending, false]);
+
+                if (filter is not null)
+                    newIndex.HasFilter(filter);
+
+                if (hasExplicitName)
+                    newIndex.HasDatabaseName(databaseName);
             }
         }
 
