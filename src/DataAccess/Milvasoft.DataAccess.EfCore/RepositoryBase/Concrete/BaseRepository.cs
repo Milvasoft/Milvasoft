@@ -300,8 +300,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <summary>
     /// Returns one entity by entity Id from database asynchronously for delete with navigation properties.
     /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
-    /// Be careful when using projection while soft delete is active.
-    /// If projection is applied to a soft deleteable entity, properties not included in the project are written to the database with their default values.
+    /// Soft deletion only writes the soft deletion properties, so projected entities can be deleted safely; but only the loaded (and tracked) cascade dependents are soft deleted together with the entity.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="includes"></param>
@@ -366,8 +365,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <summary>
     /// Returns entities from database asynchronously for delete with navigation properties.
     /// If you don't send <paramref name="includes"/>, <see cref="CascadeOnDeleteAttribute"/> marked properties will include.
-    /// Be careful when using projection while soft delete is active.
-    /// If projection is applied to a soft deleteable entity, properties not included in the project are written to the database with their default values.
+    /// Soft deletion only writes the soft deletion properties, so projected entities can be deleted safely; but only the loaded (and tracked) cascade dependents are soft deleted together with the entity.
     /// </summary>
     /// <param name="includes"></param>
     /// <param name="condition"></param>
