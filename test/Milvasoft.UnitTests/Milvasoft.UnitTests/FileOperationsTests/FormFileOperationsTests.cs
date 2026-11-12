@@ -11,6 +11,8 @@ namespace Milvasoft.UnitTests.FileOperationsTests;
 [Trait("FileOperations Unit Tests", "Milvasoft.FileOperations project unit tests.")]
 public class FormFileOperationsTests : IDisposable
 {
+    private static CancellationToken Ct => TestContext.Current.CancellationToken;
+
     private readonly string _basePath;
 
     public class Product
@@ -72,13 +74,13 @@ public class FormFileOperationsTests : IDisposable
     public async Task GetFileFromPathAsync_ShouldReturnReadableFile()
     {
         var path = Path.Combine(_basePath, "a.txt");
-        await File.WriteAllTextAsync(path, "content");
+        await File.WriteAllTextAsync(path, "content", Ct);
 
         var file = await FormFileOperations.GetFileFromPathAsync(path, FileType.Document);
 
         using var reader = new StreamReader(file.OpenReadStream());
 
-        (await reader.ReadToEndAsync()).Should().Be("content");
+        (await reader.ReadToEndAsync(Ct)).Should().Be("content");
     }
 
     [Fact]
@@ -98,7 +100,7 @@ public class FormFileOperationsTests : IDisposable
         var itemFolder = Path.Combine(_basePath, "Product", entity.Id.ToString());
 
         Directory.CreateDirectory(itemFolder);
-        await File.WriteAllTextAsync(Path.Combine(itemFolder, $"{entity.Id}.png"), "existing");
+        await File.WriteAllTextAsync(Path.Combine(itemFolder, $"{entity.Id}.png"), "existing", Ct);
 
         var paths = await new List<IFormFile> { CreateFormFile("a", "a.png"), CreateFormFile("b", "b.pdf") }
             .SaveFilesToPathAsync(entity, _basePath, t => t.Name, nameof(Product.Id));
@@ -119,7 +121,7 @@ public class FormFileOperationsTests : IDisposable
         var act = () => failing.SaveFileToPathAsync(entity, _basePath, t => t.Name, nameof(Product.Id));
 
         await act.Should().ThrowAsync<IOException>();
-        (await File.ReadAllTextAsync(first)).Should().Be("old");
+        (await File.ReadAllTextAsync(first, Ct)).Should().Be("old");
     }
 
     private sealed class FailingStream : MemoryStream

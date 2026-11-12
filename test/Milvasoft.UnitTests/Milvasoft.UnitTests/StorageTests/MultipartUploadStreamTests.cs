@@ -10,6 +10,8 @@ namespace Milvasoft.UnitTests.StorageTests;
 [Trait("Storage Unit Tests", "Milvasoft.Storage project unit tests.")]
 public class MultipartUploadStreamTests
 {
+    private static CancellationToken Ct => TestContext.Current.CancellationToken;
+
     private const int _partLength = 1024;
 
     private sealed class RecordingUploadStream(int maxConcurrentUploads = 2, Func<int, Task> onUploadPart = null)
@@ -83,8 +85,8 @@ public class MultipartUploadStreamTests
         var content = CreateContent(100);
         await using var stream = new RecordingUploadStream();
 
-        await new MemoryStream(content).CopyToAsync(stream);
-        await stream.CompleteAsync();
+        await new MemoryStream(content).CopyToAsync(stream, Ct);
+        await stream.CompleteAsync(Ct);
 
         stream.SingleContent.Should().Equal(content);
         stream.Initiated.Should().BeFalse();
@@ -96,7 +98,7 @@ public class MultipartUploadStreamTests
     {
         await using var stream = new RecordingUploadStream();
 
-        await stream.CompleteAsync();
+        await stream.CompleteAsync(Ct);
 
         stream.SingleContent.Should().BeEmpty();
         stream.Initiated.Should().BeFalse();
@@ -108,8 +110,8 @@ public class MultipartUploadStreamTests
         var content = CreateContent(_partLength * 5 + 10);
         await using var stream = new RecordingUploadStream();
 
-        await new MemoryStream(content).CopyToAsync(stream, 333);
-        await stream.CompleteAsync();
+        await new MemoryStream(content).CopyToAsync(stream, 333, Ct);
+        await stream.CompleteAsync(Ct);
 
         stream.Completed.Should().BeTrue();
         stream.Aborted.Should().BeFalse();
@@ -128,8 +130,8 @@ public class MultipartUploadStreamTests
         var content = CreateContent(_partLength * 20);
         await using var stream = new RecordingUploadStream(maxConcurrentUploads: 2);
 
-        await new MemoryStream(content).CopyToAsync(stream, _partLength);
-        await stream.CompleteAsync();
+        await new MemoryStream(content).CopyToAsync(stream, _partLength, Ct);
+        await stream.CompleteAsync(Ct);
 
         stream.MaxObservedConcurrency.Should().BeLessThanOrEqualTo(2);
     }
@@ -143,7 +145,7 @@ public class MultipartUploadStreamTests
     {
         var stream = new RecordingUploadStream();
 
-        await stream.WriteAsync(CreateContent(_partLength * 3));
+        await stream.WriteAsync(CreateContent(_partLength * 3), Ct);
         await stream.DisposeAsync();
 
         stream.Completed.Should().BeFalse();
@@ -157,8 +159,8 @@ public class MultipartUploadStreamTests
 
         var act = async () =>
         {
-            await stream.WriteAsync(CreateContent(_partLength * 4));
-            await stream.CompleteAsync();
+            await stream.WriteAsync(CreateContent(_partLength * 4), Ct);
+            await stream.CompleteAsync(Ct);
         };
 
         await act.Should().ThrowAsync<IOException>().WithMessage("boom");
@@ -190,7 +192,7 @@ public class MultipartUploadStreamTests
 
         var stream = new S3UploadStream(s3.Object, "bucket", "key", "image/png");
 
-        await stream.WriteAsync(new byte[S3UploadStream.MinPartLength + 1]);
+        await stream.WriteAsync(new byte[S3UploadStream.MinPartLength + 1], Ct);
         await stream.DisposeAsync();
 
         s3.Verify(c => c.AbortMultipartUploadAsync(It.Is<AbortMultipartUploadRequest>(r => r.UploadId == "upload-1"), It.IsAny<CancellationToken>()), Times.Once);
@@ -220,8 +222,8 @@ public class MultipartUploadStreamTests
 
         await using (var stream = new S3UploadStream(s3.Object, "bucket", "key", "image/png"))
         {
-            await stream.WriteAsync(new byte[S3UploadStream.MinPartLength * 2 + 100]);
-            await stream.CompleteAsync();
+            await stream.WriteAsync(new byte[S3UploadStream.MinPartLength * 2 + 100], Ct);
+            await stream.CompleteAsync(Ct);
         }
 
         partSizes.Should().HaveCount(3);

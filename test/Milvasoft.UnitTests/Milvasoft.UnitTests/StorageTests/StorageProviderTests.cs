@@ -16,6 +16,8 @@ namespace Milvasoft.UnitTests.StorageTests;
 [Trait("Storage Unit Tests", "Milvasoft.Storage project unit tests.")]
 public class StorageProviderTests : IDisposable
 {
+    private static CancellationToken Ct => TestContext.Current.CancellationToken;
+
     private readonly string _root;
     private readonly string _basePath;
 
@@ -66,11 +68,11 @@ public class StorageProviderTests : IDisposable
 
         var provider = CreateLocalProvider();
 
-        (await provider.DownloadAsync(path)).IsSuccess.Should().BeFalse();
-        (await provider.DeleteAsync(path)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
-        (await provider.UploadAsync(CreateFormFile("x"), path)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
+        (await provider.DownloadAsync(path, Ct)).IsSuccess.Should().BeFalse();
+        (await provider.DeleteAsync(path, Ct)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
+        (await provider.UploadAsync(CreateFormFile("x"), path, Ct)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
 
-        File.ReadAllText(Path.Combine(_root, "secret.txt")).Should().Be("secret");
+        (await File.ReadAllTextAsync(Path.Combine(_root, "secret.txt"), Ct)).Should().Be("secret");
     }
 
     [Fact]
@@ -79,9 +81,9 @@ public class StorageProviderTests : IDisposable
         var provider = CreateLocalProvider();
         var outside = Path.Combine(_root, "secret.txt");
 
-        (await provider.DownloadAsync(outside)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
-        (await provider.DeleteAsync(outside)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
-        (await provider.CopyAsync(outside, "copy.txt", default)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
+        (await provider.DownloadAsync(outside, Ct)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
+        (await provider.DeleteAsync(outside, Ct)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
+        (await provider.CopyAsync(outside, "copy.txt", Ct)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
 
         File.Exists(outside).Should().BeTrue();
     }
@@ -91,12 +93,12 @@ public class StorageProviderTests : IDisposable
     {
         var sibling = _basePath + "-other";
         Directory.CreateDirectory(sibling);
-        File.WriteAllText(Path.Combine(sibling, "a.txt"), "a");
+        await File.WriteAllTextAsync(Path.Combine(sibling, "a.txt"), "a", Ct);
 
         var provider = CreateLocalProvider();
 
-        (await provider.DownloadAsync(Path.Combine("..", "files-other", "a.txt"))).Message.Should().Be(LocalFileProvider.InvalidFilePath);
-        (await provider.DownloadAsync(Path.Combine(sibling, "a.txt"))).Message.Should().Be(LocalFileProvider.InvalidFilePath);
+        (await provider.DownloadAsync(Path.Combine("..", "files-other", "a.txt"), Ct)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
+        (await provider.DownloadAsync(Path.Combine(sibling, "a.txt"), Ct)).Message.Should().Be(LocalFileProvider.InvalidFilePath);
     }
 
     [Fact]
@@ -104,20 +106,20 @@ public class StorageProviderTests : IDisposable
     {
         var provider = CreateLocalProvider();
 
-        var upload = await provider.UploadAsync(CreateFormFile("hello"), "sub/dir/a.txt");
+        var upload = await provider.UploadAsync(CreateFormFile("hello"), "sub/dir/a.txt", Ct);
 
         upload.IsSuccess.Should().BeTrue();
 
-        var download = await provider.DownloadAsync(upload.FullPath);
+        var download = await provider.DownloadAsync(upload.FullPath, Ct);
 
         download.IsSuccess.Should().BeTrue();
 
         using (var reader = new StreamReader(download.Stream))
-            (await reader.ReadToEndAsync()).Should().Be("hello");
+            (await reader.ReadToEndAsync(Ct)).Should().Be("hello");
 
-        (await provider.DownloadAsync("sub\\dir\\a.txt")).Stream.Dispose();
+        (await provider.DownloadAsync("sub\\dir\\a.txt", Ct)).Stream.Dispose();
         provider.CreateAccessUrl(upload.FullPath).Should().Be("/files/sub/dir/a.txt");
-        (await provider.DeleteAsync("sub/./dir/a.txt")).IsSuccess.Should().BeTrue();
+        (await provider.DeleteAsync("sub/./dir/a.txt", Ct)).IsSuccess.Should().BeTrue();
         File.Exists(Path.Combine(_basePath, "sub", "dir", "a.txt")).Should().BeFalse();
     }
 
@@ -127,10 +129,10 @@ public class StorageProviderTests : IDisposable
         var provider = CreateLocalProvider(o => o.AllowedFileExtensions = [".txt"]);
         var context = CreateMultipartContext("file", "a.txt", "file content");
 
-        var result = await provider.NoBufferUploadAsync(context, "uploads/a");
+        var result = await provider.NoBufferUploadAsync(context, "uploads/a", Ct);
 
         result.IsSuccess.Should().BeTrue();
-        File.ReadAllText(Path.Combine(_basePath, "uploads", "a.txt")).Should().Be("file content");
+        (await File.ReadAllTextAsync(Path.Combine(_basePath, "uploads", "a.txt"), Ct)).Should().Be("file content");
     }
 
     [Fact]
@@ -139,7 +141,7 @@ public class StorageProviderTests : IDisposable
         var provider = CreateLocalProvider(o => o.AllowedFileExtensions = [".png"]);
         var context = CreateMultipartContext("file", "a.html", "<script></script>");
 
-        var result = await provider.NoBufferUploadAsync(context, "uploads/a");
+        var result = await provider.NoBufferUploadAsync(context, "uploads/a", Ct);
 
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be(LocalizerKeys.UnsupportedMediaType);
@@ -156,7 +158,7 @@ public class StorageProviderTests : IDisposable
         });
         var context = CreateMultipartContext("file", "a.txt", "0123456789");
 
-        var result = await provider.NoBufferUploadAsync(context, "uploads/a");
+        var result = await provider.NoBufferUploadAsync(context, "uploads/a", Ct);
 
         result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be(UploadValidationStream.FileSizeTooBig);
@@ -222,8 +224,8 @@ public class StorageProviderTests : IDisposable
 
         var act = async () =>
         {
-            await stream.WriteAsync(Encoding.ASCII.GetBytes("<html>"));
-            await stream.CompleteAsync();
+            await stream.WriteAsync(Encoding.ASCII.GetBytes("<html>"), Ct);
+            await stream.CompleteAsync(Ct);
         };
 
         await act.Should().ThrowAsync<InvalidDataException>().WithMessage(LocalizerKeys.UnsupportedMediaType);
@@ -237,9 +239,9 @@ public class StorageProviderTests : IDisposable
         var stream = new UploadValidationStream(inner, 100, [[0x89, 0x50, 0x4E, 0x47]]);
         byte[] content = [0x89, 0x50, 0x4E, 0x47, 1, 2, 3];
 
-        await stream.WriteAsync(content.AsMemory(0, 2));
-        await stream.WriteAsync(content.AsMemory(2));
-        await stream.CompleteAsync();
+        await stream.WriteAsync(content.AsMemory(0, 2), Ct);
+        await stream.WriteAsync(content.AsMemory(2), Ct);
+        await stream.CompleteAsync(Ct);
 
         inner.ToArray().Should().Equal(content);
     }
@@ -321,7 +323,7 @@ public class StorageProviderTests : IDisposable
 
         var provider = new S3Provider(s3.Object, new StorageProviderOptions { AwsS3 = new AwsS3Configuration { BucketName = "bucket" } });
 
-        var result = await provider.DeleteAsync([.. Enumerable.Range(0, 2500).Select(i => $"key-{i}")]);
+        var result = await provider.DeleteAsync([.. Enumerable.Range(0, 2500).Select(i => $"key-{i}")], Ct);
 
         batchSizes.Should().Equal(1000, 1000, 500);
         result.IsSuccess.Should().BeFalse();
@@ -346,7 +348,7 @@ public class StorageProviderTests : IDisposable
 
         var provider = new S3Provider(s3.Object, new StorageProviderOptions { AwsS3 = new AwsS3Configuration { BucketName = "bucket" } });
 
-        var result = await provider.ClearBucketAsync();
+        var result = await provider.ClearBucketAsync(Ct);
 
         result.IsSuccess.Should().BeTrue();
         deleted.Should().Be(2001);

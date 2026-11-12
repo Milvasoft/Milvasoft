@@ -18,24 +18,24 @@ public class NotificationTests
     /// transport validation (port 465), which runs after the attachment was built.
     /// </summary>
     [Fact]
-    public async Task MilvaSendMailAsync_WithDataUriAttachment_ShouldParseAttachment()
+    public Task MilvaSendMailAsync_WithDataUriAttachment_ShouldParseAttachment()
     {
         var sender = CreateSender();
         var dataUri = "data:application/pdf;base64," + Convert.ToBase64String([0x25, 0x50, 0x44, 0x46]);
 
         var act = () => sender.MilvaSendMailAsync("to@example.com", "subject", "body", dataUri, "file");
 
-        await act.Should().ThrowAsync<MilvaDeveloperException>().WithMessage("*465*");
+        return act.Should().ThrowAsync<MilvaDeveloperException>().WithMessage("*465*");
     }
 
     [Fact]
-    public async Task MilvaSendMailAsync_WithMalformedDataUri_ShouldThrowArgumentException()
+    public Task MilvaSendMailAsync_WithMalformedDataUri_ShouldThrowArgumentException()
     {
         var sender = CreateSender(port: 587);
 
         var act = () => sender.MilvaSendMailAsync("to@example.com", "subject", "body", "not-a-data-uri", "file");
 
-        await act.Should().ThrowAsync<ArgumentException>();
+        return act.Should().ThrowAsync<ArgumentException>();
     }
 
     /// <summary>
@@ -52,36 +52,36 @@ public class NotificationTests
     }
 
     [Fact]
-    public async Task MilvaSendMailAsync_WithCredentialsWithoutSsl_ShouldRefuse()
+    public Task MilvaSendMailAsync_WithCredentialsWithoutSsl_ShouldRefuse()
     {
         var sender = CreateSender(port: 25, enableSsl: false);
 
         var act = () => sender.MilvaSendMailAsync("to@example.com", "subject", "body");
 
-        await act.Should().ThrowAsync<MilvaDeveloperException>().WithMessage("*unencrypted*");
+        return act.Should().ThrowAsync<MilvaDeveloperException>().WithMessage("*unencrypted*");
     }
 
     [Fact]
-    public async Task MilvaSendMailAsync_WithCancelledToken_ShouldNotSend()
+    public Task MilvaSendMailAsync_WithCancelledToken_ShouldNotSend()
     {
         var sender = CreateSender(port: 587, host: "127.0.0.1");
 
         var act = () => sender.MilvaSendMailAsync("to@example.com", "subject", "body", cancellationToken: new CancellationToken(true));
 
-        await act.Should().ThrowAsync<OperationCanceledException>();
+        return act.Should().ThrowAsync<OperationCanceledException>();
     }
 
     /// <summary>
     /// Disposing an ExpoClient instance disposed the static HttpClient shared by every instance.
     /// </summary>
     [Fact]
-    public async Task ExpoClient_Dispose_ShouldNotDisposeSharedHttpClient()
+    public Task ExpoClient_Dispose_ShouldNotDisposeSharedHttpClient()
     {
         new ExpoClient().Dispose();
 
         var act = () => ExpoClient.PushGetReceiptsAsync(new PushReceiptRequest { PushTicketIds = ["id"] }, new CancellationToken(true));
 
         // A disposed client throws ObjectDisposedException; a live one honors the cancelled token.
-        await act.Should().ThrowAsync<OperationCanceledException>();
+        return act.Should().ThrowAsync<OperationCanceledException>();
     }
 }
