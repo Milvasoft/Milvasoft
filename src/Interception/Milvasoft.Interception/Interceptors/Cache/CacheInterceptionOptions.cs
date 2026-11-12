@@ -8,7 +8,7 @@ namespace Milvasoft.Interception.Interceptors.Cache;
 /// </summary>
 public class CacheInterceptionOptions : ICacheInterceptionOptions
 {
-    private static Type _accessorType = null;
+    private Type _cacheAccessorType;
     private string _cacheAccessorAssemblyQualifiedName;
 
     /// <inheritdoc/>
@@ -26,25 +26,27 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
         get => _cacheAccessorAssemblyQualifiedName;
         set
         {
-            if (value is not null)
-            {
-                _cacheAccessorAssemblyQualifiedName = value;
-                _accessorType = Type.GetType(_cacheAccessorAssemblyQualifiedName);
-            }
+            if (value is null)
+                return;
+
+            _cacheAccessorType = Type.GetType(value, throwOnError: false)
+                                 ?? throw new MilvaDeveloperException($"Cache accessor type '{value}' could not be loaded.");
+
+            _cacheAccessorAssemblyQualifiedName = value;
         }
     }
 
     /// <inheritdoc/>
     public Type CacheAccessorType
     {
-        get => _accessorType;
+        get => _cacheAccessorType;
         set
         {
-            if (value is not null)
-            {
-                _accessorType = typeof(ICacheAccessor<>).MakeGenericType(value);
-                _cacheAccessorAssemblyQualifiedName = value.AssemblyQualifiedName;
-            }
+            if (value is null)
+                return;
+
+            _cacheAccessorType = value;
+            _cacheAccessorAssemblyQualifiedName = value.AssemblyQualifiedName;
         }
     }
 
@@ -52,7 +54,7 @@ public class CacheInterceptionOptions : ICacheInterceptionOptions
     public Func<IServiceProvider, string> CacheKeyConfigurator { get; set; }
 
     /// <inheritdoc/>
-    public Type GetAccessorType() => _accessorType ??= typeof(ICacheAccessor<>).MakeGenericType(Type.GetType(_cacheAccessorAssemblyQualifiedName));
+    public Type GetAccessorType() => _cacheAccessorType == null ? null : typeof(ICacheAccessor<>).MakeGenericType(_cacheAccessorType);
 }
 
 /// <summary>
@@ -70,12 +72,14 @@ public interface ICacheInterceptionOptions : IInterceptionOptions
 
     /// <summary>
     /// Cache accessor assembly qualified name for configuring options from configuration file.
-    /// For example 'Milvasoft.Caching.Redis.RedisAccessor, Milvasoft.Caching.Redis, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null'
+    /// For example 'Milvasoft.Caching.Redis.RedisAccessor, Milvasoft.Caching.Redis, Version=8.0.0.0, Culture=neutral, PublicKeyToken=null'.
+    /// Setting it also sets <see cref="CacheAccessorType"/>.
     /// </summary>
     public string CacheAccessorAssemblyQualifiedName { get; set; }
 
     /// <summary>
-    /// Cache accessor type. For example typeof(RedisAccessor)
+    /// Cache accessor type. For example typeof(RedisAccessor). The interceptor resolves <see cref="ICacheAccessor{TAccessor}"/> of this type,
+    /// or this type itself when it is registered directly (for example typeof(IRedisAccessor)).
     /// </summary>
     public Type CacheAccessorType { get; set; }
 
@@ -86,7 +90,7 @@ public interface ICacheInterceptionOptions : IInterceptionOptions
     public Func<IServiceProvider, string> CacheKeyConfigurator { get; set; }
 
     /// <summary>
-    /// Gets the generic accessor type as <see cref="ICacheAccessor{TAccessor}"/>.
+    /// Gets the generic accessor type as <see cref="ICacheAccessor{TAccessor}"/> of <see cref="CacheAccessorType"/>, or null if no accessor type is configured.
     /// </summary>
     /// <returns>The generic accessor type.</returns>
     public Type GetAccessorType();

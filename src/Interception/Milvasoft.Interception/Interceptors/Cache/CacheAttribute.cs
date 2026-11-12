@@ -8,7 +8,7 @@ namespace Milvasoft.Interception.Interceptors.Cache;
 public class CacheAttribute : DecorateAttribute
 {
     /// <summary>
-    /// Determines whether <see cref="CacheInterceptor"/> process action once.
+    /// Not used. Attribute instances are shared between calls, so <see cref="CacheInterceptor"/> does not write per call state into them.
     /// </summary>
     public bool IsProcessedOnce { get; set; }
 
