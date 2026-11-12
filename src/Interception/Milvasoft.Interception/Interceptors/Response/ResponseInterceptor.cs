@@ -59,10 +59,14 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
         if (localizer != null)
             foreach (var message in response.Messages)
             {
+                if (message == null || string.IsNullOrEmpty(message.Message))
+                    continue;
+
                 if (string.IsNullOrEmpty(message.Key))
                     message.Key = message.Message;
 
-                message.Message = localizer[message.Message];
+                // A missing resource keeps the original message instead of replacing it with null.
+                message.Message = (string)localizer[message.Message] ?? message.Message;
             }
     }
 }

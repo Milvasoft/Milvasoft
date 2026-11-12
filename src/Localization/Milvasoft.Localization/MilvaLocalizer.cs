@@ -39,19 +39,25 @@ public class MilvaLocalizer : IMilvaLocalizer
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            LocalizedValue localizedValue = null;
+            if (_cache == null)
+                return _localizationManager[key];
 
             //Get value from cache if cache is used.
-            if (_localizationOptions.UseInMemoryCache)
-                localizedValue = _cache.Get(key);
+            var localizedValue = _cache.Get(key);
 
-            if (localizedValue == null || !localizedValue.ResourceFound)
-            {
-                localizedValue = _localizationManager[key];
+            if (localizedValue?.ResourceFound == true)
+                return localizedValue;
 
-                if (_localizationOptions.UseInMemoryCache && localizedValue.ResourceFound)
-                    _cache.Set(key, localizedValue.Value);
-            }
+            // Known missing keys are not looked up again until the negative cache entry expires.
+            if (_cache.IsMissing(key))
+                return new LocalizedValue(key, key, resourceFound: false);
+
+            localizedValue = _localizationManager[key];
+
+            if (localizedValue.ResourceFound)
+                _cache.Set(key, localizedValue.Value);
+            else
+                _cache.SetMissing(key);
 
             return localizedValue;
         }
@@ -69,26 +75,32 @@ public class MilvaLocalizer : IMilvaLocalizer
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            LocalizedValue localizedValue = null;
+            // Without cache the manager formats the value (arguments were dropped before).
+            if (_cache == null)
+                return _localizationManager[key, arguments];
 
             //Get value from cache if cache is used.
-            if (_localizationOptions.UseInMemoryCache)
-                localizedValue = _cache.Get(key, arguments);
+            var localizedValue = _cache.Get(key, arguments);
 
-            if (localizedValue == null || !localizedValue.ResourceFound)
+            if (localizedValue?.ResourceFound == true)
+                return localizedValue;
+
+            if (_cache.IsMissing(key))
+                return _localizationManager[key, arguments];
+
+            var rawValue = _localizationManager[key];
+
+            if (!rawValue.ResourceFound)
             {
-                localizedValue = _localizationManager[key];
+                _cache.SetMissing(key);
 
-                if (_localizationOptions.UseInMemoryCache && localizedValue.ResourceFound)
-                {
-                    _cache.Set(key, localizedValue.Value);
-
-                    // Assign again for formatted values etc. bla bla {0} bla bla
-                    localizedValue = _cache.Get(key, arguments);
-                }
+                return _localizationManager[key, arguments];
             }
 
-            return localizedValue;
+            _cache.Set(key, rawValue.Value);
+
+            // Assign again for formatted values etc. bla bla {0} bla bla
+            return _cache.Get(key, arguments);
         }
     }
 
@@ -109,13 +121,9 @@ public class MilvaLocalizer : IMilvaLocalizer
     /// <returns>The string.</returns>
     public LocalizedValue GetWithCulture(string key, string culture)
     {
-        var cultureSwitcher = new CultureSwitcher(culture);
+        using var cultureSwitcher = new CultureSwitcher(culture);
 
-        var value = this[key];
-
-        cultureSwitcher.Dispose();
-
-        return value;
+        return this[key];
     }
 
     /// <summary>
@@ -127,12 +135,8 @@ public class MilvaLocalizer : IMilvaLocalizer
     /// <returns>The string.</returns>
     public LocalizedValue GetWithCulture(string key, string culture, params object[] arguments)
     {
-        var cultureSwitcher = new CultureSwitcher(culture);
+        using var cultureSwitcher = new CultureSwitcher(culture);
 
-        var value = this[key, arguments];
-
-        cultureSwitcher.Dispose();
-
-        return value;
+        return this[key, arguments];
     }
 }

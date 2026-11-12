@@ -36,7 +36,8 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
 
             var value = _cacheAccessor.Get(formattedKey);
 
-            return new LocalizedValue(formattedKey, value, value != null, GetSearchLocation(formattedKey));
+            // Like resource files, a missing resource returns the key itself (never null or the internal redis key).
+            return new LocalizedValue(key, value ?? key, value != null, GetSearchLocation(formattedKey));
         }
     }
 
@@ -54,12 +55,11 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
 
             var value = _cacheAccessor.Get(formattedKey);
 
-            if (value != null)
-            {
-                value = string.Format(value, arguments);
-            }
+            var resourceFound = value != null;
 
-            return new LocalizedValue(formattedKey, value, value != null, GetSearchLocation(formattedKey));
+            value = string.Format(value ?? key, arguments ?? []);
+
+            return new LocalizedValue(key, value, resourceFound, GetSearchLocation(formattedKey));
         }
     }
 
@@ -72,12 +72,24 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     /// <returns>The strings.</returns>
     public IEnumerable<LocalizedValue> GetAllStrings(bool includeParentCultures)
     {
-        var server = _cacheAccessor.GetServer(_redisCacheServiceOptions.ConfigurationOptions.EndPoints[0]);
+        var endPoint = _redisCacheServiceOptions.ConfigurationOptions?.EndPoints.FirstOrDefault();
 
-        var keys = server.Keys().Select(k => k.ToString());
-        var values = _cacheAccessor.Get(keys);
+        if (endPoint == null)
+            return [];
 
-        return values.Select(v => new LocalizedValue(v, v, v.HasValue, GetSearchLocation("keys[]")));
+        var server = _cacheAccessor.GetServer(endPoint);
+
+        // Only the keys of the current culture's resources are scanned (the key format applied to a wildcard), not the whole database.
+        var pattern = _localizationOptions.KeyFormatMethod.Invoke("*", CultureInfo.CurrentUICulture.Name);
+
+        var keys = server.Keys(pattern: pattern).Select(k => k.ToString()).ToList();
+
+        if (keys.Count == 0)
+            return [];
+
+        var values = _cacheAccessor.Get(keys).ToList();
+
+        return keys.Zip(values, (key, value) => new LocalizedValue(key, value, value.HasValue, GetSearchLocation(key))).ToList();
     }
 
     #endregion
@@ -106,11 +118,9 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     /// <returns></returns>
     public async Task SetAsync(string key, string value, string culture)
     {
-        var cultureSwitcher = new CultureSwitcher(culture);
+        using var cultureSwitcher = new CultureSwitcher(culture);
 
         await SetAsync(key, value);
-
-        cultureSwitcher.Dispose();
     }
 
     /// <summary>
@@ -133,11 +143,9 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     /// <param name="culture"></param>
     public void Set(string key, string value, string culture)
     {
-        var cultureSwitcher = new CultureSwitcher(culture);
+        using var cultureSwitcher = new CultureSwitcher(culture);
 
         Set(key, value);
-
-        cultureSwitcher.Dispose();
     }
 
     /// <summary>
@@ -160,11 +168,9 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     /// <returns></returns>
     public async Task RemoveAsync(string key, string culture)
     {
-        var cultureSwitcher = new CultureSwitcher(culture);
+        using var cultureSwitcher = new CultureSwitcher(culture);
 
         await RemoveAsync(key);
-
-        cultureSwitcher.Dispose();
     }
 
     /// <summary>
@@ -185,11 +191,9 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
     /// <param name="culture"></param>
     public void Remove(string key, string culture)
     {
-        var cultureSwitcher = new CultureSwitcher(culture);
+        using var cultureSwitcher = new CultureSwitcher(culture);
 
         Remove(key);
-
-        cultureSwitcher.Dispose();
     }
 
     #endregion
@@ -212,7 +216,7 @@ public class RedisLocalizationManager(ICacheAccessor<RedisAccessor> cacheAccesso
         if (string.IsNullOrEmpty(key))
             throw new ArgumentNullException(nameof(key));
 
-        key = _localizationOptions.KeyFormatMethod.Invoke(key, CultureInfo.CurrentCulture.Name);
+        key = _localizationOptions.KeyFormatMethod.Invoke(key, CultureInfo.CurrentUICulture.Name);
 
         return key;
     }

@@ -104,7 +104,6 @@ public class ResxWriter
                 _logger?.Error("Error while adding element to resource file.");
                 _logger?.Error(e.Message);
                 tsk.SetException(e);
-                tsk.SetResult(false);
                 return await tsk.Task;
             }
         }
@@ -129,7 +128,6 @@ public class ResxWriter
                 _logger?.Error("Resource exporting error! An error occord during adding element to resx file.");
                 _logger?.Error(e.Message);
                 tsk.SetException(e);
-                tsk.TrySetResult(false);
             }
         }
 
@@ -163,7 +161,6 @@ public class ResxWriter
             _logger?.Error(e.Message);
 
             tsk.SetException(e);
-            tsk.TrySetResult(false);
         }
 
         return await tsk.Task;
