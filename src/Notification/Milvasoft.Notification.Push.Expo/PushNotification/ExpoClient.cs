@@ -5,8 +5,12 @@ using System.Text.Json.Serialization;
 namespace Milvasoft.Notification.Push.Expo.PushNotification;
 
 /// <summary>
-/// Expo client for push api requests. 
+/// Expo client for push api requests.
 /// </summary>
+/// <remarks>
+/// All instances share one <see cref="HttpClient"/> for the lifetime of the process (connections are recycled every
+/// 5 minutes so DNS changes are picked up). Disposing an instance does not dispose the shared client.
+/// </remarks>
 public class ExpoClient : IDisposable
 {
     #region Environemt Configuration
@@ -17,97 +21,91 @@ public class ExpoClient : IDisposable
 
     #endregion
 
-    /// <summary>
-    /// Make this static to avoid socket saturation and limit concurrent server connections to 6, but only for instances of this class.
-    /// </summary>
-    private static readonly HttpClientHandler _httpHandler = new() { MaxConnectionsPerServer = 6 };
-    private static readonly HttpClient _httpClient = new(_httpHandler);
-    private bool _disposedValue;
     private const string _applicationJsonMimeType = "application/json";
     private const string _tokenName = "Bearer";
+
+    /// <summary>
+    /// Shared to avoid socket exhaustion; concurrent connections to Expo are limited to 6.
+    /// </summary>
+    private static readonly HttpClient _httpClient = new(new SocketsHttpHandler
+    {
+        MaxConnectionsPerServer = 6,
+        PooledConnectionLifetime = TimeSpan.FromMinutes(5),
+    })
+    {
+        BaseAddress = new Uri(_expoBackendHost),
+        DefaultRequestHeaders = { Accept = { new MediaTypeWithQualityHeaderValue(_applicationJsonMimeType) } },
+    };
+
     private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
 
-    static ExpoClient()
-    {
-        _httpClient.BaseAddress = new Uri(_expoBackendHost);
-        _httpClient.DefaultRequestHeaders.Accept.Clear();
-        _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_applicationJsonMimeType));
-    }
+    /// <summary>
+    /// Access token sent with every request. Set per request instead of mutating the shared client's default headers,
+    /// which is not thread-safe while requests are in flight.
+    /// </summary>
+    private static volatile string _accessToken;
 
     /// <summary>
-    /// Adds Bearer authorization header value to <see cref="HttpClient.DefaultRequestHeaders"/>.
+    /// Sets the Bearer access token sent with every Expo request. Pass null to stop sending it.
     /// </summary>
     /// <param name="token"></param>
-    public static void AddBearerAuthorizationHeader(string token) => _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_tokenName, token);
+    public static void AddBearerAuthorizationHeader(string token) => _accessToken = token;
 
     /// <summary>
     /// Sends <paramref name="pushTicketRequest"/> to expo push api and returns <see cref="PushTicketResponse"/>.
     /// </summary>
     /// <param name="pushTicketRequest"></param>
-    /// <returns></returns>
-    public static async Task<PushTicketResponse> PushSendAsync(PushTicketRequest pushTicketRequest)
-    {
-        var ticketResponse = await PostAsync<PushTicketRequest, PushTicketResponse>(pushTicketRequest, _pushSendPath);
-        return ticketResponse;
-    }
+    /// <param name="cancellationToken"></param>
+    /// <returns>The response, or null if Expo returned a non-success status code.</returns>
+    public static Task<PushTicketResponse> PushSendAsync(PushTicketRequest pushTicketRequest, CancellationToken cancellationToken = default)
+        => PostAsync<PushTicketRequest, PushTicketResponse>(pushTicketRequest, _pushSendPath, cancellationToken);
 
     /// <summary>
     /// Sends <paramref name="pushReceiptRequest"/> to expo push api and returns <see cref="PushReceiptResponse"/>.
     /// </summary>
     /// <param name="pushReceiptRequest"></param>
-    /// <returns></returns>
-    public static async Task<PushReceiptResponse> PushGetReceiptsAsync(PushReceiptRequest pushReceiptRequest)
-    {
-        var receiptResponse = await PostAsync<PushReceiptRequest, PushReceiptResponse>(pushReceiptRequest, _pushGetReceiptsPath);
-        return receiptResponse;
-    }
+    /// <param name="cancellationToken"></param>
+    /// <returns>The response, or null if Expo returned a non-success status code.</returns>
+    public static Task<PushReceiptResponse> PushGetReceiptsAsync(PushReceiptRequest pushReceiptRequest, CancellationToken cancellationToken = default)
+        => PostAsync<PushReceiptRequest, PushReceiptResponse>(pushReceiptRequest, _pushGetReceiptsPath, cancellationToken);
 
     /// <summary>
-    /// Serailizes <paramref name="requestObj"/> and sends post request to <paramref name="path"/> and returns response as <typeparamref name="U"/>.
+    /// Serializes <paramref name="requestObj"/>, sends a post request to <paramref name="path"/> and returns the response as <typeparamref name="U"/>.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="U"></typeparam>
-    /// <param name="requestObj"></param>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    private static async Task<U> PostAsync<T, U>(T requestObj, string path)
+    private static async Task<U> PostAsync<T, U>(T requestObj, string path, CancellationToken cancellationToken)
     {
-        var serializedRequestObj = JsonSerializer.Serialize(requestObj, _jsonSerializerOptions);
-
-        var requestBody = new StringContent(serializedRequestObj, System.Text.Encoding.UTF8, _applicationJsonMimeType);
-
-        var responseBody = default(U);
-
-        using var response = await _httpClient.PostAsync(path, requestBody);
-
-        if (response.IsSuccessStatusCode)
+        using var request = new HttpRequestMessage(HttpMethod.Post, path)
         {
-            var rawResponseBody = await response.Content.ReadAsStringAsync();
-            responseBody = JsonSerializer.Deserialize<U>(rawResponseBody);
-        }
+            Content = JsonContent(requestObj)
+        };
 
-        return responseBody;
+        var accessToken = _accessToken;
+
+        if (!string.IsNullOrEmpty(accessToken))
+            request.Headers.Authorization = new AuthenticationHeaderValue(_tokenName, accessToken);
+
+        using var response = await _httpClient.SendAsync(request, cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+            return default;
+
+        await using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
+
+        return await JsonSerializer.DeserializeAsync<U>(responseStream, cancellationToken: cancellationToken);
     }
 
+    private static StringContent JsonContent<T>(T requestObj)
+        => new(JsonSerializer.Serialize(requestObj, _jsonSerializerOptions), System.Text.Encoding.UTF8, _applicationJsonMimeType);
+
     /// <summary>
-    /// Disposes this object.
+    /// Disposes this object. The shared <see cref="HttpClient"/> is not disposed because other instances keep using it.
     /// </summary>
     /// <param name="disposing"></param>
     protected virtual void Dispose(bool disposing)
     {
-        if (!_disposedValue)
-        {
-            if (disposing)
-            {
-                _httpClient.Dispose();
-                _httpHandler.Dispose();
-            }
-
-            _disposedValue = true;
-        }
     }
 
     /// <summary>
@@ -115,13 +113,7 @@ public class ExpoClient : IDisposable
     /// </summary>
     public void Dispose()
     {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
-
-    /// <summary>
-    /// Disposes the timer.
-    /// </summary>
-    ~ExpoClient() => Dispose(false);
 }
