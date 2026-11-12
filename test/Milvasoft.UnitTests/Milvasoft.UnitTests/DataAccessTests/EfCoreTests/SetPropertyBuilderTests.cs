@@ -83,19 +83,20 @@ public class SetPropertyBuilderTests
     }
 
     [Fact]
-    public void UpdateSettersBuilder_WithValueAndExpressionCalls_ShouldApplyToEfUpdateSettersBuilder()
+    public void SetPropertyValue_WithNullPropertyExpression_ShouldNotAddSetter()
     {
         // Arrange
-        var builder = new SetPropertyBuilder<RestTestEntityFixture>().SetPropertyValue(i => i.Name, "name")
-                                                                     .SetPropertyValue(i => i.UpdateDate, null)
-                                                                     .SetProperty(i => i.Id, i => i.Id + 1);
+        var builder = new SetPropertyBuilder<RestTestEntityFixture>();
+        var initialSetters = builder.UpdateSettersBuilder;
 
         // Act
-        var act = () => builder.UpdateSettersBuilder(new Microsoft.EntityFrameworkCore.Query.UpdateSettersBuilder<RestTestEntityFixture>());
+        var result = builder.SetPropertyValue<string>(null, "name")
+                            .SetPropertyValue(i => i.Name, "name")
+                            .SetPropertyValue(i => i.UpdateDate, null);
 
         // Assert
-        act.Should().NotThrow();
-        builder.SetPropertyCallsLog.Should().Equal("Name", "UpdateDate", "Id");
+        result.SetPropertyCallsLog.Should().Equal("Name", "UpdateDate");
+        result.UpdateSettersBuilder.GetInvocationList().Should().HaveCount(initialSetters.GetInvocationList().Length + 2);
     }
 
     #endregion

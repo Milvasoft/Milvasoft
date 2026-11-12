@@ -728,7 +728,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     {
         ValidateRequestParameters(request);
 
-        var assemblyTypes = _dbContextConfiguration.DbContext.DynamicFetch.GetEntityAssembly().GetTypes();
+        var assemblyTypes = _dbContextConfiguration.DbContext.DynamicFetch.GetEntityAssemblyTypes();
 
         var entityName = request.EntityName;
 
@@ -796,7 +796,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// </remarks>
     public SetPropertyBuilder<TEntity> GetUpdatablePropertiesBuilder<TEntity, TDto>(TDto dto) where TEntity : class, IMilvaEntity where TDto : DtoBase
     {
-        var builder = dto.GetUpdatablePropertiesBuilder<TEntity, TDto>();
+        var builder = dto.GetUpdatablePropertiesBuilder<TEntity, TDto>(_useUtcForDateTimes);
 
         SetAuditProperties(this, builder);
 
