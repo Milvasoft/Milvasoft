@@ -17,17 +17,16 @@ public class ExceptionConverter<TExceptionType> : JsonConverter<TExceptionType> 
     public override bool CanConvert(Type typeToConvert) => typeof(Exception).IsAssignableFrom(typeToConvert);
 
     /// <summary>
-    /// Deserializes the JSON representation of an exception.
+    /// Deserializes the JSON representation of an exception with the default serializer (only settable properties such as HelpLink and Source are restored).
     /// </summary>
     /// <param name="reader">The reader to use.</param>
     /// <param name="typeToConvert">The type to convert.</param>
-    /// <param name="options">The serializer options.</param>
+    /// <param name="options">The serializer options. They are not passed on, because they contain this converter.</param>
     /// <returns>The deserialized exception.</returns>
-    /// <exception cref="NotSupportedException">Thrown when deserialization is not supported.</exception>
     public override TExceptionType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => JsonSerializer.Deserialize<TExceptionType>(ref reader);
 
     /// <summary>
-    /// Serializes the specified exception to JSON.
+    /// Serializes the specified exception to JSON. Only Message, InnerException and StackTrace are written; other property getters are not invoked.
     /// </summary>
     /// <param name="writer">The writer to use.</param>
     /// <param name="value">The exception to serialize.</param>
@@ -35,37 +34,24 @@ public class ExceptionConverter<TExceptionType> : JsonConverter<TExceptionType> 
     public override void Write(Utf8JsonWriter writer, TExceptionType value, JsonSerializerOptions options)
     {
         if (value == null)
-        {
             return;
-        }
 
-        var serializableProperties = value.GetType()
-                                          .GetProperties()
-                                          .Select(uu => new { uu.Name, Value = uu.GetValue(value) })
-                                          .Where(uu => uu.Name == nameof(Exception.Message) || uu.Name == nameof(Exception.StackTrace) || uu.Name == nameof(Exception.InnerException));
-
-        if (options?.DefaultIgnoreCondition == JsonIgnoreCondition.WhenWritingNull)
-        {
-            serializableProperties = serializableProperties.Where(uu => uu.Value != null);
-        }
-
-        var propList = serializableProperties.ToList();
+        var skipNulls = options?.DefaultIgnoreCondition == JsonIgnoreCondition.WhenWritingNull;
 
         writer.WriteStartObject();
 
-        foreach (var prop in propList)
+        writer.WriteString(nameof(Exception.Message), value.Message);
+
+        if (!skipNulls || value.InnerException != null)
         {
-            if (prop.Name == nameof(Exception.InnerException))
-            {
-                writer.WritePropertyName(prop.Name);
-                JsonSerializer.Serialize(writer, prop.Value, options);
-            }
-            else
-            {
-                writer.WritePropertyName(prop.Name);
-                writer.WriteStringValue((string)prop.Value);
-            }
+            writer.WritePropertyName(nameof(Exception.InnerException));
+            JsonSerializer.Serialize(writer, (object)value.InnerException, options);
         }
+
+        var stackTrace = value.StackTrace;
+
+        if (!skipNulls || stackTrace != null)
+            writer.WriteString(nameof(Exception.StackTrace), stackTrace);
 
         writer.WriteEndObject();
     }

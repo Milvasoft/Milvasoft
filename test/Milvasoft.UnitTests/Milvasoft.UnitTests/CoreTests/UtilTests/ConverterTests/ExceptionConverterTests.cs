@@ -10,6 +10,40 @@ public class ExceptionConverterTests
 {
     private readonly ExceptionConverter<Exception> _converter = new();
 
+    private sealed class ThrowingPropertyException(string message) : Exception(message)
+    {
+        public string Expensive => throw new InvalidOperationException("Getter must not be invoked.");
+    }
+
+    [Fact]
+    public void Write_WithExceptionHavingThrowingPropertyGetter_ShouldOnlyReadSerializedProperties()
+    {
+        // Arrange
+        var converter = new ExceptionConverter<ThrowingPropertyException>();
+        var exception = new ThrowingPropertyException("Test Exception");
+
+        // Act
+        var result = converter.Write(exception);
+
+        // Assert
+        result.Should().Be("{\"Message\":\"Test Exception\",\"InnerException\":null,\"StackTrace\":null}");
+    }
+
+    [Fact]
+    public void Write_WithInnerException_ShouldSerializeInnerExceptionWithConverter()
+    {
+        // Arrange
+        var exception = new Exception("Outer", new InvalidOperationException("Inner"));
+        var options = new JsonSerializerOptions();
+        options.Converters.Add(_converter);
+
+        // Act
+        var result = JsonSerializer.Serialize(exception, options);
+
+        // Assert
+        result.Should().Be("{\"Message\":\"Outer\",\"InnerException\":{\"Message\":\"Inner\",\"InnerException\":null,\"StackTrace\":null},\"StackTrace\":null}");
+    }
+
     [Fact]
     public void CanConvert_WithExceptionType_ShouldReturnsTrue()
     {
