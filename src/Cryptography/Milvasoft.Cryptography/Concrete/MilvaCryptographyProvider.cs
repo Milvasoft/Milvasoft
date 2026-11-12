@@ -7,288 +7,337 @@ using System.Text;
 namespace Milvasoft.Cryptography.Concrete;
 
 /// <summary>
-/// Provides file encryption and decryption with AES Algorithm. Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
+/// Provides authenticated encryption (AES-256-GCM) for strings, byte arrays and files.
 /// </summary>
 /// <remarks>
-/// Creates a new <see cref="MilvaCryptographyProvider"/> instance.
+/// <para><b>Formats</b></para>
+/// <list type="bullet">
+/// <item>String (current): <c>"v2:" + Base64(nonce[12] | ciphertext | tag[16])</c>.</item>
+/// <item>Bytes and files (current): <c>"MVENC" | 0x02 | nonce[12] | ciphertext | tag[16]</c>.</item>
+/// <item>Legacy string (decryption only): <c>Base64(iv[16] | AES ciphertext)</c> produced by older versions with the configured key, <see cref="IMilvaCryptographyOptions.Cipher"/> and <see cref="IMilvaCryptographyOptions.Padding"/>.
+/// Legacy encrypted files contain this string as text.</item>
+/// </list>
+/// <para>
+/// The configured key must be 16, 24 or 32 bytes (UTF-8). The AES-GCM key is derived from it with HKDF-SHA256, so the same configured key
+/// keeps decrypting legacy values. The configured key must be a random secret; it is not stretched like a password.
+/// </para>
 /// </remarks>
-/// <param name="milvaCryptographyOptions"> Cryptography options.</param>
-/// <param name="recyclableMemoryStreamManager"></param>
-public class MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptographyOptions, RecyclableMemoryStreamManager recyclableMemoryStreamManager) : IMilvaCryptographyProvider
+public class MilvaCryptographyProvider : IMilvaCryptographyProvider
 {
     #region Fields
 
-    private readonly byte[] _key = Encoding.UTF8.GetBytes(milvaCryptographyOptions.Key);
-    private readonly CipherMode _mode = milvaCryptographyOptions.Cipher;
-    private readonly PaddingMode _padding = milvaCryptographyOptions.Padding;
-    private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager = recyclableMemoryStreamManager;
+    private const string _stringFormatPrefix = "v2:";
+    private const byte _formatVersion = 2;
+    private const int _nonceSize = 12;
+    private const int _tagSize = 16;
+    private const int _legacyIvSize = 16;
+    private static readonly byte[] _fileMagic = "MVENC"u8.ToArray();
+    private static readonly byte[] _keyDerivationInfo = "Milvasoft.Cryptography.AesGcm.v2"u8.ToArray();
+
+    private readonly byte[] _legacyKey;
+    private readonly byte[] _key;
+    private readonly CipherMode _legacyMode;
+    private readonly PaddingMode _legacyPadding;
 
     #endregion
 
+    /// <summary>
+    /// Creates a new <see cref="MilvaCryptographyProvider"/> instance.
+    /// </summary>
+    /// <param name="milvaCryptographyOptions">Cryptography options.</param>
+    /// <exception cref="CryptographicException">Thrown when the key is not 16, 24 or 32 bytes.</exception>
+    public MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptographyOptions)
+    {
+        ArgumentNullException.ThrowIfNull(milvaCryptographyOptions);
+
+        ValidateKey(milvaCryptographyOptions.Key);
+
+        _legacyKey = Encoding.UTF8.GetBytes(milvaCryptographyOptions.Key);
+        _key = HKDF.DeriveKey(HashAlgorithmName.SHA256, _legacyKey, 32, salt: [], info: _keyDerivationInfo);
+        _legacyMode = milvaCryptographyOptions.Cipher;
+        _legacyPadding = milvaCryptographyOptions.Padding;
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="MilvaCryptographyProvider"/> instance.
+    /// </summary>
+    /// <param name="milvaCryptographyOptions">Cryptography options.</param>
+    /// <param name="recyclableMemoryStreamManager">Not used anymore. Kept for constructor compatibility.</param>
+    /// <exception cref="CryptographicException">Thrown when the key is not 16, 24 or 32 bytes.</exception>
+    public MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptographyOptions, RecyclableMemoryStreamManager recyclableMemoryStreamManager) : this(milvaCryptographyOptions)
+    {
+    }
+
+    /// <summary>
+    /// Validates that <paramref name="key"/> is a valid AES key (16, 24 or 32 bytes in UTF-8).
+    /// </summary>
+    /// <param name="key">Configured key.</param>
+    /// <exception cref="CryptographicException">Thrown when the key is null or its size is invalid.</exception>
+    public static void ValidateKey(string key)
+    {
+        var keySize = key == null ? 0 : Encoding.UTF8.GetByteCount(key);
+
+        if (keySize is not (16 or 24 or 32))
+            throw new CryptographicException("Milvasoft cryptography key must be 16, 24 or 32 bytes (UTF-8).");
+    }
+
     #region Async Encryption
 
-    /// <summary>
-    /// Encrypt <paramref name="value"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="value"></param>
-    public async Task<string> EncryptAsync(string value)
-    {
-        byte[] inputValue = Encoding.UTF8.GetBytes(value);
+    /// <inheritdoc/>
+    public Task<string> EncryptAsync(string value) => Task.FromResult(Encrypt(value));
 
-        using var aesProvider = CreateCryptographyProvider();
+    /// <inheritdoc/>
+    public Task<string> DecryptAsync(string value) => Task.FromResult(Decrypt(value));
 
-        aesProvider.GenerateIV();
-
-        byte[] initializationVector = aesProvider.IV;
-
-        using ICryptoTransform encryptor = aesProvider.CreateEncryptor(_key, initializationVector);
-
-        using var memoryStream = _recyclableMemoryStreamManager.GetStream();
-
-        await memoryStream.WriteAsync(initializationVector.AsMemory(0, initializationVector.Length));
-
-        using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write, leaveOpen: true))
-        {
-            await cryptoStream.WriteAsync(inputValue.AsMemory(0, inputValue.Length));
-            await cryptoStream.FlushFinalBlockAsync();
-        }
-
-        var encryptedBytes = memoryStream.ToArray();
-
-        return Convert.ToBase64String(encryptedBytes);
-    }
-
-    /// <summary>
-    /// Decrypt <paramref name="value"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="value"></param>
-    public async Task<string> DecryptAsync(string value)
-    {
-        byte[] inputValue = Convert.FromBase64String(value);
-
-        string outputValue;
-
-        using (var memoryStream = new MemoryStream(inputValue))
-        {
-            var initializationVector = new byte[16];
-
-            await memoryStream.ReadAsync(initializationVector.AsMemory(0, initializationVector.Length));
-
-            using var aesProvider = CreateCryptographyProvider();
-
-            using ICryptoTransform decryptor = aesProvider.CreateDecryptor(_key, initializationVector);
-
-            using var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
-
-            using var reader = new StreamReader(cryptoStream);
-
-            outputValue = (await reader.ReadToEndAsync()).Trim('\0');
-        }
-
-        return outputValue;
-    }
-
-    /// <summary>
-    /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="filePath"></param>
+    /// <inheritdoc/>
     public async Task EncryptFileAsync(string filePath)
     {
-        var inputValue = await File.ReadAllTextAsync(filePath);
+        var content = await File.ReadAllBytesAsync(filePath);
 
-        var encryptedContent = await EncryptAsync(inputValue);
-
-        await File.WriteAllTextAsync(filePath, encryptedContent, Encoding.UTF8);
+        await WriteAllBytesAtomicallyAsync(filePath, EncryptBytes(content));
     }
 
-    /// <summary>
-    /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="filePath"></param>
-    /// <param name="encoding"> e.g. <see cref="Encoding.UTF8"/></param>
-    public async Task EncryptFileAsync(string filePath, Encoding encoding)
-    {
-        var inputValue = await File.ReadAllTextAsync(filePath);
-
-        var encryptedContent = await EncryptAsync(inputValue);
-
-        await File.WriteAllTextAsync(filePath, encryptedContent, encoding);
-    }
+    /// <inheritdoc/>
+    public Task DecryptFileAsync(string filePath) => DecryptFileAsync(filePath, Encoding.UTF8);
 
     /// <summary>
-    /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
+    /// Decrypts the file in <paramref name="filePath"/> in place. The file is replaced atomically.
     /// </summary>
     /// <param name="filePath"></param>
-    public async Task DecryptFileAsync(string filePath)
-    {
-        var inputValue = await File.ReadAllTextAsync(filePath);
-
-        var decryptedContent = await DecryptAsync(inputValue);
-
-        await File.WriteAllTextAsync(filePath, decryptedContent, Encoding.UTF8);
-    }
-
-    /// <summary>
-    /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="filePath"></param>
-    /// <param name="encoding"> e.g. <see cref="Encoding.UTF8"/></param>
+    /// <param name="encoding">Encoding used to write the content of legacy (text) encrypted files. e.g. <see cref="Encoding.UTF8"/></param>
     public async Task DecryptFileAsync(string filePath, Encoding encoding)
     {
-        var inputValue = await File.ReadAllTextAsync(filePath);
+        var content = await File.ReadAllBytesAsync(filePath);
 
-        var decryptedContent = await DecryptAsync(inputValue);
-
-        await File.WriteAllTextAsync(filePath, decryptedContent, encoding);
+        await WriteAllBytesAtomicallyAsync(filePath, DecryptFileContent(content, encoding));
     }
 
     #endregion
 
     #region Sync Encryption
 
-    /// <summary>
-    /// Encrypt <paramref name="value"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="value"></param>
+    /// <inheritdoc/>
     public string Encrypt(string value)
     {
-        byte[] inputValue = Encoding.UTF8.GetBytes(value);
+        ArgumentNullException.ThrowIfNull(value);
 
-        using var aesProvider = CreateCryptographyProvider();
-
-        aesProvider.GenerateIV();
-
-        byte[] initializationVector = aesProvider.IV;
-
-        using ICryptoTransform encryptor = aesProvider.CreateEncryptor(_key, initializationVector);
-
-        using var memoryStream = _recyclableMemoryStreamManager.GetStream();
-
-        memoryStream.Write(initializationVector, 0, initializationVector.Length);
-
-        using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write, leaveOpen: true))
-        {
-            cryptoStream.Write(inputValue, 0, inputValue.Length);
-            cryptoStream.FlushFinalBlock();
-        }
-
-        var encryptedBytes = memoryStream.ToArray();
-
-        return Convert.ToBase64String(encryptedBytes);
+        return _stringFormatPrefix + Convert.ToBase64String(EncryptCore(Encoding.UTF8.GetBytes(value)));
     }
 
-    /// <summary>
-    /// Decrypt <paramref name="value"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="value"></param>
+    /// <inheritdoc/>
     public string Decrypt(string value)
     {
-        byte[] inputValue = Convert.FromBase64String(value);
+        ArgumentNullException.ThrowIfNull(value);
 
-        string outputValue;
+        if (value.StartsWith(_stringFormatPrefix, StringComparison.Ordinal))
+            return Encoding.UTF8.GetString(DecryptCore(Convert.FromBase64String(value[_stringFormatPrefix.Length..])));
 
-        using (var memoryStream = new MemoryStream(inputValue))
-        {
-            var initializationVector = new byte[16];
-
-            memoryStream.Read(initializationVector, 0, initializationVector.Length);
-
-            using var aesProvider = CreateCryptographyProvider();
-
-            using ICryptoTransform decryptor = aesProvider.CreateDecryptor(_key, initializationVector);
-
-            using var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read);
-
-            using var reader = new StreamReader(cryptoStream);
-
-            outputValue = reader.ReadToEnd().Trim('\0');
-        }
-
-        return outputValue;
+        return DecryptLegacy(value);
     }
 
-    /// <summary>
-    /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="filePath"></param>
+    /// <inheritdoc/>
+    public byte[] EncryptBytes(byte[] value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+
+        var payload = EncryptCore(value);
+        var result = new byte[_fileMagic.Length + 1 + payload.Length];
+
+        _fileMagic.CopyTo(result, 0);
+        result[_fileMagic.Length] = _formatVersion;
+        payload.CopyTo(result, _fileMagic.Length + 1);
+
+        return result;
+    }
+
+    /// <inheritdoc/>
+    public byte[] DecryptBytes(byte[] value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+
+        if (!HasBinaryHeader(value))
+            throw new CryptographicException("The data is not in Milvasoft encrypted binary format.");
+
+        return DecryptCore(value.AsSpan(_fileMagic.Length + 1));
+    }
+
+    /// <inheritdoc/>
     public void EncryptFile(string filePath)
     {
-        var inputValue = File.ReadAllText(filePath);
+        var content = File.ReadAllBytes(filePath);
 
-        var encryptedContent = Encrypt(inputValue);
-
-        File.WriteAllText(filePath, encryptedContent, Encoding.UTF8);
+        WriteAllBytesAtomically(filePath, EncryptBytes(content));
     }
 
-    /// <summary>
-    /// Encrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="filePath"></param>
-    /// <param name="encoding"> e.g. <see cref="Encoding.UTF8"/></param>
-    public void EncryptFile(string filePath, Encoding encoding)
-    {
-        var inputValue = File.ReadAllText(filePath);
-
-        var encryptedContent = Encrypt(inputValue);
-
-        File.WriteAllText(filePath, encryptedContent, encoding);
-    }
+    /// <inheritdoc/>
+    public void DecryptFile(string filePath) => DecryptFile(filePath, Encoding.UTF8);
 
     /// <summary>
-    /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
+    /// Decrypts the file in <paramref name="filePath"/> in place. The file is replaced atomically.
     /// </summary>
     /// <param name="filePath"></param>
-    public void DecryptFile(string filePath)
-    {
-        var inputValue = File.ReadAllText(filePath);
-
-        var decryptedContent = Decrypt(inputValue);
-
-        File.WriteAllText(filePath, decryptedContent, Encoding.UTF8);
-    }
-
-    /// <summary>
-    /// Decrypt file in <paramref name="filePath"/> with AES Algorithm and key.
-    /// !!! Milvasoft Corporation or contributors of this project is not responsible of possible data loss.
-    /// </summary>
-    /// <param name="filePath"></param>
-    /// <param name="encoding"> e.g. <see cref="Encoding.UTF8"/></param>
+    /// <param name="encoding">Encoding used to write the content of legacy (text) encrypted files. e.g. <see cref="Encoding.UTF8"/></param>
     public void DecryptFile(string filePath, Encoding encoding)
     {
-        var inputValue = File.ReadAllText(filePath);
+        var content = File.ReadAllBytes(filePath);
 
-        var decryptedContent = Decrypt(inputValue);
-
-        File.WriteAllText(filePath, decryptedContent, encoding);
+        WriteAllBytesAtomically(filePath, DecryptFileContent(content, encoding));
     }
 
     #endregion
 
+    #region Core
+
     /// <summary>
-    /// Creates an AES cryptography provider.
+    /// Encrypts with AES-256-GCM. Returns nonce | ciphertext | tag.
     /// </summary>
-    /// <returns></returns>
-    private Aes CreateCryptographyProvider()
+    private byte[] EncryptCore(ReadOnlySpan<byte> plainBytes)
     {
-        var provider = Aes.Create();
+        var result = new byte[_nonceSize + plainBytes.Length + _tagSize];
+        var nonce = result.AsSpan(0, _nonceSize);
+        var cipherText = result.AsSpan(_nonceSize, plainBytes.Length);
+        var tag = result.AsSpan(_nonceSize + plainBytes.Length, _tagSize);
 
-        provider.BlockSize = 128;
-        provider.Mode = _mode;
-        provider.Padding = _padding;
-        provider.Key = _key;
-        provider.KeySize = _key.Length * 8;
+        RandomNumberGenerator.Fill(nonce);
 
-        return provider;
+        using var aesGcm = new AesGcm(_key, _tagSize);
+
+        aesGcm.Encrypt(nonce, plainBytes, cipherText, tag);
+
+        return result;
     }
+
+    /// <summary>
+    /// Decrypts nonce | ciphertext | tag with AES-256-GCM. Throws <see cref="CryptographicException"/> if the data was modified.
+    /// </summary>
+    private byte[] DecryptCore(ReadOnlySpan<byte> payload)
+    {
+        if (payload.Length < _nonceSize + _tagSize)
+            throw new CryptographicException("Encrypted data is too short.");
+
+        var cipherTextLength = payload.Length - _nonceSize - _tagSize;
+        var plainBytes = new byte[cipherTextLength];
+
+        using var aesGcm = new AesGcm(_key, _tagSize);
+
+        aesGcm.Decrypt(payload[.._nonceSize], payload.Slice(_nonceSize, cipherTextLength), payload[^_tagSize..], plainBytes);
+
+        return plainBytes;
+    }
+
+    /// <summary>
+    /// Decrypts values produced by older versions: Base64(iv[16] | AES ciphertext) with the configured key, cipher mode and padding.
+    /// </summary>
+    private string DecryptLegacy(string value)
+    {
+        var input = Convert.FromBase64String(value);
+
+        if (input.Length <= _legacyIvSize)
+            throw new CryptographicException("Encrypted data is too short.");
+
+        using var aes = Aes.Create();
+
+        aes.Mode = _legacyMode;
+        aes.Padding = _legacyPadding;
+        aes.Key = _legacyKey;
+
+        using var decryptor = aes.CreateDecryptor(_legacyKey, input[.._legacyIvSize]);
+
+        var plainBytes = decryptor.TransformFinalBlock(input, _legacyIvSize, input.Length - _legacyIvSize);
+
+        // Same decoding as the legacy implementation (UTF-8 with BOM detection, '\0' trimmed).
+        using var reader = new StreamReader(new MemoryStream(plainBytes));
+
+        return reader.ReadToEnd().Trim('\0');
+    }
+
+    private byte[] DecryptFileContent(byte[] content, Encoding encoding)
+    {
+        if (HasBinaryHeader(content))
+            return DecryptBytes(content);
+
+        // Legacy encrypted files (and files written from the string API) contain the encrypted value as text.
+        string encryptedText;
+
+        using (var reader = new StreamReader(new MemoryStream(content), Encoding.UTF8, detectEncodingFromByteOrderMarks: true))
+            encryptedText = reader.ReadToEnd();
+
+        var plainText = Decrypt(encryptedText.Trim());
+
+        encoding ??= Encoding.UTF8;
+
+        return [.. encoding.GetPreamble(), .. encoding.GetBytes(plainText)];
+    }
+
+    private static bool HasBinaryHeader(ReadOnlySpan<byte> content) => content.Length > _fileMagic.Length
+                                                                       && content.StartsWith(_fileMagic)
+                                                                       && content[_fileMagic.Length] == _formatVersion;
+
+    #endregion
+
+    #region Atomic file write
+
+    private static void WriteAllBytesAtomically(string filePath, byte[] content)
+    {
+        var tempFilePath = CreateTempFilePath(filePath);
+
+        try
+        {
+            using (var stream = new FileStream(tempFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, FileOptions.WriteThrough))
+                stream.Write(content);
+
+            File.Move(tempFilePath, filePath, overwrite: true);
+        }
+        catch
+        {
+            TryDelete(tempFilePath);
+            throw;
+        }
+    }
+
+    private static async Task WriteAllBytesAtomicallyAsync(string filePath, byte[] content)
+    {
+        var tempFilePath = CreateTempFilePath(filePath);
+
+        try
+        {
+            await using (var stream = new FileStream(tempFilePath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, FileOptions.WriteThrough | FileOptions.Asynchronous))
+                await stream.WriteAsync(content);
+
+            File.Move(tempFilePath, filePath, overwrite: true);
+        }
+        catch
+        {
+            TryDelete(tempFilePath);
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Temp file is created in the same directory so the final move is a same-volume rename.
+    /// </summary>
+    private static string CreateTempFilePath(string filePath)
+    {
+        var fullPath = Path.GetFullPath(filePath);
+
+        return Path.Combine(Path.GetDirectoryName(fullPath)!, $".{Path.GetFileName(fullPath)}.{Guid.NewGuid():N}.tmp");
+    }
+
+    private static void TryDelete(string filePath)
+    {
+        try
+        {
+            File.Delete(filePath);
+        }
+        catch (IOException)
+        {
+            // Best effort cleanup.
+        }
+        catch (UnauthorizedAccessException)
+        {
+            // Best effort cleanup.
+        }
+    }
+
+    #endregion
 }

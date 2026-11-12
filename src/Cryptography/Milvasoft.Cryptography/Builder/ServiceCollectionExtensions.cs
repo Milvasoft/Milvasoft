@@ -27,11 +27,15 @@ public static class ServiceCollectionExtensions
     /// <param name="builder"></param>
     /// <param name="options"></param>
     /// <returns></returns>
+    /// <exception cref="System.Security.Cryptography.CryptographicException">Thrown when the configured key is not 16, 24 or 32 bytes.</exception>
     public static MilvaCryptographyBuilder WithOptions(this MilvaCryptographyBuilder builder, Action<IMilvaCryptographyOptions> options)
     {
         var config = new MilvaCryptographyOptions();
 
         options?.Invoke(config);
+
+        // Fail at startup instead of at the first encryption.
+        MilvaCryptographyProvider.ValidateKey(config.Key);
 
         builder.Services.AddSingleton<IMilvaCryptographyOptions>(config);
 
@@ -47,6 +51,8 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="builder"></param>
     /// <returns></returns>
+    /// <exception cref="InvalidOperationException">Thrown when the configuration section is missing.</exception>
+    /// <exception cref="System.Security.Cryptography.CryptographicException">Thrown when the configured key is not 16, 24 or 32 bytes.</exception>
     public static MilvaCryptographyBuilder WithOptions(this MilvaCryptographyBuilder builder)
     {
         if (builder.ConfigurationManager == null)
@@ -58,7 +64,7 @@ public static class ServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        var options = section.Get<MilvaCryptographyOptions>();
+        var options = section.Get<MilvaCryptographyOptions>() ?? throw new InvalidOperationException($"'{MilvaCryptographyOptions.SectionName}' configuration section is missing.");
 
         builder.WithOptions(opt =>
         {
