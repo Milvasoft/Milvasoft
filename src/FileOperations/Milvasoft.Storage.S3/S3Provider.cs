@@ -1,11 +1,7 @@
-﻿using Amazon.S3;
+using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Net.Http.Headers;
-using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Helpers;
-using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Storage.Models;
 using Milvasoft.Storage.Providers;
 using System.Net;
@@ -18,6 +14,8 @@ namespace Milvasoft.Storage.S3;
 public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : StorageProviderBase(options), IS3Provider
 {
     private readonly IAmazonS3 _client = client;
+    private const int _maxKeysPerDeleteRequest = 1000;
+
     private readonly AwsS3Configuration _s3Configuration = options.AwsS3;
 
     /// <inheritdoc/>
@@ -26,12 +24,15 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
     /// <inheritdoc/>
     public override async Task<FileOperationResult> UploadAsync(IFormFile file, string filePath, CancellationToken cancellationToken = default)
     {
+        await using var inputStream = file.OpenReadStream();
+
         var request = new PutObjectRequest
         {
             BucketName = _s3Configuration.BucketName,
             Key = filePath,
-            InputStream = file.OpenReadStream(),
-            ContentType = file.ContentType,
+            InputStream = inputStream,
+            AutoCloseStream = false,
+            ContentType = StorageHelper.GetSafeContentType(string.IsNullOrEmpty(file.FileName) ? filePath : file.FileName, file.ContentType),
             CannedACL = S3CannedACL.BucketOwnerFullControl,
         };
 
@@ -48,59 +49,24 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
     }
 
     /// <summary>
-    /// Uploads file to bucket.
+    /// Streams the file in the multipart/form-data request body to the bucket without buffering the whole file.
+    /// The extension must be allowed (see <see cref="StorageProviderOptions.AllowedFileExtensions"/>), the size must not exceed
+    /// <see cref="StorageProviderOptions.MaxFileSize"/> and the content must match the registered file signature of the extension.
+    /// The object is committed only when the whole body was received; otherwise the multipart upload is aborted.
     /// </summary>
     /// <param name="context"></param>
-    /// <param name="filePath"></param>
+    /// <param name="filePath">Object key without extension. The extension of the uploaded file is appended.</param>
     /// <param name="cancellationToken"></param>
-    /// <returns>A boolean value indicating the success or failure of the upload procedure.</returns>
-    public override async Task<FileOperationResult> NoBufferUploadAsync(HttpContext context, string filePath, CancellationToken cancellationToken = default)
-    {
-        if (!MediaTypeHeaderValue.TryParse(context.Request.Headers.ContentType.ToString(), out var mediaTypeHeader))
-            return FileOperationResult.Failure(LocalizerKeys.UnsupportedMediaType);
-
-        var boundary = HeaderUtilities.RemoveQuotes(mediaTypeHeader.Boundary.Value).Value;
-
-        var reader = new MultipartReader(boundary, context.Request.Body);
-
-        var section = await reader.ReadNextSectionAsync(cancellationToken) ?? throw new MilvaUserFriendlyException(LocalizerKeys.FileShouldBeUploaded);
-
-        var extension = string.Empty;
-        var fileName = string.Empty;
-
-        while (section != null)
+    /// <returns>A value indicating the success or failure of the upload procedure.</returns>
+    public override Task<FileOperationResult> NoBufferUploadAsync(HttpContext context, string filePath, CancellationToken cancellationToken = default)
+        => ReadMultipartFilesAsync(context, filePath, async (key, contentType, copyToAsync) =>
         {
-            var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition);
+            await using var output = new S3UploadStream(_client, _s3Configuration.BucketName, key, contentType);
 
-            if (!hasContentDispositionHeader)
-                section = await reader.ReadNextSectionAsync(cancellationToken);
+            await copyToAsync(output);
 
-            if (contentDisposition.HasFileContentDisposition())
-            {
-                var trustedFileName = WebUtility.HtmlEncode(contentDisposition.FileName.Value);
-
-                fileName = trustedFileName;
-
-                extension = Path.GetExtension(trustedFileName).ToLowerInvariant();
-
-                var isSupportedExtension = StorageHelper.FileSignatures.TryGetValue(extension, out _);
-
-                if (!isSupportedExtension)
-                    return FileOperationResult.Failure(LocalizerKeys.UnsupportedMediaType);
-
-                using var output = new S3UploadStream(_client, _s3Configuration.BucketName, filePath + extension);
-
-                // Send file part by part.
-                await section.Body.CopyToAsync(output, cancellationToken);
-            }
-            else if (contentDisposition.HasFormDataContentDisposition())
-                return FileOperationResult.Failure(LocalizerKeys.FileShouldBeUploaded);
-
-            section = await reader.ReadNextSectionAsync(cancellationToken);
-        }
-
-        return FileOperationResult.Success(fullPath: filePath, fileName: fileName, fileExtension: extension);
-    }
+            await output.CompleteAsync(cancellationToken);
+        }, cancellationToken);
 
     /// <inheritdoc/>
     public override async Task<FileDownloadResult> DownloadAsync(string filePath, CancellationToken cancellationToken = default)
@@ -165,25 +131,18 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
     }
 
     /// <inheritdoc/>
+    /// <remarks>Keys are deleted in batches of 1000 (the S3 limit). Fails if any key could not be deleted.</remarks>
     public override async Task<FileOperationResult> DeleteAsync(List<string> filePaths, CancellationToken cancellationToken = default)
     {
         if (filePaths.IsNullOrEmpty())
             return FileOperationResult.Failure("File paths cannot be null or empty.");
 
-        var keys = filePaths.Select(filePath => new KeyVersion { Key = filePath }).ToList();
+        var (deleted, failed) = await DeleteKeysAsync(filePaths, cancellationToken);
 
-        var deleteObjectsRequest = new DeleteObjectsRequest
-        {
-            BucketName = _s3Configuration.BucketName,
-            Objects = keys
-        };
+        if (failed > 0)
+            return FileOperationResult.Failure($"{deleted} objects deleted, {failed} objects could not be deleted.");
 
-        var response = await _client.DeleteObjectsAsync(deleteObjectsRequest, cancellationToken);
-
-        if (response.HttpStatusCode != HttpStatusCode.OK)
-            return FileOperationResult.Failure();
-
-        return FileOperationResult.Success($"{response.DeletedObjects.Count} objects deleted.");
+        return FileOperationResult.Success($"{deleted} objects deleted.");
     }
 
     /// <inheritdoc/>
@@ -194,19 +153,32 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
 
         prefix = EnsureSlashSuffix(prefix.Trim().TrimStart('/'));
 
+        return await DeleteByPrefixAsync(prefix, cancellationToken);
+
+        static string EnsureSlashSuffix(string s) => string.IsNullOrEmpty(s) ? s : (s.EndsWith('/') ? s : s + "/");
+    }
+
+    /// <inheritdoc/>
+    /// <remarks>Lists and deletes every object page by page, so buckets with more than 1000 objects are cleared completely.</remarks>
+    public Task<FileOperationResult> ClearBucketAsync(CancellationToken cancellationToken = default) => DeleteByPrefixAsync(prefix: null, cancellationToken);
+
+    private async Task<FileOperationResult> DeleteByPrefixAsync(string prefix, CancellationToken cancellationToken)
+    {
         var listReq = new ListObjectsV2Request
         {
             BucketName = _s3Configuration.BucketName,
             Prefix = prefix,
-            MaxKeys = 1000,
+            MaxKeys = _maxKeysPerDeleteRequest,
             FetchOwner = false
         };
 
-        int totalDeleted = 0;
-        ListObjectsV2Response listRes;
+        var totalDeleted = 0;
+        var totalFailed = 0;
 
         try
         {
+            ListObjectsV2Response listRes;
+
             do
             {
                 listRes = await _client.ListObjectsV2Async(listReq, cancellationToken);
@@ -214,62 +186,58 @@ public class S3Provider(IAmazonS3 client, StorageProviderOptions options) : Stor
                 if (listRes.S3Objects.IsNullOrEmpty())
                     break;
 
-                foreach (var chunk in listRes.S3Objects.Select(o => o.Key).Chunk(1000))
-                {
-                    var delReq = new DeleteObjectsRequest
-                    {
-                        BucketName = _s3Configuration.BucketName,
-                        Quiet = true,
-                        Objects = [.. chunk.Select(k => new KeyVersion { Key = k })]
-                    };
+                var (deleted, failed) = await DeleteKeysAsync(listRes.S3Objects.Select(o => o.Key), cancellationToken);
 
-                    var delRes = await _client.DeleteObjectsAsync(delReq, cancellationToken);
-
-                    var errorCount = delRes.DeleteErrors?.Count ?? 0;
-                    totalDeleted += chunk.Length - errorCount;
-                }
+                totalDeleted += deleted;
+                totalFailed += failed;
 
                 listReq.ContinuationToken = listRes.NextContinuationToken;
             }
             while (listRes.IsTruncated ?? false);
-
-            return FileOperationResult.Success($"{totalDeleted} objects deleted.");
         }
-        catch (Exception)
+        catch (AmazonS3Exception)
         {
-            return FileDownloadResult.Failure(string.Empty);
+            return FileOperationResult.Failure($"{totalDeleted} objects deleted before the operation failed.");
         }
 
-        static string EnsureSlashSuffix(string s) => string.IsNullOrEmpty(s) ? s : (s.EndsWith('/') ? s : s + "/");
+        if (totalFailed > 0)
+            return FileOperationResult.Failure($"{totalDeleted} objects deleted, {totalFailed} objects could not be deleted.");
+
+        return FileOperationResult.Success($"{totalDeleted} objects deleted.");
     }
 
-    /// <inheritdoc/>
-    public async Task<FileOperationResult> ClearBucketAsync(CancellationToken cancellationToken = default)
+    private async Task<(int Deleted, int Failed)> DeleteKeysAsync(IEnumerable<string> keys, CancellationToken cancellationToken)
     {
-        var request = new ListObjectsRequest
+        var deleted = 0;
+        var failed = 0;
+
+        foreach (var chunk in keys.Chunk(_maxKeysPerDeleteRequest))
         {
-            BucketName = _s3Configuration.BucketName
-        };
+            var request = new DeleteObjectsRequest
+            {
+                BucketName = _s3Configuration.BucketName,
+                Quiet = true,
+                Objects = [.. chunk.Select(k => new KeyVersion { Key = k })]
+            };
 
-        var response = await _client.ListObjectsAsync(request, cancellationToken);
+            int errorCount;
 
-        var keys = new List<KeyVersion>();
+            try
+            {
+                var response = await _client.DeleteObjectsAsync(request, cancellationToken);
 
-        foreach (var item in response.S3Objects)
-        {
-            // Here you can provide VersionId as well.
-            keys.Add(new KeyVersion { Key = item.Key });
+                errorCount = response.DeleteErrors?.Count ?? 0;
+            }
+            catch (DeleteObjectsException ex)
+            {
+                errorCount = ex.Response?.DeleteErrors?.Count ?? chunk.Length;
+            }
+
+            failed += errorCount;
+            deleted += chunk.Length - errorCount;
         }
 
-        var multiObjectDeleteRequest = new DeleteObjectsRequest()
-        {
-            BucketName = _s3Configuration.BucketName,
-            Objects = keys
-        };
-
-        var deleteObjectsResponse = await _client.DeleteObjectsAsync(multiObjectDeleteRequest, cancellationToken);
-
-        return FileOperationResult.Success($"{deleteObjectsResponse.DeletedObjects.Count} objects deleted.");
+        return (deleted, failed);
     }
 
     /// <summary>
