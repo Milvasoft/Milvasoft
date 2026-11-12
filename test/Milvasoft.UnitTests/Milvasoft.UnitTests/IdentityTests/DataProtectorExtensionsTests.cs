@@ -80,7 +80,6 @@ public class DataProtectorExtensionsTests
 
         var purpose = "TestPurpose";
         var userId = Guid.NewGuid();
-        var useUtcForDateTimes = true;
 
         // Act
         var token = DataProtectorExtensions.Generate(mockProtectorProvider.Object, purpose, userId, _stamp);
