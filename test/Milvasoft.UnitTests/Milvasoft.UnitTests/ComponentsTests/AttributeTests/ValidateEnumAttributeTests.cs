@@ -56,6 +56,20 @@ public class ValidateEnumAttributeTests
     }
 
     [Fact]
+    public void ValidateEnumAttribute_ShouldNotStorePerValidationMessageInSharedAttribute()
+    {
+        // Arrange
+        var model = new TestModel { EnumProperty = (TestEnumFixture)999 };
+        var attribute = new ValidateEnumAttribute(typeof(TestEnumFixture));
+
+        // Act
+        attribute.GetValidationResult(model.EnumProperty, CreateValidationContext(model));
+
+        // Assert: attributes are shared between concurrent validations (and languages).
+        Assert.Null(attribute.ErrorMessage);
+    }
+
+    [Fact]
     public void ValidateEnumAttribute_ShouldReturnError_WhenValueIsNotEnum()
     {
         // Arrange
