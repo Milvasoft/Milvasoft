@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.IO;
 using Microsoft.Net.Http.Headers;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Storage.Models;
@@ -18,6 +19,24 @@ public static class StorageHelper
     /// Useful for validating file contents against extensions.
     /// </summary>
     public static Dictionary<string, List<byte[]>> FileSignatures { get; private set; } = [];
+
+    /// <summary>
+    /// Shared pooled memory stream manager used by storage upload streams. Pool retention is bounded.
+    /// </summary>
+    public static RecyclableMemoryStreamManager MemoryStreamManager { get; } = new(new RecyclableMemoryStreamManager.Options
+    {
+        MaximumSmallPoolFreeBytes = 64L * 1024 * 1024,
+        MaximumLargePoolFreeBytes = 64L * 1024 * 1024,
+    });
+
+    /// <summary>
+    /// Content types a browser may execute or render as active content. They are never taken from the client.
+    /// </summary>
+    private static readonly HashSet<string> _activeContentTypes = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "text/html", "application/xhtml+xml", "text/javascript", "application/javascript", "application/ecmascript",
+        "text/xml", "application/xml", "image/svg+xml", "application/x-shockwave-flash", "text/x-component"
+    };
 
     /// <summary>
     /// Registers a file signature for a specific extension (e.g., ".apk", ".jpg").
@@ -133,15 +152,75 @@ public static class StorageHelper
     /// no signatures are defined for the extension; otherwise, <see langword="false"/>.</returns>
     public static bool ValidateFileSignature(IFormFile file, string fileExtension)
     {
-        if (!FileSignatures.TryGetValue(fileExtension, out var signatures))
+        if (!FileSignatures.TryGetValue(fileExtension, out var signatures) || signatures.Count == 0)
             return true;
 
         using var stream = file.OpenReadStream();
-        var header = new byte[8];
 
-        stream.ReadExactly(header);
+        var header = new byte[signatures.Max(s => s.Length)];
 
-        return signatures.Any(sig => header.Take(sig.Length).SequenceEqual(sig));
+        // Files shorter than the longest signature are valid input; they just cannot match it.
+        var read = stream.ReadAtLeast(header, header.Length, throwOnEndOfStream: false);
+
+        return MatchesAnySignature(header.AsSpan(0, read), signatures);
+    }
+
+    /// <summary>
+    /// Returns true if <paramref name="header"/> starts with one of <paramref name="signatures"/>.
+    /// </summary>
+    /// <param name="header">First bytes of the content.</param>
+    /// <param name="signatures">Accepted signatures.</param>
+    public static bool MatchesAnySignature(ReadOnlySpan<byte> header, IEnumerable<byte[]> signatures)
+    {
+        foreach (var signature in signatures)
+            if (signature.Length > 0 && header.StartsWith(signature))
+                return true;
+
+        return false;
+    }
+
+    /// <summary>
+    /// Returns the content type to store for a file. The type is derived from the file extension on the server.
+    /// The client supplied <paramref name="clientContentType"/> is used only for unknown extensions and never if it is an active
+    /// (scriptable) type such as text/html or image/svg+xml.
+    /// </summary>
+    /// <param name="fileName">File name or path with extension.</param>
+    /// <param name="clientContentType">Content type declared by the client.</param>
+    public static string GetSafeContentType(string fileName, string clientContentType = null)
+    {
+        var extension = Path.GetExtension(fileName);
+
+        if (!string.IsNullOrEmpty(extension) && MimeTypeHelper.TryGetMimeType(extension, out var mimeType))
+            return mimeType;
+
+        if (!string.IsNullOrWhiteSpace(clientContentType)
+            && MediaTypeHeaderValue.TryParse(clientContentType, out var parsed)
+            && !_activeContentTypes.Contains(parsed.MediaType.Value))
+            return parsed.MediaType.Value;
+
+        return "application/octet-stream";
+    }
+
+    /// <summary>
+    /// Returns true if <paramref name="extension"/> may be uploaded.
+    /// The allowlist is <paramref name="allowedExtensions"/> when it is not empty, otherwise the extensions registered in <see cref="FileSignatures"/>.
+    /// If both are empty, nothing is allowed.
+    /// </summary>
+    /// <param name="extension">Extension including the leading dot.</param>
+    /// <param name="allowedExtensions">Configured allowlist.</param>
+    public static bool IsExtensionAllowed(string extension, IEnumerable<string> allowedExtensions)
+    {
+        if (string.IsNullOrWhiteSpace(extension))
+            return false;
+
+        var allowList = allowedExtensions?.Where(e => !string.IsNullOrWhiteSpace(e)).ToList();
+
+        if (allowList?.Count > 0)
+            return allowList.Exists(e => string.Equals(NormalizeExtension(e), extension, StringComparison.OrdinalIgnoreCase));
+
+        return FileSignatures.ContainsKey(extension) || FileSignatures.ContainsKey(extension.ToLowerInvariant());
+
+        static string NormalizeExtension(string e) => e.StartsWith('.') ? e : '.' + e;
     }
 
     /// <summary>
@@ -232,6 +311,17 @@ public static class StorageHelper
                 fileExtension = '.' + fileExtension;
 
             return _provider.TryGetContentType(fileExtension, out var contentType) ? contentType : "application/octet-stream";
+        }
+
+        /// <summary>
+        /// Gets MIME type from file extension if it is known.
+        /// </summary>
+        public static bool TryGetMimeType(string fileExtension, out string mimeType)
+        {
+            if (!fileExtension.StartsWith('.'))
+                fileExtension = '.' + fileExtension;
+
+            return _provider.TryGetContentType(fileExtension, out mimeType);
         }
     }
 }

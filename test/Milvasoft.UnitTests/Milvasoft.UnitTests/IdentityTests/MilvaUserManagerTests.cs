@@ -1,5 +1,6 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Utils.Constants;
@@ -132,15 +133,16 @@ public class MilvaUserManagerTests
         // Arrange
         var user = new TestUser { PasswordHash = "hashedPassword" };
         var password = "Password123!";
-        _passwordHasherMock.Setup(x => x.VerifyHashedPassword(user.PasswordHash, password))
-                          .Returns(true);
+        _passwordHasherMock.Setup(x => x.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, password))
+                          .Returns(PasswordVerificationResult.Success);
 
         // Act
         var result = _userManager.CheckPassword(user, password);
 
         // Assert
         result.Should().BeTrue();
-        _passwordHasherMock.Verify(x => x.VerifyHashedPassword(user.PasswordHash, password), Times.Once);
+        user.PasswordHash.Should().Be("hashedPassword");
+        _passwordHasherMock.Verify(x => x.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, password), Times.Once);
     }
 
     [Fact]
@@ -149,8 +151,8 @@ public class MilvaUserManagerTests
         // Arrange
         var user = new TestUser { PasswordHash = "hashedPassword" };
         var password = "WrongPassword123!";
-        _passwordHasherMock.Setup(x => x.VerifyHashedPassword(user.PasswordHash, password))
-                          .Returns(false);
+        _passwordHasherMock.Setup(x => x.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, password))
+                          .Returns(PasswordVerificationResult.Failed);
 
         // Act
         var result = _userManager.CheckPassword(user, password);
@@ -158,6 +160,152 @@ public class MilvaUserManagerTests
         // Assert
         result.Should().BeFalse();
     }
+
+    [Fact]
+    public void CheckPassword_WithLegacyHash_ShouldReturnTrueAndUpgradeHash()
+    {
+        // Arrange: hash created with the previous defaults (HMAC-SHA256, 10,000 iterations).
+        var legacyHasher = new MilvaPasswordHasher(new MilvaPasswordHasherOptions
+        {
+            IterationCount = 10000,
+            Prf = Microsoft.AspNetCore.Cryptography.KeyDerivation.KeyDerivationPrf.HMACSHA256
+        });
+        var currentHasher = new MilvaPasswordHasher(new MilvaPasswordHasherOptions { IterationCount = 20000 });
+        var userManager = new MilvaUserManager<TestUser, Guid>(new Lazy<IDataProtectionProvider>(() => _dataProtectionProviderMock.Object),
+                                                               _identityOptions,
+                                                               new Lazy<IMilvaPasswordHasher>(() => currentHasher));
+        var password = "Password123!";
+        var legacyHash = legacyHasher.HashPassword(password);
+        var user = new TestUser { PasswordHash = legacyHash };
+
+        // Act
+        var result = userManager.CheckPassword(user, password);
+
+        // Assert
+        result.Should().BeTrue();
+        user.PasswordHash.Should().NotBe(legacyHash);
+        currentHasher.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, password).Should().Be(PasswordVerificationResult.Success);
+    }
+
+    [Fact]
+    public void CheckPassword_WithWrongPassword_ShouldNotChangeHash()
+    {
+        // Arrange
+        var user = new TestUser { PasswordHash = "hashedPassword" };
+        _passwordHasherMock.Setup(x => x.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, "wrong"))
+                           .Returns(PasswordVerificationResult.Failed);
+
+        // Act
+        var result = _userManager.CheckPassword(user, "wrong");
+
+        // Assert
+        result.Should().BeFalse();
+        user.PasswordHash.Should().Be("hashedPassword");
+        _passwordHasherMock.Verify(x => x.HashPassword(It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public void ValidateUser_WithRequireUniqueEmailAndValidEmail_ShouldStillValidatePassword()
+    {
+        // Arrange
+        var user = new TestUser
+        {
+            UserName = "validuser",
+            Email = "valid@email.com"
+        };
+        _identityOptions.User.RequireUniqueEmail = true;
+
+        // Act
+        var result = _userManager.ValidateUser(user, "short");
+
+        // Assert
+        result.Should().Be(LocalizerKeys.IdentityPasswordTooShort);
+    }
+
+    [Fact]
+    public void UserToken_ShouldRoundTripAndBeInvalidatedByPasswordChange()
+    {
+        // Arrange
+        var userManager = CreateUserManagerWithRealDataProtection();
+        var user = new TestUser { Id = Guid.NewGuid(), Email = "test@example.com", UserName = "TestUser", PasswordHash = "hash-1" };
+
+        // Act
+        var token = userManager.GenerateUserToken(user, Purpose.PasswordReset);
+        var validBeforeChange = userManager.VerifyUserToken(user, Purpose.PasswordReset, token);
+
+        user.PasswordHash = "hash-2";
+
+        var validAfterChange = userManager.VerifyUserToken(user, Purpose.PasswordReset, token);
+
+        // Assert
+        validBeforeChange.Should().BeTrue();
+        validAfterChange.Should().BeFalse();
+    }
+
+    [Fact]
+    public void UserToken_EmailConfirm_ShouldBeSingleUse()
+    {
+        // Arrange
+        var userManager = CreateUserManagerWithRealDataProtection();
+        var user = new TestUser { Id = Guid.NewGuid(), Email = "test@example.com", UserName = "TestUser" };
+        var token = userManager.GenerateUserToken(user, Purpose.EmailConfirm);
+
+        // Act & Assert
+        userManager.VerifyUserToken(user, Purpose.EmailConfirm, token).Should().BeTrue();
+
+        user.EmailConfirmed = true;
+
+        userManager.VerifyUserToken(user, Purpose.EmailConfirm, token).Should().BeFalse();
+    }
+
+    [Fact]
+    public void UserToken_IssuedForAnotherUser_ShouldBeInvalid()
+    {
+        // Arrange
+        var userManager = CreateUserManagerWithRealDataProtection();
+        var user = new TestUser { Id = Guid.NewGuid(), Email = "test@example.com", UserName = "TestUser" };
+        var otherUser = new TestUser { Id = Guid.NewGuid(), Email = "test@example.com", UserName = "TestUser" };
+        var token = userManager.GenerateUserToken(user, Purpose.EmailConfirm);
+
+        // Act & Assert
+        userManager.VerifyUserToken(otherUser, Purpose.EmailConfirm, token).Should().BeFalse();
+    }
+
+    [Fact]
+    public void DigitToken_ShouldRoundTripWithConfiguredSecretAndBeSingleUse()
+    {
+        // Arrange
+        _identityOptions.Token.DigitTokenSecret = new string('s', 32);
+        var user = new TestUser { Id = Guid.NewGuid(), Email = "test@example.com", UserName = "TestUser", PasswordHash = "hash" };
+
+        // Act
+        var code = _userManager.GenerateDigitToken(user, Purpose.PasswordReset);
+
+        // Assert
+        _userManager.VerifyDigitToken(user, Purpose.PasswordReset, code).Should().BeTrue();
+
+        user.PasswordHash = "new-hash";
+
+        _userManager.VerifyDigitToken(user, Purpose.PasswordReset, code).Should().BeFalse();
+    }
+
+    [Fact]
+    public void DigitToken_WithoutSecretOrSymmetricKey_ShouldThrow()
+    {
+        // Arrange
+        var user = new TestUser { Id = Guid.NewGuid() };
+
+        // Act
+        Action act = () => _userManager.GenerateDigitToken(user, Purpose.PasswordReset);
+
+        // Assert
+        act.Should().Throw<MilvaDeveloperException>();
+    }
+
+    private MilvaUserManager<TestUser, Guid> CreateUserManagerWithRealDataProtection()
+        => new(new Lazy<IDataProtectionProvider>(() => new EphemeralDataProtectionProvider()),
+               _identityOptions,
+               new Lazy<IMilvaPasswordHasher>(() => _passwordHasherMock.Object));
 
     [Fact]
     public void ValidatePassword_WithValidPassword_ShouldReturnNull()
@@ -461,7 +609,7 @@ public class MilvaUserManagerTests
             .Returns(mockProtector.Object);
 
         // Act
-        var token = _userManager.GenerateUserToken(user, purpose, true);
+        var token = _userManager.GenerateUserToken(user, purpose);
 
         // Assert
         token.Should().NotBeNullOrEmpty();
@@ -492,7 +640,7 @@ public class MilvaUserManagerTests
             .Returns(mockProtector.Object);
 
         // Act
-        var isValid = _userManager.VerifyUserToken(user, purpose, token, true);
+        var isValid = _userManager.VerifyUserToken(user, purpose, token);
 
         // Assert
         isValid.Should().BeFalse();
@@ -512,7 +660,7 @@ public class MilvaUserManagerTests
         var purpose = Purpose.EmailConfirm;
 
         // Act
-        var isValid = _userManager.VerifyUserToken(user, purpose, null, true);
+        var isValid = _userManager.VerifyUserToken(user, purpose, null);
 
         // Assert
         isValid.Should().BeFalse();
@@ -526,7 +674,7 @@ public class MilvaUserManagerTests
         var purpose = Purpose.EmailConfirm;
 
         // Act
-        Action act = () => _userManager.GenerateUserToken(user, purpose, true);
+        Action act = () => _userManager.GenerateUserToken(user, purpose);
 
         // Assert
         act.Should().Throw<NullReferenceException>();
@@ -541,7 +689,7 @@ public class MilvaUserManagerTests
         var token = "valid-token";
 
         // Act
-        Action act = () => _userManager.VerifyUserToken(user, purpose, token, true);
+        Action act = () => _userManager.VerifyUserToken(user, purpose, token);
 
         // Assert
         act.Should().Throw<NullReferenceException>();

@@ -68,9 +68,6 @@ public class FileInformation : EntityBase<string>
     /// <param name="fileUploadRequest"></param>
     public FileInformation(FileUploadRequest fileUploadRequest) : this(fileUploadRequest.Id)
     {
-        if (string.IsNullOrWhiteSpace(fileUploadRequest.Id))
-            Id = fileUploadRequest.Id;
-
         AltText = fileUploadRequest.AltText;
         FileName = fileUploadRequest.FileName;
         Order = fileUploadRequest.Order;

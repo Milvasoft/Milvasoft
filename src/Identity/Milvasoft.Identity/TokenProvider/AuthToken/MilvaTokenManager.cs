@@ -1,4 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Tokens;
 using Milvasoft.Identity.Abstract;
 using Milvasoft.Identity.Concrete.Options;
 using System.IdentityModel.Tokens.Jwt;
@@ -21,7 +21,35 @@ public class MilvaTokenManager(MilvaIdentityOptions identityOptions, IMilvaLogge
     /// </summary>
     /// <param name="token"></param>
     /// <returns></returns>
-    public ClaimsPrincipal GetClaimsPrincipalIfValid(string token)
+    public ClaimsPrincipal GetClaimsPrincipalIfValid(string token) => GetClaimsPrincipalIfValid(token, _identityOptions.Token.TokenValidationParameters);
+
+    /// <summary>
+    /// Returns claims if token is valid. Validates the issuer against <paramref name="issuer"/> for this call only;
+    /// the shared <see cref="TokenValidationParameters"/> are not modified.
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="issuer"></param>
+    /// <returns></returns>
+    public ClaimsPrincipal GetClaimsPrincipalIfValid(string token, string issuer)
+    {
+        var validationParameters = _identityOptions.Token.TokenValidationParameters.Clone();
+
+        validationParameters.ValidIssuer = issuer;
+
+        return GetClaimsPrincipalIfValid(token, validationParameters);
+    }
+
+    /// <summary>
+    /// Overrides token valid issuer configuration in milva identity options.
+    /// </summary>
+    /// <remarks>
+    /// This changes the shared, application wide validation parameters. To validate a single token against another issuer use
+    /// <see cref="GetClaimsPrincipalIfValid(string, string)"/>, which does not modify shared state.
+    /// </remarks>
+    /// <param name="issuer"></param>
+    public void OverrideValidIssuer(string issuer) => _identityOptions.Token.TokenValidationParameters.ValidIssuer = issuer;
+
+    private ClaimsPrincipal GetClaimsPrincipalIfValid(string token, TokenValidationParameters validationParameters)
     {
         try
         {
@@ -32,7 +60,7 @@ public class MilvaTokenManager(MilvaIdentityOptions identityOptions, IMilvaLogge
             if (jwtToken == null)
                 return null;
 
-            var principal = tokenHandler.ValidateToken(token, _identityOptions.Token.TokenValidationParameters, out _);
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
 
             return principal;
         }
@@ -42,25 +70,6 @@ public class MilvaTokenManager(MilvaIdentityOptions identityOptions, IMilvaLogge
             return null;
         }
     }
-
-    /// <summary>
-    /// Returns claims if token is valid.
-    /// </summary>
-    /// <param name="token"></param>
-    /// <param name="issuer"></param>
-    /// <returns></returns>
-    public ClaimsPrincipal GetClaimsPrincipalIfValid(string token, string issuer)
-    {
-        OverrideValidIssuer(issuer);
-
-        return GetClaimsPrincipalIfValid(token);
-    }
-
-    /// <summary>
-    /// Overrides token valid issuer configuration in milva identity options.
-    /// </summary>
-    /// <param name="issuer"></param>
-    public void OverrideValidIssuer(string issuer) => _identityOptions.Token.TokenValidationParameters.ValidIssuer = issuer;
 
     /// <summary>
     /// Generates token with expired claim.

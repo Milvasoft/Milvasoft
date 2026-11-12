@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
+using Milvasoft.Core.Exceptions;
+using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Storage.Models;
+using System.Net;
 using System.Text;
 
 namespace Milvasoft.Storage.Providers;
@@ -66,7 +71,89 @@ public abstract class StorageProviderBase(StorageProviderOptions storageProvider
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
-    public virtual string CreateAccessUrl(string filePath) => Path.Combine(_storageProviderOptions.AccessUrl, filePath);
+    public virtual string CreateAccessUrl(string filePath) => UrlCombine(_storageProviderOptions.AccessUrl?.TrimEnd('/'), filePath?.TrimStart('/'));
+
+    /// <summary>
+    /// Reads the multipart/form-data request body of <paramref name="context"/> section by section without buffering it and passes
+    /// every file section to <paramref name="uploadFileAsync"/>. The file extension is checked against the configured allowlist
+    /// (<see cref="StorageProviderOptions.AllowedFileExtensions"/>, or the registered <see cref="StorageHelper.FileSignatures"/>),
+    /// and <paramref name="uploadFileAsync"/> receives a validation stream that enforces <see cref="StorageProviderOptions.MaxFileSize"/>
+    /// and the registered file signature of the extension.
+    /// </summary>
+    /// <param name="context">Http context of the upload request.</param>
+    /// <param name="filePath">Target path without extension. The extension of the uploaded file name is appended.</param>
+    /// <param name="uploadFileAsync">
+    /// Uploads one file. Arguments: target path with extension, server-side content type, and a callback that copies the validated
+    /// content to the given destination stream. The upload must be committed only after the callback completed.
+    /// </param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>The result of the upload.</returns>
+    protected async Task<FileOperationResult> ReadMultipartFilesAsync(HttpContext context,
+                                                                      string filePath,
+                                                                      Func<string, string, Func<Stream, Task>, Task> uploadFileAsync,
+                                                                      CancellationToken cancellationToken)
+    {
+        if (!MediaTypeHeaderValue.TryParse(context.Request.ContentType, out var mediaTypeHeader)
+            || string.IsNullOrWhiteSpace(HeaderUtilities.RemoveQuotes(mediaTypeHeader.Boundary).Value))
+            return FileOperationResult.Failure(LocalizerKeys.UnsupportedMediaType);
+
+        var boundary = HeaderUtilities.RemoveQuotes(mediaTypeHeader.Boundary).Value;
+
+        var reader = new MultipartReader(boundary, context.Request.Body);
+
+        var section = await reader.ReadNextSectionAsync(cancellationToken) ?? throw new MilvaUserFriendlyException(LocalizerKeys.FileShouldBeUploaded);
+
+        var extension = string.Empty;
+        var fileName = string.Empty;
+
+        for (; section != null; section = await reader.ReadNextSectionAsync(cancellationToken))
+        {
+            if (!ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition))
+                continue;
+
+            if (contentDisposition.HasFormDataContentDisposition())
+                return FileOperationResult.Failure(LocalizerKeys.FileShouldBeUploaded);
+
+            if (!contentDisposition.HasFileContentDisposition())
+                continue;
+
+            var rawFileName = HeaderUtilities.RemoveQuotes(contentDisposition.FileName).Value;
+
+            if (string.IsNullOrEmpty(rawFileName))
+                rawFileName = HeaderUtilities.RemoveQuotes(contentDisposition.FileNameStar).Value;
+
+            fileName = WebUtility.HtmlEncode(Path.GetFileName(rawFileName));
+            extension = Path.GetExtension(fileName).ToLowerInvariant();
+
+            if (!StorageHelper.IsExtensionAllowed(extension, _storageProviderOptions.AllowedFileExtensions))
+                return FileOperationResult.Failure(LocalizerKeys.UnsupportedMediaType);
+
+            StorageHelper.FileSignatures.TryGetValue(extension, out var signatures);
+
+            var body = section.Body;
+
+            try
+            {
+                await uploadFileAsync(filePath + extension, StorageHelper.GetSafeContentType(fileName), async destination =>
+                {
+                    var validation = new UploadValidationStream(destination, _storageProviderOptions.MaxFileSize, signatures);
+
+                    await body.CopyToAsync(validation, cancellationToken);
+                    await validation.CompleteAsync(cancellationToken);
+                });
+            }
+            catch (InvalidDataException ex)
+            {
+                return FileOperationResult.Failure(ex.Message);
+            }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                return FileOperationResult.Failure(LocalizerKeys.UploadFailed);
+            }
+        }
+
+        return FileOperationResult.Success(fullPath: filePath, fileName: fileName, fileExtension: extension);
+    }
 
     /// <summary>
     /// Creates access path to file.

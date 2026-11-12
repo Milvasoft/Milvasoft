@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.IdentityModel.Tokens;
 using Milvasoft.Core.Abstractions;
 using Milvasoft.Identity.Concrete.Options;
@@ -141,5 +141,23 @@ public class MilvaTokenManagerTests
         jwtToken.Should().NotBeNull();
         principal.Claims.Should().ContainSingle(c => c.Type == ClaimTypes.Name && c.Value == "TestUser");
         jwtToken.ValidTo.Should().BeCloseTo(customExpiration, TimeSpan.FromSeconds(5));
+    }
+
+    [Fact]
+    public void GetClaimsPrincipalIfValid_WithIssuer_ShouldNotModifySharedValidationParameters()
+    {
+        // Arrange
+        var options = CreateDefaultOptions();
+        var loggerMock = new Mock<IMilvaLogger>();
+        var tokenManager = new MilvaTokenManager(options, loggerMock.Object);
+        var token = tokenManager.GenerateToken(issuer: "OtherIssuer", claims: new Claim(ClaimTypes.Name, "TestUser"));
+
+        // Act
+        var principalForOtherIssuer = tokenManager.GetClaimsPrincipalIfValid(token, "OtherIssuer");
+
+        // Assert
+        principalForOtherIssuer.Should().NotBeNull();
+        options.Token.TokenValidationParameters.ValidIssuer.Should().Be("TestIssuer");
+        tokenManager.GetClaimsPrincipalIfValid(token).Should().BeNull();
     }
 }

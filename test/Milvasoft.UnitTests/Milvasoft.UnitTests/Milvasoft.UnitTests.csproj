@@ -47,6 +47,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\src\Milvasoft.Helpers\Milvasoft.Helpers.csproj" />
+		<ProjectReference Include="..\..\..\src\Notification\Milvasoft.Notification.Mail.Smtp\Milvasoft.Notification.Mail.Smtp.csproj" />
+		<ProjectReference Include="..\..\..\src\Notification\Milvasoft.Notification.Push.Expo\Milvasoft.Notification.Push.Expo.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

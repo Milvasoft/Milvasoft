@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Identity;
 using Milvasoft.Identity.Abstract;
 using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.Concrete.Options;
@@ -42,13 +43,22 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     }
 
     /// <summary>
-    /// Check password hash.
+    /// Checks <paramref name="password"/> against the user's password hash.
+    /// If the password is correct but the stored hash was created with weaker hasher settings than the configured ones,
+    /// <see cref="MilvaUser{TKey}.PasswordHash"/> is replaced with a new hash. Persist the user to keep the upgraded hash.
     /// </summary>
     /// <param name="user">The user</param>
     /// <param name="password"></param>
-    /// <returns></returns>
+    /// <returns>True if the password is correct.</returns>
     public virtual bool CheckPassword(TUser user, string password)
-        => _passwordHasher.Value.VerifyHashedPassword(user.PasswordHash, password);
+    {
+        var result = _passwordHasher.Value.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, password);
+
+        if (result == PasswordVerificationResult.SuccessRehashNeeded)
+            user.PasswordHash = _passwordHasher.Value.HashPassword(password);
+
+        return result != PasswordVerificationResult.Failed;
+    }
 
     /// <summary>
     /// Hashes password and sets user's password hash property.
@@ -183,7 +193,12 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
             return userNameValidaton;
 
         if (_options.User.RequireUniqueEmail)
-            return ValidateEmail(user.Email);
+        {
+            var emailValidation = ValidateEmail(user.Email);
+
+            if (emailValidation != null)
+                return emailValidation;
+        }
 
         if (password != null)
             return ValidatePassword(password);
@@ -303,32 +318,29 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
             MilvaIdentityExceptionThrower.ThrowInvalidEmail();
     }
 
-    /// <summary>
-    /// Generates a token for the given <paramref name="user"/> and <paramref name="purpose"/>.
-    /// </summary>
-    /// <param name="purpose">The purpose the token will be for.</param>
-    /// <param name="useUtcForDateTimes"></param>
-    /// <param name="value"></param>
-    /// <param name="user">The user the token will be for.</param>
-    /// <returns>
-    /// The <see cref="Task"/> that represents result of the asynchronous operation, a token for
-    /// the given user and purpose.
-    /// </returns>
-    public virtual string GenerateUserToken(TUser user, Purpose purpose, bool useUtcForDateTimes, string value = null) => _dataProtector.Value.Generate(GetPurpose(user, purpose, value), user.Id, _options.Token.UseUtcForDateTimes);
+    /// <inheritdoc/>
+    public virtual string GenerateUserToken(TUser user, Purpose purpose, string value = null)
+        => _dataProtector.Value.Generate(GetPurpose(user, purpose, value), user.Id, UserSecurityStamp.ComputeString(user));
 
-    /// <summary>
-    /// Returns a flag indicating whether the specified <paramref name="token"/> is valid for the given <paramref name="user"/> and <paramref name="purpose"/>.
-    /// </summary>
-    /// <param name="user">The user to validate the token against.</param>
-    /// <param name="purpose">The purpose the token should be generated for.</param>
-    /// <param name="token">The token to validate</param>
-    /// <param name="value"></param>
-    /// <param name="useUtcForDateTimes"></param>
-    /// <returns>
-    /// True if the <paramref name="token"/>
-    /// is valid, otherwise false.
-    /// </returns>
-    public virtual bool VerifyUserToken(TUser user, Purpose purpose, string token, bool useUtcForDateTimes, string value = null) => _dataProtector.Value.Validate(GetPurpose(user, purpose, value), token, user.Id, useUtcForDateTimes);
+    /// <inheritdoc/>
+    [Obsolete("Tokens always use UTC. Use GenerateUserToken(user, purpose, value) instead.")]
+    public virtual string GenerateUserToken(TUser user, Purpose purpose, bool useUtcForDateTimes, string value = null) => GenerateUserToken(user, purpose, value);
+
+    /// <inheritdoc/>
+    public virtual bool VerifyUserToken(TUser user, Purpose purpose, string token, string value = null)
+        => _dataProtector.Value.Validate(GetPurpose(user, purpose, value), token, user.Id, UserSecurityStamp.ComputeString(user));
+
+    /// <inheritdoc/>
+    [Obsolete("Tokens always use UTC. Use VerifyUserToken(user, purpose, token, value) instead.")]
+    public virtual bool VerifyUserToken(TUser user, Purpose purpose, string token, bool useUtcForDateTimes, string value = null) => VerifyUserToken(user, purpose, token, value);
+
+    /// <inheritdoc/>
+    public virtual string GenerateDigitToken(TUser user, Purpose purpose, string value = null)
+        => DigitTokenProvider<TUser, TKey>.Generate(purpose, user, _options.Token.GetDigitTokenSecret(), value);
+
+    /// <inheritdoc/>
+    public virtual bool VerifyDigitToken(TUser user, Purpose purpose, string token, string value = null)
+        => DigitTokenProvider<TUser, TKey>.Validate(purpose, token, user, _options.Token.GetDigitTokenSecret(), value);
 
     /// <summary>
     /// Returns a flag indicating whether the supplied character is a digit.

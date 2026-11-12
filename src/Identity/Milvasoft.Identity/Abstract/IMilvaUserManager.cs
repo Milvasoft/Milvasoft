@@ -1,4 +1,4 @@
-﻿using Milvasoft.Identity.Concrete.Entity;
+using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.TokenProvider;
 
 namespace Milvasoft.Identity.Abstract;
@@ -17,11 +17,13 @@ public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> wh
     void ConfigureForCreate(ref TUser user, string password);
 
     /// <summary>
-    /// Check password hash.
+    /// Checks <paramref name="password"/> against the user's password hash.
+    /// If the password is correct but the stored hash was created with weaker hasher settings than the configured ones,
+    /// <see cref="MilvaUser{TKey}.PasswordHash"/> is replaced with a new hash. Persist the user to keep the upgraded hash.
     /// </summary>
     /// <param name="user">The user</param>
     /// <param name="password"></param>
-    /// <returns></returns>
+    /// <returns>True if the password is correct.</returns>
     bool CheckPassword(TUser user, string password);
 
     /// <summary>
@@ -133,17 +135,25 @@ public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> wh
     void ThrowIfEmailIsInvalid(string email);
 
     /// <summary>
+    /// Generates a data protection token for the given <paramref name="user"/> and <paramref name="purpose"/>.
+    /// The token is bound to the user's security stamp (see <see cref="UserSecurityStamp"/>) and expires after one day.
+    /// </summary>
+    /// <param name="user">The user the token will be for.</param>
+    /// <param name="purpose">The purpose the token will be for.</param>
+    /// <param name="value">Optional value the token is bound to (for example the new email address in an email change flow).</param>
+    /// <returns>A token for the given user and purpose.</returns>
+    string GenerateUserToken(TUser user, Purpose purpose, string value = null);
+
+    /// <summary>
     /// Generates a token for the given <paramref name="user"/> and <paramref name="purpose"/>.
     /// </summary>
-    /// <param name="purpose">The purpose the token will be for.</param>
-    /// <param name="useUtcForDateTimes"></param>
-    /// <param name="value"></param>
     /// <param name="user">The user the token will be for.</param>
-    /// <returns>
-    /// The <see cref="Task"/> that represents result of the asynchronous operation, a token for
-    /// the given user and purpose.
-    /// </returns>
-    string GenerateUserToken(TUser user, Purpose purpose, bool useUtcForDateTimes, string value = null);
+    /// <param name="purpose">The purpose the token will be for.</param>
+    /// <param name="useUtcForDateTimes">Ignored. Tokens always use UTC.</param>
+    /// <param name="value">Optional value the token is bound to.</param>
+    /// <returns>A token for the given user and purpose.</returns>
+    [Obsolete("Tokens always use UTC. Use GenerateUserToken(user, purpose, value) instead.")]
+    string GenerateUserToken(TUser user, Purpose purpose, bool useUtcForDateTimes, string value = null) => GenerateUserToken(user, purpose, value);
 
     /// <summary>
     /// Returns a flag indicating whether the specified <paramref name="token"/> is valid for the given <paramref name="user"/> and <paramref name="purpose"/>.
@@ -151,11 +161,40 @@ public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> wh
     /// <param name="user">The user to validate the token against.</param>
     /// <param name="purpose">The purpose the token should be generated for.</param>
     /// <param name="token">The token to validate</param>
-    /// <param name="useUtcForDateTimes"></param>
-    /// <param name="value"></param>
-    /// <returns>
-    /// True if the <paramref name="token"/>
-    /// is valid, otherwise false.
-    /// </returns>
-    bool VerifyUserToken(TUser user, Purpose purpose, string token, bool useUtcForDateTimes, string value = null);
+    /// <param name="value">The value the token was bound to when it was generated.</param>
+    /// <returns>True if the <paramref name="token"/> is valid, otherwise false.</returns>
+    bool VerifyUserToken(TUser user, Purpose purpose, string token, string value = null);
+
+    /// <summary>
+    /// Returns a flag indicating whether the specified <paramref name="token"/> is valid for the given <paramref name="user"/> and <paramref name="purpose"/>.
+    /// </summary>
+    /// <param name="user">The user to validate the token against.</param>
+    /// <param name="purpose">The purpose the token should be generated for.</param>
+    /// <param name="token">The token to validate</param>
+    /// <param name="useUtcForDateTimes">Ignored. Tokens always use UTC.</param>
+    /// <param name="value">The value the token was bound to when it was generated.</param>
+    /// <returns>True if the <paramref name="token"/> is valid, otherwise false.</returns>
+    [Obsolete("Tokens always use UTC. Use VerifyUserToken(user, purpose, token, value) instead.")]
+    bool VerifyUserToken(TUser user, Purpose purpose, string token, bool useUtcForDateTimes, string value = null) => VerifyUserToken(user, purpose, token, value);
+
+    /// <summary>
+    /// Generates a 6 digit time based code for the given <paramref name="user"/> and <paramref name="purpose"/>.
+    /// The code is derived from the configured server-side secret (<c>Token.DigitTokenSecret</c>) and the user's security stamp.
+    /// </summary>
+    /// <param name="user">The user the code will be for.</param>
+    /// <param name="purpose">The purpose the code will be for.</param>
+    /// <param name="value">Optional value the code is bound to (for example the new email address in an email change flow).</param>
+    /// <returns>6 digit code.</returns>
+    string GenerateDigitToken(TUser user, Purpose purpose, string value = null);
+
+    /// <summary>
+    /// Returns a flag indicating whether the specified 6 digit <paramref name="token"/> is valid for the given <paramref name="user"/> and <paramref name="purpose"/>.
+    /// Callers must rate limit validation attempts.
+    /// </summary>
+    /// <param name="user">The user to validate the code against.</param>
+    /// <param name="purpose">The purpose the code was generated for.</param>
+    /// <param name="token">The code to validate.</param>
+    /// <param name="value">The value the code was bound to when it was generated.</param>
+    /// <returns>True if the code is valid, otherwise false.</returns>
+    bool VerifyDigitToken(TUser user, Purpose purpose, string token, string value = null);
 }

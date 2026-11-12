@@ -1,33 +1,60 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Milvasoft.Identity.Abstract;
 using Milvasoft.Identity.Concrete.Options;
-using System.Runtime.CompilerServices;
+using System.Buffers.Binary;
 using System.Security.Cryptography;
 
 namespace Milvasoft.Identity.Concrete;
 
 /// <summary>
-/// Implements the standard Identity password hashing.
+/// Implements PBKDF2 password hashing.
 /// </summary>
+/// <remarks>
+/// <para>
+/// Stored format (base64): <c>0x01 | prf (uint32 BE) | iteration count (uint32 BE) | salt length (uint32 BE) | salt | subkey</c>.
+/// The format records the PRF and the iteration count of every hash, so hashes created with older settings
+/// (for example HMAC-SHA256 with 10,000 iterations) keep verifying after the settings change.
+/// </para>
+/// <para>
+/// When a stored hash was created with weaker settings than the configured ones, <see cref="VerifyHashedPasswordWithRehashCheck"/>
+/// returns <see cref="PasswordVerificationResult.SuccessRehashNeeded"/> so the caller can store a new hash.
+/// </para>
+/// </remarks>
 public class MilvaPasswordHasher : IMilvaPasswordHasher
 {
+    private const byte _formatMarker = 0x01;
+    private const int _headerLength = 13;
+    private const int _saltSize = 128 / 8;
+    private const int _subkeyLength = 256 / 8;
+
     private readonly int _iterCount;
+    private readonly KeyDerivationPrf _prf;
     private readonly RandomNumberGenerator _rng;
 
     /// <summary>
     /// Creates a new instance of <see cref="MilvaPasswordHasher"/>.
     /// </summary>
     /// <param name="optionsAccessor"></param>
-    public MilvaPasswordHasher(IOptions<MilvaPasswordHasherOptions> optionsAccessor = null)
+    public MilvaPasswordHasher(IOptions<MilvaPasswordHasherOptions> optionsAccessor = null) : this(optionsAccessor?.Value)
     {
-        var options = optionsAccessor?.Value ?? new MilvaPasswordHasherOptions();
+    }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="MilvaPasswordHasher"/> with <paramref name="options"/>.
+    /// </summary>
+    /// <param name="options">Hasher options. If null, defaults are used.</param>
+    public MilvaPasswordHasher(MilvaPasswordHasherOptions options)
+    {
+        options ??= new MilvaPasswordHasherOptions();
 
         _iterCount = options.IterationCount;
 
         if (_iterCount < 1)
             throw new InvalidOperationException("InvalidPasswordHasherIterationCount");
 
+        _prf = options.Prf;
         _rng = options.RandomNumberGenerator;
     }
 
@@ -36,7 +63,32 @@ public class MilvaPasswordHasher : IMilvaPasswordHasher
     /// </summary>
     /// <param name="password">The password to hash.</param>
     /// <returns>A hashed representation of the supplied <paramref name="password"/>.</returns>
-    public virtual string HashPassword(string password) => password == null ? throw new ArgumentNullException(nameof(password)) : Convert.ToBase64String(HashPassword(password, _rng));
+    public virtual string HashPassword(string password)
+    {
+        ArgumentNullException.ThrowIfNull(password);
+
+        var salt = new byte[_saltSize];
+
+        if (_rng != null)
+            _rng.GetBytes(salt);
+        else
+            RandomNumberGenerator.Fill(salt);
+
+        var subkey = KeyDerivation.Pbkdf2(password, salt, _prf, _iterCount, _subkeyLength);
+
+        var outputBytes = new byte[_headerLength + salt.Length + subkey.Length];
+
+        outputBytes[0] = _formatMarker;
+
+        BinaryPrimitives.WriteUInt32BigEndian(outputBytes.AsSpan(1), (uint)_prf);
+        BinaryPrimitives.WriteUInt32BigEndian(outputBytes.AsSpan(5), (uint)_iterCount);
+        BinaryPrimitives.WriteUInt32BigEndian(outputBytes.AsSpan(9), (uint)salt.Length);
+
+        salt.CopyTo(outputBytes, _headerLength);
+        subkey.CopyTo(outputBytes, _headerLength + salt.Length);
+
+        return Convert.ToBase64String(outputBytes);
+    }
 
     /// <summary>
     /// Returns a <see cref="bool"/> indicating the result of a password hash comparison.
@@ -46,9 +98,22 @@ public class MilvaPasswordHasher : IMilvaPasswordHasher
     /// <returns>A <see cref="bool"/> indicating the result of a password hash comparison.</returns>
     /// <remarks>Implementations of this method should be time consistent.</remarks>
     public virtual bool VerifyHashedPassword(string hashedPassword, string providedPassword)
+        => VerifyHashedPasswordWithRehashCheck(hashedPassword, providedPassword) != PasswordVerificationResult.Failed;
+
+    /// <summary>
+    /// Verifies <paramref name="providedPassword"/> against <paramref name="hashedPassword"/> and reports whether the stored hash
+    /// should be replaced because it was created with weaker settings than the configured ones.
+    /// </summary>
+    /// <param name="hashedPassword">The hash value for a user's stored password.</param>
+    /// <param name="providedPassword">The password supplied for comparison.</param>
+    /// <returns>
+    /// <see cref="PasswordVerificationResult.Failed"/> if the password does not match,
+    /// <see cref="PasswordVerificationResult.SuccessRehashNeeded"/> if it matches but the hash uses a different PRF or fewer iterations than configured,
+    /// otherwise <see cref="PasswordVerificationResult.Success"/>.
+    /// </returns>
+    public virtual PasswordVerificationResult VerifyHashedPasswordWithRehashCheck(string hashedPassword, string providedPassword)
     {
         ArgumentNullException.ThrowIfNull(hashedPassword);
-
         ArgumentNullException.ThrowIfNull(providedPassword);
 
         byte[] decodedHashedPassword;
@@ -57,133 +122,57 @@ public class MilvaPasswordHasher : IMilvaPasswordHasher
         {
             decodedHashedPassword = Convert.FromBase64String(hashedPassword);
         }
-        catch (Exception)
+        catch (FormatException)
         {
-            return false;
+            return PasswordVerificationResult.Failed;
         }
 
-        // read the format marker from the hashed password
-        if (decodedHashedPassword.Length == 0)
-            return false;
+        if (decodedHashedPassword.Length == 0 || decodedHashedPassword[0] != _formatMarker)
+            return PasswordVerificationResult.Failed;
 
-        return decodedHashedPassword[0] switch
-        {
-            0x01 => VerifyHashedPassword(decodedHashedPassword, providedPassword, out _),
-            _ => false,// unknown format marker
-        };
+        if (!VerifyHashedPasswordV1(decodedHashedPassword, providedPassword, out var prf, out var iterCount))
+            return PasswordVerificationResult.Failed;
+
+        return prf != _prf || iterCount < _iterCount
+            ? PasswordVerificationResult.SuccessRehashNeeded
+            : PasswordVerificationResult.Success;
     }
 
-    /// <summary>
-    /// Compares two byte arrays for equality. The method is specifically written so that the loop is not optimized.
-    /// </summary>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
-    /// <returns></returns>
-    [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-    private static bool ByteArraysEqual(byte[] a, byte[] b)
+    private static bool VerifyHashedPasswordV1(byte[] hashedPassword, string password, out KeyDerivationPrf prf, out int iterCount)
     {
-        if (a == null && b == null)
-            return true;
-
-        if (a == null || b == null || a.Length != b.Length)
-            return false;
-
-        var areSame = true;
-
-        for (var i = 0; i < a.Length; i++)
-            areSame &= a[i] == b[i];
-
-        return areSame;
-    }
-
-    private byte[] HashPassword(string password, RandomNumberGenerator rng) => HashPasswordV3(password,
-                                                                                              rng,
-                                                                                              prf: KeyDerivationPrf.HMACSHA256,
-                                                                                              iterCount: _iterCount,
-                                                                                              saltSize: 128 / 8,
-                                                                                              numBytesRequested: 256 / 8);
-
-    private static byte[] HashPasswordV3(string password, RandomNumberGenerator rng, KeyDerivationPrf prf, int iterCount, int saltSize, int numBytesRequested)
-    {
-        // Produce a version 3 (see comment above) text hash.
-        byte[] salt = new byte[saltSize];
-
-        rng.GetBytes(salt);
-
-        byte[] subkey = KeyDerivation.Pbkdf2(password, salt, prf, iterCount, numBytesRequested);
-
-        var outputBytes = new byte[13 + salt.Length + subkey.Length];
-
-        outputBytes[0] = 0x01; // format marker
-
-        WriteNetworkByteOrder(outputBytes, 1, (uint)prf);
-        WriteNetworkByteOrder(outputBytes, 5, (uint)iterCount);
-        WriteNetworkByteOrder(outputBytes, 9, (uint)saltSize);
-
-        Buffer.BlockCopy(salt, 0, outputBytes, 13, salt.Length);
-        Buffer.BlockCopy(subkey, 0, outputBytes, 13 + saltSize, subkey.Length);
-
-        return outputBytes;
-    }
-
-    private static uint ReadNetworkByteOrder(byte[] buffer, int offset)
-        => (uint)buffer[offset + 0] << 24
-            | (uint)buffer[offset + 1] << 16
-            | (uint)buffer[offset + 2] << 8
-            | buffer[offset + 3];
-
-    private static bool VerifyHashedPassword(byte[] hashedPassword, string password, out int iterCount)
-    {
+        prf = default;
         iterCount = default;
 
-        try
-        {
-            // Read header information
-            KeyDerivationPrf prf = (KeyDerivationPrf)ReadNetworkByteOrder(hashedPassword, 1);
-
-            iterCount = (int)ReadNetworkByteOrder(hashedPassword, 5);
-
-            int saltLength = (int)ReadNetworkByteOrder(hashedPassword, 9);
-
-            // Read the salt: must be >= 128 bits
-            if (saltLength < 128 / 8)
-            {
-                return false;
-            }
-
-            byte[] salt = new byte[saltLength];
-
-            Buffer.BlockCopy(hashedPassword, 13, salt, 0, salt.Length);
-
-            // Read the subkey (the rest of the payload): must be >= 128 bits
-            int subkeyLength = hashedPassword.Length - 13 - salt.Length;
-
-            if (subkeyLength < 128 / 8)
-            {
-                return false;
-            }
-
-            byte[] expectedSubkey = new byte[subkeyLength];
-            Buffer.BlockCopy(hashedPassword, 13 + salt.Length, expectedSubkey, 0, expectedSubkey.Length);
-
-            // Hash the incoming password and verify it
-            byte[] actualSubkey = KeyDerivation.Pbkdf2(password, salt, prf, iterCount, subkeyLength);
-            return ByteArraysEqual(actualSubkey, expectedSubkey);
-        }
-        catch
-        {
-            // This should never occur except in the case of a malformed payload, where
-            // we might go off the end of the array. Regardless, a malformed payload
-            // implies verification failed.
+        if (hashedPassword.Length < _headerLength)
             return false;
-        }
-    }
 
-    private static void WriteNetworkByteOrder(byte[] buffer, int offset, uint value)
-    {
-        buffer[offset + 0] = (byte)(value >> 24);
-        buffer[offset + 1] = (byte)(value >> 16);
-        buffer[offset + 2] = (byte)(value >> 8);
-        buffer[offset + 3] = (byte)(value >> 0);
+        var span = hashedPassword.AsSpan();
+
+        var rawPrf = BinaryPrimitives.ReadUInt32BigEndian(span[1..]);
+        var rawIterCount = BinaryPrimitives.ReadUInt32BigEndian(span[5..]);
+        var rawSaltLength = BinaryPrimitives.ReadUInt32BigEndian(span[9..]);
+
+        if (!Enum.IsDefined((KeyDerivationPrf)rawPrf) || rawIterCount < 1 || rawIterCount > int.MaxValue)
+            return false;
+
+        // Salt and subkey must both be >= 128 bits.
+        if (rawSaltLength < 128 / 8 || rawSaltLength > (uint)(hashedPassword.Length - _headerLength))
+            return false;
+
+        var saltLength = (int)rawSaltLength;
+        var subkeyLength = hashedPassword.Length - _headerLength - saltLength;
+
+        if (subkeyLength < 128 / 8)
+            return false;
+
+        prf = (KeyDerivationPrf)rawPrf;
+        iterCount = (int)rawIterCount;
+
+        var salt = span.Slice(_headerLength, saltLength).ToArray();
+        var expectedSubkey = span.Slice(_headerLength + saltLength, subkeyLength);
+
+        var actualSubkey = KeyDerivation.Pbkdf2(password, salt, prf, iterCount, subkeyLength);
+
+        return CryptographicOperations.FixedTimeEquals(actualSubkey, expectedSubkey);
     }
 }

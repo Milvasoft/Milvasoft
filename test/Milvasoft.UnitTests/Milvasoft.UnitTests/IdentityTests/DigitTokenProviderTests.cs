@@ -1,12 +1,17 @@
 ﻿using FluentAssertions;
+using Milvasoft.Core.Exceptions;
 using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.TokenProvider;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Milvasoft.UnitTests.IdentityTests;
 
 [Trait("Identity Unit Tests", "Milvasoft.Identity project unit tests.")]
 public class DigitTokenProviderTests
 {
+    private static readonly byte[] _secret = RandomNumberGenerator.GetBytes(32);
+
     private class TestUser : MilvaUser<Guid>
     {
         public TestUser(Guid id, string phoneNumber)
@@ -14,111 +19,128 @@ public class DigitTokenProviderTests
             Id = id;
             PhoneNumber = phoneNumber;
             Email = "info@milvasoft.com";
+            PasswordHash = "hash";
         }
     }
 
-    #region Generate Tests
-
     [Fact]
-    public void Generate_ShouldReturnValidToken()
+    public void Generate_ShouldReturnSixDigitToken()
     {
         // Arrange
-        var userId = Guid.NewGuid();
-        var phoneNumber = "1234567890";
-        var user = new TestUser(userId, phoneNumber);
-        var purpose = Purpose.EmailConfirm;
+        var user = new TestUser(Guid.NewGuid(), "1234567890");
 
         // Act
-        var token = DigitTokenProvider<TestUser, Guid>.Generate(purpose, user);
+        var token = DigitTokenProvider<TestUser, Guid>.Generate(Purpose.EmailConfirm, user, _secret);
 
         // Assert
-        token.Should().NotBeNullOrEmpty();
-        token.Length.Should().Be(6); // RFC6238 tokens are typically 6 digits
-        int.TryParse(token, out _).Should().BeTrue();
+        token.Should().HaveLength(6);
+        token.Should().MatchRegex("^[0-9]{6}$");
     }
-
-    #endregion
-
-    #region Validate Tests
 
     [Fact]
     public void Validate_ShouldReturnTrueForValidToken()
     {
         // Arrange
-        var userId = Guid.NewGuid();
-        var phoneNumber = "1234567890";
-        var user = new TestUser(userId, phoneNumber);
-        var purpose = Purpose.EmailConfirm;
-
-        var token = DigitTokenProvider<TestUser, Guid>.Generate(purpose, user);
+        var user = new TestUser(Guid.NewGuid(), "1234567890");
+        var token = DigitTokenProvider<TestUser, Guid>.Generate(Purpose.EmailConfirm, user, _secret);
 
         // Act
-        var isValid = DigitTokenProvider<TestUser, Guid>.Validate(purpose, token, user);
+        var isValid = DigitTokenProvider<TestUser, Guid>.Validate(Purpose.EmailConfirm, token, user, _secret);
 
         // Assert
         isValid.Should().BeTrue();
     }
 
     [Fact]
-    public void Validate_ShouldReturnFalseForInvalidToken()
+    public void Validate_ShouldReturnFalseForMalformedToken()
     {
-        // Arrange
-        var userId = Guid.NewGuid();
-        var phoneNumber = "1234567890";
-        var user = new TestUser(userId, phoneNumber);
-        var purpose = Purpose.EmailConfirm;
+        var user = new TestUser(Guid.NewGuid(), "1234567890");
 
-        var invalidToken = "000000";
-
-        // Act
-        var isValid = DigitTokenProvider<TestUser, Guid>.Validate(purpose, invalidToken, user);
-
-        // Assert
-        isValid.Should().BeFalse();
+        DigitTokenProvider<TestUser, Guid>.Validate(Purpose.EmailConfirm, null, user, _secret).Should().BeFalse();
+        DigitTokenProvider<TestUser, Guid>.Validate(Purpose.EmailConfirm, "12345", user, _secret).Should().BeFalse();
+        DigitTokenProvider<TestUser, Guid>.Validate(Purpose.EmailConfirm, "-12345", user, _secret).Should().BeFalse();
+        DigitTokenProvider<TestUser, Guid>.Validate(Purpose.EmailConfirm, "abcdef", user, _secret).Should().BeFalse();
     }
 
     [Fact]
-    public void Validate_ShouldReturnFalseForExpiredToken()
+    public void Validate_ShouldReturnFalseForOtherPurpose()
     {
         // Arrange
-        var userId = Guid.NewGuid();
-        var phoneNumber = "1234567890";
-        var user = new TestUser(userId, phoneNumber);
-        var purpose = Purpose.PasswordReset;
+        var user = new TestUser(Guid.NewGuid(), "1234567890");
+        var token = DigitTokenProvider<TestUser, Guid>.Generate(Purpose.EmailConfirm, user, _secret);
 
-        // Simulate an expired token by using incorrect modifier
-        var expiredToken = "123456"; // Invalid due to mismatched entropy
-
-        // Act
-        var isValid = DigitTokenProvider<TestUser, Guid>.Validate(purpose, expiredToken, user);
-
-        // Assert
-        isValid.Should().BeFalse();
+        // Act & Assert
+        DigitTokenProvider<TestUser, Guid>.Validate(Purpose.PasswordReset, token, user, _secret).Should().BeFalse();
     }
 
-    #endregion
-
-    #region GetUserModifier Tests
-
-    [Theory]
-    [InlineData(Purpose.EmailChange, "Email:EmailChange:info@milvasoft.com")]
-    [InlineData(Purpose.EmailConfirm, "Totp:EmailConfirm:1234567890")]
-    [InlineData(Purpose.PasswordReset, "PhoneNumber:PasswordReset")]
-    public void GetUserModifier_ShouldReturnExpectedModifier(Purpose purpose, string expectedModifier)
+    [Fact]
+    public void Validate_ShouldReturnFalseForOtherBoundValue()
     {
         // Arrange
-        var userId = Guid.NewGuid();
-        var phoneNumber = "1234567890";
-        var user = new TestUser(userId, phoneNumber);
+        var user = new TestUser(Guid.NewGuid(), "1234567890");
+        var token = DigitTokenProvider<TestUser, Guid>.Generate(Purpose.EmailChange, user, _secret, "new@milvasoft.com");
 
-        // Act
-        var modifier = typeof(DigitTokenProvider<TestUser, Guid>)
-            .GetMethod("GetUserModifier", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
-            ?.Invoke(null, [purpose, user]) as string;
-
-        // Assert
-        modifier.Should().Be(expectedModifier);
+        // Act & Assert
+        DigitTokenProvider<TestUser, Guid>.Validate(Purpose.EmailChange, token, user, _secret, "new@milvasoft.com").Should().BeTrue();
+        DigitTokenProvider<TestUser, Guid>.Validate(Purpose.EmailChange, token, user, _secret, "attacker@milvasoft.com").Should().BeFalse();
     }
 
-    #endregion
+    /// <summary>
+    /// The previous implementation keyed the HMAC with the user id and a public modifier only, so anyone who knew a user's id
+    /// could compute that user's code. Codes must depend on a server-side secret.
+    /// </summary>
+    [Fact]
+    public void Token_ShouldNotBeComputableFromPublicUserDataOnly()
+    {
+        // Arrange
+        var user = new TestUser(Guid.NewGuid(), "1234567890");
+        var otherSecret = RandomNumberGenerator.GetBytes(32);
+        var forgedCodes = Enumerable.Range(-2, 5).Select(step => LegacyForgedCode(user, step)).ToList();
+
+        // Act
+        var token = DigitTokenProvider<TestUser, Guid>.Generate(Purpose.PasswordReset, user, _secret);
+
+        // Assert
+        DigitTokenProvider<TestUser, Guid>.Validate(Purpose.PasswordReset, token, user, otherSecret).Should().BeFalse();
+        forgedCodes.Should().NotContain(token);
+    }
+
+    [Fact]
+    public void Validate_ShouldReturnFalseAfterSecurityRelevantChange()
+    {
+        // Arrange
+        var user = new TestUser(Guid.NewGuid(), "1234567890");
+        var token = DigitTokenProvider<TestUser, Guid>.Generate(Purpose.EmailConfirm, user, _secret);
+
+        // Act
+        user.EmailConfirmed = true;
+
+        // Assert
+        DigitTokenProvider<TestUser, Guid>.Validate(Purpose.EmailConfirm, token, user, _secret).Should().BeFalse();
+    }
+
+    [Fact]
+    public void Generate_WithShortSecret_ShouldThrow()
+    {
+        var user = new TestUser(Guid.NewGuid(), "1234567890");
+
+        Action act = () => DigitTokenProvider<TestUser, Guid>.Generate(Purpose.EmailConfirm, user, new byte[16]);
+
+        act.Should().Throw<MilvaDeveloperException>();
+    }
+
+    /// <summary>
+    /// Code an attacker could compute with the previous implementation: HMACSHA512 keyed by the user id (UTF-16) over the time step and a public modifier.
+    /// </summary>
+    private static string LegacyForgedCode(TestUser user, int stepOffset)
+    {
+        var step = (ulong)((DateTimeOffset.UtcNow.UtcTicks - DateTimeOffset.UnixEpoch.UtcTicks) / TimeSpan.FromMinutes(3).Ticks) + (ulong)stepOffset;
+        var stepBytes = BitConverter.GetBytes(System.Net.IPAddress.HostToNetworkOrder((long)step));
+        var modifier = Encoding.UTF8.GetBytes("PhoneNumber:PasswordReset");
+        var hash = HMACSHA512.HashData(Encoding.Unicode.GetBytes(user.Id.ToString()), stepBytes.Concat(modifier).ToArray());
+        var offset = hash[^1] & 0xf;
+        var binaryCode = (hash[offset] & 0x7f) << 24 | (hash[offset + 1] & 0xff) << 16 | (hash[offset + 2] & 0xff) << 8 | hash[offset + 3] & 0xff;
+
+        return (binaryCode % 1000000).ToString("D6");
+    }
 }

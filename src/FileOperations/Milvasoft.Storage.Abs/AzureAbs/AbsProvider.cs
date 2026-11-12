@@ -1,14 +1,12 @@
-﻿using Azure.Storage.Blobs;
+using Azure;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Net.Http.Headers;
-using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Helpers;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.Storage.Models;
 using Milvasoft.Storage.Providers;
-using System.Net;
 
 namespace Milvasoft.Storage.Abs.AzureAbs;
 
@@ -26,68 +24,47 @@ public class AbsProvider(BlobServiceClient blobServiceClient, StorageProviderOpt
 
         try
         {
-            await blobClient.UploadAsync(file.OpenReadStream(), overwrite: true, cancellationToken);
+            await using var inputStream = file.OpenReadStream();
+
+            var options = new BlobUploadOptions
+            {
+                HttpHeaders = new BlobHttpHeaders
+                {
+                    ContentType = StorageHelper.GetSafeContentType(string.IsNullOrEmpty(file.FileName) ? filePath : file.FileName, file.ContentType)
+                }
+            };
+
+            await blobClient.UploadAsync(inputStream, options, cancellationToken);
 
             return FileOperationResult.Success(fullPath: filePath);
         }
-        catch (Exception)
+        catch (RequestFailedException)
         {
-            return FileOperationResult.Failure();
+            return FileOperationResult.Failure(LocalizerKeys.UploadFailed);
         }
     }
 
-    /// <inheritdoc/>
-    public override async Task<FileOperationResult> NoBufferUploadAsync(HttpContext context, string filePath, CancellationToken cancellationToken = default)
-    {
-        if (!MediaTypeHeaderValue.TryParse(context.Request.Headers.ContentType.ToString(), out var mediaTypeHeader))
-            return FileOperationResult.Failure(LocalizerKeys.UnsupportedMediaType);
-
-        var boundary = HeaderUtilities.RemoveQuotes(mediaTypeHeader.Boundary.Value).Value;
-
-        var reader = new MultipartReader(boundary, context.Request.Body);
-
-        var section = await reader.ReadNextSectionAsync(cancellationToken) ?? throw new MilvaUserFriendlyException(LocalizerKeys.FileShouldBeUploaded);
-
-        var extension = string.Empty;
-        var fileName = string.Empty;
-
-        while (section != null)
+    /// <summary>
+    /// Streams the file in the multipart/form-data request body to the container without buffering the whole file.
+    /// The extension must be allowed (see <see cref="StorageProviderOptions.AllowedFileExtensions"/>), the size must not exceed
+    /// <see cref="StorageProviderOptions.MaxFileSize"/> and the content must match the registered file signature of the extension.
+    /// The blob is committed only when the whole body was received.
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="filePath">Blob name without extension. The extension of the uploaded file is appended.</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>A value indicating the success or failure of the upload procedure.</returns>
+    public override Task<FileOperationResult> NoBufferUploadAsync(HttpContext context, string filePath, CancellationToken cancellationToken = default)
+        => ReadMultipartFilesAsync(context, filePath, async (blobName, contentType, copyToAsync) =>
         {
-            var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition);
+            var blobClient = _containerClient.GetBlockBlobClient(blobName);
 
-            if (!hasContentDispositionHeader)
-                section = await reader.ReadNextSectionAsync(cancellationToken);
+            await using var output = new AbsUploadStream(blobClient, contentType);
 
-            if (contentDisposition.HasFileContentDisposition())
-            {
-                var trustedFileName = WebUtility.HtmlEncode(contentDisposition.FileName.Value);
+            await copyToAsync(output);
 
-                fileName = trustedFileName;
-
-                extension = Path.GetExtension(trustedFileName).ToLowerInvariant();
-
-                try
-                {
-                    var blobClient = _containerClient.GetBlockBlobClient(filePath + extension);
-
-                    using var output = new AbsUploadStream(blobClient, section.ContentType, filePath + extension);
-
-                    // Sends part by part.
-                    await section.Body.CopyToAsync(output, cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    return FileOperationResult.Failure(ex.Message);
-                }
-            }
-            else if (contentDisposition.HasFormDataContentDisposition())
-                return FileOperationResult.Failure(LocalizerKeys.FileShouldBeUploaded);
-
-            section = await reader.ReadNextSectionAsync(cancellationToken);
-        }
-
-        return FileOperationResult.Success(fullPath: filePath, fileName: fileName, fileExtension: extension);
-    }
+            await output.CompleteAsync(cancellationToken);
+        }, cancellationToken);
 
     /// <inheritdoc/>
     public override async Task<FileDownloadResult> DownloadAsync(string filePath, CancellationToken cancellationToken = default)
@@ -121,15 +98,25 @@ public class AbsProvider(BlobServiceClient blobServiceClient, StorageProviderOpt
         if (filePaths.IsNullOrEmpty())
             return FileOperationResult.Failure("File paths cannot be null or empty.");
 
+        var failed = 0;
+
         foreach (var filePath in filePaths)
+        {
             try
             {
-                await DeleteAsync(filePath, cancellationToken);
+                var result = await DeleteAsync(filePath, cancellationToken);
+
+                if (!result.IsSuccess)
+                    failed++;
             }
-            catch (Exception)
+            catch (RequestFailedException)
             {
-                continue;
+                failed++;
             }
+        }
+
+        if (failed > 0)
+            return FileOperationResult.Failure($"{filePaths.Count - failed} files deleted, {failed} files could not be deleted.");
 
         return FileOperationResult.Success();
     }
@@ -155,5 +142,26 @@ public class AbsProvider(BlobServiceClient blobServiceClient, StorageProviderOpt
     }
 
     /// <inheritdoc/>
-    public override Task<FileOperationResult> CopyAsync(string source, string destination, CancellationToken cancellationToken) => throw new NotImplementedException();
+    public override async Task<FileOperationResult> CopyAsync(string source, string destination, CancellationToken cancellationToken)
+    {
+        var sourceClient = _containerClient.GetBlobClient(source);
+
+        if (!await sourceClient.ExistsAsync(cancellationToken))
+            return FileOperationResult.Failure(LocalizerKeys.FileNotFound);
+
+        try
+        {
+            var destinationClient = _containerClient.GetBlobClient(destination);
+
+            var operation = await destinationClient.StartCopyFromUriAsync(sourceClient.Uri, cancellationToken: cancellationToken);
+
+            await operation.WaitForCompletionAsync(cancellationToken);
+
+            return FileOperationResult.Success(fullPath: destination);
+        }
+        catch (RequestFailedException)
+        {
+            return FileOperationResult.Failure();
+        }
+    }
 }
