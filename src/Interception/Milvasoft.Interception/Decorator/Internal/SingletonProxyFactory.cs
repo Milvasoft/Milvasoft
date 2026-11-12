@@ -5,13 +5,10 @@ namespace Milvasoft.Interception.Decorator.Internal;
 /// <summary>
 /// Castle.Dynamic proxy singleton generator.
 /// </summary>
-internal sealed class SingletonProxyFactory
+internal static class SingletonProxyFactory
 {
-    private static ProxyGenerator _proxyGenerator;
+    // A single generator (and its dynamic assembly / proxy type cache) for the whole process.
+    private static readonly ProxyGenerator _proxyGenerator = new();
 
-    private SingletonProxyFactory()
-    {
-    }
-
-    public static ProxyGenerator GetProxyGenerator() => _proxyGenerator ??= new ProxyGenerator();
+    public static ProxyGenerator GetProxyGenerator() => _proxyGenerator;
 }

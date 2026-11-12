@@ -4,65 +4,27 @@ using System.Reflection;
 
 namespace Milvasoft.Interception.Decorator.Internal;
 
-internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterceptor[]> methodDecoratorMap) : IAsyncInterceptor
+/// <summary>
+/// Castle interceptor that runs the <see cref="IMilvaInterceptor"/> pipeline of decorated methods.
+/// Synchronous, <see cref="Task"/>, <see cref="Task{TResult}"/>, <see cref="ValueTask"/> and <see cref="ValueTask{TResult}"/> returning methods are supported;
+/// for awaitable methods the proxy returns a task that completes when the whole pipeline (including the target's work) completes.
+/// </summary>
+/// <param name="methodDecoratorMap">Interceptors (ordered by <see cref="IMilvaInterceptor.InterceptionOrder"/>) per implementation method.</param>
+internal sealed class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterceptor[]> methodDecoratorMap) : IInterceptor
 {
     public ReadOnlyDictionary<MethodInfo, IMilvaInterceptor[]> MethodDecoratorMap { get; } = methodDecoratorMap;
 
-    public void InterceptSynchronous(IInvocation invocation)
+    public void Intercept(IInvocation invocation)
     {
-        if (TryGetMethodDecorators(invocation, out var decorators))
-        {
-            var call = new Call(invocation, decorators);
-
-            try
-            {
-                GetFirstRunningInterceptor(decorators).OnInvoke(call).Wait();
-            }
-            catch (AggregateException e) when (e.InnerException != null)
-            {
-                e.InnerException.Rethrow();
-            }
-
-            invocation.ReturnValue = call.ReturnValue;
-        }
-        else
+        if (!TryGetMethodDecorators(invocation, out var decorators))
         {
             invocation.Proceed();
+            return;
         }
-    }
 
-    public void InterceptAsynchronous(IInvocation invocation)
-    {
-        if (TryGetMethodDecorators(invocation, out var decorators))
-        {
-            var decoratedTask = WrapInvocationInTask(invocation, [.. decorators]);
+        var call = new Call(invocation, decorators, MethodReturnInfo.For(invocation.Method));
 
-            if (decoratedTask.IsFaulted)
-            {
-                (decoratedTask.Exception?.InnerException ?? decoratedTask.Exception).Rethrow();
-            }
-
-            if (!decoratedTask.IsCompleted)
-            {
-                invocation.ReturnValue = decoratedTask;
-            }
-        }
-        else
-        {
-            invocation.Proceed();
-        }
-    }
-
-    public void InterceptAsynchronous<TResult>(IInvocation invocation)
-    {
-        if (TryGetMethodDecorators(invocation, out var decorators))
-        {
-            invocation.ReturnValue = WrapInvocationInTaskWithResult<TResult>(invocation, decorators);
-        }
-        else
-        {
-            invocation.Proceed();
-        }
+        invocation.ReturnValue = call.Run();
     }
 
     /// <summary>
@@ -79,56 +41,4 @@ internal class DecoratorInterceptor(ReadOnlyDictionary<MethodInfo, IMilvaInterce
 
         return MethodDecoratorMap.TryGetValue(targetMethod, out decorators) && decorators != null && decorators.Length != 0;
     }
-
-    private static Task WrapInvocationInTask(IInvocation invocation, IMilvaInterceptor[] decorators)
-    {
-        var call = new Call(invocation, decorators);
-
-        return GetFirstRunningInterceptor(decorators).OnInvoke(call);
-    }
-
-    private static async Task<TResult> WrapInvocationInTaskWithResult<TResult>(IInvocation invocation, IMilvaInterceptor[] decorators)
-    {
-        var call = new Call(invocation, decorators);
-
-        try
-        {
-            await GetFirstRunningInterceptor(decorators).OnInvoke(call).ConfigureAwait(false);
-        }
-        catch (AggregateException aggreggateException)
-        {
-            aggreggateException.InnerException?.Rethrow();
-            aggreggateException.Rethrow();
-        }
-        catch (TargetInvocationException targetInvocationException)
-        {
-            if (targetInvocationException.InnerException is AggregateException aggreggateException)
-            {
-                aggreggateException.InnerException?.Rethrow();
-                aggreggateException.Rethrow();
-            }
-
-            targetInvocationException.InnerException?.Rethrow();
-            targetInvocationException.Rethrow();
-        }
-
-        if (call.ReturnValue is TResult result)
-        {
-            return result;
-        }
-        else if (call.ReturnValue is Task<TResult> resultTask)
-        {
-            return await resultTask.ConfigureAwait(false);
-        }
-        else if (call.ReturnValue is null)
-        {
-            return (TResult)call.ReturnValue;
-        }
-        else
-        {
-            throw new InvalidOperationException($"Expected {typeof(TResult)} or Task<{typeof(TResult)}> but got {call.ReturnValue?.GetType().Name ?? "null"}.");
-        }
-    }
-
-    private static IMilvaInterceptor GetFirstRunningInterceptor(IMilvaInterceptor[] decorators) => decorators.MinBy(decorator => decorator.InterceptionOrder);
 }

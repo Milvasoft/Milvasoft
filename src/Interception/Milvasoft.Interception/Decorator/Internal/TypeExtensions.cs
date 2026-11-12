@@ -1,12 +1,9 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace Milvasoft.Interception.Decorator.Internal;
 
 internal static class TypeExtensions
 {
-    private static readonly Type _voidTaskResultType = Type.GetType("System.Threading.Tasks.VoidTaskResult", false);
-
     /// <summary>
     /// Finds public methods that do not have special names.
     /// </summary>
@@ -23,63 +20,27 @@ internal static class TypeExtensions
     /// <returns></returns>
     internal static MethodInfo GetInterfaceMethod(this MethodInfo implementation)
     {
-        var interfaces = implementation.DeclaringType.GetInterfaces();
+        // ReflectedType is the concrete type the method was fetched from; it may implement interfaces through inherited methods.
+        var declaringType = implementation.ReflectedType ?? implementation.DeclaringType;
 
-        foreach (var @interface in interfaces)
+        if (declaringType == null || declaringType.IsInterface)
+            return null;
+
+        var method = implementation.IsGenericMethod && !implementation.IsGenericMethodDefinition
+                        ? implementation.GetGenericMethodDefinition()
+                        : implementation;
+
+        foreach (var @interface in declaringType.GetInterfaces())
         {
-            var map = implementation.DeclaringType.GetInterfaceMap(@interface);
+            var map = declaringType.GetInterfaceMap(@interface);
 
-            var index = Array.IndexOf(map.TargetMethods, implementation);
+            // Compare handles instead of MethodInfo instances, their ReflectedType may differ for inherited methods.
+            var index = Array.FindIndex(map.TargetMethods, target => target.MethodHandle == method.MethodHandle);
 
             if (index != -1)
-            {
                 return map.InterfaceMethods[index];
-            }
         }
 
         return null;
-    }
-
-    /// <summary>
-    /// Returns <paramref name="method"/> is async method or not.
-    /// </summary>
-    /// <param name="method"></param>
-    /// <returns></returns>
-    internal static bool IsAsync(this MethodInfo method)
-        => method.GetCustomAttribute<AsyncStateMachineAttribute>() != null;
-
-    /// <summary>
-    /// Returns <paramref name="type"/>'s return type is <see cref="void"/> or not.
-    /// </summary>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    internal static bool IsTaskWithVoidTaskResult(this Type type)
-        => type.GenericTypeArguments?.Length > 0 && type.GenericTypeArguments[0] == _voidTaskResultType;
-
-    /// <summary>
-    /// Returns <paramref name="type"/>'s return type is <see cref="Task{T}"/> or not.
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="genericTaskType"></param>
-    /// <returns></returns>
-    internal static bool TryGetGenericTaskType(this TypeInfo type, out TypeInfo genericTaskType)
-    {
-        ArgumentNullException.ThrowIfNull(type);
-
-        while (type != null)
-        {
-            if (IsGenericTaskType(type))
-            {
-                genericTaskType = type;
-                return true;
-            }
-
-            type = type.BaseType.GetTypeInfo();
-        }
-
-        genericTaskType = null;
-        return false;
-
-        static bool IsGenericTaskType(TypeInfo typeInfo) => typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(Task<>);
     }
 }

@@ -14,7 +14,7 @@ public class InterceptorRunner : IInterceptorRunner
     [LogRunner]
     public virtual async Task<TResult> InterceptWithLogAsync<TResult>(Expression<Func<Task<TResult>>> expression)
     {
-        var result = await expression.Compile().Invoke().ConfigureAwait(false);
+        var result = await expression.Compile(preferInterpretation: true).Invoke().ConfigureAwait(false);
 
         return result;
     }
@@ -22,13 +22,13 @@ public class InterceptorRunner : IInterceptorRunner
     /// <inheritdoc/>
     [LogRunner]
     public virtual Task InterceptWithLogAsync(Expression<Func<Task>> expression)
-        => expression.Compile().Invoke();
+        => expression.Compile(preferInterpretation: true).Invoke();
 
     /// <inheritdoc/>
     [LogRunner]
     public virtual TResult InterceptWithLog<TResult>(Expression<Func<TResult>> expression)
     {
-        var result = expression.Compile().Invoke();
+        var result = expression.Compile(preferInterpretation: true).Invoke();
 
         return result;
     }
@@ -36,5 +36,5 @@ public class InterceptorRunner : IInterceptorRunner
     /// <inheritdoc/>
     [LogRunner]
     public virtual void InterceptWithLog<T>(Expression<Action> expression)
-        => expression.Compile().Invoke();
+        => expression.Compile(preferInterpretation: true).Invoke();
 }

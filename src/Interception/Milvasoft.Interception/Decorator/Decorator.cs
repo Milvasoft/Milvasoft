@@ -1,5 +1,7 @@
 ﻿using Castle.DynamicProxy;
+using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Interception.Decorator.Internal;
+using Milvasoft.Interception.Interceptors.Response;
 using System.Collections.ObjectModel;
 using System.Reflection;
 
@@ -18,8 +20,7 @@ public sealed class Decorator
     public Func<Type, IMilvaInterceptor> Factory { get; set; }
 
     /// <summary>
-    /// <para>Creates a decorator with <see cref="Factory"/> set to <see cref="Activator.CreateInstance(Type)"/>.</para>
-    /// <para>This only allows to create <see cref="IMilvaInterceptor"/> instances that have a parameterless constructor.</para>
+    /// Creates a decorator whose <see cref="Factory"/> resolves interceptors from <paramref name="serviceProvider"/>.
     /// </summary>
     public Decorator(IServiceProvider serviceProvider)
     {
@@ -65,37 +66,102 @@ public sealed class Decorator
     /// <param name="serviceProvider">Service provider.</param>
     /// <returns>A dynamic proxy with <see cref="IMilvaInterceptor"/> instances as interceptors.</returns>
     public object For(Type type, object targetObject, IServiceProvider serviceProvider)
+        => For(type, targetObject, serviceProvider, forwardDisposal: false);
+
+    /// <summary>
+    /// Creates a decorated instance for the given object.
+    /// </summary>
+    /// <param name="type">Type of the target object.</param>
+    /// <param name="targetObject">Object to be decorated.</param>
+    /// <param name="serviceProvider">Service provider.</param>
+    /// <param name="forwardDisposal">
+    /// When true and <paramref name="targetObject"/> implements <see cref="IDisposable"/> or <see cref="IAsyncDisposable"/>, the interface proxy implements them too,
+    /// so a container that disposes the proxy also disposes the target.
+    /// </param>
+    /// <returns>A dynamic proxy with <see cref="IMilvaInterceptor"/> instances as interceptors.</returns>
+    internal object For(Type type, object targetObject, IServiceProvider serviceProvider, bool forwardDisposal)
     {
         ArgumentNullException.ThrowIfNull(targetObject);
 
         var interceptor = BuildDecoratorInterceptor(targetObject, serviceProvider);
 
-        var proxy = type.IsInterface
-                         ? _proxyGenerator.CreateInterfaceProxyWithTargetInterface(type, targetObject, interceptor)
-                         : _proxyGenerator.CreateClassProxyWithTarget(type, targetObject, interceptor);
+        if (!type.IsInterface)
+            return _proxyGenerator.CreateClassProxyWithTarget(type, targetObject, interceptor);
 
-        return proxy;
+        var additionalInterfaces = forwardDisposal ? GetDisposableInterfaces(type, targetObject) : Type.EmptyTypes;
+
+        return _proxyGenerator.CreateInterfaceProxyWithTargetInterface(type, additionalInterfaces, targetObject, ProxyGenerationOptions.Default, interceptor);
     }
 
     /// <summary>
-    /// Creted <see cref="IMilvaInterceptor"/> instances.
+    /// Creates the interceptor which runs the <see cref="IMilvaInterceptor"/>s of each decorated method.
+    /// Every interceptor type is resolved once per proxy and interceptors are ordered by <see cref="IMilvaInterceptor.InterceptionOrder"/> (stable).
     /// </summary>
-    /// <typeparam name="TImplementation"></typeparam>
     /// <param name="targetObject"></param>
     /// <param name="serviceProvider">Service provider.</param>
     /// <returns></returns>
-    private DecoratorInterceptor BuildDecoratorInterceptor<TImplementation>(TImplementation targetObject, IServiceProvider serviceProvider)
+    private DecoratorInterceptor BuildDecoratorInterceptor(object targetObject, IServiceProvider serviceProvider)
     {
-        var decoratorTypesMap = MethodDecoratorMap.Get(targetObject.GetType(), serviceProvider);
+        var decorations = MethodDecoratorMap.Get(targetObject.GetType());
 
-        var decoratorsMap = decoratorTypesMap.ToDictionary(typeMapItem => typeMapItem.Key,
-                                                           typeMapItem => typeMapItem.Value.Select(type => GetDecorator(type)).OrderBy(i => i.InterceptionOrder).ToArray());
+        var resolvedInterceptors = new Dictionary<Type, IMilvaInterceptor>();
+        bool? responseInterceptorRegistered = null;
+
+        var decoratorsMap = new Dictionary<MethodInfo, IMilvaInterceptor[]>(decorations.Count);
+
+        foreach (var (method, decoration) in decorations)
+        {
+            var interceptorTypes = decoration.DecoratorTypes.AsEnumerable();
+
+            if (decoration.ReturnsResponse && !decoration.DecoratorTypes.Contains(typeof(ResponseInterceptor)))
+            {
+                responseInterceptorRegistered ??= IsRegistered(serviceProvider, typeof(ResponseInterceptor));
+
+                if (responseInterceptorRegistered.Value)
+                    interceptorTypes = interceptorTypes.Append(typeof(ResponseInterceptor));
+            }
+
+            var interceptors = interceptorTypes.Select(GetInterceptor).OrderBy(i => i.InterceptionOrder).ToArray();
+
+            if (interceptors.Length != 0)
+                decoratorsMap[method] = interceptors;
+        }
 
         return new DecoratorInterceptor(new ReadOnlyDictionary<MethodInfo, IMilvaInterceptor[]>(decoratorsMap));
 
-        IMilvaInterceptor GetDecorator(Type type)
+        IMilvaInterceptor GetInterceptor(Type type)
         {
-            return Factory(type);
+            if (!resolvedInterceptors.TryGetValue(type, out var interceptor))
+            {
+                interceptor = Factory(type) ?? throw new MilvaDeveloperException($"Interceptor '{type.Name}' is not registered. Register it (for example with the With...Interceptor builder methods) before resolving decorated services.");
+                resolvedInterceptors[type] = interceptor;
+            }
+
+            return interceptor;
         }
+    }
+
+    private static bool IsRegistered(IServiceProvider serviceProvider, Type type)
+    {
+        if (serviceProvider == null)
+            return false;
+
+        if (serviceProvider.GetService(typeof(IServiceProviderIsService)) is IServiceProviderIsService isService)
+            return isService.IsService(type);
+
+        return serviceProvider.GetService(type) != null;
+    }
+
+    private static Type[] GetDisposableInterfaces(Type type, object targetObject)
+    {
+        var interfaces = new List<Type>(2);
+
+        if (targetObject is IDisposable && !typeof(IDisposable).IsAssignableFrom(type))
+            interfaces.Add(typeof(IDisposable));
+
+        if (targetObject is IAsyncDisposable && !typeof(IAsyncDisposable).IsAssignableFrom(type))
+            interfaces.Add(typeof(IAsyncDisposable));
+
+        return [.. interfaces];
     }
 }
