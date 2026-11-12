@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<PackageReference Include="ConfigureAwait.Fody" Version="3.4.1" PrivateAssets="All" />
+		<PackageReference Include="Fody" Version="6.9.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Milvasoft.BulkExtensions\Milvasoft.BulkExtensions.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Milvasoft.BulkExtensions.Tests" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Update="AsyncFixer" Version="2.1.0" />
+	</ItemGroup>
+
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.BulkExtensions.PostgreSql</PackageId>
+		<Product>Milvasoft.BulkExtensions.PostgreSql</Product>
+		<Description>PostgreSQL provider for Milvasoft.BulkExtensions. Bulk insert, update, delete, upsert, read and save changes for Entity Framework Core with Npgsql, using binary COPY.</Description>
+		<PackageTags>efcore,bulk,bulkinsert,bulkupdate,upsert,postgresql,postgres,npgsql,copy,performance</PackageTags>
+
+	</PropertyGroup>
+
+</Project>
