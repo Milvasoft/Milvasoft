@@ -197,6 +197,29 @@ public partial class StringHelperTests
     }
 
     [Theory]
+    [InlineData("tr-TR", "IŞIK", "IŞIK")]
+    [InlineData("en-US", "IŞIK", "IŞIK")]
+    [InlineData("tr-TR", "ışık", "IŞIK")]
+    [InlineData("en-US", "ışık", "IŞIK")]
+    [InlineData("tr-TR", "Ivan", "IVAN")]
+    [InlineData("tr-TR", "ivan", "IVAN")]
+    [InlineData("", "İstanbul", "ISTANBUL")]
+    [InlineData("tr-TR", "istanbul", "ISTANBUL")]
+    [InlineData("en-US", "Ilker@Example.com", "ILKER@EXAMPLE.COM")]
+    [InlineData("tr-TR", "Ilker@Example.com", "ILKER@EXAMPLE.COM")]
+    public void MilvaNormalize_WithTurkishILetters_ShouldReturnSameResultForEveryCulture(string cultureCode, string input, string expected)
+    {
+        //Arrange
+        CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
+
+        //Act
+        var result = input.MilvaNormalize();
+
+        //Assert
+        result.Should().Be(expected);
+    }
+
+    [Theory]
     [InlineData("tr-TR")]
     [InlineData("en-US")]
     public void MilvaNormalize_WithInputStringIsValidWithDifferentCulture_ShouldReturnNormalizedString(string cultureCode)

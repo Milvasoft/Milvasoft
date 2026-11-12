@@ -14,12 +14,41 @@ public static partial class CommonHelper
 
     private static readonly MethodInfo _orderByDescendingMethod = typeof(Queryable).GetMethods().Single(method => method.Name == "OrderByDescending" && method.GetParameters().Length == 2);
 
+    private static readonly MethodInfo _queryableAnyMethod = typeof(Queryable).GetMethods().Single(method => method.Name == nameof(Queryable.Any) && method.GetParameters().Length == 1);
+
     /// <summary>
     /// Checks if the collection is null or empty.
     /// </summary>
+    /// <remarks>
+    /// Collections are checked by their count. For an <see cref="IQueryable"/> an Any() query is executed (e.g. EXISTS in SQL), the data is not loaded.
+    /// Other sequences are enumerated for at most one element and the enumerator is disposed.
+    /// </remarks>
     /// <param name="this">The collection to check.</param>
     /// <returns>True if the collection is null or empty, otherwise false.</returns>
-    public static bool IsNullOrEmpty(this IEnumerable @this) => @this == null || !@this.GetEnumerator().MoveNext();
+    public static bool IsNullOrEmpty(this IEnumerable @this)
+    {
+        switch (@this)
+        {
+            case null:
+                return true;
+            case ICollection collection:
+                return collection.Count == 0;
+            case IQueryable queryable:
+                var anyCall = Expression.Call(_queryableAnyMethod.MakeGenericMethod(queryable.ElementType), queryable.Expression);
+                return !queryable.Provider.Execute<bool>(anyCall);
+        }
+
+        var enumerator = @this.GetEnumerator();
+
+        try
+        {
+            return !enumerator.MoveNext();
+        }
+        finally
+        {
+            (enumerator as IDisposable)?.Dispose();
+        }
+    }
 
     /// <summary>
     /// Orders the source collection by the specified property name.
@@ -30,7 +59,7 @@ public static partial class CommonHelper
     /// <returns>The ordered source collection.</returns>
     public static IQueryable<T> OrderByProperty<T>(this IQueryable<T> source, string propertyName)
     {
-        if (source.IsNullOrEmpty() || !source.PropertyExists(propertyName))
+        if (source == null || !source.PropertyExists(propertyName))
             return source;
 
         var parameter = Expression.Parameter(typeof(T));
@@ -55,7 +84,7 @@ public static partial class CommonHelper
     /// <returns>The ordered source collection in descending order.</returns>
     public static IQueryable<T> OrderByPropertyDescending<T>(this IQueryable<T> source, string propertyName)
     {
-        if (source.IsNullOrEmpty() || !source.PropertyExists(propertyName))
+        if (source == null || !source.PropertyExists(propertyName))
             return source;
 
         var parameterExpression = Expression.Parameter(typeof(T));
@@ -138,23 +167,19 @@ public static partial class CommonHelper
     /// </remarks>
     public static IEnumerable<T> ApplyDateSearch<T>(this IEnumerable<T> contentList, Expression<Func<T, DateTime?>> dateProperty, DateTime? startDate, DateTime? endDate)
     {
-        if (contentList.IsNullOrEmpty() || dateProperty == null || (!startDate.HasValue && !endDate.HasValue))
+        if (contentList == null || dateProperty == null || (!startDate.HasValue && !endDate.HasValue))
             return contentList;
 
-        var propertyName = dateProperty.GetPropertyName();
+        var getDate = dateProperty.Compile();
 
-        // If a selection has been made between two dates, it will return those between the two dates.
-        if (startDate.HasValue && endDate.HasValue)
-            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) >= startDate.Value && (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) <= endDate.Value);
-        // If only the start date value exists, it returns those larger than the start date value.
-        else if (startDate.HasValue && !endDate.HasValue)
+        // Items without a date value never match a date search.
+        return contentList.Where(item =>
         {
-            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) >= startDate.Value);
-        }
-        // If only the end date value exists, it returns those smaller than the end date value.
-        else if (!startDate.HasValue && endDate.HasValue)
-            contentList = contentList.Where(i => (DateTime)i.GetType().GetProperty(propertyName).GetValue(i, null) <= endDate.Value);
+            var date = getDate(item);
 
-        return contentList;
+            return date.HasValue
+                   && (!startDate.HasValue || date.Value >= startDate.Value)
+                   && (!endDate.HasValue || date.Value <= endDate.Value);
+        });
     }
 }

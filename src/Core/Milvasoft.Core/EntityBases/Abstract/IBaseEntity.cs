@@ -29,15 +29,10 @@ public interface IEntityBase<TKey> : IMilvaEntity
 public interface IMilvaEntity
 {
     /// <summary>
-    /// Unique identifier for this entity. Do not use this property when access Id. This is a representation for sql translations etc.
+    /// Unique identifier for this entity as object. It is mainly a representation for expression/sql translations (EF Core binds it to the mapped Id property by name).
+    /// When evaluated in memory it returns <see cref="GetUniqueIdentifier"/>. Use the strongly typed Id property to set the identifier.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2011:Avoid infinite recursion", Justification = "<Pending>")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Blocker Bug", "S2190:Loops and recursions should not be infinite", Justification = "<Pending>")]
-    public virtual object Id
-    {
-        get => Id;
-        set => Id = value;
-    }
+    public object Id => GetUniqueIdentifier();
 
     /// <summary>
     /// Gets the value of Id property.

@@ -24,11 +24,24 @@ public partial class HttpRequestHelperTests
         requestMessage.Should().NotBeNull();
         requestMessage.Method.Should().Be(httpMethod);
         requestMessage.RequestUri.Should().Be(new Uri(url));
-        requestMessage.Version.Should().Be(new Version(1, 0));
-        requestMessage.Content.Should().NotBeNull();
-        requestMessage.Content.Headers.ContentType.MediaType.Should().Be($"application/json-{httpMethod}+{MimeTypeNames.Json}");
+        requestMessage.Version.Should().Be(new Version(1, 1));
+        requestMessage.Content.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task BuildRequestMessage_WithContentAndDefaultValues_ShouldUseApplicationJson()
+    {
+        // Arrange
+        var httpMethod = HttpMethod.Post;
+        var url = "https://example.com";
+
+        // Act
+        using var requestMessage = httpMethod.BuildRequestMessage(url, new { Name = "John" });
+
+        // Assert
+        requestMessage.Content.Headers.ContentType.MediaType.Should().Be(MimeTypeNames.ApplicationJson);
         requestMessage.Content.Headers.ContentType.CharSet.Should().Be(Encoding.UTF8.WebName);
-        (await requestMessage.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken)).Should().BeEmpty();
+        (await requestMessage.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken)).Should().Be("{\"Name\":\"John\"}");
     }
 
     [Fact]
@@ -40,7 +53,7 @@ public partial class HttpRequestHelperTests
         var content = new { Name = "John", Age = 30 };
         var headers = new List<KeyValuePair<string, string>> { new("Authorization", "Bearer token") };
         var encoding = Encoding.ASCII;
-        var mediaType = "xml";
+        var mediaType = "application/vnd.milvasoft+json";
         var version = new Version(2, 0);
 
         // Act
@@ -52,7 +65,7 @@ public partial class HttpRequestHelperTests
         requestMessage.RequestUri.Should().Be(new Uri(url));
         requestMessage.Version.Should().Be(version);
         requestMessage.Content.Should().NotBeNull();
-        requestMessage.Content.Headers.ContentType.MediaType.Should().Be($"application/json-{httpMethod}+{mediaType}");
+        requestMessage.Content.Headers.ContentType.MediaType.Should().Be(mediaType);
         requestMessage.Content.Headers.ContentType.CharSet.Should().Be(encoding.WebName);
         (await requestMessage.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken)).Should().Be("{\"Name\":\"John\",\"Age\":30}");
     }
@@ -145,6 +158,40 @@ public partial class HttpRequestHelperTests
 
         // Assert
         act.Should().Throw<Exception>().WithMessage(LocalizerKeys.InvalidUrlErrorMessage);
+    }
+
+    [Theory]
+    [InlineData("https://example.com/api/v1/items/~user@x;v=1?time=10:00&list=(a,b)*!")]
+    [InlineData("https://[::1]:8080/api")]
+    [InlineData("ftp://files.example.com/pub/file.txt")]
+    [InlineData("https://xn--istanbul-xya.example.com/şehir")]
+    public void BuildRequestUrlFromAddress_WithValidUrlsRejectedByOldRegex_ShouldReturnUrl(string url)
+    {
+        // Arrange
+        var uri = new Uri(url);
+        var address = uri.GetLeftPart(UriPartial.Authority);
+        var pathAndQuery = url[address.Length..].TrimStart('/');
+
+        // Act
+        var result = HttpRequestHelper.BuildRequestUrlFromAddress(address, pathAndQuery);
+
+        // Assert
+        result.Should().Be(url);
+    }
+
+    [Fact]
+    public void BuildRequestUrlFromAddress_WithLongHostName_ShouldCompleteQuickly()
+    {
+        // Arrange (nested quantifiers of the old regex backtracked catastrophically on such input)
+        var address = "http://" + new string('a', 40) + "-!";
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+        // Act
+        Action act = () => HttpRequestHelper.BuildRequestUrlFromAddress(address, "api");
+
+        // Assert
+        act.Should().Throw<Exception>().WithMessage(LocalizerKeys.InvalidUrlErrorMessage);
+        stopwatch.Elapsed.Should().BeLessThan(TimeSpan.FromSeconds(1));
     }
 
     #endregion

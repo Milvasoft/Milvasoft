@@ -90,51 +90,42 @@ public static partial class CommonHelper
     }
 
     /// <summary>
-    /// Checks if the given <paramref name="date"/> falls between the specified <paramref name="startTime"/> and <paramref name="endTime"/>.
+    /// Checks if the time of day of <paramref name="date"/> falls in the daily window from <paramref name="startTime"/> to <paramref name="endTime"/> (both inclusive).
     /// </summary>
+    /// <remarks>
+    /// Only the time of day parts of <paramref name="startTime"/> and <paramref name="endTime"/> are used.
+    /// If <paramref name="endTime"/> is less than or equal to <paramref name="startTime"/>, the window crosses midnight (e.g. 22:00 - 02:00).
+    /// </remarks>
     /// <param name="date">The date to check.</param>
-    /// <param name="startTime">The start time.</param>
-    /// <param name="endTime">The end time.</param>
-    /// <param name="convertTimesToUtc">Indicates whether to convert times to UTC before comparison. Default is true.</param>
+    /// <param name="startTime">The start time of the daily window.</param>
+    /// <param name="endTime">The end time of the daily window.</param>
+    /// <param name="convertTimesToUtc">
+    /// If true, <paramref name="startTime"/> and <paramref name="endTime"/> are local (<see cref="TimeZoneInfo.Local"/>) wall clock times
+    /// and <paramref name="date"/> is treated as UTC unless its kind is <see cref="DateTimeKind.Local"/>; the comparison is done in local time.
+    /// If false, all values are compared as they are. Default is true.
+    /// </param>
     /// <returns>True if the date falls between the start time and end time, otherwise false.</returns>
-
     public static bool IsBetween(this DateTime date, TimeSpan startTime, TimeSpan endTime, bool convertTimesToUtc = true)
     {
-        if (convertTimesToUtc)
-        {
-            startTime = startTime.ConvertToUtc();
-            endTime = endTime.ConvertToUtc();
-        }
+        var timeOfDay = convertTimesToUtc ? ToLocalTime(date).TimeOfDay : date.TimeOfDay;
 
-        DateTime startDate = date.WithTime(startTime);
-        DateTime endDate = date.WithTime(endTime);
-
-        //Check whether the endTime is lesser than startTime
-        if (startTime >= endTime)
-        {
-            //Increase the date if endTime is timespan of the Nextday 
-            endDate = endDate.AddDays(1);
-        }
-
-        return date >= startDate && date <= endDate;
+        return IsTimeOfDayBetween(timeOfDay, startTime, endTime);
     }
 
     /// <summary>
-    /// Checks if the given <paramref name="date"/> with the specified <paramref name="compareTime"/> falls between the <paramref name="startTime"/> and <paramref name="endTime"/>.
+    /// Checks if <paramref name="compareTime"/> falls in the daily window from <paramref name="startTime"/> to <paramref name="endTime"/> (both inclusive).
     /// </summary>
-    /// <param name="date">The date to check.</param>
+    /// <remarks>
+    /// All times must be expressed in the same time zone; only their time of day parts are used.
+    /// If <paramref name="endTime"/> is less than or equal to <paramref name="startTime"/>, the window crosses midnight (e.g. 22:00 - 02:00).
+    /// </remarks>
+    /// <param name="date">The date the times belong to. It does not affect the result.</param>
     /// <param name="compareTime">The time to compare.</param>
-    /// <param name="startTime">The start time.</param>
-    /// <param name="endTime">The end time.</param>
-    /// <param name="convertTimesToUtc">Indicates whether to convert times to UTC before comparison. Default is true.</param>
-    /// <returns>True if the date with the compare time falls between the start time and end time, otherwise false.</returns>
-    public static bool IsBetween(this DateTime date, TimeSpan compareTime, TimeSpan startTime, TimeSpan endTime, bool convertTimesToUtc = true)
-    {
-        if (convertTimesToUtc)
-            compareTime = compareTime.ConvertToUtc();
-
-        return date.WithTime(compareTime).IsBetween(startTime, endTime, convertTimesToUtc);
-    }
+    /// <param name="startTime">The start time of the daily window.</param>
+    /// <param name="endTime">The end time of the daily window.</param>
+    /// <returns>True if the compare time falls between the start time and end time, otherwise false.</returns>
+    public static bool IsBetween(this DateTime date, TimeSpan compareTime, TimeSpan startTime, TimeSpan endTime)
+        => IsTimeOfDayBetween(compareTime, startTime, endTime);
 
     /// <summary>
     /// Checks if the given <paramref name="date"/> falls between the specified <paramref name="startDate"/> and <paramref name="endDate"/>.
@@ -152,14 +143,19 @@ public static partial class CommonHelper
     /// <param name="compareTime">The time to compare.</param>
     /// <param name="startDate">The start date.</param>
     /// <param name="endDate">The end date.</param>
-    /// <param name="convertTimeToUtc">Indicates whether to convert the compare time to UTC before comparison. Default is true.</param>
+    /// <param name="convertTimeToUtc">
+    /// If true, <paramref name="compareTime"/> is a local (<see cref="TimeZoneInfo.Local"/>) wall clock time on the day of <paramref name="date"/>
+    /// and it is converted to UTC (the day may change) before comparing with <paramref name="startDate"/> and <paramref name="endDate"/>. Default is true.
+    /// </param>
     /// <returns>True if the date with the compare time falls between the start date and end date, otherwise false.</returns>
     public static bool IsBetween(this DateTime date, TimeSpan compareTime, DateTime startDate, DateTime endDate, bool convertTimeToUtc = true)
     {
-        if (convertTimeToUtc)
-            compareTime = compareTime.ConvertToUtc();
+        var dateTime = DateTime.SpecifyKind(date.Date.Add(GetTimeOfDay(compareTime)), DateTimeKind.Unspecified);
 
-        return date.WithTime(compareTime).IsBetween(startDate, endDate);
+        if (convertTimeToUtc)
+            dateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.Local);
+
+        return dateTime.IsBetween(startDate, endDate);
     }
 
     /// <summary>
@@ -174,13 +170,27 @@ public static partial class CommonHelper
                time.Hours, time.Minutes, time.Seconds,
                time.Milliseconds, time.Microseconds, kind: kind);
 
-    /// <summary>
-    /// Converts the specified <paramref name="timeSpan"/> to UTC.
-    /// </summary>
-    /// <param name="timeSpan">The time span to convert.</param>
-    /// <returns>The converted time span in UTC.</returns> 
-    /// <remarks>
-    /// Be careful when using this method. Each time you use it, it will repeat the time difference process according to the time zone you are in.
-    /// </remarks>
-    public static TimeSpan ConvertToUtc(this TimeSpan timeSpan) => TimeSpan.FromTicks(new DateTime(timeSpan.Ticks, DateTimeKind.Unspecified).ToUniversalTime().Ticks);
+    private static bool IsTimeOfDayBetween(TimeSpan time, TimeSpan startTime, TimeSpan endTime)
+    {
+        time = GetTimeOfDay(time);
+        startTime = GetTimeOfDay(startTime);
+        endTime = GetTimeOfDay(endTime);
+
+        if (startTime < endTime)
+            return time >= startTime && time <= endTime;
+
+        // Window crosses midnight (or covers the whole day when start equals end).
+        return time >= startTime || time <= endTime;
+    }
+
+    private static TimeSpan GetTimeOfDay(TimeSpan time)
+    {
+        var ticks = time.Ticks % TimeSpan.TicksPerDay;
+
+        return TimeSpan.FromTicks(ticks < 0 ? ticks + TimeSpan.TicksPerDay : ticks);
+    }
+
+    private static DateTime ToLocalTime(DateTime date) => date.Kind == DateTimeKind.Local
+                                                            ? date
+                                                            : TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(date, DateTimeKind.Utc), TimeZoneInfo.Local);
 }

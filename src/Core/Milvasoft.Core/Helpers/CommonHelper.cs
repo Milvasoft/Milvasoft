@@ -11,8 +11,6 @@ namespace Milvasoft.Core.Helpers;
 /// </summary>
 public static partial class CommonHelper
 {
-    private static readonly MethodInfo _deserializeMethod = typeof(JsonSerializer).GetMethod(nameof(JsonSerializer.Deserialize), [typeof(JsonElement), typeof(JsonSerializerOptions)]);
-
     /// <summary>
     /// Creates an expression that represents the condition where the IsDeleted property of an entity is false.
     /// </summary>

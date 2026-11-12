@@ -53,12 +53,5 @@ public static partial class CommonHelper
     /// <param name="element">The json element to deserialize.</param>
     /// <param name="type">The type of the object to deserialize to.</param>
     /// <returns>The deserialized object of the specified type.</returns>
-    public static object Deserialize(this JsonElement element, Type type)
-    {
-        var genericMethod = _deserializeMethod.MakeGenericMethod(type);
-
-        var value = genericMethod.Invoke(null, [element, null]);
-
-        return value;
-    }
+    public static object Deserialize(this JsonElement element, Type type) => JsonSerializer.Deserialize(element, type);
 }

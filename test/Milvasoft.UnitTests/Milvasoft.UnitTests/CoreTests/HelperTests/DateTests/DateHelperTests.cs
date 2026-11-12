@@ -261,7 +261,7 @@ public partial class DateHelperTests
         var compareTime = new TimeSpan(dateForTimeSpan.Ticks);
 
         // Act
-        var result = inputDate.IsBetween(compareTime, startTime, endTime, convertTimesToUtc);
+        var result = inputDate.IsBetween(compareTime, startTime, endTime);
 
         // Assert
         result.Should().Be(expectedResult);
@@ -330,35 +330,51 @@ public partial class DateHelperTests
         result.Should().Be(expected);
     }
 
-    [Fact]
-    public void ConvertToUtc_WithInputIsTurkeyTime_ShouldReturnTimeAsConvertedToUtc()
+    [Theory]
+    [InlineData(3, 0, false)]  // 03:00 local is outside 00:15 - 02:00
+    [InlineData(1, 0, true)]   // 01:00 local is inside 00:15 - 02:00
+    [InlineData(0, 10, false)] // 00:10 local is outside 00:15 - 02:00
+    public void IsBetween_WithUtcDateAndLocalWindowNearMidnight_ShouldCompareInLocalTime(int localHour, int localMinute, bool expected)
     {
         // Arrange
-        TimeZoneInfo tzone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
-        var utcDate = new DateTime(2024, 01, 01, 10, 00, 00, DateTimeKind.Unspecified);
-        var dateForTimeSpan = TimeZoneInfo.ConvertTimeFromUtc(utcDate, tzone);//13:00
-        var time = new TimeSpan(dateForTimeSpan.Ticks);
-        var expected = new TimeSpan(utcDate.Ticks);
+        var localDateTime = new DateTime(2024, 06, 15, localHour, localMinute, 0, DateTimeKind.Unspecified);
+        var utcDate = TimeZoneInfo.ConvertTimeToUtc(localDateTime, TimeZoneInfo.Local);
 
         // Act
-        var result = time.ConvertToUtc();
+        var result = utcDate.IsBetween(new TimeSpan(0, 15, 0), new TimeSpan(2, 0, 0), convertTimesToUtc: true);
+
+        // Assert
+        result.Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData(23, 30, true)]
+    [InlineData(1, 30, true)]  // after midnight part of an overnight window
+    [InlineData(12, 0, false)]
+    public void IsBetween_WithOvernightWindow_ShouldIncludeTimesAfterMidnight(int hour, int minute, bool expected)
+    {
+        // Arrange
+        var date = new DateTime(2024, 06, 15, hour, minute, 0, DateTimeKind.Unspecified);
+
+        // Act
+        var result = date.IsBetween(new TimeSpan(22, 0, 0), new TimeSpan(2, 0, 0), convertTimesToUtc: false);
 
         // Assert
         result.Should().Be(expected);
     }
 
     [Fact]
-    public void ConvertToUtc_WithInputIsUtcTime_ShouldReturnTimeAsConvertedToUtc()
+    public void IsBetween_WithLocalCompareTimeBeforeUtcOffset_ShouldConvertToPreviousUtcDay()
     {
         // Arrange
-        var utcDate = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2024, 01, 01, 10, 00, 00, DateTimeKind.Unspecified));
-        var time = new TimeSpan(utcDate.Ticks);
-        var expected = new TimeSpan(utcDate.AddHours(-3).Ticks);
+        var date = new DateTime(2024, 06, 15, 0, 0, 0, DateTimeKind.Unspecified);
+        var compareTime = new TimeSpan(0, 30, 0);
+        var expectedUtc = TimeZoneInfo.ConvertTimeToUtc(date.Add(compareTime), TimeZoneInfo.Local);
 
         // Act
-        var result = time.ConvertToUtc();
+        var result = date.IsBetween(compareTime, expectedUtc, expectedUtc, convertTimeToUtc: true);
 
         // Assert
-        result.Should().Be(expected);
+        result.Should().BeTrue();
     }
 }

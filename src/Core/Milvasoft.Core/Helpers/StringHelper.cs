@@ -111,26 +111,35 @@ public static partial class CommonHelper
         if (string.IsNullOrEmpty(str))
             return string.Empty;
 
-        var rawDataBytes = str.GetByteArray();
-
-        // ComputeHash - returns byte array
-        byte[] bytes = SHA256.HashData(rawDataBytes);
-
-        // Convert byte array to a string
-        StringBuilder builder = new StringBuilder();
-
-        for (int i = 0; i < bytes.Length; i++)
-            builder.Append(bytes[i].ToString("x2"));
-
-        return builder.ToString();
+        return Convert.ToHexStringLower(SHA256.HashData(str.GetByteArray()));
     }
 
     /// <summary>
-    /// Normalizes the input string according to the invariant culture.
+    /// Normalizes the input string for case insensitive comparisons (e.g. normalized user names and emails).
+    /// The result does not depend on the current culture.
     /// </summary>
+    /// <remarks>
+    /// The value is lowercased and then uppercased with invariant culture rules, and the Turkish dotted/dotless I letters
+    /// ('ı', 'İ') are folded to 'I'. So "I", "i", "ı" and "İ" all normalize to "I" (e.g. "istanbul", "İstanbul", "ISTANBUL" → "ISTANBUL";
+    /// "ışık", "IŞIK" → "IŞIK").
+    /// <para>
+    /// Before this change the first step used the current culture. On a tr-TR server 'I' became 'ı' (so "IŞIK" → "ıŞıK"),
+    /// on other cultures 'ı' stayed 'ı' (and on invariant culture 'İ' stayed 'İ'). Values normalized by older versions differ from the new result
+    /// only by these characters, so they can be migrated with <c>REPLACE(REPLACE(column, 'ı', 'I'), 'İ', 'I')</c>.
+    /// </para>
+    /// </remarks>
     /// <param name="value">The input string.</param>
-    /// <returns>The normalized string according to the invariant culture.</returns>
-    public static string MilvaNormalize(this string value) => !string.IsNullOrWhiteSpace(value) ? value.ToLower().ToUpperInvariant() : value;
+    /// <returns>The normalized string.</returns>
+    public static string MilvaNormalize(this string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return value;
+
+        return value.ToLowerInvariant()
+                    .ToUpperInvariant()
+                    .Replace('ı', 'I')
+                    .Replace('İ', 'I');
+    }
 
     /// <summary>
     /// Masks string.

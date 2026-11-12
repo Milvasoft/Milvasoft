@@ -1,5 +1,6 @@
 ﻿using Milvasoft.Core.Utils.Converters;
 using System.ComponentModel;
+using System.Globalization;
 using System.Text.Json.Serialization;
 
 namespace Milvasoft.Core.EntityBases.MultiTenancy;
@@ -44,7 +45,7 @@ public struct TenantId : IEquatable<TenantId>
 
             var tenancyName = splitted[0];
 
-            var branchNo = Convert.ToInt32(splitted[1]);
+            var branchNo = int.Parse(splitted[1], NumberStyles.Integer, CultureInfo.InvariantCulture);
 
             BuildTenantId(tenancyName, branchNo);
         }
@@ -92,10 +93,10 @@ public struct TenantId : IEquatable<TenantId>
     public readonly string GetHashString() => $"{_tenancyName}_{_branchNo}".Hash();
 
     /// <summary>
-    /// Compares hashes.
+    /// Compares <see cref="TenancyName"/> and <see cref="BranchNo"/>.
     /// </summary>
     /// <param name="obj"></param>
-    /// <returns> If both hash are equals returns true, othewise false. </returns>
+    /// <returns> If both are equal returns true, othewise false. </returns>
     public override readonly bool Equals(object obj)
     {
         // Check that o is a TenantId first
@@ -106,17 +107,11 @@ public struct TenantId : IEquatable<TenantId>
     }
 
     /// <summary>
-    /// Compares hashes.
+    /// Compares <see cref="TenancyName"/> and <see cref="BranchNo"/>.
     /// </summary>
     /// <param name="other"></param>
-    /// <returns> If both hash are equals returns true, othewise false. </returns>
-    public readonly bool Equals(TenantId other)
-    {
-        if (other._hash != GetHashString())
-            return false;
-
-        return true;
-    }
+    /// <returns> If both are equal returns true, othewise false. </returns>
+    public readonly bool Equals(TenantId other) => _branchNo == other._branchNo && string.Equals(_tenancyName, other._tenancyName, StringComparison.Ordinal);
 
     /// <summary>
     /// Compares <see cref="TenancyName"/> with <paramref name="other"/>.TenancyName.
@@ -204,19 +199,10 @@ public struct TenantId : IEquatable<TenantId>
         if (splittedArray.Length != 2)
             return false;
 
-        if (string.IsNullOrWhiteSpace(splittedArray[0]) || string.IsNullOrWhiteSpace(splittedArray[1]))
+        if (string.IsNullOrWhiteSpace(splittedArray[0]))
             return false;
 
-        try
-        {
-            Convert.ToInt32(splittedArray[1]);
-        }
-        catch (Exception)
-        {
-            return false;
-        }
-
-        return true;
+        return int.TryParse(splittedArray[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var branchNo) && branchNo > 0;
     }
 
     /// <summary>
@@ -246,13 +232,7 @@ public struct TenantId : IEquatable<TenantId>
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    public static bool operator ==(TenantId a, TenantId b)
-    {
-        if (a._hash != b._hash)
-            return false;
-
-        return true;
-    }
+    public static bool operator ==(TenantId a, TenantId b) => a.Equals(b);
 
     /// <summary>
     /// Indicates whether the values of two specified <see cref="TenantId"/> objects are not equal.
@@ -299,22 +279,15 @@ public struct TenantId : IEquatable<TenantId>
     /// </summary>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    public static TenantId operator ++(TenantId tenantId)
-    {
-        tenantId._branchNo++;
-        return tenantId;
-    }
+    public static TenantId operator ++(TenantId tenantId) => new(tenantId._tenancyName, tenantId._branchNo + 1);
 
     /// <summary>
     /// Decreases <paramref name="tenantId"/>.BranchNo.
     /// </summary>
     /// <param name="tenantId"></param>
     /// <returns></returns>
-    public static TenantId operator --(TenantId tenantId)
-    {
-        tenantId._branchNo--;
-        return tenantId;
-    }
+    /// <exception cref="MilvaDeveloperException">Thrown when the result branch no would be 0 or less.</exception>
+    public static TenantId operator --(TenantId tenantId) => new(tenantId._tenancyName, tenantId._branchNo - 1);
 
     private void BuildTenantId(string tenancyName, int branchNo)
     {

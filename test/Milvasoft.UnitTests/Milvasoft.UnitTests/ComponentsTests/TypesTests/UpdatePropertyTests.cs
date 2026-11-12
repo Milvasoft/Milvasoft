@@ -108,6 +108,33 @@ public class UpdatePropertyTests
     }
 
     [Fact]
+    public void Equality_WithNullValues_ShouldBeConsistentWithOperatorAndHashCode()
+    {
+        // Arrange
+        var updateProperty1 = new UpdateProperty<string>(null);
+        var updateProperty2 = new UpdateProperty<string>(null);
+
+        // Act & Assert
+        updateProperty1.Equals(updateProperty2).Should().BeTrue();
+        updateProperty1.Equals((object)updateProperty2).Should().BeTrue();
+        (updateProperty1 == updateProperty2).Should().BeTrue();
+        updateProperty1.GetHashCode().Should().Be(updateProperty2.GetHashCode());
+    }
+
+    [Fact]
+    public void Equality_WithSameValueButDifferentIsUpdated_ShouldReturnFalse()
+    {
+        // Arrange
+        var notUpdated = new UpdateProperty<int>();
+        var updatedToDefault = new UpdateProperty<int>(0);
+
+        // Act & Assert
+        notUpdated.Equals(updatedToDefault).Should().BeFalse();
+        (notUpdated == updatedToDefault).Should().BeFalse();
+        (notUpdated != updatedToDefault).Should().BeTrue();
+    }
+
+    [Fact]
     public void Equals_WithComparingSamInstances_ShouldReturnTrue()
     {
         // Arrange

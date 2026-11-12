@@ -11,20 +11,6 @@ public interface IRedisAccessor : ICacheAccessor<RedisAccessor>
     #region Async
 
     /// <summary>
-    /// Connects redis database if there is no connection. Otherwise this method does nothing.
-    /// </summary>
-    /// <returns> Returns connected status. </returns>
-    ValueTask<bool> ConnectAsync();
-
-    /// <summary>
-    /// Close all connections.
-    /// If connection exists, closes the connection.
-    /// If connection not exists, disposes client object.
-    /// </summary>
-    /// <returns></returns>
-    ValueTask DisconnectAsync();
-
-    /// <summary>
     /// Gets redis database.
     /// </summary>
     /// <returns></returns>
@@ -56,15 +42,16 @@ public interface IRedisAccessor : ICacheAccessor<RedisAccessor>
     Task<bool> SetAsync(KeyValuePair<RedisKey, RedisValue>[] values);
 
     /// <summary>
-    /// Flushs default database.
+    /// Removes all keys of the accessor's database on every connected primary server. Same as <see cref="PurgeAsync"/>.
+    /// The multiplexer must be configured with <see cref="ConfigurationOptions.AllowAdmin"/> at startup.
     /// </summary>
     /// <returns></returns>
     Task FlushDatabaseAsync();
 
     /// <summary>
-    /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
-    /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
-    /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
+    /// It performs the requested redis action.
+    /// If redis is not reachable (not connected, connection or timeout error), it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key.
+    /// Error logging if <paramref name="milvaLogger"/> object is not null.
     /// </summary>
     /// <param name="action"></param>
     /// <param name="userFriendlyMessageLocalizerKey"></param>
@@ -75,9 +62,9 @@ public interface IRedisAccessor : ICacheAccessor<RedisAccessor>
                                  IMilvaLogger milvaLogger = null);
 
     /// <summary>
-    /// It performs the requested redis action in try catch blocks. If redis client not connected, connects.
-    /// If an error occurs when performing action or connecting to redis, it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key. 
-    /// Fatal logging if <paramref name="milvaLogger"/> object is not null.
+    /// It performs the requested redis action.
+    /// If redis is not reachable (not connected, connection or timeout error), it throws the <see cref="MilvaUserFriendlyException"/> error along with the message key.
+    /// Error logging if <paramref name="milvaLogger"/> object is not null.
     /// </summary>
     /// <param name="action"></param>
     /// <param name="userFriendlyMessageLocalizerKey"></param>
@@ -88,13 +75,18 @@ public interface IRedisAccessor : ICacheAccessor<RedisAccessor>
                                        IMilvaLogger milvaLogger = null);
 
     /// <summary>
-    /// Checks redis connection and if connection close try to open connection.
+    /// Kept for backward compatibility. It does nothing.
     /// </summary>
+    /// <remarks>
+    /// The shared <see cref="IConnectionMultiplexer"/> is never closed or replaced by the accessor.
+    /// StackExchange.Redis reconnects automatically in the background; use <see cref="ICacheAccessor.IsConnected"/> to check the current state.
+    /// </remarks>
     /// <returns></returns>
     ValueTask CheckClientAndConnectIfNotAsync();
 
     /// <summary>
-    /// Removes current database.
+    /// Removes all keys of the accessor's database on every connected primary server.
+    /// The multiplexer must be configured with <see cref="ConfigurationOptions.AllowAdmin"/> at startup.
     /// </summary>
     /// <returns></returns>
     Task PurgeAsync();
@@ -104,27 +96,14 @@ public interface IRedisAccessor : ICacheAccessor<RedisAccessor>
     #region Sync
 
     /// <summary>
-    /// Connects redis database if there is no connection. Otherwise this method does nothing.
-    /// </summary>
-    /// <returns></returns>
-    public void Connect();
-
-    /// <summary>
-    /// Close all connections.
-    /// If connection exists, closes the connection.
-    /// If connection not exists, disposes client object.
-    /// </summary>
-    /// <returns></returns>
-    public void Disconnect();
-
-    /// <summary>
     /// Gets <paramref name="keys"/> values.
     /// </summary>
     /// <returns></returns>
     public RedisValue[] Get(IEnumerable<string> keys);
 
     /// <summary>
-    /// Removes current database.
+    /// Removes all keys of the accessor's database on every connected primary server.
+    /// The multiplexer must be configured with <see cref="ConfigurationOptions.AllowAdmin"/> at startup.
     /// </summary>
     /// <returns></returns>
     void Purge();

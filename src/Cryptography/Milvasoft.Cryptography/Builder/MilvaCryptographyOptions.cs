@@ -32,23 +32,24 @@ public class MilvaCryptographyOptions : IMilvaCryptographyOptions
 public interface IMilvaCryptographyOptions
 {
     /// <summary>
-    /// Gets or sets base path. If sets combines all file paths with this.
+    /// Lifetime of the <see cref="Abstract.IMilvaCryptographyProvider"/> registration.
     /// </summary>
     public ServiceLifetime Lifetime { get; set; }
 
     /// <summary>
-    /// Encryption key.
+    /// Encryption key. Must be a random secret of 16, 24 or 32 bytes (UTF-8). It is validated when the services are registered.
     /// </summary>
     public string Key { get; set; }
 
     /// <summary>
-    /// Specifies the block cipher mode to use for encryption. Default is  Default is <see cref="CipherMode.CBC"/>
+    /// Block cipher mode of values encrypted by older versions (legacy AES-CBC format). Only used for decrypting them;
+    /// new values are always encrypted with AES-256-GCM. Default is <see cref="CipherMode.CBC"/>.
     /// </summary>
     public CipherMode Cipher { get; set; }
 
     /// <summary>
-    /// Specifies the type of padding to apply when the message data block is shorter than the full number of bytes needed for a cryptographic operation.
-    /// Default is <see cref="PaddingMode.PKCS7"/>
+    /// Padding mode of values encrypted by older versions (legacy AES-CBC format). Only used for decrypting them;
+    /// new values are always encrypted with AES-256-GCM. Default is <see cref="PaddingMode.PKCS7"/>.
     /// </summary>
     public PaddingMode Padding { get; set; }
 }
