@@ -1,83 +1,92 @@
-using Microsoft.AspNetCore.Identity;
 using Milvasoft.Identity.Concrete.Entity;
 using System.Globalization;
+using System.Security.Cryptography;
 
 namespace Milvasoft.Identity.TokenProvider;
 
 /// <summary>
-/// Represents a token provider that generates time based codes using the user's security stamp.
+/// Generates and validates 6 digit time based (RFC 6238) codes for a user.
 /// </summary>
+/// <remarks>
+/// <para>
+/// The per-user TOTP key is derived with HMAC-SHA256 from a server-side <c>secret</c>, the user's security stamp
+/// (see <see cref="UserSecurityStamp"/>), the <see cref="Purpose"/> and an optional <c>value</c> the code is bound to
+/// (for example the new email address for <see cref="Purpose.EmailChange"/>). Without the secret a code cannot be computed,
+/// and a code stops validating as soon as the user's security-relevant state changes (so it is single-use for the
+/// password reset, email confirmation and email change flows).
+/// </para>
+/// <para>
+/// Codes are valid for roughly 6 to 15 minutes (3 minute time steps, two past and two future steps are accepted).
+/// A 6 digit code can be brute forced without rate limiting; callers must limit validation attempts per user.
+/// </para>
+/// </remarks>
 /// <typeparam name="TUser">The type encapsulating a user.</typeparam>
 /// <typeparam name="TKey">The type user's key.</typeparam>
 public static class DigitTokenProvider<TUser, TKey> where TUser : MilvaUser<TKey> where TKey : IEquatable<TKey>
 {
-    private const string _totp = "Totp";
+    /// <summary>
+    /// Minimum length of the server-side secret in bytes.
+    /// </summary>
+    public const int MinSecretLength = 32;
+
+    private const string _keyDerivationLabel = "Milvasoft.Identity.DigitToken.v2";
 
     /// <summary>
-    /// Generates a token for the specified <paramref name="user"/> and <paramref name="purpose"/>.
+    /// Generates a code for the specified <paramref name="user"/> and <paramref name="purpose"/>.
     /// </summary>
-    /// <param name="purpose">The purpose the token will be used for.</param>
-    /// <param name="user">The user a token should be generated for. </param>
-    /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, containing the token for the specified
-    /// <paramref name="user"/> and <paramref name="purpose"/>.
-    /// </returns>
-    /// <remarks>
-    /// The <paramref name="purpose"/> parameter allows a token generator to be used for multiple types of token whilst
-    /// insuring a token for one purpose cannot be used for another. For example if you specified a purpose of "Email"
-    /// and validated it with the same purpose a token with the purpose of TOTP would not pass the check even if it was
-    /// for the same user.
-    ///
-    /// Implementations of <see cref="IUserTwoFactorTokenProvider{TUser}"/> should validate that purpose is not null or empty to
-    /// help with token separation.
-    /// </remarks>
-    public static string Generate(Purpose purpose, TUser user)
+    /// <param name="purpose">The purpose the code will be used for.</param>
+    /// <param name="user">The user a code should be generated for.</param>
+    /// <param name="secret">Server-side secret, at least <see cref="MinSecretLength"/> bytes. Never send it to clients.</param>
+    /// <param name="value">Optional value the code is bound to (for example the new email address in an email change flow).</param>
+    /// <returns>6 digit code.</returns>
+    public static string Generate(Purpose purpose, TUser user, byte[] secret, string value = null)
     {
-        var token = Encoding.Unicode.GetBytes(user.Id.ToString());
+        var key = DeriveKey(purpose, user, secret, value);
 
-        var modifier = GetUserModifier(purpose, user);
-
-        return Rfc6238AuthenticationService.GenerateCode(token, modifier).ToString("D6", CultureInfo.InvariantCulture);
+        return Rfc6238AuthenticationService.GenerateCode(key).ToString("D6", CultureInfo.InvariantCulture);
     }
 
     /// <summary>
     /// Returns a flag indicating whether the specified <paramref name="token"/> is valid for the given
     /// <paramref name="user"/> and <paramref name="purpose"/>.
     /// </summary>
-    /// <param name="purpose">The purpose the token will be used for.</param>
-    /// <param name="token">The token to validate.</param>
-    /// <param name="user">The user a token should be validated for.</param>
-    /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, containing the a flag indicating the result
-    /// of validating the <paramref name="token"> for the specified </paramref><paramref name="user"/> and <paramref name="purpose"/>.
-    /// The task will return true if the token is valid, otherwise false.
-    /// </returns>
-    public static bool Validate(Purpose purpose, string token, TUser user)
+    /// <param name="purpose">The purpose the code was generated for.</param>
+    /// <param name="token">The code to validate.</param>
+    /// <param name="user">The user the code should be validated for.</param>
+    /// <param name="secret">The server-side secret used when generating the code.</param>
+    /// <param name="value">The value the code was bound to when it was generated.</param>
+    /// <returns>True if the code is valid, otherwise false.</returns>
+    public static bool Validate(Purpose purpose, string token, TUser user, byte[] secret, string value = null)
     {
-        if (!int.TryParse(token, out int code))
+        if (string.IsNullOrEmpty(token) || token.Length != 6 || !int.TryParse(token, NumberStyles.None, CultureInfo.InvariantCulture, out int code))
             return false;
 
-        var securityToken = Encoding.Unicode.GetBytes(user.Id.ToString());
+        var key = DeriveKey(purpose, user, secret, value);
 
-        var modifier = GetUserModifier(purpose, user);
-
-        return securityToken != null && Rfc6238AuthenticationService.ValidateCode(securityToken, code, modifier);
+        return Rfc6238AuthenticationService.ValidateCode(key, code);
     }
 
     /// <summary>
-    /// Returns a constant, provider and user unique modifier used for entropy in generated tokens from user information.
+    /// Derives the TOTP key of <paramref name="user"/> for <paramref name="purpose"/>.
     /// </summary>
-    /// <param name="purpose">The purpose the token will be generated for.</param>
-    /// <param name="user">The user a token should be generated for.</param>
-    /// <returns>
-    /// The <see cref="Task"/> that represents the asynchronous operation, containing a constant modifier for the specified
-    /// <paramref name="user"/> and <paramref name="purpose"/>.
-    /// </returns>
-    private static string GetUserModifier(Purpose purpose, TUser user) => purpose switch
+    internal static byte[] DeriveKey(Purpose purpose, TUser user, byte[] secret, string value)
     {
-        Purpose.EmailChange => string.Join(':', nameof(MilvaUser<>.Email), purpose, user.Email),
-        Purpose.EmailConfirm => string.Join(':', _totp, purpose, user.PhoneNumber),
-        Purpose.PasswordReset => string.Join(':', nameof(MilvaUser<>.PhoneNumber), purpose),
-        _ => string.Empty,
-    };
+        ArgumentNullException.ThrowIfNull(user);
+        ArgumentNullException.ThrowIfNull(secret);
+
+        if (secret.Length < MinSecretLength)
+            throw new MilvaDeveloperException($"Digit token secret must be at least {MinSecretLength} bytes.");
+
+        using var ms = new MemoryStream();
+
+        using (var writer = new BinaryWriter(ms, StreamExtensions._defaultEncoding, leaveOpen: true))
+        {
+            writer.Write(_keyDerivationLabel);
+            writer.Write((int)purpose);
+            writer.Write(value ?? string.Empty);
+            writer.Write(UserSecurityStamp.Compute(user));
+        }
+
+        return HMACSHA256.HashData(secret, ms.ToArray());
+    }
 }

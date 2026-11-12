@@ -1,45 +1,39 @@
-using System.Diagnostics;
-using System.Net;
+using System.Buffers.Binary;
 using System.Security.Cryptography;
 
 namespace Milvasoft.Identity.TokenProvider;
 
+/// <summary>
+/// RFC 6238 time based one-time codes. Time steps are always computed from UTC.
+/// </summary>
 internal static class Rfc6238AuthenticationService
 {
     private static readonly TimeSpan _timestep = TimeSpan.FromMinutes(3);
-    private static readonly UTF8Encoding _encoding = new(false, true);
-    private static readonly RandomNumberGenerator _rng = RandomNumberGenerator.Create();
 
     /// <summary>
-    /// Use UTC for date times. Default is false.
+    /// Number of time steps before the current one that are still accepted.
     /// </summary>
-    public static bool UseUtcForDateTimes { get; set; } = false;
+    private const int _allowedPastTimeSteps = 2;
 
-    // Generates a new 80-bit security token
-    public static byte[] GenerateRandomKey()
-    {
-        byte[] bytes = new byte[20];
+    /// <summary>
+    /// Number of time steps after the current one that are still accepted (clock skew between servers).
+    /// </summary>
+    private const int _allowedFutureTimeSteps = 2;
 
-        _rng.GetBytes(bytes);
-
-        return bytes;
-    }
-
-    internal static int ComputeTotp(HashAlgorithm hashAlgorithm, ulong timestepNumber, string modifier)
+    internal static int ComputeTotp(byte[] key, ulong timestepNumber)
     {
         // # of 0's = length of pin
         const int Mod = 1000000;
 
         // See https://tools.ietf.org/html/rfc4226
-        // We can add an optional modifier
-        var timestepAsBytes = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((long)timestepNumber));
+        Span<byte> timestepAsBytes = stackalloc byte[sizeof(ulong)];
 
-        var hash = hashAlgorithm.ComputeHash(ApplyModifier(timestepAsBytes, modifier));
+        BinaryPrimitives.WriteUInt64BigEndian(timestepAsBytes, timestepNumber);
+
+        var hash = HMACSHA512.HashData(key, timestepAsBytes);
 
         // Generate DT string
         var offset = hash[^1] & 0xf;
-
-        Debug.Assert(offset + 4 < hash.Length);
 
         var binaryCode = (hash[offset] & 0x7f) << 24
                          | (hash[offset + 1] & 0xff) << 16
@@ -49,62 +43,32 @@ internal static class Rfc6238AuthenticationService
         return binaryCode % Mod;
     }
 
-    private static byte[] ApplyModifier(byte[] input, string modifier)
-    {
-        if (string.IsNullOrEmpty(modifier))
-        {
-            return input;
-        }
-
-        var modifierBytes = _encoding.GetBytes(modifier);
-
-        var combined = new byte[checked(input.Length + modifierBytes.Length)];
-
-        Buffer.BlockCopy(input, 0, combined, 0, input.Length);
-
-        Buffer.BlockCopy(modifierBytes, 0, combined, input.Length, modifierBytes.Length);
-
-        return combined;
-    }
-
     // More info: https://tools.ietf.org/html/rfc6238#section-4
-    private static ulong GetCurrentTimeStepNumber()
-    {
-        var delta = CommonHelper.GetNow(UseUtcForDateTimes) - DateTime.UnixEpoch;
+    internal static ulong GetTimeStepNumber(DateTimeOffset now) => (ulong)((now.UtcTicks - DateTimeOffset.UnixEpoch.UtcTicks) / _timestep.Ticks);
 
-        return (ulong)(delta.Ticks / _timestep.Ticks);
+    public static int GenerateCode(byte[] key) => GenerateCode(key, DateTimeOffset.UtcNow);
+
+    internal static int GenerateCode(byte[] key, DateTimeOffset now)
+    {
+        ArgumentNullException.ThrowIfNull(key);
+
+        return ComputeTotp(key, GetTimeStepNumber(now));
     }
 
-    public static int GenerateCode(byte[] securityToken, string modifier = null)
+    public static bool ValidateCode(byte[] key, int code) => ValidateCode(key, code, DateTimeOffset.UtcNow);
+
+    internal static bool ValidateCode(byte[] key, int code, DateTimeOffset now)
     {
-        ArgumentNullException.ThrowIfNull(securityToken);
+        ArgumentNullException.ThrowIfNull(key);
 
-        // Allow a variance of no greater than 90 seconds in either direction
-        var currentTimeStep = GetCurrentTimeStepNumber();
+        var currentTimeStep = GetTimeStepNumber(now);
 
-        using var hashAlgorithm = new HMACSHA512(securityToken);
+        var matched = false;
 
-        return ComputeTotp(hashAlgorithm, currentTimeStep, modifier);
-    }
+        // Check every step (no early exit) so the time taken does not depend on which step matched.
+        for (var i = -_allowedPastTimeSteps; i <= _allowedFutureTimeSteps; i++)
+            matched |= ComputeTotp(key, (ulong)((long)currentTimeStep + i)) == code;
 
-    public static bool ValidateCode(byte[] securityToken, int code, string modifier = null)
-    {
-        ArgumentNullException.ThrowIfNull(securityToken);
-
-        // Allow a variance of no greater than 90 seconds in either direction
-        var currentTimeStep = GetCurrentTimeStepNumber();
-
-        using var hashAlgorithm = new HMACSHA512(securityToken);
-
-        for (var i = -2; i <= 2; i++)
-        {
-            var computedTotp = ComputeTotp(hashAlgorithm, (ulong)((long)currentTimeStep + i), modifier);
-
-            if (computedTotp == code)
-                return true;
-        }
-
-        // No match
-        return false;
+        return matched;
     }
 }
