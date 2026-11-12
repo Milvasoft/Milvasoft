@@ -28,7 +28,7 @@ public class TransactionInterceptorTests(CustomWebApplicationFactory factory) : 
 {
     private IServiceProvider _rootProvider;
 
-    private Task SetUpAsync(bool registerDbContextType = true)
+    private Task SetUpAsync(bool registerDbContextType = true, bool? rollbackOnUnsuccessfulResponse = null)
     {
         var waf = _factory.WithWebHostBuilder(builder =>
         {
@@ -58,6 +58,9 @@ public class TransactionInterceptorTests(CustomWebApplicationFactory factory) : 
                         {
                             if (registerDbContextType)
                                 opt.DbContextType = typeof(MilvaBulkDbContextFixture);
+
+                            if (rollbackOnUnsuccessfulResponse.HasValue)
+                                opt.RollbackOnUnsuccessfulResponse = rollbackOnUnsuccessfulResponse.Value;
                         });
             });
         });
@@ -95,9 +98,25 @@ public class TransactionInterceptorTests(CustomWebApplicationFactory factory) : 
     }
 
     [Fact]
-    public async Task MethodReturningUnsuccessfulResponse_ShouldRollBack()
+    public async Task MethodReturningUnsuccessfulResponse_ByDefault_ShouldCommit()
     {
+        // Writes made before returning an error response (e.g. failed login counter, lockout) must be kept by default.
         await SetUpAsync();
+
+        using (var scope = _rootProvider.CreateScope())
+        {
+            var response = await scope.ServiceProvider.GetRequiredService<ITransactionalService>().AddAndFailAsync(1);
+
+            response.IsSuccess.Should().BeFalse();
+        }
+
+        (await CountAsync()).Should().Be(1);
+    }
+
+    [Fact]
+    public async Task MethodReturningUnsuccessfulResponse_WithRollbackOnUnsuccessfulResponse_ShouldRollBack()
+    {
+        await SetUpAsync(rollbackOnUnsuccessfulResponse: true);
 
         using (var scope = _rootProvider.CreateScope())
         {

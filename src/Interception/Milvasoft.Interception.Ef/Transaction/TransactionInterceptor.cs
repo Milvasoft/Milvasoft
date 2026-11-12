@@ -13,7 +13,7 @@ namespace Milvasoft.Interception.Ef.Transaction;
 /// </summary>
 /// <remarks>
 /// <para>The transaction is committed after the method's work completes. It is rolled back when the method throws,
-/// and (by default, see <see cref="ITransactionInterceptionOptions.RollbackOnUnsuccessfulResponse"/>) when it returns an unsuccessful <see cref="IResponse"/>.</para>
+/// and, when <see cref="ITransactionInterceptionOptions.RollbackOnUnsuccessfulResponse"/> is enabled (off by default), when it returns an unsuccessful <see cref="IResponse"/>.</para>
 /// <para>When a transaction is already active on the context (nested use), the call participates in it and the outermost starter completes it.</para>
 /// <para>If no DbContext can be found a <see cref="Core.Exceptions.MilvaDeveloperException"/> is thrown and the method is not run.</para>
 /// </remarks>
@@ -74,7 +74,7 @@ public partial class TransactionInterceptor(IServiceProvider serviceProvider) : 
     }
 
     private bool ShouldRollback(object returnValue)
-        => (_transactionInterceptionOptions?.RollbackOnUnsuccessfulResponse ?? true) && returnValue is IResponse { IsSuccess: false };
+        => (_transactionInterceptionOptions?.RollbackOnUnsuccessfulResponse ?? false) && returnValue is IResponse { IsSuccess: false };
 
     private static async Task TryRollbackAsync(IDbContextTransaction transaction)
     {
