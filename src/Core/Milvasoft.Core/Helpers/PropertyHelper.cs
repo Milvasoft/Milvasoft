@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections.Concurrent;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Milvasoft.Core.Helpers;
@@ -145,7 +146,12 @@ public static partial class CommonHelper
     /// <returns>The property selector function.</returns>
     /// <exception cref="MilvaDeveloperException">Thrown when <typeparamref name="T"/> does not contain <paramref name="propertyName"/>.</exception>
     public static Func<T, TPropertyType> CreatePropertySelectorFunction<T, TPropertyType>(string propertyName)
-        => CreatePropertySelector<T, TPropertyType>(propertyName)?.Compile();
+    {
+        if (propertyName == null)
+            return null;
+
+        return PropertySelectorFunctionCache<T, TPropertyType>.Functions.GetOrAdd(propertyName, name => CreatePropertySelector<T, TPropertyType>(name)?.Compile());
+    }
 
     /// <summary>
     /// Creates a required property selector function for the specified property name.
@@ -159,7 +165,16 @@ public static partial class CommonHelper
     {
         typeof(T).ThrowIfPropertyNotExists(propertyName);
 
-        return CreateRequiredPropertySelector<T, TPropertyType>(propertyName).Compile();
+        return PropertySelectorFunctionCache<T, TPropertyType>.Functions.GetOrAdd(propertyName, name => CreateRequiredPropertySelector<T, TPropertyType>(name).Compile());
+    }
+
+    /// <summary>
+    /// Compiled property selector functions per <typeparamref name="T"/>, <typeparamref name="TPropertyType"/> and property name.
+    /// Compiling an expression is expensive, so each selector is compiled once.
+    /// </summary>
+    private static class PropertySelectorFunctionCache<T, TPropertyType>
+    {
+        public static readonly ConcurrentDictionary<string, Func<T, TPropertyType>> Functions = new(StringComparer.Ordinal);
     }
 
     /// <summary>
