@@ -1,4 +1,4 @@
-﻿using EFCore.BulkExtensions;
+﻿using Milvasoft.BulkExtensions;
 
 namespace Milvasoft.DataAccess.EfCore.Bulk;
 

@@ -1,4 +1,4 @@
-﻿using EFCore.BulkExtensions;
+﻿using Milvasoft.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.Core.Utils.Constants;

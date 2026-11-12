@@ -1,4 +1,4 @@
-﻿using EFCore.BulkExtensions;
+﻿using Milvasoft.BulkExtensions;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

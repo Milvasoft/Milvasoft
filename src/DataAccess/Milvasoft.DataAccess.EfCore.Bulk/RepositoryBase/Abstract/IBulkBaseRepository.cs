@@ -1,4 +1,4 @@
-﻿using EFCore.BulkExtensions;
+﻿using Milvasoft.BulkExtensions;
 using Milvasoft.Core.EntityBases.Abstract;
 using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 

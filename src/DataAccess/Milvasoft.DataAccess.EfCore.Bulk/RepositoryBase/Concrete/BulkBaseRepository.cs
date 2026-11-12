@@ -1,4 +1,4 @@
-﻿using EFCore.BulkExtensions;
+﻿using Milvasoft.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Core.EntityBases.Abstract;
