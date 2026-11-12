@@ -240,7 +240,7 @@ public class InterceptionPipelineTests
     }
 
     [Fact]
-    public async Task LoggerFailure_ShouldNotReplaceTheExceptionOfTheCall()
+    public Task LoggerFailure_ShouldNotReplaceTheExceptionOfTheCall()
     {
         var services = GetLogServices();
         services.GetRequiredService<RecordingLoggerFixture>().ThrowOnLog = true;
@@ -248,7 +248,7 @@ public class InterceptionPipelineTests
 
         var act = () => sut.FailAsync();
 
-        await act.Should().ThrowAsync<ArgumentException>();
+        return act.Should().ThrowAsync<ArgumentException>();
     }
 
     [Fact]

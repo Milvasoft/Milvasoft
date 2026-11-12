@@ -164,7 +164,7 @@ public class TransactionInterceptorTests(CustomWebApplicationFactory factory) : 
     public class TransactionalService(MilvaBulkDbContextFixture dbContext) : ITransactionalService, ICanRetrieveDbContext
     {
         [Transaction]
-        public async Task AddAndSucceedAsync(int id) => await AddAsync(id);
+        public Task AddAndSucceedAsync(int id) => AddAsync(id);
 
         [Transaction]
         public async Task AddAndThrowAsync(int id)
@@ -192,10 +192,10 @@ public class TransactionInterceptorTests(CustomWebApplicationFactory factory) : 
 
         public DbContext GetDbContext(Type contextType) => dbContext;
 
-        private async Task AddAsync(int id)
+        private Task AddAsync(int id)
         {
             dbContext.FullAuditableEntities.Add(new SomeFullAuditableEntityFixture { Id = id, SomeDateProp = DateTime.UtcNow, SomeDateTimeOffsetProp = DateTimeOffset.UtcNow });
-            await dbContext.SaveChangesAsync();
+            return dbContext.SaveChangesAsync();
         }
     }
 

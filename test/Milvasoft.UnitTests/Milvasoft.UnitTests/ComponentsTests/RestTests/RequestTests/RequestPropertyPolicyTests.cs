@@ -58,13 +58,13 @@ public class RequestPropertyPolicyTests
     [Theory]
     [InlineData(nameof(PolicyEntity.PasswordHash))]
     [InlineData(nameof(PolicyEntity.NotAggregatable))]
-    public async Task Aggregate_BySensitiveOrDeniedProperty_ShouldBeRejected(string propertyName)
+    public Task Aggregate_BySensitiveOrDeniedProperty_ShouldBeRejected(string propertyName)
     {
         var criteria = new AggregationCriteria { AggregateBy = propertyName, Type = AggregationType.Count };
 
         var act = () => criteria.ApplyAggregationAsync(Entities().AsQueryable(), runAsync: false, TestContext.Current.CancellationToken);
 
-        await act.Should().ThrowAsync<MilvaUserFriendlyException>();
+        return act.Should().ThrowAsync<MilvaUserFriendlyException>();
     }
 
     [Fact]
