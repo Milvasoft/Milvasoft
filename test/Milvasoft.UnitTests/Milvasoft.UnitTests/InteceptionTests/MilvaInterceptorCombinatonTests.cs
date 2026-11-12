@@ -38,7 +38,7 @@ public class MilvaInterceptorCombinatonTests
         var logExistsWithActivityId = TestLogger.Logs.TryGetValue(firstCallResult.Data, out var logEntity);
 
         logExistsWithActivityId.Should().BeTrue();
-        logEntity.IsSuccess.Should().BeFalse();
+        logEntity.IsSuccess.Should().BeTrue();
         logEntity.CacheInfo.Should().Contain("false");
 
         firstCallResult.IsCachedData.Should().BeFalse();
@@ -52,7 +52,7 @@ public class MilvaInterceptorCombinatonTests
 
         logEntity = TestLogger.Logs.Last().Value;
 
-        logEntity.IsSuccess.Should().BeFalse();
+        logEntity.IsSuccess.Should().BeTrue();
         logEntity.CacheInfo.Should().Contain("true");
         logEntity.MethodResult.Should().Contain("\"Metadatas\":null");
 
@@ -61,12 +61,32 @@ public class MilvaInterceptorCombinatonTests
 
     }
 
+    [Fact]
+    public void MethodReturnsErrorResponse_WithCacheInterceptor_ShouldNotCacheTheErrorResponse()
+    {
+        // Arrange
+        var services = GetServices();
+        var sut = services.GetService<ISomeInterface>();
+        var cacheAccessor = services.GetService<ICacheAccessor<TestCacheAccessorFixture>>();
+
+        // Act
+        var firstCallResult = sut.ErrorMethod();
+        var secondCallResult = sut.ErrorMethod();
+
+        // Assert
+        cacheAccessor.Get<Response<string>>("").Should().BeNull();
+        firstCallResult.IsSuccess.Should().BeFalse();
+        secondCallResult.IsCachedData.Should().BeFalse();
+        sut.CallCount.Should().Be(2);
+    }
+
     #region Setup
 
     public interface ISomeInterface : IInterceptable
     {
         public int CallCount { get; set; }
         Response<string> Method();
+        Response<string> ErrorMethod();
     }
 
     public class SomeClass : ISomeInterface
@@ -77,6 +97,15 @@ public class MilvaInterceptorCombinatonTests
         [ActivityStarter]
         [Log]
         public virtual Response<string> Method()
+        {
+            CallCount++;
+            return Response<string>.Success(ActivityHelper.TraceId);
+        }
+
+        [Cache("Error")]
+        [ActivityStarter]
+        [Log]
+        public virtual Response<string> ErrorMethod()
         {
             CallCount++;
             return Response<string>.Error(ActivityHelper.TraceId);

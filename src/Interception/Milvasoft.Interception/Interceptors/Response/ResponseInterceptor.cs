@@ -15,7 +15,11 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
     private readonly IResponseInterceptionOptions _interceptionOptions = interceptionOptions;
 
     /// <inheritdoc/>
-    public int InterceptionOrder { get; set; } = int.MaxValue;
+    /// <remarks>
+    /// Default is 0: inside <see cref="Logging.LogInterceptor"/> (-1) so the processed response is logged, and outside <see cref="Cache.CacheInterceptor"/> (1)
+    /// so the raw result is cached and role/culture dependent processing runs for every caller, including cache hits.
+    /// </remarks>
+    public int InterceptionOrder { get; set; } = 0;
 
     /// <inheritdoc/>
     public async Task OnInvoke(Call call)
@@ -27,23 +31,19 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
 
         var excludeAttribute = call.Method.GetCustomAttribute<ExcludeFromMetadataAttribute>() ?? call.MethodImplementation.GetCustomAttribute<ExcludeFromMetadataAttribute>();
 
-        if (call.ReturnType.CanAssignableTo(typeof(IResponse)))
+        // The runtime value is checked, so Task<T>/ValueTask<T> returning methods and null results are handled.
+        if (call.ReturnValue is not IResponse response)
+            return;
+
+        if (excludeAttribute is null && response is IHasMetadata hasMetadataResponse)
         {
-            if (excludeAttribute is null && call.ReturnType.CanAssignableTo(typeof(IHasMetadata)))
-            {
-                if (call.ReturnValue is not IHasMetadata hasMetadataResponse)
-                    return;
+            var metadataGenerator = new ResponseMetadataGenerator(_serviceProvider);
 
-                var metadataGenerator = new ResponseMetadataGenerator(_serviceProvider);
-
-                metadataGenerator.GenerateMetadata(hasMetadataResponse);
-            }
-
-            var response = call.ReturnValue as IResponse;
-
-            if (_interceptionOptions.TranslateResultMessages && !response.Messages.IsNullOrEmpty())
-                TranslateResultMessages(response);
+            await metadataGenerator.GenerateMetadataAsync(hasMetadataResponse);
         }
+
+        if (_interceptionOptions.TranslateResultMessages && !response.Messages.IsNullOrEmpty())
+            TranslateResultMessages(response);
     }
 
     /// <summary>
@@ -59,10 +59,14 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
         if (localizer != null)
             foreach (var message in response.Messages)
             {
+                if (message == null || string.IsNullOrEmpty(message.Message))
+                    continue;
+
                 if (string.IsNullOrEmpty(message.Key))
                     message.Key = message.Message;
 
-                message.Message = localizer[message.Message];
+                // A missing resource keeps the original message instead of replacing it with null.
+                message.Message = (string)localizer[message.Message] ?? message.Message;
             }
     }
 }

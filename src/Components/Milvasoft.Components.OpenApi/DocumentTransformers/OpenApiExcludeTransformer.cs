@@ -1,15 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 using Milvasoft.Components.OpenApi.Attributes;
+using System.Text.RegularExpressions;
 
 namespace Milvasoft.Components.OpenApi.DocumentTransformers;
 
 /// <summary>
-/// Deletes properties marked with the <see cref="OpenApiExcludeAttribute"/> attribute from the openapi documentation.
+/// Deletes operations marked with the <see cref="OpenApiExcludeAttribute"/> attribute (on the controller, the action or minimal API endpoint metadata)
+/// from the openapi documentation.
 /// </summary>
-public class OpenApiExcludeTransformer(IApiDescriptionGroupCollectionProvider apiDescriptionProvider) : IOpenApiDocumentTransformer
+/// <remarks>
+/// <see cref="OpenApiExtensions.AddMilvaTransformers(OpenApiOptions)"/> also excludes these endpoints with <see cref="OpenApiOptions.ShouldInclude"/>,
+/// so they are not generated at all; this transformer removes anything that was generated anyway.
+/// </remarks>
+public partial class OpenApiExcludeTransformer(IApiDescriptionGroupCollectionProvider apiDescriptionProvider) : IOpenApiDocumentTransformer
 {
     private readonly IApiDescriptionGroupCollectionProvider _apiDescriptionProvider = apiDescriptionProvider;
 
@@ -18,48 +23,58 @@ public class OpenApiExcludeTransformer(IApiDescriptionGroupCollectionProvider ap
     {
         ArgumentNullException.ThrowIfNull(document);
 
-        var apiDescriptions = _apiDescriptionProvider.ApiDescriptionGroups?.Items.SelectMany(g => g.Items) ?? [];
+        if (document.Paths == null)
+            return Task.CompletedTask;
+
+        var apiDescriptions = context?.DescriptionGroups?.SelectMany(g => g.Items)
+                              ?? _apiDescriptionProvider.ApiDescriptionGroups?.Items.SelectMany(g => g.Items)
+                              ?? [];
 
         foreach (var apiDescription in apiDescriptions)
         {
-            // 1. Check if it is a Controller Action
-            if (apiDescription.ActionDescriptor is not ControllerActionDescriptor actionDescriptor)
+            if (!IsExcluded(apiDescription))
                 continue;
 
-            // 2. Check for the attribute on Controller or Action
-            var controllerHasExclude = actionDescriptor.ControllerTypeInfo.GetCustomAttributes(typeof(OpenApiExcludeAttribute), inherit: true).Length != 0;
-            var actionHasExclude = actionDescriptor.MethodInfo.GetCustomAttributes(typeof(OpenApiExcludeAttribute), inherit: true).Length != 0;
+            var key = NormalizePath(apiDescription.RelativePath);
 
-            if (!controllerHasExclude && !actionHasExclude)
+            if (!document.Paths.TryGetValue(key, out var pathItem) || pathItem.Operations == null)
                 continue;
 
-            // 3. Normalize path key to match OpenAPI standard
-            var relativePath = apiDescription.RelativePath ?? string.Empty;
+            // Remove only the specific operation (e.g., remove POST, keep GET)
+            if (apiDescription.HttpMethod != null)
+                pathItem.Operations.Remove(new HttpMethod(apiDescription.HttpMethod));
 
-            // Remove query string if present
-            var pathWithoutQuery = relativePath.Split('?', 2)[0];
-
-            // Ensure leading slash
-            var key = "/" + pathWithoutQuery.TrimStart('/');
-
-            // 4. Check if path exists in the document
-            if (document.Paths.TryGetValue(key, out var pathItem))
-            {
-                // 5. Identify and remove the specific HTTP Operation
-                if (apiDescription.HttpMethod != null)
-                {
-                    // Remove only the specific operation (e.g., remove POST, keep GET)
-                    pathItem.Operations.Remove(new HttpMethod(apiDescription.HttpMethod));
-                }
-
-                // 6. If the path has no operations left, remove the path entirely
-                if (pathItem.Operations.Count == 0)
-                {
-                    document.Paths.Remove(key);
-                }
-            }
+            // If the path has no operations left, remove the path entirely
+            if (pathItem.Operations.Count == 0)
+                document.Paths.Remove(key);
         }
 
         return Task.CompletedTask;
     }
+
+    /// <summary>
+    /// Whether the endpoint is marked with <see cref="OpenApiExcludeAttribute"/> (controller, action or endpoint metadata).
+    /// </summary>
+    /// <param name="apiDescription"></param>
+    /// <returns></returns>
+    public static bool IsExcluded(ApiDescription apiDescription)
+        => apiDescription?.ActionDescriptor?.EndpointMetadata?.OfType<OpenApiExcludeAttribute>().Any() == true;
+
+    /// <summary>
+    /// Converts a route template to an OpenAPI path key: leading slash, no query string, no constraints, defaults or optional/catch-all markers.
+    /// </summary>
+    /// <param name="relativePath"></param>
+    /// <returns></returns>
+    public static string NormalizePath(string relativePath)
+    {
+        // Route parameters first: an optional parameter ({id?}) contains '?' too.
+        var path = RouteParameterRegex().Replace(relativePath ?? string.Empty, match => $"{{{match.Groups["name"].Value}}}");
+
+        path = path.Split('?', 2)[0];
+
+        return "/" + path.TrimStart('/');
+    }
+
+    [GeneratedRegex(@"\{\**(?<name>[^}:=?]+)[^}]*\}")]
+    private static partial Regex RouteParameterRegex();
 }

@@ -2,13 +2,21 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Interception.Decorator;
+using Milvasoft.Interception.Ef.Builder;
 
 namespace Milvasoft.Interception.Ef.Transaction;
 
 /// <summary>
 /// Interceptor that starts a database transaction for methods marked with <see cref="TransactionAttribute"/>.
 /// </summary>
+/// <remarks>
+/// <para>The transaction is committed after the method's work completes. It is rolled back when the method throws,
+/// and (by default, see <see cref="ITransactionInterceptionOptions.RollbackOnUnsuccessfulResponse"/>) when it returns an unsuccessful <see cref="IResponse"/>.</para>
+/// <para>When a transaction is already active on the context (nested use), the call participates in it and the outermost starter completes it.</para>
+/// <para>If no DbContext can be found a <see cref="Core.Exceptions.MilvaDeveloperException"/> is thrown and the method is not run.</para>
+/// </remarks>
 [ConfigureAwait(false)]
 public partial class TransactionInterceptor(IServiceProvider serviceProvider) : IMilvaInterceptor
 {
@@ -21,69 +29,62 @@ public partial class TransactionInterceptor(IServiceProvider serviceProvider) : 
     /// <inheritdoc/>
     public async Task OnInvoke(Call call)
     {
-        DbContext context = GetDbContext(call);
+        var transactionAttribute = call.GetInterceptorAttribute<TransactionAttribute>();
 
-        if (context == null)
+        var context = InterceptedDbContextResolver.Resolve(call,
+                                                           transactionAttribute?.GetDbContextFromServiceProvider ?? true,
+                                                           _transactionInterceptionOptions,
+                                                           _serviceProvider,
+                                                           nameof(TransactionInterceptor));
+
+        // Nested use: the outer starter owns the transaction.
+        if (context.Database.CurrentTransaction != null)
+        {
             await call.NextAsync();
+            return;
+        }
 
         var executionStrategy = context.Database.CreateExecutionStrategy();
 
         await executionStrategy.ExecuteAsync(async () =>
         {
-            // In nested uses, transactions are shared. In such cases, it determines which transaction will be completed after the commit process is completed.
-            bool isTransactionStarter = false;
-
-            IDbContextTransaction transaction = null;
-
-            if (context.Database.CurrentTransaction == null)
-            {
-                transaction = await context.Database.BeginTransactionAsync().ConfigureAwait(false);
-                isTransactionStarter = true;
-            }
-            else
-            {
-                transaction = context.Database.CurrentTransaction;
-            }
+            // Disposing a transaction that was neither committed nor rolled back rolls it back.
+            await using var transaction = await context.Database.BeginTransactionAsync();
 
             try
             {
                 await call.NextAsync();
-
-                if (transaction != null && isTransactionStarter)
-                {
-                    await transaction.CommitAsync().ConfigureAwait(false);
-                    await transaction.DisposeAsync();
-                }
             }
             catch (Exception)
             {
-                if (transaction != null && isTransactionStarter)
-                {
-                    await transaction.RollbackAsync().ConfigureAwait(false);
-                    await transaction.DisposeAsync();
-                }
+                await TryRollbackAsync(transaction);
 
                 throw;
             }
+
+            if (ShouldRollback(call.ReturnValue))
+            {
+                await transaction.RollbackAsync();
+                return;
+            }
+
+            // A commit failure propagates to the caller unchanged.
+            await transaction.CommitAsync();
         });
     }
 
-    private DbContext GetDbContext(Call call)
+    private bool ShouldRollback(object returnValue)
+        => (_transactionInterceptionOptions?.RollbackOnUnsuccessfulResponse ?? true) && returnValue is IResponse { IsSuccess: false };
+
+    private static async Task TryRollbackAsync(IDbContextTransaction transaction)
     {
-        var transactionAttribute = call.GetInterceptorAttribute<TransactionAttribute>();
-
-        if (!transactionAttribute.GetDbContextFromServiceProvider)
+        try
         {
-            if (call.MethodImplementation.DeclaringType.IsAssignableFrom(typeof(ICanRetrieveDbContext)))
-            {
-                var canRetrieveDbContext = call.MethodImplementation.DeclaringType as ICanRetrieveDbContext;
-
-                return canRetrieveDbContext.GetDbContext(_transactionInterceptionOptions.GetDbContextType());
-            }
+            await transaction.RollbackAsync();
         }
-        else
-            return _serviceProvider.GetService(_transactionInterceptionOptions.GetDbContextType()) as DbContext;
-
-        return null;
+        catch (Exception)
+        {
+            // The original exception is more important; the transaction is rolled back on dispose anyway.
+        }
     }
 }

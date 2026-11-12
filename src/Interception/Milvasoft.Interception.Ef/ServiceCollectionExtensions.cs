@@ -47,11 +47,12 @@ public static class ServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        var options = section.Get<TransactionInterceptionOptions>();
+        var options = section.Get<TransactionInterceptionOptions>() ?? new TransactionInterceptionOptions();
 
         builder.WithTransactionInterceptor(interceptionOptions: (opt) =>
         {
             opt.InterceptorLifetime = options.InterceptorLifetime;
+            opt.RollbackOnUnsuccessfulResponse = options.RollbackOnUnsuccessfulResponse;
             opt.DbContextAssemblyQualifiedName = options.DbContextAssemblyQualifiedName;
             opt.DbContextType = options.DbContextType;
         });
@@ -125,7 +126,7 @@ public static class ServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        var options = section.Get<WithNoLockInterceptionOptions>();
+        var options = section.Get<WithNoLockInterceptionOptions>() ?? new WithNoLockInterceptionOptions();
 
         builder.WithNoLockInterceptor(interceptionOptions: (opt) =>
         {

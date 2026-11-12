@@ -20,7 +20,7 @@ public class TenantOptions<TOptions>(IOptionsFactory<TOptions> factory, IOptions
     /// <summary>
     /// Options Value.
     /// </summary>
-    public TOptions Value => Get("Default");
+    public TOptions Value => Get(Microsoft.Extensions.Options.Options.DefaultName);
 
     /// <summary>
     /// Adds a key/value pair to the <see cref="ConcurrentDictionary{TKey, TValue}"/>      
@@ -29,5 +29,5 @@ public class TenantOptions<TOptions>(IOptionsFactory<TOptions> factory, IOptions
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public TOptions Get(string name) => _cache.GetOrAdd(name, () => _factory.Create(name));
+    public TOptions Get(string name) => _cache.GetOrAdd(name ?? Microsoft.Extensions.Options.Options.DefaultName, () => _factory.Create(name ?? Microsoft.Extensions.Options.Options.DefaultName));
 }

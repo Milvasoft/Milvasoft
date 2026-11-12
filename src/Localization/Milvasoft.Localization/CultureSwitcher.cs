@@ -5,35 +5,40 @@ namespace Milvasoft.Localization;
 /// <summary>
 /// Switches the current culture to a specific culture then return to the original culture and dispose.
 /// </summary>
+/// <remarks>
+/// Only the culture of the current execution context (<see cref="CultureInfo.CurrentCulture"/> and <see cref="CultureInfo.CurrentUICulture"/>) is changed;
+/// process wide defaults (<see cref="CultureInfo.DefaultThreadCurrentCulture"/>) are never touched, so other requests are not affected.
+/// Both cultures are restored to their original values on dispose. Use it with <c>using</c>.
+/// </remarks>
 public sealed class CultureSwitcher : IDisposable
 {
     private readonly CultureInfo _originalCulture;
+    private readonly CultureInfo _originalUICulture;
 
     /// <summary>
-    /// Since Localizer.WithCultre has became obsolete, 
+    /// Since Localizer.WithCultre has became obsolete,
     /// this is a solution to retrive a string from specific culture resource file
     /// </summary>
     public CultureSwitcher(string culture)
     {
-        if (!Equals(CultureInfo.CurrentCulture, CultureInfo.CurrentUICulture))
-            throw new InvalidOperationException("Different CurrentCulture and CurrentUICulture culture is not supported.");
-
         _originalCulture = CultureInfo.CurrentCulture;
+        _originalUICulture = CultureInfo.CurrentUICulture;
 
-        var cultureInfo = string.IsNullOrEmpty(culture) ? CultureInfo.CurrentCulture : new CultureInfo(culture);
+        if (string.IsNullOrEmpty(culture))
+            return;
 
-        SetCulture(cultureInfo);
-    }
+        var cultureInfo = CultureInfo.GetCultureInfo(culture);
 
-    private static void SetCulture(CultureInfo cultureInfo)
-    {
         CultureInfo.CurrentCulture = cultureInfo;
         CultureInfo.CurrentUICulture = cultureInfo;
-        CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
     }
 
     /// <summary>
-    /// dispose...
+    /// Restores the original cultures.
     /// </summary>
-    public void Dispose() => SetCulture(_originalCulture);
+    public void Dispose()
+    {
+        CultureInfo.CurrentCulture = _originalCulture;
+        CultureInfo.CurrentUICulture = _originalUICulture;
+    }
 }

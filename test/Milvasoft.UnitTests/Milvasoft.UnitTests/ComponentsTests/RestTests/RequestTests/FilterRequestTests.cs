@@ -32,6 +32,20 @@ public class FilterRequestTests
     }
 
     [Theory]
+    [ClassData(typeof(UnsupportedCriteriaForBuildFilterExpressionMethodData))]
+    public void BuildFilterExpression_WithUnknownPropertyOrUnsupportedFilterType_ShouldThrowUserFriendlyException(FilterCriteria criteria)
+    {
+        // Arrange
+        var filterRequest = new FilterRequest { Criterias = [criteria] };
+
+        // Act
+        Action act = () => filterRequest.BuildFilterExpression<RestTestEntityFixture>();
+
+        // Assert
+        act.Should().Throw<MilvaUserFriendlyException>();
+    }
+
+    [Theory]
     [ClassData(typeof(ValidListSourceButFilterValuesNotValidForBuildFilterExpressionMethodData))]
     public void BuildFilterExpression_WithValidFilterTypeAndFilterByButFilterValuesAreNull_ShouldThrowException(FilterRequest filterRequest)
     {
@@ -41,7 +55,7 @@ public class FilterRequestTests
         Action act = () => filterRequest.BuildFilterExpression<RestTestEntityFixture>();
 
         // Assert
-        act.Should().Throw<MilvaDeveloperException>().WithMessage("Please provide filter values!");
+        act.Should().Throw<MilvaUserFriendlyException>().WithMessage("Please provide filter values!");
     }
 
     [Theory]

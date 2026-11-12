@@ -77,8 +77,15 @@ public static class OpenApiExtensions
     /// </summary>
     /// <param name="options"></param>
     /// <returns></returns>
+    /// <remarks>
+    /// Endpoints marked with <see cref="Attributes.OpenApiExcludeAttribute"/> are excluded through <see cref="OpenApiOptions.ShouldInclude"/> (combined with an existing predicate).
+    /// </remarks>
     public static OpenApiOptions AddMilvaTransformers(this OpenApiOptions options)
     {
+        var shouldInclude = options.ShouldInclude;
+
+        options.ShouldInclude = description => !OpenApiExcludeTransformer.IsExcluded(description) && (shouldInclude?.Invoke(description) ?? true);
+
         // Document
         options.AddDocumentTransformer<OpenApiServerTransformer>();
         options.AddDocumentTransformer<OpenApiExcludeTransformer>();

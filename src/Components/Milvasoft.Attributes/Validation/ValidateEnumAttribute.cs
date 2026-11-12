@@ -82,13 +82,33 @@ public class ValidateEnumAttribute : ValidationAttribute
 
             var valueType = _enumType ?? value.GetType();
 
-            if (!Enum.IsDefined(valueType, value))
+            if (!IsDefined(valueType, value))
             {
-                ErrorMessage = errorMessage;
-                return new ValidationResult(FormatErrorMessage(""));
+                // The attribute instance is shared by all validations; never store the per request (localized) message in it.
+                return new ValidationResult(errorMessage, validationContext.MemberName is null ? null : [validationContext.MemberName]);
             }
         }
 
         return ValidationResult.Success;
+    }
+
+    private static bool IsDefined(Type enumType, object value)
+    {
+        enumType = Nullable.GetUnderlyingType(enumType) ?? enumType;
+
+        if (!enumType.IsEnum)
+            return false;
+
+        try
+        {
+            // Numeric values of another integral type are converted to the enum first (Enum.IsDefined throws for them).
+            var enumValue = value.GetType() == enumType || value is string ? value : Enum.ToObject(enumType, value);
+
+            return Enum.IsDefined(enumType, enumValue);
+        }
+        catch (ArgumentException)
+        {
+            return false;
+        }
     }
 }

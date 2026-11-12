@@ -15,6 +15,9 @@ public class TransactionInterceptionOptions : HaveDbContextType, ITransactionInt
 
     /// <inheritdoc/>
     public ServiceLifetime InterceptorLifetime { get; set; } = ServiceLifetime.Scoped;
+
+    /// <inheritdoc/>
+    public bool RollbackOnUnsuccessfulResponse { get; set; } = true;
 }
 
 /// <summary>
@@ -26,4 +29,9 @@ public interface ITransactionInterceptionOptions : IHaveDbContextType, IMilvaOpt
     /// Transaction interceptor lifetime.
     /// </summary>
     public ServiceLifetime InterceptorLifetime { get; set; }
+
+    /// <summary>
+    /// When true (default) the transaction is rolled back when the intercepted method returns an IResponse whose IsSuccess is false.
+    /// </summary>
+    public bool RollbackOnUnsuccessfulResponse { get; set; }
 }

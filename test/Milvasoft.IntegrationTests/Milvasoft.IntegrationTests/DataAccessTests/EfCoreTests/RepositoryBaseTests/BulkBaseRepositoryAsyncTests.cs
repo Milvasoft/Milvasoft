@@ -17,6 +17,7 @@ using Milvasoft.Helpers.DataAccess.EfCore.Concrete;
 using Milvasoft.IntegrationTests.Client.Fixtures;
 using Milvasoft.IntegrationTests.Client.Fixtures.EntityFixtures;
 using Milvasoft.IntegrationTests.Client.Fixtures.Persistence;
+using Milvasoft.MultiTenancy.Context;
 using Milvasoft.MultiTenancy.EfCore;
 using Milvasoft.MultiTenancy.EfCore.RepositoryBase.Concrete;
 using Milvasoft.MultiTenancy.Extensions;
@@ -243,6 +244,9 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
             services.AddScoped(typeof(ISomeMultiTenantGenericRepository<>), typeof(SomeMultiTenantGenericRepository<>));
         });
 
+        // The DbContext factory reads the tenant only from the validated tenant context (filled by the tenant middleware for HTTP requests).
+        _serviceProvider.GetRequiredService<ITenantContext<SomeTenantEntity, TenantId>>().SetTenant(new SomeTenantEntity("test", 1));
+
         var dbContext = _serviceProvider.GetService<MultiTenantDbContextFixture>();
         var entityRepository = _serviceProvider.GetService<ISomeMultiTenantGenericRepository<SomeMultiTenantTestEntityFixture>>();
 
@@ -270,7 +274,7 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         addedEntity.Should().NotBeNull();
         addedEntity.CreationDate.Should().NotBeNull();
         addedEntity.CreatorUserName.Should().Be("testuser");
-        addedEntity.TenantId = new TenantId("test_1");
+        addedEntity.TenantId.Should().Be(new TenantId("test_1"));
     }
 
     [Theory]

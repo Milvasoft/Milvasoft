@@ -22,12 +22,19 @@ where TKey : struct, IEquatable<TKey>
     private readonly ITenantStore<TTenant, TKey> _tenantStore = tenantStore;
 
     /// <summary>
-    /// Gets the current tenant.
+    /// Gets the tenant of the resolved identifier from the store. Returns null when no identifier is sent or the tenant is unknown.
+    /// It does not check the user's tenant claim; prefer ITenantContext which holds the tenant validated by the tenant middleware.
     /// </summary>
     /// <returns></returns>
     public async Task<TTenant> GetTenantAsync()
     {
         var tenantIdentifier = await _tenantResolutionStrategy.GetTenantIdentifierAsync();
-        return await _tenantStore.GetTenantAsync(tenantIdentifier);
+
+        if (Context.TenantIdentifierHelper.IsEmpty(tenantIdentifier))
+            return null;
+
+        var tenant = await _tenantStore.GetTenantAsync(tenantIdentifier);
+
+        return tenant != null && Context.TenantIdentifierHelper.AreEqual(tenant.Id, tenantIdentifier) ? tenant : null;
     }
 }

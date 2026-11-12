@@ -30,28 +30,43 @@ public sealed class Call
     public object[] Arguments => _invocation.Arguments;
 
     /// <summary>
-    /// Gets or sets the return value provided by call target or other <see cref="IMilvaInterceptor"/> instances.
+    /// Gets or sets the result provided by call target or other <see cref="IMilvaInterceptor"/> instances.
+    /// For awaitable methods this is the awaited result (the <c>T</c> of <see cref="Task{TResult}"/> or <see cref="ValueTask{TResult}"/>, null for <see cref="Task"/> and <see cref="ValueTask"/>),
+    /// and it is set only after the target's work has completed.
     /// </summary>
     public object ReturnValue { get; set; }
 
     /// <summary>
-    /// Gets or sets the return value provided by call target or other <see cref="IMilvaInterceptor"/> instances.
+    /// Gets or sets the declared return type of the method (for example <see cref="Task{TResult}"/>).
+    /// Use <see cref="ResultType"/> for the type of <see cref="ReturnValue"/>.
     /// </summary>
     public Type ReturnType { get; set; }
 
     /// <summary>
-    /// Gets the generic arguments of the method. 
+    /// Gets the type of <see cref="ReturnValue"/>: TResult for <see cref="Task{TResult}"/> and <see cref="ValueTask{TResult}"/>,
+    /// <see cref="void"/> for <see cref="Task"/>, <see cref="ValueTask"/> and void methods, otherwise the declared return type.
+    /// </summary>
+    public Type ResultType => _returnInfo.ResultType;
+
+    /// <summary>
+    /// Gets whether the intercepted method is awaitable (returns <see cref="Task"/>, <see cref="Task{TResult}"/>, <see cref="ValueTask"/> or <see cref="ValueTask{TResult}"/>).
+    /// When it is false the caller blocks until the interceptors complete, so interceptors should prefer synchronous work for such calls.
+    /// </summary>
+    public bool IsAsync => _returnInfo.IsAsync;
+
+    /// <summary>
+    /// Gets the generic arguments of the method.
     /// Returns empty if method is not generic.
     /// </summary>
     public Type[] GenericArguments => _invocation.GenericArguments ?? [];
 
     /// <summary>
-    /// Gets the object on which call was performed. 
+    /// Gets the object on which call was performed.
     /// </summary>
     public object Object => _invocation.InvocationTarget;
 
     /// <summary>
-    /// If you are working with an interceptor such as cache interceptor and you want the calling method not to run at all, false must be sent. 
+    /// If you are working with an interceptor such as cache interceptor and you want the calling method not to run at all, false must be sent.
     /// The original caller is not called, only the interceptors are called.
     /// Default is true.
     /// </summary>
@@ -64,20 +79,24 @@ public sealed class Call
     private readonly IInvocation _invocation;
     private readonly IInvocationProceedInfo _proceedInfo;
     private readonly IMilvaInterceptor[] _decorators;
-    private int _callIndex = 1;
+    private readonly MethodReturnInfo _returnInfo;
+    private int _callIndex;
 
     #endregion
 
-    internal Call(IInvocation invocation, IMilvaInterceptor[] decorators)
+    internal Call(IInvocation invocation, IMilvaInterceptor[] decorators, MethodReturnInfo returnInfo)
     {
         _invocation = invocation;
-        _decorators = decorators;
+        _decorators = decorators ?? [];
+        _returnInfo = returnInfo;
         _proceedInfo = invocation.CaptureProceedInfo();
         ReturnType = invocation.Method.ReturnType;
     }
 
     /// <summary>
     /// Executes the next <see cref="IMilvaInterceptor.OnInvoke(Call)"/> and eventually the called method itself.
+    /// The returned task completes when the called method's work (including the awaited task of an async method) has completed,
+    /// and it faults with the called method's exception.
     /// </summary>
     public async Task NextAsync()
     {
@@ -85,7 +104,7 @@ public sealed class Call
 
         try
         {
-            if (_decorators != null && _callIndex < _decorators.Length)
+            if (_callIndex < _decorators.Length)
             {
                 await _decorators[_callIndex++].OnInvoke(this).ConfigureAwait(false);
             }
@@ -96,14 +115,7 @@ public sealed class Call
 
                 _proceedInfo.Invoke();
 
-                if (_invocation.ReturnValue is Task task && MethodImplementation.IsAsync())
-                {
-                    await SetReturnValueAsAsync(task).ConfigureAwait(false);
-                }
-                else
-                {
-                    ReturnValue = _invocation.ReturnValue;
-                }
+                ReturnValue = await _returnInfo.AwaitTargetResultAsync(_invocation.ReturnValue).ConfigureAwait(false);
             }
         }
         catch (Exception)
@@ -117,47 +129,15 @@ public sealed class Call
     }
 
     /// <summary>
-    /// Returns the attribute of type <typeparamref name="T"/> used in the method or class.
+    /// Returns the attribute of type <typeparamref name="T"/> that is applied to the called method, its interface method, the implementing class or the interface.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
+    /// <returns>The attribute or null if not found.</returns>
     public T GetInterceptorAttribute<T>() where T : DecorateAttribute
-    {
-        var decorateAttribute = MethodImplementation.GetCustomAttribute<T>();
+        => InterceptorAttributeLocator.Find<T>(MethodImplementation, Method);
 
-        decorateAttribute ??= MethodImplementation.DeclaringType.GetCustomAttribute<T>();
-
-        return decorateAttribute;
-    }
-
-    private async Task SetReturnValueAsAsync(Task task)
-    {
-        if (!task.IsCompleted)
-        {
-            // Async methods are executed within interception.
-            // Non-async method returned task is treated as a result 
-            // and is not executed within interception.
-            await task.ConfigureAwait(false);
-        }
-
-        if (task.IsFaulted && task.Exception != null)
-        {
-            task.Exception.Rethrow();
-        }
-
-        // Runtime might return Task<T> derived type here.
-        // Discussed in dotnet/runtime#26312 and microsoft/vs-streamjsonrpc#116.
-        if (task.GetType().GetTypeInfo().TryGetGenericTaskType(out var genericTaskType))
-        {
-            if (genericTaskType.IsTaskWithVoidTaskResult())
-            {
-                return;
-            }
-
-            var resultProperty = genericTaskType.GetDeclaredProperty("Result")
-                ?? throw new InvalidOperationException($"Object of type '{genericTaskType}' was expected to contain a property 'Result'.");
-
-            ReturnValue = resultProperty.GetValue(task);
-        }
-    }
+    /// <summary>
+    /// Starts the interception pipeline and returns the value the proxy must return to the caller.
+    /// </summary>
+    internal object Run() => _returnInfo.CreateProxyReturnValue(NextAsync(), this);
 }

@@ -23,7 +23,8 @@ public static class ActivityHelper
     public static string Parent => Activity.Current?.ParentId ?? "No Parent";
 
     /// <summary>
-    /// Trace id of current activity. If no activity occurs creates random acitivity id.
+    /// Trace id of current activity. If there is no current activity a new random trace id is returned on every access,
+    /// so values read outside an activity cannot be correlated. Use <see cref="ActivityStarterAttribute"/> (or any activity) to share a trace id.
     /// </summary>
     public static string TraceId => Activity.Current?.TraceId.ToString() ?? ActivityTraceId.CreateRandom().ToString();
 

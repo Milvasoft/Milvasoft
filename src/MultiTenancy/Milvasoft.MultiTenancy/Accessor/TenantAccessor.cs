@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Milvasoft.Core.EntityBases.MultiTenancy;
+using Milvasoft.MultiTenancy.Context;
 using Milvasoft.MultiTenancy.Extensions;
 
 namespace Milvasoft.MultiTenancy.Accessor;
@@ -29,7 +31,8 @@ public class TenantAccessor<TTenant, TKey>(IHttpContextAccessor httpContextAcces
     public IHttpContextAccessor HttpContextAccessor { get; } = httpContextAccessor;
 
     /// <summary>
-    /// Accessed tenant from <see cref="HttpContext"/>.
+    /// The validated tenant of the current scope (<see cref="ITenantContext{TTenant, TKey}"/>), falling back to <see cref="HttpContext.Items"/>.
     /// </summary>
-    public TTenant Tenant => HttpContextAccessor.HttpContext?.GetTenant<TTenant, TKey>();
+    public TTenant Tenant => ServiceProvider?.GetService<ITenantContext<TTenant, TKey>>()?.Tenant
+                             ?? HttpContextAccessor?.HttpContext?.GetTenant<TTenant, TKey>();
 }

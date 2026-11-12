@@ -20,6 +20,14 @@ public class CachedTenantStore<TTenant, TKey>(IRedisAccessor redisCacheService) 
     private readonly IRedisAccessor _redisCacheService = redisCacheService;
 
     /// <summary>
+    /// Prefix of the Redis keys of tenants. Default is empty, which keeps the existing key format (the tenant identifier itself)
+    /// that other services may write. Set a prefix (for example "tenant:") to keep tenant keys apart from other data; tenants must then be written with the same prefix.
+    /// </summary>
+    public static string KeyPrefix { get; set; } = string.Empty;
+
+    private static string GetKey(TKey identifier) => $"{KeyPrefix}{identifier}";
+
+    /// <summary>
     /// Returns a tenant according to <paramref name="identifier"/>.
     /// </summary>
     /// <param name="identifier"></param>
@@ -29,7 +37,7 @@ public class CachedTenantStore<TTenant, TKey>(IRedisAccessor redisCacheService) 
         await _redisCacheService.CheckClientAndConnectIfNotAsync();
 
         if (_redisCacheService.IsConnected())
-            return await _redisCacheService.GetAsync<TTenant>(identifier.ToString()).ConfigureAwait(false);
+            return await _redisCacheService.GetAsync<TTenant>(GetKey(identifier)).ConfigureAwait(false);
         else
             return null;
     }
@@ -45,7 +53,7 @@ public class CachedTenantStore<TTenant, TKey>(IRedisAccessor redisCacheService) 
         await _redisCacheService.CheckClientAndConnectIfNotAsync();
 
         if (_redisCacheService.IsConnected())
-            return await _redisCacheService.SetAsync(identifier.ToString(), tenant).ConfigureAwait(false);
+            return await _redisCacheService.SetAsync(GetKey(identifier), tenant).ConfigureAwait(false);
         else
             return false;
     }

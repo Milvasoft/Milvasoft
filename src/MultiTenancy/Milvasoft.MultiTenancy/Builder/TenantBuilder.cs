@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Milvasoft.Core.EntityBases.MultiTenancy;
 using Milvasoft.MultiTenancy.Accessor;
+using Milvasoft.MultiTenancy.Context;
+using Milvasoft.MultiTenancy.Options;
 using Milvasoft.MultiTenancy.ResolutionStrategy;
 using Milvasoft.MultiTenancy.Service;
 using Milvasoft.MultiTenancy.Store;
@@ -8,7 +11,7 @@ using Milvasoft.MultiTenancy.Store;
 namespace Milvasoft.MultiTenancy.Builder;
 
 /// <summary>
-/// Configure tenant services. 
+/// Configure tenant services.
 /// </summary>
 public class TenantBuilder<TTenant, TKey>
 where TTenant : class, IMilvaTenantBase<TKey>
@@ -18,14 +21,36 @@ where TKey : struct, IEquatable<TKey>
 
     /// <summary>
     /// Creates new instance of <see cref="TenantBuilder{TTenant, TKey}"/>.
-    /// Registers <see cref="TenantService{TTenant, TKey}"/> to <see cref="ITenantService{TTenant, TKey}"/> as <see cref="ServiceLifetime.Transient"/>
+    /// Registers <see cref="TenantService{TTenant, TKey}"/> to <see cref="ITenantService{TTenant, TKey}"/> as <see cref="ServiceLifetime.Transient"/>,
+    /// the scoped <see cref="ITenantContext{TTenant, TKey}"/> (also as <see cref="ITenantContext"/>) and default <see cref="TenantResolutionOptions"/>.
     /// </summary>
     /// <param name="services"></param>
     public TenantBuilder(IServiceCollection services)
     {
         services.AddTransient<ITenantAccessor<TTenant, TKey>, TenantAccessor<TTenant, TKey>>();
         services.AddTransient<ITenantService<TTenant, TKey>, TenantService<TTenant, TKey>>();
+        services.TryAddScoped<TenantContext<TTenant, TKey>>();
+        services.TryAddScoped<ITenantContext<TTenant, TKey>>(sp => sp.GetRequiredService<TenantContext<TTenant, TKey>>());
+        services.TryAddScoped<ITenantContext>(sp => sp.GetRequiredService<TenantContext<TTenant, TKey>>());
+        services.TryAddSingleton(new TenantResolutionOptions());
         _services = services;
+    }
+
+    /// <summary>
+    /// Configures the tenant middleware (claim binding, optional tenant requests, rejection response).
+    /// </summary>
+    /// <param name="configure"></param>
+    /// <returns></returns>
+    public TenantBuilder<TTenant, TKey> WithResolutionOptions(Action<TenantResolutionOptions> configure)
+    {
+        var options = new TenantResolutionOptions();
+
+        configure?.Invoke(options);
+
+        _services.RemoveAll<TenantResolutionOptions>();
+        _services.AddSingleton(options);
+
+        return this;
     }
 
     /// <summary>

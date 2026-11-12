@@ -62,4 +62,17 @@ public interface ILocalizationMemoryCache
     /// <param name="value"></param>
     /// <returns></returns>
     public bool TryGetValue(string key, out string value);
+
+    /// <summary>
+    /// Remembers for a short time that <paramref name="key"/> has no resource, so it is not looked up again on every call.
+    /// </summary>
+    /// <param name="key"></param>
+    public void SetMissing(string key) { }
+
+    /// <summary>
+    /// Whether <paramref name="key"/> is remembered as missing.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public bool IsMissing(string key) => false;
 }

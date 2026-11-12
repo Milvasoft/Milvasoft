@@ -55,11 +55,11 @@ public sealed class ResxElement : IEquatable<ResxElement>
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool Equals(ResxElement other) => Key.Equals(other.Key, StringComparison.OrdinalIgnoreCase);
+    public bool Equals(ResxElement other) => other is not null && string.Equals(Key, other.Key, StringComparison.OrdinalIgnoreCase);
 
     /// <inheritdoc/>
     public override bool Equals(object obj) => Equals(obj as ResxElement);
 
     /// <inheritdoc/>
-    public override int GetHashCode() => throw new NotImplementedException();
+    public override int GetHashCode() => Key is null ? 0 : StringComparer.OrdinalIgnoreCase.GetHashCode(Key);
 }
