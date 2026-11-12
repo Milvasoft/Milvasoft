@@ -2,14 +2,14 @@
 
   <PropertyGroup>
 
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>true</IsPackable>
     <PlatformTarget>AnyCPU</PlatformTarget>
 
-    <PackageVersion>10.2.5</PackageVersion>
+    <PackageVersion>11.0.0</PackageVersion>
     <Authors>Milvasoft Corporation</Authors>
     <Copyright>Milvasoft Yazılım Bilişim Araştırma Geliştirme Danışmanlık Sanayi ve Ticaret Ltd.Şti.</Copyright>
     <RepositoryUrl>https://github.com/Milvasoft/Milvasoft</RepositoryUrl>

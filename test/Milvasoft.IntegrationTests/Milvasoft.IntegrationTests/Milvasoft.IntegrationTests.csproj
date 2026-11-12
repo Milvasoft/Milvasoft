@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
+		<TargetFramework>net11.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<IsPackable>false</IsPackable>
@@ -18,16 +18,16 @@
 		<PackageReference Include="Azure.Identity" Version="1.21.0" />
 		<PackageReference Include="Bogus" Version="35.6.5" />
 		<PackageReference Include="FluentAssertions" Version="[7.0.0]" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.12" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.12" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.12" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="10.0.12" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Abstractions" Version="10.0.12" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="11.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="11.0.0-rc.3.26522.148" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="11.0.0-rc.3.26522.148" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="11.0.0-rc.3.26522.148" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Abstractions" Version="11.0.0-rc.3.26522.148" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-rc.3" />
 		<PackageReference Include="Respawn" Version="7.0.0" />
 		<PackageReference Include="SharpCompress" Version="0.50.4" />
 		<PackageReference Include="SSH.NET" Version="2026.0.0" />
-		<PackageReference Include="System.Drawing.Common" Version="10.0.12" />
+		<PackageReference Include="System.Drawing.Common" Version="11.0.0" />
 		<PackageReference Include="Testcontainers.PostgreSql" Version="4.15.0" />
 		<PackageReference Include="WireMock.Net" Version="2.15.0" />
 		<PackageReference Include="coverlet.collector" Version="10.0.1">

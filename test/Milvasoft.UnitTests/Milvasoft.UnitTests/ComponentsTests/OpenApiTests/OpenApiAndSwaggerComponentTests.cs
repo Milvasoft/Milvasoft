@@ -161,7 +161,7 @@ public class OpenApiAndSwaggerComponentTests
         {
             RequestBody = new OpenApiRequestBody
             {
-                Content = new Dictionary<string, OpenApiMediaType> { ["multipart/form-data"] = new OpenApiMediaType { Schema = schema } }
+                Content = new Dictionary<string, IOpenApiMediaType> { ["multipart/form-data"] = new OpenApiMediaType { Schema = schema } }
             }
         };
     }
