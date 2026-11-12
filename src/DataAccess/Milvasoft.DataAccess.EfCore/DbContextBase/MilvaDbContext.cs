@@ -107,6 +107,16 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     public void SetSoftDeletionStateToDefault() => _currentSoftDeleteState = _dbContextConfiguration.DbContext.DefaultSoftDeletionState;
 
     /// <summary>
+    /// Sets soft deletion state to default state if soft deletion state reset after every operation is enabled.
+    /// Called after every save and execute delete operation.
+    /// </summary>
+    public void ResetSoftDeletionStateAfterOperation()
+    {
+        if (_resetSoftDeleteStateAfterEveryOperation)
+            SetSoftDeletionStateToDefault();
+    }
+
+    /// <summary>
     /// It updates the state that determines whether soft delete state reset to default occurs after any operation.
     /// </summary>
     /// <param name="state">Soft delete reset state.</param>
@@ -198,8 +208,7 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
             ChangeTracker.AutoDetectChangesEnabled = autoDetectChanges;
         }
 
-        if (_resetSoftDeleteStateAfterEveryOperation)
-            _currentSoftDeleteState = _dbContextConfiguration.DbContext.DefaultSoftDeletionState;
+        ResetSoftDeletionStateAfterOperation();
     }
 
     /// <summary>

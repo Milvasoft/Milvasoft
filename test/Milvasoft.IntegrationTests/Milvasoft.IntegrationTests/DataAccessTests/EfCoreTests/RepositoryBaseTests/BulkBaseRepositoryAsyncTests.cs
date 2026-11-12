@@ -1124,6 +1124,62 @@ public class BulkBaseRepositoryAsyncTests(CustomWebApplicationFactory factory) :
         entityAfterDelete.IsDeleted.Should().Be(true);
     }
 
+    [Fact]
+    public async Task ExecuteDeleteAsync_WithSoftDeletionActivatedForOneOperation_ShouldResetStateAndNotDeleteSoftDeletedRecordsAgain()
+    {
+        // Arrange
+        var userName = "testuser";
+
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration
+                {
+                    GetCurrentUserNameMethod = (sp) => userName,
+                    DefaultSoftDeletionState = DataAccess.EfCore.Utils.Enums.SoftDeletionState.Passive,
+                    ResetSoftDeleteStateAfterEveryOperation = true
+                };
+
+                opt.Auditing = new AuditConfiguration { AuditDeleter = true, AuditDeletionDate = true };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString());
+            });
+        });
+
+        var dbContext = _serviceProvider.GetService<MilvaBulkDbContextFixture>();
+        var entityRepository = _serviceProvider.GetService<ISomeGenericRepository<SomeFullAuditableEntityFixture>>();
+        await SeedAsync(dbContext);
+        var ct = TestContext.Current.CancellationToken;
+
+        // Act
+        entityRepository.ChangeSoftDeletionState(DataAccess.EfCore.Utils.Enums.SoftDeletionState.Active);
+        var firstAffectedRows = await entityRepository.ExecuteDeleteAsync(1, cancellationToken: ct);
+
+        var stateAfterOperation = entityRepository.GetCurrentSoftDeletionState();
+
+        userName = "anotheruser";
+        entityRepository.ChangeSoftDeletionState(DataAccess.EfCore.Utils.Enums.SoftDeletionState.Active);
+        var secondAffectedRows = await entityRepository.ExecuteDeleteAsync(1, cancellationToken: ct);
+
+        await entityRepository.ExecuteDeleteAsync(2, cancellationToken: ct);
+
+        // Assert
+        firstAffectedRows.Should().Be(1);
+        secondAffectedRows.Should().Be(0);
+        stateAfterOperation.Should().Be(DataAccess.EfCore.Utils.Enums.SoftDeletionState.Passive);
+
+        var entities = await dbContext.FullAuditableEntities.AsNoTracking().Where(e => e.Id == 1 || e.Id == 2).ToListAsync(ct);
+        entities.Should().ContainSingle();
+        entities[0].Id.Should().Be(1);
+        entities[0].IsDeleted.Should().BeTrue();
+        entities[0].DeleterUserName.Should().Be("testuser");
+    }
+
     [Theory]
     [InlineData(QueryTrackingBehavior.NoTrackingWithIdentityResolution)]
     [InlineData(QueryTrackingBehavior.NoTracking)]

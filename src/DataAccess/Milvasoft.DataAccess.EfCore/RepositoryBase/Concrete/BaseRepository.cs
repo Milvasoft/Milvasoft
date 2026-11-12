@@ -853,22 +853,32 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <param name="propertyBuilder"> If soft delete is active you may want to update some properties. etc. image in database</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public virtual Task<int> ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate,
+    public virtual async Task<int> ExecuteDeleteAsync(Expression<Func<TEntity, bool>> predicate,
                                                       SetPropertyBuilder<TEntity> propertyBuilder = null,
                                                       CancellationToken cancellationToken = default)
     {
-        // If soft deletion active and entity is soft deletable.
-        if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
+        try
         {
-            propertyBuilder ??= new SetPropertyBuilder<TEntity>();
+            // If soft deletion active and entity is soft deletable.
+            if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
+            {
+                propertyBuilder ??= new SetPropertyBuilder<TEntity>();
 
-            //Soft delete
-            AddDeletionPropertyCalls(propertyBuilder);
+                //Soft delete
+                AddDeletionPropertyCalls(propertyBuilder);
 
-            return _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.UpdateSettersBuilder, cancellationToken: cancellationToken);
+                // Already soft deleted records are not deleted again, so their deletion audit values are kept.
+                return await _dbSet.Where(predicate)
+                                   .Where(MilvaDbContextCache.GetIsDeletedFilter<TEntity>())
+                                   .ExecuteUpdateAsync(propertyBuilder.UpdateSettersBuilder, cancellationToken: cancellationToken);
+            }
+
+            return await _dbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken: cancellationToken);
         }
-
-        return _dbSet.Where(predicate).ExecuteDeleteAsync(cancellationToken: cancellationToken);
+        finally
+        {
+            _dbContext.ResetSoftDeletionStateAfterOperation();
+        }
     }
 
     #endregion

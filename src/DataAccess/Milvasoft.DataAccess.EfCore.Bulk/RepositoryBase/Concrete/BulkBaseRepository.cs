@@ -70,7 +70,10 @@ public abstract partial class BulkBaseRepository<TEntity, TContext>(TContext dbC
     /// <returns></returns>
     public virtual async Task BulkDeleteAsync(List<TEntity> entities, Action<BulkConfig> bulkConfig = null, CancellationToken cancellationToken = default)
     {
-        if (!entities.IsNullOrEmpty())
+        if (entities.IsNullOrEmpty())
+            return;
+
+        try
         {
             // If soft deletion active and entity is soft deletable.
             if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
@@ -84,6 +87,10 @@ public abstract partial class BulkBaseRepository<TEntity, TContext>(TContext dbC
             }
 
             await _dbContext.BulkDeleteAsync(entities, bulkConfig, cancellationToken: cancellationToken);
+        }
+        finally
+        {
+            _dbContext.ResetSoftDeletionStateAfterOperation();
         }
     }
 

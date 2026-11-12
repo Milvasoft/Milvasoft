@@ -629,18 +629,28 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     public virtual int ExecuteDelete(Expression<Func<TEntity, bool>> predicate,
                                      SetPropertyBuilder<TEntity> propertyBuilder = null)
     {
-        // If soft deletion active and entity is soft deletable.
-        if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
+        try
         {
-            propertyBuilder ??= new SetPropertyBuilder<TEntity>();
+            // If soft deletion active and entity is soft deletable.
+            if (_dbContext.GetCurrentSoftDeletionState() == SoftDeletionState.Active && CommonHelper.PropertyExists<TEntity>(EntityPropertyNames.IsDeleted))
+            {
+                propertyBuilder ??= new SetPropertyBuilder<TEntity>();
 
-            //Soft delete
-            AddDeletionPropertyCalls(propertyBuilder);
+                //Soft delete
+                AddDeletionPropertyCalls(propertyBuilder);
 
-            return _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.UpdateSettersBuilder);
+                // Already soft deleted records are not deleted again, so their deletion audit values are kept.
+                return _dbSet.Where(predicate)
+                             .Where(MilvaDbContextCache.GetIsDeletedFilter<TEntity>())
+                             .ExecuteUpdate(propertyBuilder.UpdateSettersBuilder);
+            }
+
+            return _dbSet.Where(predicate).ExecuteDelete();
         }
-
-        return _dbSet.Where(predicate).ExecuteDelete();
+        finally
+        {
+            _dbContext.ResetSoftDeletionStateAfterOperation();
+        }
     }
 
     #endregion
