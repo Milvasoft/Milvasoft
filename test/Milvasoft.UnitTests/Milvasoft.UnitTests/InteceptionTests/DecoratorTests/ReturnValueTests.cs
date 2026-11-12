@@ -109,7 +109,7 @@ public class ReturnValueTests
     }
 
     [Fact]
-    public void Method_WithNullTask_ShouldReturnNull()
+    public async Task Method_WithNullTask_ShouldReturnFaultedTask()
     {
         // Arrange
         var services = GetServices();
@@ -118,8 +118,8 @@ public class ReturnValueTests
         // Act
         var actual = sut.NullTaskMethod();
 
-        // Assert
-        actual.Should().BeNull();
+        // Assert: the interceptors await the target's task, so a null task is reported as an error instead of being returned.
+        await actual.Awaiting(t => t).Should().ThrowAsync<InvalidOperationException>();
     }
 
     #region Setup

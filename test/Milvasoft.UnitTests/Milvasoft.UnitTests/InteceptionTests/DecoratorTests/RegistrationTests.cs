@@ -98,7 +98,10 @@ public class RegistrationTests
         var builder = new InterceptionBuilder(new ServiceCollection());
 
         var instance = new SomeClass();
-        builder.Services.AddScoped<TestDecorator>();
+
+        // The instance is a singleton; a scoped interceptor would be resolved from a new scope per call (never captured by the singleton),
+        // so the interceptor is registered as singleton to observe its calls here.
+        builder.Services.AddSingleton<TestDecorator>();
         builder.Services.AddTransient<SomeClass>();
         builder.Services.AddSingleton(instance);
         builder.Services.AddTransient<ISomeInterface, SomeClass>();
