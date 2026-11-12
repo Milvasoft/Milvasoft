@@ -39,7 +39,7 @@ public class ResponseInterceptor(IServiceProvider serviceProvider, IResponseInte
         {
             var metadataGenerator = new ResponseMetadataGenerator(_serviceProvider);
 
-            metadataGenerator.GenerateMetadata(hasMetadataResponse);
+            await metadataGenerator.GenerateMetadataAsync(hasMetadataResponse);
         }
 
         if (_interceptionOptions.TranslateResultMessages && !response.Messages.IsNullOrEmpty())
