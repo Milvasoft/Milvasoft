@@ -124,7 +124,8 @@ public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider cr
     }
 
     private static PropertyMeta[] GetProps(Type type) => _propCache.GetOrAdd(type, t => [.. t.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                                                                   .Where(p => p.CanRead)
+                                                                   // Indexers (e.g. Dictionary.Item) can not be read without an index.
+                                                                   .Where(p => p.CanRead && p.GetIndexParameters().Length == 0)
                                                                    .Select(p => new PropertyMeta(p.Name,
                                                                                                  p,
                                                                                                  p.GetCustomAttribute<EncryptedAttribute>() is not null,
@@ -187,8 +188,19 @@ public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider cr
         if (IsSimpleType(type))
             return obj;
 
+        // Dictionary: keep keys, shape values (they can contain encrypted properties).
+        if (obj is IDictionary dictionary)
+        {
+            var shapedDictionary = new Dictionary<string, object>(dictionary.Count);
+
+            foreach (DictionaryEntry entry in dictionary)
+                shapedDictionary[Convert.ToString(entry.Key, System.Globalization.CultureInfo.InvariantCulture)!] = ShapeForEncryption(entry.Value, crypto);
+
+            return shapedDictionary;
+        }
+
         // IEnumerable (but not IDictionary)
-        if (obj is IEnumerable enumerable && obj is not IDictionary)
+        if (obj is IEnumerable enumerable)
         {
             var list = new List<object>();
             foreach (var item in enumerable)
@@ -232,6 +244,31 @@ public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider cr
     /// <returns></returns>
     private static JsonElement DecryptElement(JsonElement element, Type targetType, IMilvaCryptographyProvider crypto)
     {
+        if (element.ValueKind == JsonValueKind.Object && GetDictionaryValueType(targetType) is Type dictionaryValueType)
+        {
+            using var buffer = new MemoryStream();
+            using (var writer = new Utf8JsonWriter(buffer))
+            {
+                writer.WriteStartObject();
+
+                foreach (var jp in element.EnumerateObject())
+                {
+                    writer.WritePropertyName(jp.Name);
+
+                    if (jp.Value.ValueKind is JsonValueKind.Object or JsonValueKind.Array)
+                        DecryptElement(jp.Value, dictionaryValueType, crypto).WriteTo(writer);
+                    else
+                        jp.Value.WriteTo(writer);
+                }
+
+                writer.WriteEndObject();
+            }
+
+            buffer.Position = 0;
+            using var reParsed = JsonDocument.Parse(buffer);
+            return reParsed.RootElement.Clone();
+        }
+
         if (element.ValueKind == JsonValueKind.Object)
         {
             using var buffer = new MemoryStream();
@@ -314,4 +351,12 @@ public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider cr
         // primitive
         return element.Clone();
     }
+
+    /// <summary>
+    /// Returns value type of a dictionary type (IDictionary&lt;TKey, TValue&gt; or IReadOnlyDictionary&lt;TKey, TValue&gt;), otherwise null.
+    /// </summary>
+    private static Type GetDictionaryValueType(Type type)
+        => Array.Find([type, .. type.GetInterfaces()], i => i.IsGenericType
+                                                         && (i.GetGenericTypeDefinition() == typeof(IDictionary<,>) || i.GetGenericTypeDefinition() == typeof(IReadOnlyDictionary<,>)))
+               ?.GetGenericArguments()[1];
 }
