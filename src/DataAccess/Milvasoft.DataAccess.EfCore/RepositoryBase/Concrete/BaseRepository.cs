@@ -8,6 +8,7 @@ using Milvasoft.DataAccess.EfCore.RepositoryBase.Abstract;
 using Milvasoft.DataAccess.EfCore.Utils.IncludeLibrary;
 using Milvasoft.Types.Structs;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Linq.Expressions;
 
 namespace Milvasoft.Helpers.DataAccess.EfCore.Concrete;
@@ -1089,28 +1090,26 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     protected static IQueryable<TEntity> IncludeNavigationProperties(IQueryable<TEntity> query)
     {
-        var cascadePropertyPaths = GetCascadePropertyPaths<TEntity>();
-
-        var duplications = new List<string>();
-
-        for (int i = 0; i < cascadePropertyPaths.Count; i++)
-        {
-            var cascadePropertyPath = cascadePropertyPaths[i];
-
-            if (cascadePropertyPaths.Exists(c => c != cascadePropertyPath && c.StartsWith(cascadePropertyPath)))
-                duplications.Add(cascadePropertyPath);
-        }
-
-        foreach (var cascadeProp in cascadePropertyPaths)
-        {
-            if (duplications.Contains(cascadeProp))
-                continue;
-
-            query = query.Include(cascadeProp);
-        }
+        foreach (var includePath in GetCascadeIncludePaths(typeof(TEntity)))
+            query = query.Include(includePath);
 
         return query;
     }
+
+    /// <summary>
+    /// Gets the include paths of <see cref="CascadeOnDeleteAttribute"/> marked navigation properties of <paramref name="type"/>.
+    /// Paths which are already covered by a deeper path (e.g. "Items" by "Items.Children") are removed. Results are cached per type.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    protected static IReadOnlyList<string> GetCascadeIncludePaths(Type type) => _cascadeIncludePathsCache.GetOrAdd(type, static t =>
+    {
+        var paths = GetCascadePropertyPaths(t);
+
+        return [.. paths.Distinct().Where(path => !paths.Exists(other => other.StartsWith(path + ".", StringComparison.Ordinal)))];
+    });
+
+    private static readonly ConcurrentDictionary<Type, string[]> _cascadeIncludePathsCache = new();
 
     /// <summary>
     /// Gets property paths.
@@ -1122,7 +1121,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     protected static List<string> GetCascadePropertyPaths<T>(string parentPath = null, int maxDepth = 5) => GetCascadePropertyPaths(typeof(T), parentPath, maxDepth);
 
     /// <summary>
-    /// Gets property paths.
+    /// Gets paths of <see cref="CascadeOnDeleteAttribute"/> marked reference and collection (e.g. <see cref="List{T}"/>, <see cref="ICollection{T}"/>)
+    /// navigation properties, recursively for the navigation target types. A type is not visited again in the same path.
     /// </summary>
     /// <param name="type"></param>
     /// <param name="parentPath"></param>
@@ -1131,34 +1131,49 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     protected static List<string> GetCascadePropertyPaths(Type type, string parentPath = null, int maxDepth = 5, int currentDepth = 0)
     {
-        var properties = type.GetProperties().Where(p => p.IsDefined(typeof(CascadeOnDeleteAttribute), inherit: false));
-
         var paths = new List<string>();
 
-        if (currentDepth > maxDepth)
-            return paths;
+        CollectCascadePropertyPaths(type, parentPath, maxDepth, currentDepth, [type], paths);
 
-        foreach (var property in properties)
+        return paths;
+
+        static void CollectCascadePropertyPaths(Type type, string parentPath, int maxDepth, int currentDepth, HashSet<Type> typesInPath, List<string> paths)
         {
-            var propertyType = property.PropertyType;
+            if (currentDepth > maxDepth)
+                return;
 
-            if (!propertyType.IsClass || propertyType == typeof(string) || propertyType == typeof(decimal))
-                continue;
-
-            var currentPath = string.IsNullOrEmpty(parentPath) ? property.Name : $"{parentPath}.{property.Name}";
-
-            paths.Add(currentPath);
-
-            // Eğer property bir sınıfsa ve string değilse, alt property'leri rekrüzyonla getir
-            if (propertyType.IsGenericType && typeof(IList).IsAssignableFrom(propertyType))
+            foreach (var property in type.GetProperties().Where(p => p.IsDefined(typeof(CascadeOnDeleteAttribute), inherit: false)))
             {
-                var genericArgumentType = propertyType.GetGenericArguments()[0];
+                var navigationType = GetNavigationTargetType(property.PropertyType);
 
-                paths.AddRange(GetCascadePropertyPaths(genericArgumentType, currentPath, maxDepth, currentDepth + 1));
+                if (navigationType is null)
+                    continue;
+
+                var currentPath = string.IsNullOrEmpty(parentPath) ? property.Name : $"{parentPath}.{property.Name}";
+
+                paths.Add(currentPath);
+
+                if (typesInPath.Add(navigationType))
+                {
+                    CollectCascadePropertyPaths(navigationType, currentPath, maxDepth, currentDepth + 1, typesInPath, paths);
+                    typesInPath.Remove(navigationType);
+                }
             }
         }
 
-        return paths;
+        static Type GetNavigationTargetType(Type propertyType)
+        {
+            if (propertyType == typeof(string))
+                return null;
+
+            var elementType = propertyType.IsArray
+                ? propertyType.GetElementType()
+                : Array.Find([propertyType, .. propertyType.GetInterfaces()], i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))?.GetGenericArguments()[0];
+
+            var targetType = elementType ?? propertyType;
+
+            return targetType.IsClass && targetType != typeof(string) ? targetType : null;
+        }
     }
 
     /// <summary>
