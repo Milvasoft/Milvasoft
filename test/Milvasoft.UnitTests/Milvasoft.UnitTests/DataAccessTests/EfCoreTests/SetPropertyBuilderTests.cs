@@ -82,5 +82,21 @@ public class SetPropertyBuilderTests
         result.SetPropertyCallsLog.Should().ContainSingle().Which.Should().Be("UpdateDate");
     }
 
+    [Fact]
+    public void UpdateSettersBuilder_WithValueAndExpressionCalls_ShouldApplyToEfUpdateSettersBuilder()
+    {
+        // Arrange
+        var builder = new SetPropertyBuilder<RestTestEntityFixture>().SetPropertyValue(i => i.Name, "name")
+                                                                     .SetPropertyValue(i => i.UpdateDate, null)
+                                                                     .SetProperty(i => i.Id, i => i.Id + 1);
+
+        // Act
+        var act = () => builder.UpdateSettersBuilder(new Microsoft.EntityFrameworkCore.Query.UpdateSettersBuilder<RestTestEntityFixture>());
+
+        // Assert
+        act.Should().NotThrow();
+        builder.SetPropertyCallsLog.Should().Equal("Name", "UpdateDate", "Id");
+    }
+
     #endregion
 }
