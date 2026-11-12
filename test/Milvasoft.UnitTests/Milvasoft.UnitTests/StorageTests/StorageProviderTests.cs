@@ -290,6 +290,19 @@ public class StorageProviderTests : IDisposable
     #region S3Provider
 
     [Fact]
+    public void S3Provider_GeneratePreSignedUrl_ShouldSignContentTypeAndLength()
+    {
+        using var client = new AmazonS3Client(new Amazon.Runtime.BasicAWSCredentials("access", "secret"), Amazon.RegionEndpoint.EUCentral1);
+        var provider = new S3Provider(client, new StorageProviderOptions { AwsS3 = new AwsS3Configuration { BucketName = "bucket" } });
+
+        var url = provider.GeneratePreSignedUrl("a/b.png", contentType: "image/png", contentLength: 42);
+
+        var signedHeaders = Uri.UnescapeDataString(url.Split("X-Amz-SignedHeaders=")[1].Split('&')[0]);
+
+        signedHeaders.Split(';').Should().Contain(["content-type", "content-length"]);
+    }
+
+    [Fact]
     public async Task S3Provider_DeleteAsync_ShouldBatchKeysByThousandAndReportErrors()
     {
         var s3 = new Mock<IAmazonS3>();
