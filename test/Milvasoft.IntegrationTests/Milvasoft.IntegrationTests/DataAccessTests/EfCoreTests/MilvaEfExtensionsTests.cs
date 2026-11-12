@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.MilvaResponse;
 using Milvasoft.Components.Rest.Request;
+using Milvasoft.Core.Exceptions;
 using Milvasoft.Core.Utils.Constants;
 using Milvasoft.DataAccess.EfCore;
 using Milvasoft.DataAccess.EfCore.Configuration;
@@ -1401,6 +1402,117 @@ public class MilvaEfExtensionsTests(CustomWebApplicationFactory factory) : DataA
         result.Data.Should().HaveCount(4);
         result.HasNextPage.Should().BeFalse();
         result.NextCursor.Should().BeNull();
+    }
+
+    [Theory]
+    [InlineData(SortType.Asc, new[] { 3, 4 })]
+    [InlineData(SortType.Desc, new[] { 2, 1 })]
+    public async Task ToCursorListResponseAsync_WithStringSortPropertyAndCursor_ShouldTranslateAndReturnNextPage(SortType sortType, int[] expectedIds)
+    {
+        // Arrange
+        var dbContext = await InitializeCursorTestAsync();
+        var sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.SomeStringProp), Type = sortType };
+        var firstPage = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(new CursorListRequest { RowCount = 2, Sorting = sorting }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Act
+        var result = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(new CursorListRequest
+        {
+            RowCount = 2,
+            Cursor = firstPage.NextCursor,
+        }, cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Data.Select(e => e.Id).Should().Equal(expectedIds);
+        result.HasNextPage.Should().BeFalse();
+        result.HasPreviousPage.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task ToCursorListResponseAsync_WithCursorOfDeletedLastRows_ShouldReturnEmptyPage(bool withProjection)
+    {
+        // Arrange
+        var dbContext = await InitializeCursorTestAsync();
+        var ct = TestContext.Current.CancellationToken;
+        var sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc };
+        var firstPage = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(new CursorListRequest { RowCount = 2, Sorting = sorting }, cancellationToken: ct);
+        await dbContext.FullAuditableEntities.Where(e => e.Id > 2).ExecuteDeleteAsync(ct);
+        var request = new CursorListRequest { RowCount = 2, Cursor = firstPage.NextCursor };
+
+        // Act
+        var ids = withProjection
+            ? (await dbContext.FullAuditableEntities.ToCursorListResponseAsync(request, e => new SomeBaseEntityFixture { Id = e.Id }, cancellationToken: ct)).Data.Select(e => e.Id)
+            : (await dbContext.FullAuditableEntities.ToCursorListResponseAsync(request, cancellationToken: ct)).Data.Select(e => e.Id);
+
+        // Assert
+        ids.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task ToCursorListResponseAsync_WithProjectionAndConditionAfterProjection_ShouldReturnFullPageAndCorrectNextPage()
+    {
+        // Arrange
+        var dbContext = await InitializeCursorTestAsync();
+        var ct = TestContext.Current.CancellationToken;
+        var request = new CursorListRequest { RowCount = 2, Sorting = new SortRequest { SortBy = nameof(SomeFullAuditableEntityFixture.Id), Type = SortType.Asc } };
+
+        // Act
+        var result = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(request,
+                                                                                     e => new SomeBaseEntityFixture { Id = e.Id, SomeStringProp = e.SomeStringProp },
+                                                                                     r => r.SomeStringProp != "somestring1",
+                                                                                     cancellationToken: ct);
+
+        var nextResult = await dbContext.FullAuditableEntities.ToCursorListResponseAsync(new CursorListRequest { RowCount = 2, Cursor = result.NextCursor },
+                                                                                         e => new SomeBaseEntityFixture { Id = e.Id, SomeStringProp = e.SomeStringProp },
+                                                                                         r => r.SomeStringProp != "somestring1",
+                                                                                         cancellationToken: ct);
+
+        // Assert
+        result.Data.Select(e => e.Id).Should().Equal(2, 3);
+        result.HasNextPage.Should().BeTrue();
+        nextResult.Data.Select(e => e.Id).Should().Equal(4);
+        nextResult.HasNextPage.Should().BeFalse();
+    }
+
+    [Theory]
+    [InlineData("not a cursor", 2)]
+    [InlineData("eyJTb3J0QnkiOiJJZCIsIlZhbHVlIjoiXCJhYmNcIiIsIlNvcnRUeXBlIjowfQ==", 2)]
+    [InlineData(null, 0)]
+    [InlineData(null, -1)]
+    public async Task ToCursorListResponseAsync_WithMalformedCursorOrInvalidRowCount_ShouldThrowUserFriendlyException(string cursor, int rowCount)
+    {
+        // Arrange
+        var dbContext = await InitializeCursorTestAsync();
+
+        // Act
+        var act = () => dbContext.FullAuditableEntities.ToCursorListResponseAsync(new CursorListRequest { RowCount = rowCount, Cursor = cursor },
+                                                                                 cancellationToken: TestContext.Current.CancellationToken);
+
+        // Assert
+        await act.Should().ThrowAsync<MilvaUserFriendlyException>();
+    }
+
+    private async Task<MilvaBulkDbContextFixture> InitializeCursorTestAsync()
+    {
+        await InitializeAsync(services =>
+        {
+            services.ConfigureMilvaDataAccess(opt =>
+            {
+                opt.DbContext = new DbContextConfiguration { UseUtcForDateTime = true };
+            });
+
+            services.AddDbContext<MilvaBulkDbContextFixture>(x =>
+            {
+                x.ConfigureWarnings(warnings => { warnings.Log(RelationalEventId.PendingModelChangesWarning); });
+                x.UseNpgsql(_factory.GetConnectionString());
+            });
+        });
+
+        var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
+        await SeedFullAuditableEntitiesAsync(dbContext);
+
+        return dbContext;
     }
 
     [Fact]

@@ -15,6 +15,10 @@ internal static class CursorExtensions
     internal static SortRequest ReversedSorting(SortRequest sorting)
         => new() { SortBy = sorting.SortBy, Type = sorting.Type == SortType.Asc ? SortType.Desc : SortType.Asc };
 
+    // string.Compare(string, string) is translated by EF Core providers (e.g. Compare(a, b) > 0 becomes a > b), so the
+    // comparison runs in the database with the same collation as the ORDER BY. The StringComparison overload is not translatable.
+    private static readonly MethodInfo _stringCompareMethod = typeof(string).GetMethod(nameof(string.Compare), [typeof(string), typeof(string)]);
+
     // Per-entity-type sort property metadata; resolved once via reflection then cached.
     internal static readonly ConcurrentDictionary<(Type EntityType, string SortBy), CursorPropertyMetadata> _cursorMetadataCache = new();
 
@@ -40,7 +44,7 @@ internal static class CursorExtensions
 
         var param = Expression.Parameter(typeof(TEntity), "e");
         var propertyAccess = Expression.Property(param, meta.Property);
-        var rawValue = System.Text.Json.JsonSerializer.Deserialize(cursorData.Value, meta.UnderlyingType);
+        var rawValue = DeserializeCursorValue(cursorData.Value, meta.UnderlyingType);
 
         var strictBody = BuildComparison(propertyAccess, meta, rawValue, useGreaterThan);
 
@@ -53,7 +57,7 @@ internal static class CursorExtensions
         if (!string.IsNullOrEmpty(cursorData.IdValue) && idMeta != null)
         {
             var idAccess = Expression.Property(param, idMeta.Property);
-            var idRawValue = System.Text.Json.JsonSerializer.Deserialize(cursorData.IdValue, idMeta.UnderlyingType);
+            var idRawValue = DeserializeCursorValue(cursorData.IdValue, idMeta.UnderlyingType);
             var idStrictBody = BuildComparison(idAccess, idMeta, idRawValue, useGreaterThan);
             var equalBody = BuildEquality(propertyAccess, meta, rawValue);
 
@@ -66,13 +70,12 @@ internal static class CursorExtensions
         return query.Where(Expression.Lambda<Func<TEntity, bool>>(strictBody, param));
     }
 
-    /// <summary>Builds a strict greater-than / less-than comparison against a boxed value, handling string (ordinal) and (nullable) value types.</summary>
+    /// <summary>Builds a strict greater-than / less-than comparison against a boxed value, handling string and (nullable) value types.</summary>
     private static Expression BuildComparison(MemberExpression propertyAccess, CursorPropertyMetadata meta, object rawValue, bool useGreaterThan)
     {
         if (meta.UnderlyingType == typeof(string))
         {
-            var compareMethod = typeof(string).GetMethod(nameof(string.Compare), [typeof(string), typeof(string), typeof(StringComparison)]);
-            var call = Expression.Call(compareMethod, propertyAccess, Expression.Constant(rawValue, typeof(string)), Expression.Constant(StringComparison.Ordinal));
+            var call = Expression.Call(_stringCompareMethod, propertyAccess, Expression.Constant(rawValue, typeof(string)));
 
             return useGreaterThan
                 ? Expression.GreaterThan(call, Expression.Constant(0))
@@ -88,13 +91,12 @@ internal static class CursorExtensions
             : Expression.LessThan(propertyAccess, valueExpr);
     }
 
-    /// <summary>Builds an equality comparison against a boxed value, handling string (ordinal) and (nullable) value types.</summary>
+    /// <summary>Builds an equality comparison against a boxed value, handling string and (nullable) value types.</summary>
     private static Expression BuildEquality(MemberExpression propertyAccess, CursorPropertyMetadata meta, object rawValue)
     {
         if (meta.UnderlyingType == typeof(string))
         {
-            var compareMethod = typeof(string).GetMethod(nameof(string.Compare), [typeof(string), typeof(string), typeof(StringComparison)]);
-            var call = Expression.Call(compareMethod, propertyAccess, Expression.Constant(rawValue, typeof(string)), Expression.Constant(StringComparison.Ordinal));
+            var call = Expression.Call(_stringCompareMethod, propertyAccess, Expression.Constant(rawValue, typeof(string)));
 
             return Expression.Equal(call, Expression.Constant(0));
         }
@@ -104,6 +106,25 @@ internal static class CursorExtensions
             : Expression.Constant(rawValue, meta.Property.PropertyType);
 
         return Expression.Equal(propertyAccess, valueExpr);
+    }
+
+    /// <summary>
+    /// Deserializes a cursor value. A malformed or null value (cursors come from clients) is reported as an invalid parameter.
+    /// </summary>
+    private static object DeserializeCursorValue(string json, Type type)
+    {
+        object value;
+
+        try
+        {
+            value = string.IsNullOrEmpty(json) ? null : System.Text.Json.JsonSerializer.Deserialize(json, type);
+        }
+        catch (Exception ex) when (ex is System.Text.Json.JsonException or NotSupportedException or ArgumentException)
+        {
+            throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+        }
+
+        return value ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
     }
 
     /// <summary>
@@ -176,6 +197,36 @@ internal static class CursorExtensions
         return Expression.Lambda<Func<TEntity, CursorProjectionCarrier<TResult>>>(body, param);
     }
 
+    /// <summary>
+    /// Rewrites a condition on the projected result to a condition on the carrier (<c>c => condition(c.Result)</c>),
+    /// so it can be translated and applied in the database before paging.
+    /// </summary>
+    internal static Expression<Func<CursorProjectionCarrier<TResult>, bool>> BuildCarrierCondition<TResult>(Expression<Func<TResult, bool>> condition)
+    {
+        var carrierParam = Expression.Parameter(typeof(CursorProjectionCarrier<TResult>), "c");
+
+        var resultAccess = Expression.Property(carrierParam, nameof(CursorProjectionCarrier<>.Result));
+
+        var body = new ParameterReplacer(condition.Parameters[0], resultAccess).Visit(condition.Body);
+
+        return Expression.Lambda<Func<CursorProjectionCarrier<TResult>, bool>>(body, carrierParam);
+    }
+
+    /// <summary>
+    /// Creates a carrier for an already materialized entity, reading sort and tie-break values from the entity.
+    /// </summary>
+    internal static CursorProjectionCarrier<TResult> CreateCarrier<TEntity, TResult>(TEntity entity, TResult result, SortRequest sorting)
+    {
+        var meta = string.IsNullOrWhiteSpace(sorting?.SortBy) ? null : GetCursorPropertyMetadata(typeof(TEntity), sorting.SortBy);
+
+        return new CursorProjectionCarrier<TResult>
+        {
+            SortValue = meta?.Property.GetValue(entity),
+            IdValue = meta == null ? null : GetTieBreakValue(typeof(TEntity), sorting.SortBy, entity),
+            Result = result
+        };
+    }
+
     internal static string BuildCursor<TEntity>(TEntity item, SortRequest sorting, bool isBackward)
     {
         if (item == null || string.IsNullOrWhiteSpace(sorting?.SortBy))
@@ -231,11 +282,11 @@ internal sealed class CursorProjectionCarrier<TResult>
     public TResult Result { get; set; }
 }
 
-/// <summary>Replaces a specific parameter expression node inside an expression tree.</summary>
-internal sealed class ParameterReplacer(ParameterExpression oldParam, ParameterExpression newParam) : ExpressionVisitor
+/// <summary>Replaces a specific parameter expression node inside an expression tree with another expression.</summary>
+internal sealed class ParameterReplacer(ParameterExpression oldParam, Expression replacement) : ExpressionVisitor
 {
     protected override Expression VisitParameter(ParameterExpression node)
-        => node == oldParam ? newParam : base.VisitParameter(node);
+        => node == oldParam ? replacement : base.VisitParameter(node);
 }
 
 internal sealed record CursorData
@@ -264,9 +315,27 @@ internal sealed record CursorData
         return Convert.ToBase64String(Encoding.UTF8.GetBytes(System.Text.Json.JsonSerializer.Serialize(data)));
     }
 
+    /// <summary>
+    /// Decodes a client supplied cursor. Throws <see cref="MilvaUserFriendlyException"/> with <see cref="MilvaException.InvalidParameter"/> if the cursor is malformed.
+    /// </summary>
     public static CursorData Decode(string cursor)
     {
-        var json = Encoding.UTF8.GetString(Convert.FromBase64String(cursor));
-        return System.Text.Json.JsonSerializer.Deserialize<CursorData>(json);
+        CursorData data;
+
+        try
+        {
+            var json = Encoding.UTF8.GetString(Convert.FromBase64String(cursor));
+
+            data = System.Text.Json.JsonSerializer.Deserialize<CursorData>(json);
+        }
+        catch (Exception ex) when (ex is FormatException or System.Text.Json.JsonException or ArgumentException)
+        {
+            throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+        }
+
+        if (data == null || string.IsNullOrWhiteSpace(data.SortBy) || !Enum.IsDefined(data.SortType))
+            throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+
+        return data;
     }
 }
