@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Milvasoft.Core.Utils.Converters;
 using Milvasoft.Interception.Builder;
+using Milvasoft.Interception.Decorator.Internal;
 using Milvasoft.Interception.Interceptors.ActivityScope;
 using Milvasoft.Interception.Interceptors.Cache;
 using Milvasoft.Interception.Interceptors.Logging;
@@ -58,9 +59,11 @@ public static class InterceptionServiceCollectionExtensions
 
         services.ConfigureCurrentMilvaJsonSerializerOptions();
 
-        var externalTypes = builder.Services?.Where(i => i.ImplementationType?.GetInterfaces() != null && Array.Exists(i.ImplementationType.GetInterfaces(), t => t == typeof(IInterceptable))).Select(i => i.ServiceType);
+        // Keyed descriptors throw when their non-keyed implementation properties are read, so the implementation type is read according to the descriptor kind.
+        var externalTypes = builder.Services.Where(descriptor => GetImplementationType(descriptor)?.IsAssignableTo(typeof(IInterceptable)) == true)
+                                            .Select(descriptor => descriptor.ServiceType);
 
-        types = [.. types.Concat(externalTypes).Distinct()];
+        types = [.. (types ?? []).Concat(externalTypes).Distinct()];
 
         builder.WithDefaultInterceptorRunner();
 
@@ -113,9 +116,16 @@ public static class InterceptionServiceCollectionExtensions
     /// <summary>
     /// Decorates the specified service type descriptor inside <see cref="IServiceCollection"/>.
     /// </summary>
+    /// <remarks>
+    /// <para>Both keyed and non-keyed registrations of <paramref name="type"/> are decorated. Registrations that are already decorated are skipped, so calling this twice does not intercept twice.</para>
+    /// <para>The proxy has the lifetime of the original registration and its interceptors are resolved from the provider that resolves the service.
+    /// Scoped interceptors of a singleton service are resolved from a new service scope on every call, so they are never captured by the singleton.</para>
+    /// <para><paramref name="serviceLifetime"/> is not used anymore; it is kept for source compatibility.</para>
+    /// </remarks>
     public static InterceptionBuilder Intercept(this InterceptionBuilder builder, Type type, ServiceLifetime serviceLifetime = ServiceLifetime.Scoped)
     {
-        builder.Services.TryAdd(ServiceDescriptor.Describe(typeof(Decorator), x => new Decorator((type) => (IMilvaInterceptor)x.GetRequiredService(type)), serviceLifetime));
+        // Decorator is stateless; transient avoids capturing a scoped instance in singleton services.
+        builder.Services.TryAdd(ServiceDescriptor.Transient(typeof(Decorator), sp => new Decorator(interceptorType => (IMilvaInterceptor)sp.GetRequiredService(interceptorType))));
 
         var descriptors = builder.Services.Where(x => x.ServiceType == type).ToArray();
 
@@ -124,10 +134,12 @@ public static class InterceptionServiceCollectionExtensions
 
         foreach (var descriptor in descriptors)
         {
+            if (DecoratedServiceFactory.IsDecorated(descriptor))
+                continue;
+
             var index = builder.Services.IndexOf(descriptor);
 
-            builder.Services.Insert(index, Intercept(descriptor));
-            builder.Services.RemoveAt(index + 1);
+            builder.Services[index] = new DecoratedServiceFactory(descriptor, builder.Services).CreateDescriptor();
         }
 
         return builder;
@@ -199,7 +211,7 @@ public static class InterceptionServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        var options = section.Get<LogInterceptionOptions>();
+        var options = section.Get<LogInterceptionOptions>() ?? new LogInterceptionOptions();
 
         builder.WithLogInterceptor(interceptionOptions: (opt) =>
         {
@@ -280,7 +292,7 @@ public static class InterceptionServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        var options = section.Get<ResponseInterceptionOptions>();
+        var options = section.Get<ResponseInterceptionOptions>() ?? new ResponseInterceptionOptions();
 
         builder.WithResponseInterceptor(interceptionOptions: (opt) =>
         {
@@ -309,7 +321,7 @@ public static class InterceptionServiceCollectionExtensions
         if (postConfigureAction == null)
             throw new MilvaDeveloperException("Please provide post configure options.");
 
-        if (!builder.Services.Any(s => s.ServiceType == typeof(IConfigureOptions<LogInterceptionOptions>)))
+        if (!builder.Services.Any(s => s.ServiceType == typeof(IConfigureOptions<ResponseInterceptionOptions>)))
             throw new MilvaDeveloperException("Please configure options with WithOptions() builder method before post configuring.");
 
         var config = new ResponseInterceptionPostConfigureOptions();
@@ -373,7 +385,7 @@ public static class InterceptionServiceCollectionExtensions
                         .Bind(section)
                         .ValidateDataAnnotations();
 
-        var options = section.Get<CacheInterceptionOptions>();
+        var options = section.Get<CacheInterceptionOptions>() ?? new CacheInterceptionOptions();
 
         builder.WithCacheInterceptor(interceptionOptions: (opt) =>
         {
@@ -478,25 +490,12 @@ public static class InterceptionServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Decorates the types added to the service collection to intercept them with Castle.Core's ProxyGenerator.
+    /// Gets the implementation type of a keyed or non-keyed descriptor (null for instance and factory registrations).
     /// </summary>
-    /// <param name="serviceDescriptor"></param>
+    /// <param name="descriptor"></param>
     /// <returns></returns>
-    private static ServiceDescriptor Intercept(ServiceDescriptor serviceDescriptor)
-    {
-        object DecoratedFactory(IServiceProvider serviceProvider)
-        {
-            var implementation = serviceProvider.GetInstance(serviceDescriptor);
-
-            var decorator = serviceProvider.GetRequiredService<Decorator>();
-
-            return decorator.For(serviceDescriptor.ServiceType, implementation, serviceProvider);
-        }
-
-        return ServiceDescriptor.Describe(serviceType: serviceDescriptor.ServiceType,
-                                          implementationFactory: DecoratedFactory,
-                                          lifetime: serviceDescriptor.Lifetime);
-    }
+    private static Type GetImplementationType(ServiceDescriptor descriptor)
+        => descriptor.IsKeyedService ? descriptor.KeyedImplementationType : descriptor.ImplementationType;
 
     /// <summary>
     /// Finds the classes to be intercepted in the assembly.
