@@ -123,7 +123,20 @@ public abstract class MultipartUploadStream : Stream
         {
             // A full part is dispatched only when more data arrives, so the last part is always uploaded by CompleteAsync.
             if (_currentPart != null && _currentPart.Length >= _partLength)
-                await DispatchCurrentPartAsync(isLastPart: false, cancellationToken);
+            {
+                try
+                {
+                    await DispatchCurrentPartAsync(isLastPart: false, cancellationToken);
+                }
+                catch
+                {
+                    // A failed part must never be followed by a commit (S3 accepts non-consecutive part numbers),
+                    // so the whole upload is aborted and the stream cannot be completed anymore.
+                    await AbortAsync();
+
+                    throw;
+                }
+            }
 
             _currentPart ??= StorageHelper.MemoryStreamManager.GetStream(nameof(MultipartUploadStream));
 

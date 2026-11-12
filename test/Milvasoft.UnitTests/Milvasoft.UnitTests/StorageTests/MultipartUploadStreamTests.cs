@@ -169,6 +169,23 @@ public class MultipartUploadStreamTests
     }
 
     [Fact]
+    public async Task CompleteAsync_AfterFailedWrite_ShouldNotCommitIncompleteUpload()
+    {
+        await using var stream = new RecordingUploadStream(maxConcurrentUploads: 1, onUploadPart: part => part == 1 ? throw new IOException("boom") : Task.CompletedTask);
+
+        // With one upload slot, dispatching part 2 observes the failure of part 1 inside WriteAsync.
+        var write = async () => await stream.WriteAsync(CreateContent(_partLength * 3), Ct);
+
+        await write.Should().ThrowAsync<IOException>();
+
+        var complete = () => stream.CompleteAsync(Ct);
+
+        await complete.Should().ThrowAsync<InvalidOperationException>();
+        stream.Completed.Should().BeFalse();
+        stream.Aborted.Should().BeTrue();
+    }
+
+    [Fact]
     public void Write_Synchronous_ShouldThrowNotSupported()
     {
         using var stream = new RecordingUploadStream();
