@@ -163,10 +163,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
     /// <returns></returns>
-    public async Task AddContentAsync<T>(T content, string filePath, bool contentsHasId = false)
-    {
-        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForAdd([content], jsonContentString, contentsHasId));
-    }
+    public Task AddContentAsync<T>(T content, string filePath, bool contentsHasId = false)
+        => ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForAdd([content], jsonContentString, contentsHasId));
 
     /// <summary>
     /// Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
@@ -183,10 +181,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param>
     /// <returns></returns>
-    public async Task AddContentsAsync<T>(List<T> contents, string filePath, bool contentsHasId = false)
-    {
-        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForAdd(contents, jsonContentString, contentsHasId));
-    }
+    public Task AddContentsAsync<T>(List<T> contents, string filePath, bool contentsHasId = false)
+        => ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForAdd(contents, jsonContentString, contentsHasId));
 
     /// <summary>
     /// Updates content from json file in <paramref name="filePath"/>.
@@ -209,10 +205,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
     /// <returns></returns>
-    public async Task UpdateContentAsync<T>(T content, string filePath, Expression<Func<T, dynamic>> mappingProperty)
-    {
-        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForUpdate([content], jsonContentString, mappingProperty));
-    }
+    public Task UpdateContentAsync<T>(T content, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        => ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForUpdate([content], jsonContentString, mappingProperty));
 
     /// <summary>
     /// Updates contents from json file in <paramref name="filePath"/>.
@@ -235,10 +229,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
     /// <returns></returns>
-    public async Task UpdateContentsAsync<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty)
-    {
-        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForUpdate(contents, jsonContentString, mappingProperty));
-    }
+    public Task UpdateContentsAsync<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        => ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForUpdate(contents, jsonContentString, mappingProperty));
 
     /// <summary>
     /// Deletes record from requested json file.
@@ -255,10 +247,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
     /// <returns></returns>
-    public async Task DeleteContentAsync<T>(List<dynamic> mappingValue, string filePath, Expression<Func<T, dynamic>> mappingProperty)
-    {
-        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForDelete(mappingValue, jsonContentString, mappingProperty));
-    }
+    public Task DeleteContentAsync<T>(List<dynamic> mappingValue, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        => ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForDelete(mappingValue, jsonContentString, mappingProperty));
 
     /// <summary>
     /// Deletes records from requested json file.
@@ -274,10 +264,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
     /// <returns></returns>
-    public async Task DeleteContentsAsync<T>(List<dynamic> mappingValues, string filePath, Expression<Func<T, dynamic>> mappingProperty)
-    {
-        await ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty));
-    }
+    public Task DeleteContentsAsync<T>(List<dynamic> mappingValues, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        => ModifyAsync(filePath, encrypted: false, jsonContentString => GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty));
 
     /// <summary>
     /// Removes all file data and writes new one.
@@ -357,10 +345,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param> 
     /// <returns></returns>
-    public async Task AddCryptedContentAsync<T>(T content, string filePath, bool contentsHasId)
-    {
-        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForAdd([content], jsonContentString, contentsHasId));
-    }
+    public Task AddCryptedContentAsync<T>(T content, string filePath, bool contentsHasId)
+        => ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForAdd([content], jsonContentString, contentsHasId));
 
     /// <summary>
     /// Adds <paramref name="contents"/> to json file in <paramref name="filePath"/>.
@@ -383,10 +369,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="contentsHasId"> Determines whether the contents are added in auto increment by "Id" property. </param> 
     /// <returns></returns>
-    public async Task AddCryptedContentsAsync<T>(List<T> contents, string filePath, bool contentsHasId)
-    {
-        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForAdd(contents, jsonContentString, contentsHasId));
-    }
+    public Task AddCryptedContentsAsync<T>(List<T> contents, string filePath, bool contentsHasId)
+        => ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForAdd(contents, jsonContentString, contentsHasId));
 
     /// <summary>
     /// Updates contents from json file in <paramref name="filePath"/>.
@@ -413,10 +397,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
     /// <returns></returns>
-    public async Task UpdateCryptedContentAsync<T>(T content, string filePath, Expression<Func<T, dynamic>> mappingProperty)
-    {
-        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForUpdate([content], jsonContentString, mappingProperty));
-    }
+    public Task UpdateCryptedContentAsync<T>(T content, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        => ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForUpdate([content], jsonContentString, mappingProperty));
 
     /// <summary>
     /// Updates contents from json file in <paramref name="filePath"/>.
@@ -441,10 +423,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
     /// <returns></returns>
-    public async Task UpdateCryptedContentsAsync<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty)
-    {
-        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForUpdate(contents, jsonContentString, mappingProperty));
-    }
+    public Task UpdateCryptedContentsAsync<T>(List<T> contents, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        => ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForUpdate(contents, jsonContentString, mappingProperty));
 
     /// <summary>
     /// Deletes record from requested json file.
@@ -466,10 +446,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
     /// <returns> Completed <see cref="Task"/> </returns>
-    public async Task DeleteCryptedContentAsync<T>(dynamic mappingValue, string filePath, Expression<Func<T, dynamic>> mappingProperty)
-    {
-        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty));
-    }
+    public Task DeleteCryptedContentAsync<T>(dynamic mappingValue, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        => ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForDelete([mappingValue], jsonContentString, mappingProperty));
 
     /// <summary>
     /// Deletes record from requested json file.
@@ -490,10 +468,8 @@ public class JsonOperations : IJsonOperations
     /// <param name="filePath"> Path to json file to get data from. </param>
     /// <param name="mappingProperty"> The data to be updated is extracted from the file according to this property. </param>
     /// <returns> Completed <see cref="Task"/> </returns>
-    public async Task DeleteCryptedContentAsync<T>(List<dynamic> mappingValues, string filePath, Expression<Func<T, dynamic>> mappingProperty)
-    {
-        await ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty));
-    }
+    public Task DeleteCryptedContentAsync<T>(List<dynamic> mappingValues, string filePath, Expression<Func<T, dynamic>> mappingProperty)
+        => ModifyAsync(filePath, encrypted: true, jsonContentString => GetJsonResultForDelete(mappingValues, jsonContentString, mappingProperty));
 
     /// <summary>
     /// Removes all file data and writes new one.
