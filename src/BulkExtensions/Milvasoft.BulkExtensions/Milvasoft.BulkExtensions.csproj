@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<PackageReference Include="ConfigureAwait.Fody" Version="3.4.1" PrivateAssets="All" />
+		<PackageReference Include="Fody" Version="6.9.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.12" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Update="AsyncFixer" Version="2.1.0" />
+	</ItemGroup>
+
+	<PropertyGroup>
+
+		<PackageId>Milvasoft.BulkExtensions</PackageId>
+		<Product>Milvasoft.BulkExtensions</Product>
+		<Description>Provider independent bulk operations (insert, update, delete, upsert, read, save changes) for Entity Framework Core. Install a provider package such as Milvasoft.BulkExtensions.PostgreSql to use it.</Description>
+		<PackageTags>efcore,bulk,bulkinsert,bulkupdate,upsert,ef,sql,performance</PackageTags>
+
+	</PropertyGroup>
+
+</Project>

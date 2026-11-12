@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+		<OutputType>Exe</OutputType>
+		<!-- Tests call the synchronous bulk APIs on purpose. -->
+		<NoWarn>$(NoWarn);AsyncFixer02</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentAssertions" Version="[7.0.0]" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.12" />
+		<PackageReference Include="Testcontainers.PostgreSql" Version="4.15.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.0" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="4.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="xunit.v3" Version="4.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\src\BulkExtensions\Milvasoft.BulkExtensions.PostgreSql\Milvasoft.BulkExtensions.PostgreSql.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Xunit" />
+		<Using Include="FluentAssertions" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Update="AsyncFixer" Version="2.1.0" />
+	</ItemGroup>
+
+</Project>

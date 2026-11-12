@@ -28,6 +28,7 @@
 - Custom Validation Attributes
 - Redis Caching
 - Database Access (RDBMS & MongoDB)
+- [Bulk Operations for EF Core (PostgreSQL)](src/BulkExtensions/README.md)
 - Encryption
 - Custom Exception Handling
 - Json File Operations
