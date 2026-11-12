@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Milvasoft.Core.Utils.ExpressionVisitors;
 
@@ -7,8 +8,11 @@ namespace Milvasoft.Core.Utils.ExpressionVisitors;
 /// </summary>
 public class SoftDeleteFilterVisitor : ExpressionVisitor
 {
-    private readonly HashSet<Expression> _processedNodes = [];
     private const string _expressionParam = "x";
+    private static readonly MethodInfo _whereMethod = GetEnumerableMethodWithFuncParameter(nameof(Enumerable.Where));
+    private static readonly MethodInfo _selectMethod = GetEnumerableMethodWithFuncParameter(nameof(Enumerable.Select));
+    private static readonly MethodInfo _toListMethod = typeof(Enumerable).GetMethods().Single(m => m.Name == nameof(Enumerable.ToList) && m.GetParameters().Length == 1);
+    private readonly HashSet<Expression> _processedNodes = [];
 
     /// <inheritdoc/>
     protected override Expression VisitMemberInit(MemberInitExpression node)
@@ -108,31 +112,35 @@ public class SoftDeleteFilterVisitor : ExpressionVisitor
         var condition = Expression.Equal(isDeletedProperty, Expression.Constant(false));
         var lambda = Expression.Lambda(condition, parameter);
 
-        var whereMethod = typeof(Enumerable).GetMethods()
-                                            .First(m => m.Name == nameof(Enumerable.Where) && m.GetParameters().Length == 2)
-                                            .MakeGenericMethod(elementType);
+        var whereMethod = _whereMethod.MakeGenericMethod(elementType);
 
         var filteredCollection = Expression.Call(whereMethod, modifiedExpression, lambda);
 
         var selectLambda = Expression.Lambda(Visit(parameter), parameter);
 
-        var selectMethod = typeof(Enumerable).GetMethods()
-                                             .First(m => m.Name == nameof(Enumerable.Select) && m.GetParameters().Length == 2)
-                                             .MakeGenericMethod(elementType, selectLambda.Body.Type);
+        var selectMethod = _selectMethod.MakeGenericMethod(elementType, selectLambda.Body.Type);
 
         var processedCollection = Expression.Call(selectMethod, filteredCollection, selectLambda);
 
         if (collectionExpression.Type.IsGenericType && collectionExpression.Type.GetGenericTypeDefinition() == typeof(List<>))
         {
-            var toListMethod = typeof(Enumerable).GetMethods()
-                                                 .First(m => m.Name == nameof(Enumerable.ToList) && m.GetParameters().Length == 1)
-                                                 .MakeGenericMethod(selectLambda.Body.Type);
+            var toListMethod = _toListMethod.MakeGenericMethod(selectLambda.Body.Type);
 
             processedCollection = Expression.Call(toListMethod, processedCollection);
         }
 
         return processedCollection;
     }
+
+    /// <summary>
+    /// Gets the Enumerable method overload whose second parameter is Func&lt;TSource, TResult&gt; (not the overload with the index parameter).
+    /// </summary>
+    private static MethodInfo GetEnumerableMethodWithFuncParameter(string methodName)
+        => typeof(Enumerable).GetMethods()
+                             .Single(m => m.Name == methodName
+                                          && m.GetParameters().Length == 2
+                                          && m.GetParameters()[1].ParameterType.IsGenericType
+                                          && m.GetParameters()[1].ParameterType.GetGenericTypeDefinition() == typeof(Func<,>));
 
     private static bool IsCollectionOfISoftDeletable(Type type, out Type elementType)
     {
