@@ -33,9 +33,9 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     protected SoftDeletionState _currentSoftDeleteState;
 
     /// <summary>
-    /// Default prop for datetime configuration.
+    /// Default prop for datetime configuration. Same default as <see cref="DbContextConfiguration.UseUtcForDateTime"/>.
     /// </summary>
-    protected bool _useUtcForDateTimes = false;
+    protected bool _useUtcForDateTimes = true;
 
     /// <summary>
     /// It updates the state that determines whether soft delete state reset to default occurs after any operation.
@@ -718,28 +718,46 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// Gets requested contents by <typeparamref name="TEntity"/> DbSet.
     /// If this method gets soft deleted entities please override <see cref="CommonHelper.CreateIsDeletedFalseExpression{TEntity}"/> method your own condition.
     /// </summary>
+    /// <param name="filterRequest"></param>
+    /// <param name="sortRequest"></param>
+    /// <param name="projectionExpression"></param>
+    /// <param name="fetchSoftDeletedEntities"></param>
+    /// <param name="maxRowCount"> Maximum number of rows to return (after sorting). When null, zero or less, all rows are returned. </param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public Task<List<TEntity>> GetContentsAsync<TEntity>(FilterRequest filterRequest,
                                                          SortRequest sortRequest,
                                                          Expression<Func<TEntity, TEntity>> projectionExpression = null,
-                                                         bool fetchSoftDeletedEntities = false) where TEntity : class
+                                                         bool fetchSoftDeletedEntities = false,
+                                                         int? maxRowCount = null,
+                                                         CancellationToken cancellationToken = default) where TEntity : class
         => Set<TEntity>().Where(fetchSoftDeletedEntities ? e => true : MilvaDbContextCache.GetIsDeletedFilter<TEntity>())
-                               .IncludeTranslations(this)
-                               .WithFiltering(filterRequest)
-                               .WithSorting(sortRequest)
-                               .Select(projectionExpression ?? (entity => entity))
-                               .ToListAsync();
+                         .IncludeTranslations(this)
+                         .WithFiltering(filterRequest)
+                         .WithSorting(sortRequest)
+                         .Select(projectionExpression ?? (entity => entity))
+                         .TakeIfLimited(maxRowCount)
+                         .ToListAsync(cancellationToken);
 
     /// <summary>
-    /// Gets
+    /// Gets distinct values of <paramref name="propertyName"/> of not soft deleted <typeparamref name="TEntity"/> rows.
     /// </summary>
+    /// <remarks>
+    /// <paramref name="propertyName"/> is not checked against <see cref="RequestPropertyPolicy"/>; for client requests use <see cref="GetPropertyValuesAsync(EntityPropertyValuesRequest, CancellationToken)"/>.
+    /// </remarks>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TPropertyType"></typeparam>
     /// <param name="propertyName"></param>
     /// <param name="filterRequest"></param>
     /// <param name="sortRequest"></param>
+    /// <param name="maxRowCount"> Maximum number of values to return. When null, zero or less, all values are returned. </param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<List<TPropertyType>> GetEntityPropertyValuesAsync<TEntity, TPropertyType>(string propertyName, FilterRequest filterRequest, SortRequest sortRequest) where TEntity : class
+    public async Task<List<TPropertyType>> GetEntityPropertyValuesAsync<TEntity, TPropertyType>(string propertyName,
+                                                                                                 FilterRequest filterRequest,
+                                                                                                 SortRequest sortRequest,
+                                                                                                 int? maxRowCount = null,
+                                                                                                 CancellationToken cancellationToken = default) where TEntity : class
     {
         var keySelector = (Expression<Func<TEntity, TPropertyType>>)CommonHelper.DynamicInvokeCreatePropertySelector(nameof(CommonHelper.CreateRequiredPropertySelector),
                                                                                                                      typeof(TEntity),
@@ -752,36 +770,50 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
                                          .WithSorting(sortRequest)
                                          .GroupBy(keySelector)
                                          .Select(x => x.Key)
-                                         .ToListAsync();
+                                         .TakeIfLimited(maxRowCount)
+                                         .ToListAsync(cancellationToken);
 
         return result;
     }
 
     /// <summary>
-    /// Get values for some entity's property.
+    /// Gets distinct values of a property of an entity for a client request.
     /// </summary>
+    /// <remarks>
+    /// The entity must be in <see cref="DynamicFetchConfiguration.AllowedEntityNamesForLookup"/> and the property must be allowed by
+    /// <see cref="RequestPropertyPolicy"/> for <see cref="RequestPropertyUsage.Lookup"/> (sensitive properties are rejected).
+    /// At most <see cref="DynamicFetchConfiguration.GetEffectiveMaxRowCount"/> values are returned.
+    /// </remarks>
     /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<List<object>> GetPropertyValuesAsync(EntityPropertyValuesRequest request)
+    /// <exception cref="MilvaUserFriendlyException"> When the request is not valid or the property is not allowed. </exception>
+    public async Task<List<object>> GetPropertyValuesAsync(EntityPropertyValuesRequest request, CancellationToken cancellationToken = default)
     {
         ValidateRequestParameters(request);
 
-        var assemblyTypes = _dbContextConfiguration.DbContext.DynamicFetch.GetEntityAssemblyTypes();
+        var dynamicFetchConfiguration = _dbContextConfiguration.DbContext.DynamicFetch;
+
+        var assemblyTypes = dynamicFetchConfiguration.GetEntityAssemblyTypes();
 
         var entityName = request.EntityName;
 
         Type entityType = Array.Find(assemblyTypes, i => i.Name == entityName) ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
 
-        var propType = (entityType.GetProperty(request.PropertyName)?.PropertyType) ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+        var property = entityType.GetProperty(request.PropertyName) ?? throw new MilvaUserFriendlyException(MilvaException.InvalidParameter);
+
+        RequestPropertyPolicy.EnsureAllowed(property, RequestPropertyUsage.Lookup, request.PropertyName);
 
         dynamic taskResult = this.GetType()
                                    .GetMethod(nameof(GetEntityPropertyValuesAsync))
-                                   .MakeGenericMethod(entityType, propType)
+                                   .MakeGenericMethod(entityType, property.PropertyType)
                                    .Invoke(this,
                                    [
                                        request.PropertyName,
                                        request.Filtering,
                                        request.Sorting,
+                                       dynamicFetchConfiguration.GetEffectiveMaxRowCount(),
+                                       cancellationToken
                                    ]);
 
         var lookupList = (IList)await taskResult;
@@ -805,10 +837,17 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     /// <summary>
     /// Gets the lookup data for the specified <paramref name="lookupRequest"/>.
     /// </summary>
+    /// <remarks>
+    /// Entities must be in <see cref="DynamicFetchConfiguration.AllowedEntityNamesForLookup"/> and requested properties must be allowed by
+    /// <see cref="RequestPropertyPolicy"/> for <see cref="RequestPropertyUsage.Lookup"/> (sensitive properties are rejected).
+    /// At most <see cref="DynamicFetchConfiguration.GetEffectiveMaxRowCount"/> rows are returned for each entity.
+    /// </remarks>
     /// <param name="lookupRequest">The lookup request containing the parameters for the lookup.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>A list of lookup results containing the requested data.</returns>
-    public Task<List<object>> GetLookupsAsync(LookupRequest lookupRequest)
-        => new LookupManager(this, _dbContextConfiguration).GetLookupsAsync(lookupRequest);
+    /// <exception cref="MilvaUserFriendlyException"> When the request is not valid or a property is not allowed. </exception>
+    public Task<List<object>> GetLookupsAsync(LookupRequest lookupRequest, CancellationToken cancellationToken = default)
+        => new LookupManager(this, _dbContextConfiguration).GetLookupsAsync(lookupRequest, cancellationToken);
 
     #endregion
 

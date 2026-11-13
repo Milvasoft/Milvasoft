@@ -1133,7 +1133,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         };
 
         // Act
-        var result = await dbContext.GetLookupsAsync(request);
+        var result = await dbContext.GetLookupsAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEmpty();
@@ -1164,7 +1164,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
 
         // Act
-        Func<Task> act = async () => await dbContext.GetLookupsAsync(lookupRequest);
+        Func<Task> act = async () => await dbContext.GetLookupsAsync(lookupRequest, TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<MilvaUserFriendlyException>();
@@ -1218,7 +1218,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         object expectedData = new { SomeDecimalProp = 10M, SomeNullableProp = 100, Id = 1 };
 
         // Act
-        var result = await dbContext.GetLookupsAsync(lookupRequest);
+        var result = await dbContext.GetLookupsAsync(lookupRequest, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(1);
@@ -1311,7 +1311,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         using var _ = new CultureSwitcher("tr-TR");
 
         // Act
-        var result = await dbContext.GetLookupsAsync(lookupRequest);
+        var result = await dbContext.GetLookupsAsync(lookupRequest, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(1);
@@ -1406,7 +1406,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         using var _ = new CultureSwitcher("tr-TR");
 
         // Act
-        var result = await dbContext.GetLookupsAsync(lookupRequest);
+        var result = await dbContext.GetLookupsAsync(lookupRequest, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(1);
@@ -1462,7 +1462,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         object expectedData = new { SomeStringProp = "stringprop", Id = "milvasoft_1" };
 
         // Act
-        var result = await dbContext.GetLookupsAsync(lookupRequest);
+        var result = await dbContext.GetLookupsAsync(lookupRequest, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(1);
@@ -1540,7 +1540,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         var dbContext = _serviceProvider.GetRequiredService<MilvaBulkDbContextFixture>();
 
         // Act
-        Func<Task> act = async () => await dbContext.GetPropertyValuesAsync(request);
+        Func<Task> act = async () => await dbContext.GetPropertyValuesAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<MilvaUserFriendlyException>();
@@ -1606,7 +1606,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         };
 
         // Act
-        var result = await dbContext.GetPropertyValuesAsync(request);
+        var result = await dbContext.GetPropertyValuesAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(2);
@@ -1650,7 +1650,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.GetContentsAsync<SomeBaseEntityFixture>(null, null, null);
+        var result = await dbContext.GetContentsAsync<SomeBaseEntityFixture>(null, null, null, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(1);
@@ -1743,7 +1743,7 @@ public class DbContextTests(CustomWebApplicationFactory factory) : DataAccessInt
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.GetEntityPropertyValuesAsync<SomeFullAuditableEntityFixture, string>(nameof(SomeFullAuditableEntityFixture.SomeStringProp), null, null);
+        var result = await dbContext.GetEntityPropertyValuesAsync<SomeFullAuditableEntityFixture, string>(nameof(SomeFullAuditableEntityFixture.SomeStringProp), null, null, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(2);

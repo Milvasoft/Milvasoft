@@ -807,6 +807,7 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <summary>
     /// Runs execute update. Adds performer and perform time to to be updated properties.
     /// You can detect non null properties and create <see cref="SetPropertyBuilder{TSource}"/> with <see cref="MilvaEfExtensions.GetUpdatablePropertiesBuilder"/> method.
+    /// Soft deleted rows are not updated unless soft deleted entity fetching is enabled (see <see cref="FetchSoftDeletedEntities(bool)"/>), same as reads.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="propertyBuilder"></param>
@@ -817,6 +818,8 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
 
     /// <summary>
     /// Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
+    /// Soft deleted rows are not updated unless soft deleted entity fetching is enabled (see <see cref="FetchSoftDeletedEntities(bool)"/>), same as reads.
+    /// Use <see cref="RestoreAsync(Expression{Func{TEntity, bool}}, CancellationToken)"/> to restore soft deleted rows.
     /// </summary>
     /// <param name="predicate"></param>
     /// <param name="propertyBuilder"></param>
@@ -824,16 +827,40 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     /// <returns></returns>
     public virtual Task<int> ExecuteUpdateAsync(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default)
     {
-        if (!propertyBuilder.AuditCallsAdded)
-        {
-            if (_dataAccessConfiguration.Auditing.AuditModificationDate)
-                AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.LastModificationDate);
+        ArgumentNullException.ThrowIfNull(propertyBuilder);
 
-            if (_dataAccessConfiguration.Auditing.AuditModifier)
-                AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
-        }
+        AddModificationAuditPropertyCalls(propertyBuilder);
 
-        return _dbSet.Where(predicate).ExecuteUpdateAsync(propertyBuilder.UpdateSettersBuilder, cancellationToken: cancellationToken);
+        return _dbSet.Where(CreateConditionExpression(predicate) ?? (entity => true)).ExecuteUpdateAsync(propertyBuilder.UpdateSettersBuilder, cancellationToken: cancellationToken);
+    }
+
+    /// <summary>
+    /// Restores the soft deleted row with <paramref name="id"/>. See <see cref="RestoreAsync(Expression{Func{TEntity, bool}}, CancellationToken)"/>.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> Number of restored rows. </returns>
+    public virtual Task<int> RestoreAsync(object id, CancellationToken cancellationToken = default)
+        => RestoreAsync(i => i.Id == id, cancellationToken);
+
+    /// <summary>
+    /// Restores soft deleted rows that match <paramref name="predicate"/> with a single update statement: sets <see cref="EntityPropertyNames.IsDeleted"/> to false,
+    /// clears <see cref="EntityPropertyNames.DeletionDate"/> and <see cref="EntityPropertyNames.DeleterUserName"/> and sets the modification audit values (according to <see cref="AuditConfiguration"/>).
+    /// Rows which are not soft deleted are not touched.
+    /// </summary>
+    /// <remarks>
+    /// The soft delete query filter added with <see cref="Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.UseSoftDeleteQueryFilter"/> is ignored when it is a named filter
+    /// (<see cref="Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.SoftDeleteQueryFilterName"/>). Other query filters (e.g. tenant filters) still apply.
+    /// </remarks>
+    /// <param name="predicate"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> Number of restored rows. </returns>
+    /// <exception cref="MilvaDeveloperException"> When <typeparamref name="TEntity"/> is not soft deletable. </exception>
+    public virtual Task<int> RestoreAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        var propertyBuilder = CreateRestorePropertyBuilder();
+
+        return CreateRestoreQuery(predicate).ExecuteUpdateAsync(propertyBuilder.UpdateSettersBuilder, cancellationToken: cancellationToken);
     }
 
     /// <summary>
@@ -1055,6 +1082,64 @@ public abstract partial class BaseRepository<TEntity, TContext> : IBaseRepositor
     }
 
     #region Auditing
+
+    /// <summary>
+    /// Adds modification date and modifier property calls to <paramref name="propertyBuilder"/> (according to <see cref="AuditConfiguration"/>),
+    /// unless they were already added (e.g. by <see cref="GetUpdatablePropertiesBuilder{TDto}(TDto)"/>).
+    /// </summary>
+    /// <param name="propertyBuilder"></param>
+    protected internal virtual void AddModificationAuditPropertyCalls(SetPropertyBuilder<TEntity> propertyBuilder)
+    {
+        if (propertyBuilder.AuditCallsAdded)
+            return;
+
+        if (_dataAccessConfiguration.Auditing.AuditModificationDate)
+            AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.LastModificationDate);
+
+        if (_dataAccessConfiguration.Auditing.AuditModifier)
+            AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
+    }
+
+    /// <summary>
+    /// Creates the property builder that restores soft deleted rows. See <see cref="RestoreAsync(Expression{Func{TEntity, bool}}, CancellationToken)"/>.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="MilvaDeveloperException"> When <typeparamref name="TEntity"/> is not soft deletable. </exception>
+    protected internal virtual SetPropertyBuilder<TEntity> CreateRestorePropertyBuilder()
+    {
+        if (typeof(TEntity).GetPublicPropertyIgnoreCase(EntityPropertyNames.IsDeleted)?.PropertyType != typeof(bool))
+            throw new MilvaDeveloperException($"'{typeof(TEntity).Name}' is not soft deletable, so it cannot be restored.");
+
+        var propertyBuilder = new SetPropertyBuilder<TEntity>();
+
+        propertyBuilder.SetPropertyValue(CommonHelper.CreatePropertySelector<TEntity, bool>(EntityPropertyNames.IsDeleted), false);
+
+        if (typeof(TEntity).GetPublicPropertyIgnoreCase(EntityPropertyNames.DeletionDate)?.PropertyType == typeof(DateTime?))
+            propertyBuilder.SetPropertyValue(CommonHelper.CreatePropertySelector<TEntity, DateTime?>(EntityPropertyNames.DeletionDate), null);
+
+        if (typeof(TEntity).GetPublicPropertyIgnoreCase(EntityPropertyNames.DeleterUserName)?.PropertyType == typeof(string))
+            propertyBuilder.SetPropertyValue(CommonHelper.CreatePropertySelector<TEntity, string>(EntityPropertyNames.DeleterUserName), null);
+
+        AddModificationAuditPropertyCalls(propertyBuilder);
+
+        return propertyBuilder;
+    }
+
+    /// <summary>
+    /// Soft deleted rows that match <paramref name="predicate"/>. The named soft delete query filter is ignored, other query filters apply.
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <returns></returns>
+    protected IQueryable<TEntity> CreateRestoreQuery(Expression<Func<TEntity, bool>> predicate)
+    {
+        var isDeletedSelector = CommonHelper.CreatePropertySelector<TEntity, bool>(EntityPropertyNames.IsDeleted);
+
+        var isDeletedTrue = Expression.Lambda<Func<TEntity, bool>>(Expression.Equal(isDeletedSelector.Body, Expression.Constant(true)), isDeletedSelector.Parameters);
+
+        return _dbSet.IgnoreQueryFilters([Milvasoft.DataAccess.EfCore.DbContextBase.ModelBuilderExtensions.SoftDeleteQueryFilterName])
+                     .Where(predicate ?? (entity => true))
+                     .Where(isDeletedTrue);
+    }
 
     /// <summary>
     /// Adds perform time, performer and IsDeleted proeperty calls to <paramref name="propertyBuilder"/>.

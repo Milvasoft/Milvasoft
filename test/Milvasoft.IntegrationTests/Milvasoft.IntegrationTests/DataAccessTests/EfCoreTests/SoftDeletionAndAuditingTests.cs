@@ -1,6 +1,7 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
 using Milvasoft.Attributes.Annotations;
 using Milvasoft.Core.EntityBases.Concrete.Auditing;
 using Milvasoft.DataAccess.EfCore.Configuration;
@@ -447,6 +448,39 @@ public class SoftDeletionAndAuditingTests(CustomWebApplicationFactory factory) :
         (await assertContext.Authors.SingleAsync(ct)).Name.Should().Be("committed");
     }
 
+    [Theory]
+    [InlineData(false, 2)]
+    [InlineData(true, 1)]
+    public async Task ApplyTransactionAsync_WhenExecutionStrategyRetries_ShouldClearChangeTrackerOnlyWhenRequested(bool clearChangeTrackerOnRetry, int expectedAuthorCount)
+    {
+        // Arrange
+        var ct = TestContext.Current.CancellationToken;
+        await using var context = CreateContext(retryOnce: true);
+        var repository = new Milvasoft.DataAccess.EfCore.RepositoryBase.Concrete.ContextRepository<SoftDeletionTestDbContext>(context);
+        var attempts = 0;
+
+        // Act
+        await repository.ApplyTransactionAsync(async () =>
+        {
+            attempts++;
+
+            context.Authors.Add(new SdAuthor { Name = $"attempt{attempts}" });
+
+            // The first attempt fails after tracking an entity, before saving it.
+            if (attempts == 1)
+                throw new TransientTestException();
+
+            await context.SaveChangesAsync(ct);
+        }, cancellationToken: ct, clearChangeTrackerOnRetry: clearChangeTrackerOnRetry);
+
+        // Assert
+        attempts.Should().Be(2);
+
+        await using var assertContext = CreateContext();
+        var authors = await assertContext.Authors.Select(a => a.Name).ToListAsync(ct);
+        authors.Should().HaveCount(expectedAuthorCount).And.Contain("attempt2");
+    }
+
     #endregion
 
     #region Helpers
@@ -480,9 +514,13 @@ public class SoftDeletionAndAuditingTests(CustomWebApplicationFactory factory) :
         }
     }
 
-    private SoftDeletionTestDbContext CreateContext()
+    private SoftDeletionTestDbContext CreateContext(bool retryOnce = false)
     {
-        var options = new DbContextOptionsBuilder<SoftDeletionTestDbContext>().UseNpgsql(_connectionString).Options;
+        var options = new DbContextOptionsBuilder<SoftDeletionTestDbContext>().UseNpgsql(_connectionString, npgsql =>
+        {
+            if (retryOnce)
+                npgsql.ExecutionStrategy(dependencies => new RetryOnceExecutionStrategy(dependencies));
+        }).Options;
 
         var configuration = new DataAccessConfiguration
         {
@@ -647,3 +685,15 @@ public class SdBlogLink
 public class SdBlogRepository(SoftDeletionTestDbContext dbContext) : BaseRepository<SdBlog, SoftDeletionTestDbContext>(dbContext);
 
 #endregion
+
+/// <summary>
+/// Retries once, immediately, on <see cref="TransientTestException"/>.
+/// </summary>
+internal sealed class RetryOnceExecutionStrategy(ExecutionStrategyDependencies dependencies) : ExecutionStrategy(dependencies, maxRetryCount: 1, maxRetryDelay: TimeSpan.Zero)
+{
+    protected override bool ShouldRetryOn(Exception exception) => exception is TransientTestException;
+}
+
+internal sealed class TransientTestException : Exception
+{
+}

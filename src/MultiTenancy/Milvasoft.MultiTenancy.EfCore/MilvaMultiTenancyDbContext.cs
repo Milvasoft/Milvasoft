@@ -27,6 +27,10 @@ public interface IMultiTenantDbContext : IMilvaBulkDbContextBase
 /// <para>On save (including bulk save): added rows are stamped with <see cref="CurrentTenantId"/>; modified and deleted rows must belong to
 /// <see cref="CurrentTenantId"/> (their original tenant id is checked and cannot be changed). Any violation, or writing tenant rows without a tenant,
 /// throws <see cref="TenantMismatchException"/> and nothing is saved.</para>
+/// <para>The tenant id of tenant entities is a concurrency token, so updates and deletes are sent with <c>WHERE ... AND "TenantId" = @currentTenant</c>.
+/// An entity that was not loaded from the database (e.g. built from client input and attached with <c>Update</c>/<c>Remove</c>) and carries the key of
+/// another tenant's row affects no rows, and the save fails with <see cref="DbUpdateConcurrencyException"/>.
+/// This is a model change without a schema change: add an (empty) migration to update the model snapshot.</para>
 /// <para>Derived contexts that override saving must override <see cref="SaveChanges(bool)"/> and <see cref="SaveChangesAsync(bool, CancellationToken)"/>.</para>
 /// </remarks>
 /// <param name="options"></param>
@@ -38,14 +42,32 @@ public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbC
     public TenantId CurrentTenantId { get; set; }
 
     /// <summary>
-    /// Adds global query filter for tenant id.
+    /// Adds global query filter for tenant id and configures the tenant id as a concurrency token (see the class remarks).
     /// </summary>
     /// <param name="modelBuilder"></param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         HasTenantIdQueryFilter(modelBuilder);
 
+        // Maps TenantId properties (UseTenantId), so the concurrency token is configured after it.
         base.OnModelCreating(modelBuilder);
+
+        UseTenantIdAsConcurrencyToken(modelBuilder);
+    }
+
+    /// <summary>
+    /// Configures the tenant id property of <see cref="IHasTenantId"/> entities as a concurrency token.
+    /// </summary>
+    /// <param name="modelBuilder"></param>
+    protected static void UseTenantIdAsConcurrencyToken(ModelBuilder modelBuilder)
+    {
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes().Where(e => e.ClrType.IsAssignableTo(typeof(IHasTenantId))))
+        {
+            var tenantIdProperty = entityType.FindProperty(EntityPropertyNames.TenantId);
+
+            if (tenantIdProperty != null && (tenantIdProperty.ClrType == typeof(TenantId) || tenantIdProperty.ClrType == typeof(TenantId?)))
+                tenantIdProperty.IsConcurrencyToken = true;
+        }
     }
 
     /// <summary>
@@ -130,6 +152,9 @@ public class MilvaMultiTenancyDbContext(DbContextOptions options) : MilvaBulkDbC
 
             if (originalTenantId is not TenantId original || original != CurrentTenantId || currentTenantId is not TenantId current || current != CurrentTenantId)
                 throw new TenantMismatchException($"A '{entry.Metadata.ClrType.Name}' row that does not belong to the current tenant cannot be {(entry.State == EntityState.Deleted ? "deleted" : "updated")}.");
+
+            // The original tenant id equals the current tenant here. It is a concurrency token, so the update/delete only matches the row when
+            // the row really belongs to the current tenant (a detached entity built with another tenant's key affects no rows).
         }
     }
 

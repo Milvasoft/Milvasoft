@@ -11,6 +11,7 @@ public class SomeMilvaDbContextFixture(DbContextOptions<SomeMilvaDbContextFixtur
     public DbSet<SomeEntityFixture> Entities { get; set; }
     public DbSet<SomeBaseEntityFixture> BaseEntities { get; set; }
     public DbSet<SomeFullAuditableEntityFixture> FullAuditableEntities { get; set; }
+    public DbSet<PolicyTestEntityFixture> PolicyTestEntities { get; set; }
 }
 
 public class AnotherMilvaDbContextFixture(DbContextOptions<AnotherMilvaDbContextFixture> contextOptions, IDataAccessConfiguration dataAccessConfiguration) : MilvaDbContext(contextOptions, dataAccessConfiguration)

@@ -16,6 +16,12 @@ namespace Milvasoft.DataAccess.EfCore.Utils;
 public static class MilvaEfExtensions
 {
     /// <summary>
+    /// Takes at most <paramref name="maxRowCount"/> items when it is greater than zero, otherwise returns <paramref name="query"/>.
+    /// </summary>
+    internal static IQueryable<T> TakeIfLimited<T>(this IQueryable<T> query, int? maxRowCount)
+        => maxRowCount > 0 ? query.Take(maxRowCount.Value) : query;
+
+    /// <summary>
     /// Applies filtering options to the IQueryable data source.
     /// </summary>
     /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>
@@ -177,9 +183,14 @@ public static class MilvaEfExtensions
 
         // A cursor captures the sort it was built with; honor it (ignoring any client SortBy override on
         // later pages) so the ordering stays consistent with the cursor filter — otherwise equal-value rows
-        // are skipped or duplicated.
+        // are skipped or duplicated. The cursor is client input (not signed), so its sort property is checked
+        // against RequestPropertyPolicy like a requested sort property.
         if (cursorData != null)
+        {
+            CursorExtensions.GetSortPropertyMetadata(typeof(TEntity), cursorData.SortBy);
+
             cursorListRequest.Sorting = new SortRequest { SortBy = cursorData.SortBy, Type = cursorData.SortType };
+        }
 
         query = CursorExtensions.ApplyCursorSorting(query.WithFiltering(cursorListRequest.Filtering), cursorListRequest.Sorting);
 
@@ -286,9 +297,14 @@ public static class MilvaEfExtensions
 
         // A cursor captures the sort it was built with; honor it (ignoring any client SortBy override on
         // later pages) so the ordering stays consistent with the cursor filter — otherwise equal-value rows
-        // are skipped or duplicated.
+        // are skipped or duplicated. The cursor is client input (not signed), so its sort property is checked
+        // against RequestPropertyPolicy like a requested sort property.
         if (cursorData != null)
+        {
+            CursorExtensions.GetSortPropertyMetadata(typeof(TEntity), cursorData.SortBy);
+
             cursorListRequest.Sorting = new SortRequest { SortBy = cursorData.SortBy, Type = cursorData.SortType };
+        }
 
         query = CursorExtensions.ApplyCursorSorting(query.WithFiltering(cursorListRequest.Filtering), cursorListRequest.Sorting);
 

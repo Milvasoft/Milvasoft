@@ -523,12 +523,30 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
 
     /// <summary>
     /// Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
+    /// Soft deleted rows are not updated unless soft deleted entity fetching is enabled, same as reads.
     /// </summary>
     /// <param name="predicate"></param>
     /// <param name="propertyBuilder"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<int> ExecuteUpdateAsync(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Restores the soft deleted row with <paramref name="id"/>. See <see cref="RestoreAsync(Expression{Func{TEntity, bool}}, CancellationToken)"/>.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> Number of restored rows. </returns>
+    Task<int> RestoreAsync(object id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Restores soft deleted rows that match <paramref name="predicate"/> with a single update statement: sets IsDeleted to false,
+    /// clears DeletionDate and DeleterUserName and sets the modification audit values. Rows which are not soft deleted are not touched.
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns> Number of restored rows. </returns>
+    Task<int> RestoreAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity.
@@ -918,11 +936,27 @@ public interface IBaseRepository<TEntity> where TEntity : class, IMilvaEntity
 
     /// <summary>
     /// Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
+    /// Soft deleted rows are not updated unless soft deleted entity fetching is enabled, same as reads.
     /// </summary>
     /// <param name="predicate"></param>
     /// <param name="propertyBuilder"></param>
     /// <returns></returns>
     int ExecuteUpdate(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder);
+
+    /// <summary>
+    /// Restores the soft deleted row with <paramref name="id"/>. See <see cref="Restore(Expression{Func{TEntity, bool}})"/>.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns> Number of restored rows. </returns>
+    int Restore(object id);
+
+    /// <summary>
+    /// Restores soft deleted rows that match <paramref name="predicate"/> with a single update statement: sets IsDeleted to false,
+    /// clears DeletionDate and DeleterUserName and sets the modification audit values. Rows which are not soft deleted are not touched.
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <returns> Number of restored rows. </returns>
+    int Restore(Expression<Func<TEntity, bool>> predicate);
 
     /// <summary>
     /// Deletes all records that match the condition. If <see cref="SoftDeletionState"/> is active, it updates the soft delete properties of the relevant entity.

@@ -583,6 +583,7 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
     /// <summary>
     /// Runs execute update. Adds performer and perform time to to be updated properties.
     /// You can detect non null properties and create <see cref="SetPropertyBuilder{TSource}"/> with <see cref="MilvaEfExtensions.GetUpdatablePropertiesBuilder"/> method.
+    /// Soft deleted rows are not updated unless soft deleted entity fetching is enabled (see <see cref="FetchSoftDeletedEntities(bool)"/>), same as reads.
     /// </summary>
     /// <param name="id"></param>
     /// <param name="propertyBuilder"></param>
@@ -592,22 +593,39 @@ public abstract partial class BaseRepository<TEntity, TContext> where TEntity : 
 
     /// <summary>
     /// Runs execute update with given <paramref name="predicate"/>. Adds performer and perform time to to be updated properties.
+    /// Soft deleted rows are not updated unless soft deleted entity fetching is enabled (see <see cref="FetchSoftDeletedEntities(bool)"/>), same as reads.
+    /// Use <see cref="Restore(Expression{Func{TEntity, bool}})"/> to restore soft deleted rows.
     /// </summary>
     /// <param name="predicate"></param>
     /// <param name="propertyBuilder"></param>
     /// <returns></returns>
     public virtual int ExecuteUpdate(Expression<Func<TEntity, bool>> predicate, SetPropertyBuilder<TEntity> propertyBuilder)
     {
-        if (!propertyBuilder.AuditCallsAdded)
-        {
-            if (_dataAccessConfiguration.Auditing.AuditModificationDate)
-                AddPerformTimePropertyCall(propertyBuilder, EntityPropertyNames.LastModificationDate);
+        ArgumentNullException.ThrowIfNull(propertyBuilder);
 
-            if (_dataAccessConfiguration.Auditing.AuditModifier)
-                AddPerformerUserPropertyCall(propertyBuilder, EntityPropertyNames.LastModifierUserName);
-        }
+        AddModificationAuditPropertyCalls(propertyBuilder);
 
-        return _dbSet.Where(predicate).ExecuteUpdate(propertyBuilder.UpdateSettersBuilder);
+        return _dbSet.Where(CreateConditionExpression(predicate) ?? (entity => true)).ExecuteUpdate(propertyBuilder.UpdateSettersBuilder);
+    }
+
+    /// <summary>
+    /// Restores the soft deleted row with <paramref name="id"/>. See <see cref="Restore(Expression{Func{TEntity, bool}})"/>.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns> Number of restored rows. </returns>
+    public virtual int Restore(object id) => Restore(i => i.Id == id);
+
+    /// <summary>
+    /// Restores soft deleted rows that match <paramref name="predicate"/>. See <see cref="RestoreAsync(Expression{Func{TEntity, bool}}, CancellationToken)"/>.
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <returns> Number of restored rows. </returns>
+    /// <exception cref="MilvaDeveloperException"> When <typeparamref name="TEntity"/> is not soft deletable. </exception>
+    public virtual int Restore(Expression<Func<TEntity, bool>> predicate)
+    {
+        var propertyBuilder = CreateRestorePropertyBuilder();
+
+        return CreateRestoreQuery(predicate).ExecuteUpdate(propertyBuilder.UpdateSettersBuilder);
     }
 
     /// <summary>

@@ -1,4 +1,4 @@
-using Milvasoft.Attributes.Annotations;
+﻿using Milvasoft.Attributes.Annotations;
 using System.Collections.Concurrent;
 using System.Reflection;
 
@@ -23,6 +23,12 @@ public enum RequestPropertyUsage
     /// <see cref="AggregationRequest"/> criteria.
     /// </summary>
     Aggregate,
+
+    /// <summary>
+    /// Values returned to clients by dynamic lookups (e.g. MilvaDbContext.GetLookupsAsync and GetPropertyValuesAsync of Milvasoft.DataAccess.EfCore).
+    /// Allowed like <see cref="Sort"/>: an explicit <see cref="FilterableAttribute"/>(true) allows a property, otherwise sensitive properties are rejected.
+    /// </summary>
+    Lookup,
 }
 
 /// <summary>
@@ -64,7 +70,7 @@ public static class RequestQueryOptions
 /// Decides which properties clients may filter, sort or aggregate by.
 /// </summary>
 /// <remarks>
-/// <para>A property is allowed unless one of these applies (an explicit <see cref="FilterableAttribute"/>(true) for filtering/sorting or
+/// <para>A property is allowed unless one of these applies (an explicit <see cref="FilterableAttribute"/>(true) for filtering/sorting/lookups or
 /// <see cref="AggregatableAttribute"/>(true) for aggregation always allows it):</para>
 /// <list type="bullet">
 /// <item>It is marked <see cref="FilterableAttribute"/>(false) (filtering) or <see cref="AggregatableAttribute"/>(false) (aggregation).</item>
@@ -139,6 +145,7 @@ public static class RequestPropertyPolicy
     {
         RequestPropertyUsage.Filter => "filtering",
         RequestPropertyUsage.Sort => "sorting",
+        RequestPropertyUsage.Lookup => "lookup",
         _ => "aggregation",
     };
 }

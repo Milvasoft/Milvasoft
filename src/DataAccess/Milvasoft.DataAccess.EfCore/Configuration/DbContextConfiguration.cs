@@ -6,9 +6,14 @@
 public class DbContextConfiguration
 {
     /// <summary>
-    /// If it is true converts all saved DateTimes to UTC. Default value is false.
+    /// If it is true, <see cref="DateTime"/> and <see cref="DateTimeOffset"/> values are stored in UTC (see <see cref="DbContextBase.ModelBuilderExtensions.UseUtcDateTime"/>)
+    /// and audit dates are set with <see cref="DateTime.UtcNow"/>. Default value is true.
     /// </summary>
-    public bool UseUtcForDateTime { get; set; } = false;
+    /// <remarks>
+    /// In UTC mode <see cref="DateTimeKind.Unspecified"/> values are treated as UTC, <see cref="DateTimeKind.Local"/> values are converted to UTC.
+    /// Set it to false to keep local times (e.g. for <c>timestamp without time zone</c> columns); then dates are not converted and audit dates use <see cref="DateTime.Now"/>.
+    /// </remarks>
+    public bool UseUtcForDateTime { get; set; } = true;
 
     /// <summary>
     /// Soft delete state when delete operation. Default value is false.

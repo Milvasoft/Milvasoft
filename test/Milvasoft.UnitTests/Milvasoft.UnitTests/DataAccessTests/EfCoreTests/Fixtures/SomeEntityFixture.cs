@@ -1,4 +1,5 @@
-﻿using Milvasoft.Core.EntityBases.Concrete;
+﻿using Milvasoft.Attributes.Annotations;
+using Milvasoft.Core.EntityBases.Concrete;
 using Milvasoft.Core.EntityBases.Concrete.Auditing;
 using System.ComponentModel.DataAnnotations;
 
@@ -33,4 +34,16 @@ public class SomeFullAuditableEntityFixture : FullAuditableEntity<int>
     public string SomeStringProp { get; set; }
     public DateTime SomeDateProp { get; set; }
     public decimal SomeDecimalProp { get; set; }
+}
+
+public class PolicyTestEntityFixture : FullAuditableEntity<int>
+{
+    public string Name { get; set; }
+    public string PasswordHash { get; set; }
+
+    [Encrypted]
+    public string EncryptedValue { get; set; }
+
+    [Filterable(true)]
+    public int Rank { get; set; }
 }

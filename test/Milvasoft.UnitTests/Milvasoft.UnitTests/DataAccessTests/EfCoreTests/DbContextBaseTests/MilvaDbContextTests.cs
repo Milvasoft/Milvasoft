@@ -137,7 +137,7 @@ public class MilvaDbContextTests
         var services = GetServices(dataAccessConfiguration);
         var dbContext = services.GetService<SomeMilvaDbContextFixture>();
         ResetDatabase(dbContext);
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         var entity = new SomeBaseEntityFixture
         {
             Id = 1,
@@ -260,7 +260,7 @@ public class MilvaDbContextTests
         var services = GetServices(dataAccessConfiguration);
         var dbContext = services.GetService<SomeMilvaDbContextFixture>();
         ResetDatabase(dbContext);
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         var entity = new SomeBaseEntityFixture
         {
             Id = 1,
@@ -301,7 +301,7 @@ public class MilvaDbContextTests
         var services = GetServices(dataAccessConfiguration);
         var dbContext = services.GetService<SomeMilvaDbContextFixture>();
         ResetDatabase(dbContext);
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         var entities = new List<SomeBaseEntityFixture>
         {
              new() {
@@ -405,7 +405,7 @@ public class MilvaDbContextTests
         var services = GetServices(dataAccessConfiguration);
         var dbContext = services.GetService<SomeMilvaDbContextFixture>();
         ResetDatabase(dbContext);
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         var entities = new List<SomeBaseEntityFixture>
         {
              new() {
@@ -659,7 +659,7 @@ public class MilvaDbContextTests
         };
 
         // Act
-        var result = await dbContext.GetLookupsAsync(request);
+        var result = await dbContext.GetLookupsAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeEmpty();
@@ -688,7 +688,7 @@ public class MilvaDbContextTests
         ResetDatabase(dbContext);
 
         // Act
-        Func<Task> act = async () => await dbContext.GetLookupsAsync(lookupRequest);
+        Func<Task> act = async () => await dbContext.GetLookupsAsync(lookupRequest, TestContext.Current.CancellationToken);
 
         // Assert
         return act.Should().ThrowAsync<MilvaUserFriendlyException>();
@@ -738,7 +738,7 @@ public class MilvaDbContextTests
         object expectedData = new { SomeDecimalProp = 10M, Id = 1 };
 
         // Act
-        var result = await dbContext.GetLookupsAsync(lookupRequest);
+        var result = await dbContext.GetLookupsAsync(lookupRequest, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(1);
@@ -814,7 +814,7 @@ public class MilvaDbContextTests
         ResetDatabase(dbContext);
 
         // Act
-        Func<Task> act = async () => await dbContext.GetPropertyValuesAsync(request);
+        Func<Task> act = async () => await dbContext.GetPropertyValuesAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         return act.Should().ThrowAsync<MilvaUserFriendlyException>();
@@ -871,7 +871,7 @@ public class MilvaDbContextTests
         };
 
         // Act
-        var result = await dbContext.GetPropertyValuesAsync(request);
+        var result = await dbContext.GetPropertyValuesAsync(request, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(2);
@@ -912,7 +912,7 @@ public class MilvaDbContextTests
         await dbContext.SaveChangesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Act
-        var result = await dbContext.GetContentsAsync<SomeBaseEntityFixture>(null, null, null);
+        var result = await dbContext.GetContentsAsync<SomeBaseEntityFixture>(null, null, null, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().HaveCount(1);
