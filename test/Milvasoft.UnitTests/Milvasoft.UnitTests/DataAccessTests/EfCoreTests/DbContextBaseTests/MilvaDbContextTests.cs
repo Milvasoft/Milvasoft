@@ -137,7 +137,7 @@ public class MilvaDbContextTests
         var services = GetServices(dataAccessConfiguration);
         var dbContext = services.GetService<SomeMilvaDbContextFixture>();
         ResetDatabase(dbContext);
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         var entity = new SomeBaseEntityFixture
         {
             Id = 1,
@@ -260,7 +260,7 @@ public class MilvaDbContextTests
         var services = GetServices(dataAccessConfiguration);
         var dbContext = services.GetService<SomeMilvaDbContextFixture>();
         ResetDatabase(dbContext);
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         var entity = new SomeBaseEntityFixture
         {
             Id = 1,
@@ -301,7 +301,7 @@ public class MilvaDbContextTests
         var services = GetServices(dataAccessConfiguration);
         var dbContext = services.GetService<SomeMilvaDbContextFixture>();
         ResetDatabase(dbContext);
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         var entities = new List<SomeBaseEntityFixture>
         {
              new() {
@@ -405,7 +405,7 @@ public class MilvaDbContextTests
         var services = GetServices(dataAccessConfiguration);
         var dbContext = services.GetService<SomeMilvaDbContextFixture>();
         ResetDatabase(dbContext);
-        var now = DateTime.Now;
+        var now = DateTime.UtcNow;
         var entities = new List<SomeBaseEntityFixture>
         {
              new() {
