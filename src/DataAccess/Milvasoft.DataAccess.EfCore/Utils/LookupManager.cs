@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.MultiLanguage;
 using Milvasoft.Core.MultiLanguage.EntityBases;
 using Milvasoft.Core.MultiLanguage.EntityBases.Abstract;
@@ -20,7 +21,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
     private static readonly MethodInfo _createProjectionExpressionMethod = typeof(MultiLanguageExtensions).GetMethod(nameof(MultiLanguageExtensions.CreateProjectionExpression));
     private const string _taskResultPropertyName = "Result";
     private static readonly ConcurrentDictionary<Type, Func<object>> _typeFactoryCache = new();
-    private static readonly ConcurrentDictionary<Type, Func<MilvaDbContext, object, object, object, bool, Task>> _getContentsMethodCache = new();
+    private static readonly ConcurrentDictionary<Type, Func<MilvaDbContext, object, object, object, bool, int?, CancellationToken, Task>> _getContentsMethodCache = new();
 
     internal class LookupContext
     {
@@ -38,7 +39,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
         public List<string> TranslationWithJsonEntityPropertyNames { get; set; }
     }
 
-    public async Task<List<object>> GetLookupsAsync(LookupRequest lookupRequest)
+    public async Task<List<object>> GetLookupsAsync(LookupRequest lookupRequest, CancellationToken cancellationToken = default)
     {
         if (lookupRequest?.Parameters.IsNullOrEmpty() ?? true)
             return [];
@@ -57,7 +58,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
 
             parameter.UpdateFilterByForTranslationPropertyNames(context.PropertyNames.TranslationEntityPropertyNames);
 
-            var lookupList = await FetchLookupDataAsync(context, projectionExpression);
+            var lookupList = await FetchLookupDataAsync(context, projectionExpression, cancellationToken);
 
             if (lookupList.Count > 0)
             {
@@ -124,10 +125,14 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
 
             if (prop != null)
             {
+                RequestPropertyPolicy.EnsureAllowed(prop, RequestPropertyUsage.Lookup, requestedPropName);
+
                 mainEntityPropertyNames.Add(requestedPropName);
             }
-            else if (translationEntityType != null && CommonHelper.PropertyExists(translationEntityType, requestedPropName))
+            else if (translationEntityType != null && CommonHelper.GetPublicPropertyIgnoreCase(translationEntityType, requestedPropName) is PropertyInfo translationProp)
             {
+                RequestPropertyPolicy.EnsureAllowed(translationProp, RequestPropertyUsage.Lookup, requestedPropName);
+
                 if (isTranslationsEntityJson)
                     translationEntityWithJsonPropNames.Add(requestedPropName);
                 else
@@ -161,9 +166,15 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
                 context.RequestParameter.FetchSoftDeletedEntities
             ]);
 
-    private async Task<IList> FetchLookupDataAsync(LookupContext context, object projectionExpression)
+    private async Task<IList> FetchLookupDataAsync(LookupContext context, object projectionExpression, CancellationToken cancellationToken)
     {
-        var taskResult = CallGetContentsAsync(context.EntityType, context.RequestParameter.Filtering, context.RequestParameter.Sorting, projectionExpression, context.RequestParameter.FetchSoftDeletedEntities);
+        var taskResult = CallGetContentsAsync(context.EntityType,
+                                              context.RequestParameter.Filtering,
+                                              context.RequestParameter.Sorting,
+                                              projectionExpression,
+                                              context.RequestParameter.FetchSoftDeletedEntities,
+                                              _dataAccessConfiguration.DbContext.DynamicFetch.GetEffectiveMaxRowCount(),
+                                              cancellationToken);
 
         await taskResult;
 
@@ -268,7 +279,7 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
         return propNamesForProjection;
     }
 
-    private Task CallGetContentsAsync(Type entityType, object filtering, object sorting, object projection, bool fetchSoftDeletedEntities)
+    private Task CallGetContentsAsync(Type entityType, object filtering, object sorting, object projection, bool fetchSoftDeletedEntities, int? maxRowCount, CancellationToken cancellationToken)
     {
         var func = _getContentsMethodCache.GetOrAdd(entityType, type =>
         {
@@ -281,19 +292,30 @@ internal class LookupManager(MilvaDbContext dbContext, IDataAccessConfiguration 
             var sortingParam = Expression.Parameter(typeof(object));
             var projectionParam = Expression.Parameter(typeof(object));
             var fetchSoftDeletedParam = Expression.Parameter(typeof(bool));
+            var maxRowCountParam = Expression.Parameter(typeof(int?));
+            var cancellationTokenParam = Expression.Parameter(typeof(CancellationToken));
 
             var call = Expression.Call(contextParam,
                                        method,
                                        Expression.Convert(filteringParam, method.GetParameters()[0].ParameterType),
                                        Expression.Convert(sortingParam, method.GetParameters()[1].ParameterType),
                                        Expression.Convert(projectionParam, method.GetParameters()[2].ParameterType),
-                                       fetchSoftDeletedParam);
+                                       fetchSoftDeletedParam,
+                                       maxRowCountParam,
+                                       cancellationTokenParam);
 
-            var lambda = Expression.Lambda<Func<MilvaDbContext, object, object, object, bool, Task>>(call, contextParam, filteringParam, sortingParam, projectionParam, fetchSoftDeletedParam);
+            var lambda = Expression.Lambda<Func<MilvaDbContext, object, object, object, bool, int?, CancellationToken, Task>>(call,
+                                                                                                                         contextParam,
+                                                                                                                         filteringParam,
+                                                                                                                         sortingParam,
+                                                                                                                         projectionParam,
+                                                                                                                         fetchSoftDeletedParam,
+                                                                                                                         maxRowCountParam,
+                                                                                                                         cancellationTokenParam);
 
             return lambda.Compile();
         });
 
-        return func(_dbContext, filtering, sorting, projection, fetchSoftDeletedEntities);
+        return func(_dbContext, filtering, sorting, projection, fetchSoftDeletedEntities, maxRowCount, cancellationToken);
     }
 }

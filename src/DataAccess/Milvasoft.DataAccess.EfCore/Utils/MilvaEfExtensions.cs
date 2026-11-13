@@ -16,6 +16,12 @@ namespace Milvasoft.DataAccess.EfCore.Utils;
 public static class MilvaEfExtensions
 {
     /// <summary>
+    /// Takes at most <paramref name="maxRowCount"/> items when it is greater than zero, otherwise returns <paramref name="query"/>.
+    /// </summary>
+    internal static IQueryable<T> TakeIfLimited<T>(this IQueryable<T> query, int? maxRowCount)
+        => maxRowCount > 0 ? query.Take(maxRowCount.Value) : query;
+
+    /// <summary>
     /// Applies filtering options to the IQueryable data source.
     /// </summary>
     /// <typeparam name="TEntity">The type of entity in the IQueryable.</typeparam>

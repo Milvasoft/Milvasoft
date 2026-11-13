@@ -98,6 +98,26 @@ public class RequestPropertyPolicyTests
         act.Should().Throw<MilvaUserFriendlyException>();
     }
 
+    [Theory]
+    [InlineData(nameof(PolicyEntity.PasswordHash))]
+    [InlineData(nameof(PolicyEntity.SecurityStamp))]
+    [InlineData(nameof(PolicyEntity.ClientSecret))]
+    [InlineData(nameof(PolicyEntity.EncryptedValue))]
+    [InlineData(nameof(PolicyEntity.HiddenValue))]
+    public void Lookup_OfSensitiveProperty_ShouldBeRejected(string propertyName)
+    {
+        var act = () => RequestPropertyPolicy.EnsureAllowed(typeof(PolicyEntity).GetProperty(propertyName), RequestPropertyUsage.Lookup, propertyName);
+
+        act.Should().Throw<MilvaUserFriendlyException>();
+    }
+
+    [Theory]
+    [InlineData(nameof(PolicyEntity.Name))]
+    [InlineData(nameof(PolicyEntity.Token))]
+    [InlineData(nameof(PolicyEntity.NotFilterable))]
+    public void Lookup_OfNotSensitiveOrExplicitlyAllowedProperty_ShouldBeAllowed(string propertyName)
+        => RequestPropertyPolicy.IsAllowed(typeof(PolicyEntity).GetProperty(propertyName), RequestPropertyUsage.Lookup).Should().BeTrue();
+
     [Fact]
     public void RowCount_AboveMaximum_ShouldBeCapped()
     {

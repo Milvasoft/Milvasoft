@@ -1,4 +1,5 @@
-﻿using Milvasoft.DataAccess.EfCore.DbContextBase;
+﻿using Milvasoft.Components.Rest.Request;
+using Milvasoft.DataAccess.EfCore.DbContextBase;
 using Milvasoft.DataAccess.EfCore.Utils.LookupModels;
 using System.Reflection;
 
@@ -12,12 +13,12 @@ public class DynamicFetchConfiguration
     private static Assembly _entityAssembly = null;
 
     /// <summary>
-    /// Entity assembly for <see cref="MilvaDbContext.GetLookupsAsync(LookupRequest)"/> and <see cref="MilvaDbContext.GetPropertyValuesAsync(EntityPropertyValuesRequest)"/> operations.
+    /// Entity assembly for <see cref="MilvaDbContext.GetLookupsAsync(LookupRequest, CancellationToken)"/> and <see cref="MilvaDbContext.GetPropertyValuesAsync(EntityPropertyValuesRequest, CancellationToken)"/> operations.
     /// </summary>
     public string EntityAssemblyName { get; set; }
 
     /// <summary>
-    /// Allowed entity names for <see cref="MilvaDbContext.GetLookupsAsync(LookupRequest)"/> and <see cref="MilvaDbContext.GetPropertyValuesAsync(EntityPropertyValuesRequest)"/> operations.
+    /// Allowed entity names for <see cref="MilvaDbContext.GetLookupsAsync(LookupRequest, CancellationToken)"/> and <see cref="MilvaDbContext.GetPropertyValuesAsync(EntityPropertyValuesRequest, CancellationToken)"/> operations.
     /// </summary>
     public List<string> AllowedEntityNamesForLookup { get; set; } = [];
 
@@ -25,6 +26,23 @@ public class DynamicFetchConfiguration
     /// Allowed entity count for dynamic fetch. Default value is 5.
     /// </summary>
     public int MaxAllowedPropertyCountForLookup { get; set; } = 5;
+
+    /// <summary>
+    /// Maximum number of rows returned for each entity of a lookup request and for a property values request. Larger results are truncated (after sorting).
+    /// When null, <see cref="RequestQueryOptions.MaxRowCount"/> (default 1000) is used. Zero or less disables the limit.
+    /// </summary>
+    public int? MaxRowCount { get; set; }
+
+    /// <summary>
+    /// Gets the row limit to apply (see <see cref="MaxRowCount"/>), or null when there is no limit.
+    /// </summary>
+    /// <returns></returns>
+    public int? GetEffectiveMaxRowCount()
+    {
+        var maxRowCount = MaxRowCount ?? RequestQueryOptions.MaxRowCount;
+
+        return maxRowCount > 0 ? maxRowCount : null;
+    }
 
     /// <summary>
     /// Gets assembly for entity operations.    
