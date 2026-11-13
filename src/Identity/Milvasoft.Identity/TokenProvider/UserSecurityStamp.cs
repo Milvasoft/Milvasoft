@@ -1,20 +1,44 @@
 using Milvasoft.Identity.Concrete.Entity;
+using System.Buffers.Text;
 using System.Security.Cryptography;
 
 namespace Milvasoft.Identity.TokenProvider;
 
 /// <summary>
-/// Computes a per-user security stamp from the security-relevant state of a user.
+/// Computes the per-user security stamp that user tokens and 6 digit codes are bound to.
 /// </summary>
 /// <remarks>
-/// <see cref="MilvaUser{TKey}"/> has no persisted security stamp column, so the stamp is derived from the values whose change must
-/// invalidate outstanding user tokens: id, password hash, email, email confirmation, phone number and phone confirmation.
-/// As a result a token becomes invalid as soon as the operation it authorizes changes one of these values
-/// (password reset changes the password hash, email confirmation flips <see cref="MilvaUser{TKey}.EmailConfirmed"/>,
-/// email change changes <see cref="MilvaUser{TKey}.Email"/>), which makes tokens single-use.
+/// <para>
+/// The stamp is a SHA-256 hash of the values whose change must invalidate outstanding user tokens: id, password hash, email,
+/// email confirmation, phone number, phone confirmation and, when it is set, the persisted <see cref="MilvaUser{TKey}.SecurityStamp"/>.
+/// A token stops validating as soon as one of these values changes.
+/// </para>
+/// <para>
+/// <see cref="MilvaUser{TKey}.SecurityStamp"/> is a random value that <c>IMilvaUserManager</c> rotates whenever credentials or identity change and after a
+/// successful single-use token verification; <c>RotateSecurityStamp</c> revokes all outstanding tokens. The derived columns stay part of the hash
+/// so tokens are also invalidated when an application changes for example <see cref="MilvaUser{TKey}.Email"/> without going through the user manager.
+/// </para>
+/// <para>
+/// When <see cref="MilvaUser{TKey}.SecurityStamp"/> is null or empty (rows created before the column existed) the stamp is computed exactly as in
+/// earlier versions, so tokens issued before the upgrade stay valid. The first time a stamp is assigned to such a user, the computed stamp changes
+/// and every token issued to that user before (data protection tokens, at most one day old, and 6 digit codes) stops validating.
+/// </para>
 /// </remarks>
 public static class UserSecurityStamp
 {
+    /// <summary>
+    /// Size of a new random stamp in bytes.
+    /// </summary>
+    public const int NewStampByteLength = 32;
+
+    private const string _persistedStampLabel = "Milvasoft.Identity.SecurityStamp.v1";
+
+    /// <summary>
+    /// Creates a new random value for <see cref="MilvaUser{TKey}.SecurityStamp"/>: 32 random bytes, Base64Url encoded (43 characters).
+    /// </summary>
+    /// <returns>New random stamp.</returns>
+    public static string NewStamp() => Base64Url.EncodeToString(RandomNumberGenerator.GetBytes(NewStampByteLength));
+
     /// <summary>
     /// Computes the SHA-256 security stamp of <paramref name="user"/>.
     /// </summary>
@@ -36,6 +60,13 @@ public static class UserSecurityStamp
             writer.Write(user.EmailConfirmed);
             writer.Write(user.PhoneNumber ?? string.Empty);
             writer.Write(user.PhoneNumberConfirmed);
+
+            // Appended only when present, so stamps of users without a persisted stamp are byte-identical to earlier versions.
+            if (!string.IsNullOrEmpty(user.SecurityStamp))
+            {
+                writer.Write(_persistedStampLabel);
+                writer.Write(user.SecurityStamp);
+            }
         }
 
         return SHA256.HashData(ms.ToArray());

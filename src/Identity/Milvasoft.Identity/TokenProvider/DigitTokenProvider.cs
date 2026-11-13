@@ -12,8 +12,8 @@ namespace Milvasoft.Identity.TokenProvider;
 /// The per-user TOTP key is derived with HMAC-SHA256 from a server-side <c>secret</c>, the user's security stamp
 /// (see <see cref="UserSecurityStamp"/>), the <see cref="Purpose"/> and an optional <c>value</c> the code is bound to
 /// (for example the new email address for <see cref="Purpose.EmailChange"/>). Without the secret a code cannot be computed,
-/// and a code stops validating as soon as the user's security-relevant state changes (so it is single-use for the
-/// password reset, email confirmation and email change flows).
+/// and a code stops validating as soon as the user's security stamp changes. <c>MilvaUserManager.VerifyDigitToken</c> rotates the stamp
+/// after a successful verification, so codes verified through the user manager are single-use once the user is persisted.
 /// </para>
 /// <para>
 /// Codes are valid for roughly 6 to 15 minutes (3 minute time steps, two past and two future steps are accepted).

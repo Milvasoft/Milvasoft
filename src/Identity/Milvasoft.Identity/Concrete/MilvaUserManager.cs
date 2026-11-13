@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Milvasoft.Identity.Abstract;
 using Milvasoft.Identity.Concrete.Entity;
@@ -25,12 +25,7 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
     private readonly Lazy<IMilvaPasswordHasher> _passwordHasher = passwordHasher;
     private readonly MilvaIdentityOptions _options = options;
 
-    /// <summary>
-    /// Sets password hash, normalized columns etc.
-    /// </summary>
-    /// <param name="user"></param>
-    /// <param name="password"></param>
-    /// <returns></returns>
+    /// <inheritdoc/>
     public virtual void ConfigureForCreate(ref TUser user, string password)
     {
         user.PasswordHash = _passwordHasher.Value.HashPassword(password);
@@ -40,6 +35,59 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
 
         user.NormalizedUserName = user.UserName.MilvaNormalize();
         user.NormalizedEmail = user.Email.MilvaNormalize();
+
+        RotateSecurityStamp(user);
+    }
+
+    /// <inheritdoc/>
+    public virtual void RotateSecurityStamp(TUser user)
+    {
+        ArgumentNullException.ThrowIfNull(user);
+
+        user.SecurityStamp = UserSecurityStamp.NewStamp();
+    }
+
+    /// <inheritdoc/>
+    public virtual void SetEmail(TUser user, string email, bool emailConfirmed = false)
+    {
+        ArgumentNullException.ThrowIfNull(user);
+
+        user.Email = email;
+        user.NormalizedEmail = email.MilvaNormalize();
+        user.EmailConfirmed = emailConfirmed;
+
+        RotateSecurityStamp(user);
+    }
+
+    /// <inheritdoc/>
+    public virtual void ConfirmEmail(TUser user)
+    {
+        ArgumentNullException.ThrowIfNull(user);
+
+        user.EmailConfirmed = true;
+
+        RotateSecurityStamp(user);
+    }
+
+    /// <inheritdoc/>
+    public virtual void SetPhoneNumber(TUser user, string phoneNumber, bool phoneNumberConfirmed = false)
+    {
+        ArgumentNullException.ThrowIfNull(user);
+
+        user.PhoneNumber = phoneNumber;
+        user.PhoneNumberConfirmed = phoneNumberConfirmed;
+
+        RotateSecurityStamp(user);
+    }
+
+    /// <inheritdoc/>
+    public virtual void ConfirmPhoneNumber(TUser user)
+    {
+        ArgumentNullException.ThrowIfNull(user);
+
+        user.PhoneNumberConfirmed = true;
+
+        RotateSecurityStamp(user);
     }
 
     /// <inheritdoc/>
@@ -66,21 +114,15 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
         return true;
     }
 
-    /// <summary>
-    /// Hashes password and sets user's password hash property.
-    /// </summary>
-    /// <param name="user">The user</param>
-    /// <param name="password"></param>
-    /// <returns></returns>
+    /// <inheritdoc/>
     public virtual void SetPasswordHash(TUser user, string password)
-        => user.PasswordHash = _passwordHasher.Value.HashPassword(password);
+    {
+        user.PasswordHash = _passwordHasher.Value.HashPassword(password);
 
-    /// <summary>
-    /// Validates and hashes password and sets user's password hash property. If validation failed throws exception.
-    /// </summary>
-    /// <param name="user">The user</param>
-    /// <param name="password"></param>
-    /// <returns></returns>
+        RotateSecurityStamp(user);
+    }
+
+    /// <inheritdoc/>
     public virtual void ValidateAndSetPasswordHash(TUser user, string password)
     {
         ThrowIfPasswordIsInvalid(password);
@@ -334,7 +376,14 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
 
     /// <inheritdoc/>
     public virtual bool VerifyUserToken(TUser user, Purpose purpose, string token, string value = null)
-        => _dataProtector.Value.Validate(GetPurpose(user, purpose, value), token, user.Id, UserSecurityStamp.ComputeString(user));
+    {
+        var isValid = _dataProtector.Value.Validate(GetPurpose(user, purpose, value), token, user.Id, UserSecurityStamp.ComputeString(user));
+
+        if (isValid && IsSingleUse(purpose))
+            RotateSecurityStamp(user);
+
+        return isValid;
+    }
 
     /// <inheritdoc/>
     [Obsolete("Tokens always use UTC. Use VerifyUserToken(user, purpose, token, value) instead.")]
@@ -346,7 +395,22 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
 
     /// <inheritdoc/>
     public virtual bool VerifyDigitToken(TUser user, Purpose purpose, string token, string value = null)
-        => DigitTokenProvider<TUser, TKey>.Validate(purpose, token, user, _options.Token.GetDigitTokenSecret(), value);
+    {
+        var isValid = DigitTokenProvider<TUser, TKey>.Validate(purpose, token, user, _options.Token.GetDigitTokenSecret(), value);
+
+        if (isValid && IsSingleUse(purpose))
+            RotateSecurityStamp(user);
+
+        return isValid;
+    }
+
+    /// <summary>
+    /// Returns whether a verified token or code of <paramref name="purpose"/> is consumed by rotating the user's security stamp.
+    /// All built-in purposes (email confirmation, email change, password reset) are single-use.
+    /// </summary>
+    /// <param name="purpose">The token purpose.</param>
+    /// <returns>True if the token must not be accepted twice.</returns>
+    protected virtual bool IsSingleUse(Purpose purpose) => purpose is Purpose.EmailConfirm or Purpose.EmailChange or Purpose.PasswordReset;
 
     /// <summary>
     /// Returns a flag indicating whether the supplied character is a digit.
