@@ -27,7 +27,7 @@ public static class ServiceCollectionExtensions
     /// <param name="builder"></param>
     /// <param name="options"></param>
     /// <returns></returns>
-    /// <exception cref="System.Security.Cryptography.CryptographicException">Thrown when the configured key is not 16, 24 or 32 bytes.</exception>
+    /// <exception cref="System.Security.Cryptography.CryptographicException">Thrown when the configured key is invalid. See <see cref="MilvaCryptographyProvider.ValidateKey(string)"/>.</exception>
     public static MilvaCryptographyBuilder WithOptions(this MilvaCryptographyBuilder builder, Action<IMilvaCryptographyOptions> options)
     {
         var config = new MilvaCryptographyOptions();
@@ -52,7 +52,7 @@ public static class ServiceCollectionExtensions
     /// <param name="builder"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException">Thrown when the configuration section is missing.</exception>
-    /// <exception cref="System.Security.Cryptography.CryptographicException">Thrown when the configured key is not 16, 24 or 32 bytes.</exception>
+    /// <exception cref="System.Security.Cryptography.CryptographicException">Thrown when the configured key is invalid. See <see cref="MilvaCryptographyProvider.ValidateKey(string)"/>.</exception>
     public static MilvaCryptographyBuilder WithOptions(this MilvaCryptographyBuilder builder)
     {
         if (builder.ConfigurationManager == null)

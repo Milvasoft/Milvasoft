@@ -17,15 +17,31 @@ namespace Milvasoft.Cryptography.Concrete;
 /// <item>Legacy string (decryption only): <c>Base64(iv[16] | AES ciphertext)</c> produced by older versions with the configured key, <see cref="IMilvaCryptographyOptions.Cipher"/> and <see cref="IMilvaCryptographyOptions.Padding"/>.
 /// Legacy encrypted files contain this string as text.</item>
 /// </list>
+/// <para><b>Keys</b></para>
+/// <list type="bullet">
+/// <item>Raw key (recommended for new deployments): <c>"base64:" + Base64(32 random bytes)</c>, for example the output of <see cref="GenerateKey"/>
+/// or <c>"base64:" + $(openssl rand -base64 32)</c>. The 32 decoded bytes are used directly as the AES-256-GCM key.
+/// The legacy AES-CBC format cannot be decrypted with such a key (no value was ever encrypted with it in that format).</item>
+/// <item>UTF-8 key (existing deployments): a string of 16, 24 or 32 bytes in UTF-8. The AES-GCM key is derived from it with HKDF-SHA256 and
+/// the UTF-8 bytes are also used as the key of the legacy AES-CBC format, so values encrypted with this key by any version stay decryptable.</item>
+/// </list>
 /// <para>
-/// The configured key must be 16, 24 or 32 bytes (UTF-8). The AES-GCM key is derived from it with HKDF-SHA256, so the same configured key
-/// keeps decrypting legacy values. The configured key must be a random secret; it is not stretched like a password.
+/// The two kinds never overlap: a <c>"base64:"</c> key is at least 50 characters long, longer than any UTF-8 key. A string that starts with
+/// <c>"base64:"</c> but is 16, 24 or 32 bytes long is therefore treated as a UTF-8 key, as it was in older versions.
+/// The key must be a random secret; it is not stretched like a password. It is validated when the services are registered (see <see cref="ValidateKey(string)"/>).
+/// Changing the key, including converting a UTF-8 key to the <c>"base64:"</c> form, makes existing values undecryptable.
 /// </para>
 /// </remarks>
 public class MilvaCryptographyProvider : IMilvaCryptographyProvider
 {
     #region Fields
 
+    /// <summary>
+    /// Prefix of a configured key that is the Base64 encoding of a 32 byte raw AES-256 key.
+    /// </summary>
+    public const string Base64KeyPrefix = "base64:";
+
+    private const int _rawKeySize = 32;
     private const string _stringFormatPrefix = "v2:";
     private const byte _formatVersion = 2;
     private const int _nonceSize = 12;
@@ -45,15 +61,24 @@ public class MilvaCryptographyProvider : IMilvaCryptographyProvider
     /// Creates a new <see cref="MilvaCryptographyProvider"/> instance.
     /// </summary>
     /// <param name="milvaCryptographyOptions">Cryptography options.</param>
-    /// <exception cref="CryptographicException">Thrown when the key is not 16, 24 or 32 bytes.</exception>
+    /// <exception cref="CryptographicException">Thrown when the key is invalid. See <see cref="ValidateKey(string)"/>.</exception>
     public MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptographyOptions)
     {
         ArgumentNullException.ThrowIfNull(milvaCryptographyOptions);
 
         ValidateKey(milvaCryptographyOptions.Key);
 
-        _legacyKey = Encoding.UTF8.GetBytes(milvaCryptographyOptions.Key);
-        _key = HKDF.DeriveKey(HashAlgorithmName.SHA256, _legacyKey, 32, salt: [], info: _keyDerivationInfo);
+        if (TryDecodeBase64Key(milvaCryptographyOptions.Key, out var rawKey))
+        {
+            _key = rawKey;
+            _legacyKey = null;
+        }
+        else
+        {
+            _legacyKey = Encoding.UTF8.GetBytes(milvaCryptographyOptions.Key);
+            _key = HKDF.DeriveKey(HashAlgorithmName.SHA256, _legacyKey, _rawKeySize, salt: [], info: _keyDerivationInfo);
+        }
+
         _legacyMode = milvaCryptographyOptions.Cipher;
         _legacyPadding = milvaCryptographyOptions.Padding;
     }
@@ -63,23 +88,63 @@ public class MilvaCryptographyProvider : IMilvaCryptographyProvider
     /// </summary>
     /// <param name="milvaCryptographyOptions">Cryptography options.</param>
     /// <param name="recyclableMemoryStreamManager">Not used anymore. Kept for constructor compatibility.</param>
-    /// <exception cref="CryptographicException">Thrown when the key is not 16, 24 or 32 bytes.</exception>
+    /// <exception cref="CryptographicException">Thrown when the key is invalid. See <see cref="ValidateKey(string)"/>.</exception>
     public MilvaCryptographyProvider(IMilvaCryptographyOptions milvaCryptographyOptions, RecyclableMemoryStreamManager recyclableMemoryStreamManager) : this(milvaCryptographyOptions)
     {
     }
 
     /// <summary>
-    /// Validates that <paramref name="key"/> is a valid AES key (16, 24 or 32 bytes in UTF-8).
+    /// Validates that <paramref name="key"/> is either <c>"base64:"</c> followed by the Base64 encoding of exactly 32 bytes,
+    /// or a string of 16, 24 or 32 bytes in UTF-8.
     /// </summary>
     /// <param name="key">Configured key.</param>
-    /// <exception cref="CryptographicException">Thrown when the key is null or its size is invalid.</exception>
+    /// <exception cref="CryptographicException">Thrown when the key is null or invalid.</exception>
     public static void ValidateKey(string key)
     {
-        var keySize = key == null ? 0 : Encoding.UTF8.GetByteCount(key);
+        if (TryDecodeBase64Key(key, out _) || IsUtf8Key(key))
+            return;
 
-        if (keySize is not (16 or 24 or 32))
-            throw new CryptographicException("Milvasoft cryptography key must be 16, 24 or 32 bytes (UTF-8).");
+        if (key != null && key.StartsWith(Base64KeyPrefix, StringComparison.Ordinal))
+            throw new CryptographicException($"Milvasoft cryptography key with the '{Base64KeyPrefix}' prefix must be the Base64 encoding of exactly {_rawKeySize} bytes.");
+
+        throw new CryptographicException($"Milvasoft cryptography key must be '{Base64KeyPrefix}' followed by the Base64 encoding of {_rawKeySize} random bytes, or 16, 24 or 32 bytes (UTF-8).");
     }
+
+    /// <summary>
+    /// Generates a new random key in the <c>"base64:"</c> form (32 random bytes).
+    /// </summary>
+    /// <returns>A key such as <c>base64:3q2+7w...=</c>.</returns>
+    public static string GenerateKey() => Base64KeyPrefix + Convert.ToBase64String(RandomNumberGenerator.GetBytes(_rawKeySize));
+
+    /// <summary>
+    /// Decodes a <c>"base64:"</c> key. A UTF-8 key of 16, 24 or 32 bytes is never decoded, even when it starts with the prefix,
+    /// because a Base64 encoded 32 byte key does not fit in 32 bytes.
+    /// </summary>
+    private static bool TryDecodeBase64Key(string key, out byte[] rawKey)
+    {
+        rawKey = null;
+
+        if (key == null || !key.StartsWith(Base64KeyPrefix, StringComparison.Ordinal) || IsUtf8Key(key))
+            return false;
+
+        var encoded = key[Base64KeyPrefix.Length..];
+
+        // Room for one extra byte so that a longer key is detected instead of being truncated.
+        Span<byte> buffer = stackalloc byte[_rawKeySize + 3];
+
+        if (!Convert.TryFromBase64String(encoded, buffer, out var written) || written != _rawKeySize)
+        {
+            CryptographicOperations.ZeroMemory(buffer);
+            return false;
+        }
+
+        rawKey = buffer[.._rawKeySize].ToArray();
+        CryptographicOperations.ZeroMemory(buffer);
+
+        return true;
+    }
+
+    private static bool IsUtf8Key(string key) => key != null && Encoding.UTF8.GetByteCount(key) is 16 or 24 or 32;
 
     #region Async Encryption
 
@@ -230,6 +295,9 @@ public class MilvaCryptographyProvider : IMilvaCryptographyProvider
     /// </summary>
     private string DecryptLegacy(string value)
     {
+        if (_legacyKey == null)
+            throw new CryptographicException($"The value is not in the '{_stringFormatPrefix}' format. The legacy format cannot be decrypted with a '{Base64KeyPrefix}' key.");
+
         var input = Convert.FromBase64String(value);
 
         if (input.Length <= _legacyIvSize)
