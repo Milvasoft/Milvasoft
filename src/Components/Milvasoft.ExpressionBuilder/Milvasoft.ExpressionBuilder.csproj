@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<PackageId>Milvasoft.ExpressionBuilder</PackageId>
+		<Product>Milvasoft.ExpressionBuilder</Product>
+		<RootNamespace>ExpressionBuilder</RootNamespace>
+		<Description>Builds EF Core translatable filter predicates from property paths and operations.</Description>
+		<PackageTags>expression, filter, predicate, linq, efcore</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Update="AsyncFixer" Version="2.1.0" />
+	</ItemGroup>
+
+</Project>

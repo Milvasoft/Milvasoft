@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <None Remove="C:\Users\bugra\.nuget\packages\milvasoft.expressionbuilder\9.0.1\contentFiles\any\net9.0\readme.md" />
     <None Remove="F:\MilvasoftHelper\Milvasoft\resources\milvalogo.png" />
     <None Remove="F:\MilvasoftHelper\Milvasoft\resources\readme.md" />
   </ItemGroup>
@@ -12,11 +11,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="11.0.0-rc.3.26522.148" />
-    <PackageReference Include="Milvasoft.ExpressionBuilder" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Milvasoft.Attributes.Annotations\Milvasoft.Attributes.Annotations.csproj" />
+    <ProjectReference Include="..\Milvasoft.ExpressionBuilder\Milvasoft.ExpressionBuilder.csproj" />
     <ProjectReference Include="..\..\Core\Milvasoft.Core\Milvasoft.Core.csproj" />
   </ItemGroup>
 

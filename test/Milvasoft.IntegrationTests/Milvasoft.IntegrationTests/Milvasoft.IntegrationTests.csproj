@@ -51,6 +51,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Include="..\..\Milvasoft.UnitTests\Milvasoft.UnitTests\ComponentsTests\ExpressionBuilderTests\Fixture\FilterEntityFixture.cs" Link="ExpressionBuilderTests\Fixture\FilterEntityFixture.cs" />
+		<Compile Include="..\..\Milvasoft.UnitTests\Milvasoft.UnitTests\ComponentsTests\ExpressionBuilderTests\Fixture\FilterCaseData.cs" Link="ExpressionBuilderTests\Fixture\FilterCaseData.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <PackageReference Update="AsyncFixer" Version="2.1.0" />
 	</ItemGroup>
 
