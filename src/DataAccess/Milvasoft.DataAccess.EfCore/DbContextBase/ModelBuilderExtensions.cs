@@ -48,8 +48,14 @@ public static class ModelBuilderExtensions
     }
 
     /// <summary>
-    /// Use UTC for datetime types.
+    /// Stores <see cref="DateTime"/> and <see cref="DateTimeOffset"/> values in UTC.
     /// </summary>
+    /// <remarks>
+    /// <para> <see cref="DateTime"/> values are converted with <see cref="ToUtc(DateTime)"/> on write: <see cref="DateTimeKind.Local"/> values are converted to UTC,
+    ///        <see cref="DateTimeKind.Unspecified"/> values are treated as UTC (only their kind is changed, the clock value is kept) and UTC values are kept.
+    ///        Values read from the database are returned with <see cref="DateTimeKind.Utc"/>. </para>
+    /// <para> <see cref="DateTimeOffset"/> values are converted to UTC (offset 0) on write. </para>
+    /// </remarks>
     /// <param name="modelBuilder"></param>
     public static ModelBuilder UseUtcDateTime(this ModelBuilder modelBuilder)
     {
@@ -61,13 +67,13 @@ public static class ModelBuilderExtensions
                 {
                     modelBuilder.Entity(entityType.ClrType)
                                 .Property<DateTime>(property.Name)
-                                .HasConversion(v => v.ToUniversalTime(), v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+                                .HasConversion(v => ToUtc(v), v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
                 }
                 else if (property.ClrType == typeof(DateTime?))
                 {
                     modelBuilder.Entity(entityType.ClrType)
                                 .Property<DateTime?>(property.Name)
-                                .HasConversion(v => v.HasValue ? v.Value.ToUniversalTime() : v, v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
+                                .HasConversion(v => v.HasValue ? ToUtc(v.Value) : v, v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
                 }
                 else if (property.ClrType == typeof(DateTimeOffset))
                 {
@@ -86,6 +92,19 @@ public static class ModelBuilderExtensions
 
         return modelBuilder;
     }
+
+    /// <summary>
+    /// Converts <paramref name="value"/> to UTC for storage. <see cref="DateTimeKind.Local"/> values are converted to UTC;
+    /// <see cref="DateTimeKind.Unspecified"/> values are treated as UTC (the clock value is kept, never shifted by the server's time zone).
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static DateTime ToUtc(DateTime value) => value.Kind switch
+    {
+        DateTimeKind.Utc => value,
+        DateTimeKind.Local => value.ToUniversalTime(),
+        _ => DateTime.SpecifyKind(value, DateTimeKind.Utc),
+    };
 
     /// <summary>
     /// Adds <see cref="ObjectId"/> converters to <see cref="ObjectId"/> typed properties.

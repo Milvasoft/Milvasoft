@@ -33,9 +33,9 @@ public abstract class MilvaDbContext(DbContextOptions options) : DbContext(optio
     protected SoftDeletionState _currentSoftDeleteState;
 
     /// <summary>
-    /// Default prop for datetime configuration.
+    /// Default prop for datetime configuration. Same default as <see cref="DbContextConfiguration.UseUtcForDateTime"/>.
     /// </summary>
-    protected bool _useUtcForDateTimes = false;
+    protected bool _useUtcForDateTimes = true;
 
     /// <summary>
     /// It updates the state that determines whether soft delete state reset to default occurs after any operation.
