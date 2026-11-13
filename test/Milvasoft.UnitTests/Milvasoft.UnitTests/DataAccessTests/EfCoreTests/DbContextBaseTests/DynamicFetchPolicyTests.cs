@@ -16,14 +16,14 @@ namespace Milvasoft.UnitTests.DataAccessTests.EfCoreTests.DbContextBaseTests;
 public class DynamicFetchPolicyTests
 {
     [Theory]
-    [InlineData(nameof(LookupTestEntityFixture.PasswordHash))]
-    [InlineData(nameof(LookupTestEntityFixture.EncryptedValue))]
+    [InlineData(nameof(PolicyTestEntityFixture.PasswordHash))]
+    [InlineData(nameof(PolicyTestEntityFixture.EncryptedValue))]
     public async Task GetLookupsAsync_WithSensitiveProperty_ShouldThrow(string propertyName)
     {
         // Arrange
         var dbContext = await CreateContextAsync(rowCount: 1);
 
-        var request = new LookupRequest { Parameters = [new() { EntityName = nameof(LookupTestEntityFixture), RequestedPropertyNames = [propertyName] }] };
+        var request = new LookupRequest { Parameters = [new() { EntityName = nameof(PolicyTestEntityFixture), RequestedPropertyNames = [propertyName] }] };
 
         // Act
         var act = () => dbContext.GetLookupsAsync(request, TestContext.Current.CancellationToken);
@@ -44,9 +44,9 @@ public class DynamicFetchPolicyTests
             [
                 new()
                 {
-                    EntityName = nameof(LookupTestEntityFixture),
-                    RequestedPropertyNames = [nameof(LookupTestEntityFixture.Name)],
-                    Sorting = new SortRequest { SortBy = nameof(LookupTestEntityFixture.Id) }
+                    EntityName = nameof(PolicyTestEntityFixture),
+                    RequestedPropertyNames = [nameof(PolicyTestEntityFixture.Name)],
+                    Sorting = new SortRequest { SortBy = nameof(PolicyTestEntityFixture.Id) }
                 }
             ]
         };
@@ -64,7 +64,7 @@ public class DynamicFetchPolicyTests
         // Arrange
         var dbContext = await CreateContextAsync(rowCount: 3);
 
-        var request = new LookupRequest { Parameters = [new() { EntityName = nameof(LookupTestEntityFixture), RequestedPropertyNames = [nameof(LookupTestEntityFixture.Name)] }] };
+        var request = new LookupRequest { Parameters = [new() { EntityName = nameof(PolicyTestEntityFixture), RequestedPropertyNames = [nameof(PolicyTestEntityFixture.Name)] }] };
 
         // Act
         var result = await dbContext.GetLookupsAsync(request, TestContext.Current.CancellationToken);
@@ -80,7 +80,7 @@ public class DynamicFetchPolicyTests
         // Arrange
         var dbContext = await CreateContextAsync(rowCount: 1);
 
-        var request = new LookupRequest { Parameters = [new() { EntityName = nameof(LookupTestEntityFixture), RequestedPropertyNames = [nameof(LookupTestEntityFixture.Name)] }] };
+        var request = new LookupRequest { Parameters = [new() { EntityName = nameof(PolicyTestEntityFixture), RequestedPropertyNames = [nameof(PolicyTestEntityFixture.Name)] }] };
 
         // Act
         var act = () => dbContext.GetLookupsAsync(request, new CancellationToken(canceled: true));
@@ -90,14 +90,14 @@ public class DynamicFetchPolicyTests
     }
 
     [Theory]
-    [InlineData(nameof(LookupTestEntityFixture.PasswordHash))]
-    [InlineData(nameof(LookupTestEntityFixture.EncryptedValue))]
+    [InlineData(nameof(PolicyTestEntityFixture.PasswordHash))]
+    [InlineData(nameof(PolicyTestEntityFixture.EncryptedValue))]
     public async Task GetPropertyValuesAsync_WithSensitiveProperty_ShouldThrow(string propertyName)
     {
         // Arrange
         var dbContext = await CreateContextAsync(rowCount: 1);
 
-        var request = new EntityPropertyValuesRequest { EntityName = nameof(LookupTestEntityFixture), PropertyName = propertyName };
+        var request = new EntityPropertyValuesRequest { EntityName = nameof(PolicyTestEntityFixture), PropertyName = propertyName };
 
         // Act
         var act = () => dbContext.GetPropertyValuesAsync(request, TestContext.Current.CancellationToken);
@@ -112,7 +112,7 @@ public class DynamicFetchPolicyTests
         // Arrange
         var dbContext = await CreateContextAsync(rowCount: 5, maxRowCount: 2);
 
-        var request = new EntityPropertyValuesRequest { EntityName = nameof(LookupTestEntityFixture), PropertyName = nameof(LookupTestEntityFixture.Name) };
+        var request = new EntityPropertyValuesRequest { EntityName = nameof(PolicyTestEntityFixture), PropertyName = nameof(PolicyTestEntityFixture.Name) };
 
         // Act
         var result = await dbContext.GetPropertyValuesAsync(request, TestContext.Current.CancellationToken);
@@ -130,7 +130,7 @@ public class DynamicFetchPolicyTests
                 DynamicFetch = new DynamicFetchConfiguration
                 {
                     EntityAssemblyName = "Milvasoft.UnitTests",
-                    AllowedEntityNamesForLookup = [nameof(LookupTestEntityFixture)],
+                    AllowedEntityNamesForLookup = [nameof(PolicyTestEntityFixture)],
                     MaxRowCount = maxRowCount
                 }
             }
@@ -144,7 +144,7 @@ public class DynamicFetchPolicyTests
         var dbContext = services.BuildServiceProvider().GetRequiredService<SomeMilvaDbContextFixture>();
 
         for (int i = 1; i <= rowCount; i++)
-            dbContext.LookupTestEntities.Add(new LookupTestEntityFixture { Id = i, Name = $"name{i}", PasswordHash = $"hash{i}", EncryptedValue = $"secret{i}" });
+            dbContext.PolicyTestEntities.Add(new PolicyTestEntityFixture { Id = i, Name = $"name{i}", PasswordHash = $"hash{i}", EncryptedValue = $"secret{i}" });
 
         await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
 

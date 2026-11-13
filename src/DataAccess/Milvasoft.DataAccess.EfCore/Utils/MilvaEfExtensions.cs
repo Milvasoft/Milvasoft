@@ -183,9 +183,14 @@ public static class MilvaEfExtensions
 
         // A cursor captures the sort it was built with; honor it (ignoring any client SortBy override on
         // later pages) so the ordering stays consistent with the cursor filter — otherwise equal-value rows
-        // are skipped or duplicated.
+        // are skipped or duplicated. The cursor is client input (not signed), so its sort property is checked
+        // against RequestPropertyPolicy like a requested sort property.
         if (cursorData != null)
+        {
+            CursorExtensions.GetSortPropertyMetadata(typeof(TEntity), cursorData.SortBy);
+
             cursorListRequest.Sorting = new SortRequest { SortBy = cursorData.SortBy, Type = cursorData.SortType };
+        }
 
         query = CursorExtensions.ApplyCursorSorting(query.WithFiltering(cursorListRequest.Filtering), cursorListRequest.Sorting);
 
@@ -292,9 +297,14 @@ public static class MilvaEfExtensions
 
         // A cursor captures the sort it was built with; honor it (ignoring any client SortBy override on
         // later pages) so the ordering stays consistent with the cursor filter — otherwise equal-value rows
-        // are skipped or duplicated.
+        // are skipped or duplicated. The cursor is client input (not signed), so its sort property is checked
+        // against RequestPropertyPolicy like a requested sort property.
         if (cursorData != null)
+        {
+            CursorExtensions.GetSortPropertyMetadata(typeof(TEntity), cursorData.SortBy);
+
             cursorListRequest.Sorting = new SortRequest { SortBy = cursorData.SortBy, Type = cursorData.SortType };
+        }
 
         query = CursorExtensions.ApplyCursorSorting(query.WithFiltering(cursorListRequest.Filtering), cursorListRequest.Sorting);
 

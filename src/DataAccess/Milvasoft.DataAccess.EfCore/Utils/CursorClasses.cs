@@ -1,4 +1,4 @@
-using Milvasoft.Components.Rest.Enums;
+﻿using Milvasoft.Components.Rest.Enums;
 using Milvasoft.Components.Rest.Request;
 using Milvasoft.Core.Utils.Constants;
 using System.Collections.Concurrent;
@@ -34,10 +34,8 @@ internal static class CursorExtensions
         if (cursorData == null || string.IsNullOrWhiteSpace(cursorData.SortBy))
             return query;
 
-        var meta = GetCursorPropertyMetadata(typeof(TEntity), cursorData.SortBy);
-
-        if (meta == null)
-            return query;
+        // The cursor comes from the client, so its sort property is validated like a requested sort property.
+        var meta = GetSortPropertyMetadata(typeof(TEntity), cursorData.SortBy);
 
         var isAscending = cursorData.SortType == SortType.Asc;
         var useGreaterThan = isAscending != isBackward;
@@ -131,20 +129,24 @@ internal static class CursorExtensions
     /// Applies the cursor ordering: the requested sort followed by a primary-key (Id) tie-break in the same
     /// direction, so equal SortBy values have a stable, total order (matching <see cref="ApplyCursorCondition"/>).
     /// Skipped tie-break when sorting already is by the primary key or the entity has no Id property.
+    /// The sort property is validated with <see cref="GetSortPropertyMetadata"/>.
     /// </summary>
     internal static IQueryable<TEntity> ApplyCursorSorting<TEntity>(IQueryable<TEntity> query, SortRequest sorting) where TEntity : class
     {
-        var primaryExpression = sorting?.BuildPropertySelectorExpression<TEntity>();
-
-        if (primaryExpression == null)
+        if (string.IsNullOrWhiteSpace(sorting?.SortBy))
             return query;
 
-        var sortingById = string.Equals(sorting.SortBy, EntityPropertyNames.Id, StringComparison.OrdinalIgnoreCase);
+        var meta = GetSortPropertyMetadata(typeof(TEntity), sorting.SortBy);
+
+        var primaryExpression = CommonHelper.CreateRequiredPropertySelector<TEntity>(meta.Property.Name);
+
+        var sortingById = IsPrimaryKeyId(sorting.SortBy);
 
         // Only tie-break when the entity actually has an Id property (guards against keyless/Id-less entities).
-        var idExpression = sortingById || GetCursorPropertyMetadata(typeof(TEntity), EntityPropertyNames.Id) == null
-            ? null
-            : new SortRequest { SortBy = EntityPropertyNames.Id, Type = sorting.Type }.BuildPropertySelectorExpression<TEntity>();
+        // The tie-break is added by the library, not requested by the client, so it is not checked against the request property policy.
+        var idMeta = sortingById ? null : GetCursorPropertyMetadata(typeof(TEntity), EntityPropertyNames.Id);
+
+        var idExpression = idMeta == null ? null : CommonHelper.CreateRequiredPropertySelector<TEntity>(idMeta.Property.Name);
 
         if (sorting.Type == SortType.Asc)
         {
@@ -259,6 +261,26 @@ internal static class CursorExtensions
         return idMeta?.Property.GetValue(item);
     }
 
+    /// <summary>
+    /// Gets the metadata of a client supplied sort property (from the request or from a cursor) and checks it with <see cref="RequestPropertyPolicy"/>
+    /// for <see cref="RequestPropertyUsage.Sort"/>. The primary key (Id) is always allowed, because it is the default cursor sort and the tie-break of every cursor.
+    /// </summary>
+    /// <exception cref="MilvaUserFriendlyException"> When the property does not exist or cannot be sorted by. </exception>
+    internal static CursorPropertyMetadata GetSortPropertyMetadata(Type entityType, string sortBy)
+    {
+        var meta = string.IsNullOrWhiteSpace(sortBy) ? null : GetCursorPropertyMetadata(entityType, sortBy);
+
+        if (meta == null || (!IsPrimaryKeyId(sortBy) && !RequestPropertyPolicy.IsAllowed(meta.Property, RequestPropertyUsage.Sort)))
+            throw RequestPropertyPolicy.NotAllowed(sortBy, RequestPropertyUsage.Sort);
+
+        return meta;
+    }
+
+    private static bool IsPrimaryKeyId(string propertyName) => string.Equals(propertyName, EntityPropertyNames.Id, StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// Gets cached metadata of <paramref name="sortBy"/> without any policy check. Use <see cref="GetSortPropertyMetadata"/> for client supplied names.
+    /// </summary>
     internal static CursorPropertyMetadata GetCursorPropertyMetadata(Type entityType, string sortBy) => _cursorMetadataCache.GetOrAdd((entityType, sortBy), key =>
     {
         var prop = key.EntityType.GetProperty(key.SortBy, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);

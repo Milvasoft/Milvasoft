@@ -36,11 +36,14 @@ public class SomeFullAuditableEntityFixture : FullAuditableEntity<int>
     public decimal SomeDecimalProp { get; set; }
 }
 
-public class LookupTestEntityFixture : FullAuditableEntity<int>
+public class PolicyTestEntityFixture : FullAuditableEntity<int>
 {
     public string Name { get; set; }
     public string PasswordHash { get; set; }
 
     [Encrypted]
     public string EncryptedValue { get; set; }
+
+    [Filterable(true)]
+    public int Rank { get; set; }
 }
