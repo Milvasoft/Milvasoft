@@ -5,40 +5,81 @@ using Milvasoft.Cryptography.Abstract;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Milvasoft.DataAccess.EfCore.Utils.Converters;
 
 /// <summary>
-/// Defines the internal encryption converter for string values.
+/// Encrypts string values with <see cref="IMilvaCryptographyProvider"/>. Stored values have the <c>enc::</c> prefix.
 /// </summary>
 /// <remarks>
-/// Creates a new <see cref="MilvaEncryptionConverter"/> instance.
+/// <para>
+/// <b>Encrypted columns are not queryable.</b> Every write uses a random IV, so the same plain text is stored differently each time:
+/// equality filters, joins, unique constraints, indexes and sorting on an encrypted column do not work. Only read and write the value.
+/// </para>
+/// <para> Write: every non null value is encrypted, also values that already start with <c>enc::</c> (so user input is never taken for cipher text). </para>
+/// <para>
+/// Read: values without the <c>enc::</c> prefix (e.g. written before encryption was enabled) are returned as they are. A value with the prefix that cannot
+/// be decrypted (corrupted data or another key) is never returned silently: if an <see cref="IMilvaLogger"/> is given, the failure is logged as an error and
+/// the stored value is returned; otherwise a <see cref="CryptographicException"/> is thrown.
+/// </para>
 /// </remarks>
 /// <param name="crypto"></param>
 /// <param name="converterMappingHints"></param>
-
-public sealed class MilvaEncryptionConverter(IMilvaCryptographyProvider crypto, ConverterMappingHints converterMappingHints = null) : ValueConverter<string, string>(
-        s => s == null ? null
-                 : (s.StartsWith(_prefix, StringComparison.Ordinal) ? s : _prefix + crypto.Encrypt(s)),
-        s => s == null ? null
-                 : (s.StartsWith(_prefix, StringComparison.Ordinal) ? SafeDecrypt(s, crypto) : s), converterMappingHints)
+/// <param name="logger"> Logs values that cannot be decrypted. The converter is a part of the EF Core model, which is built once and cached, so pass a long lived (singleton) logger. </param>
+public sealed class MilvaEncryptionConverter(IMilvaCryptographyProvider crypto, ConverterMappingHints converterMappingHints = null, IMilvaLogger logger = null)
+    : ValueConverter<string, string>(s => EncryptedValue.Protect(s, crypto), s => EncryptedValue.Unprotect(s, crypto, logger), converterMappingHints)
 {
-    private const string _prefix = "enc::";
+}
 
-    private static string SafeDecrypt(string marked, IMilvaCryptographyProvider crypto)
+/// <summary>
+/// Encryption format of <see cref="MilvaEncryptionConverter"/> and <see cref="EncryptedJsonValueConverter{T}"/>.
+/// </summary>
+public static class EncryptedValue
+{
+    /// <summary>
+    /// Prefix of encrypted values.
+    /// </summary>
+    public const string Prefix = "enc::";
+
+    /// <summary>
+    /// Encrypts <paramref name="value"/> and adds <see cref="Prefix"/>. Null stays null. Every other value is encrypted, also values that start with <see cref="Prefix"/>.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="crypto"></param>
+    /// <returns></returns>
+    public static string Protect(string value, IMilvaCryptographyProvider crypto) => value is null ? null : Prefix + crypto.Encrypt(value);
+
+    /// <summary>
+    /// Decrypts a value written by <see cref="Protect(string, IMilvaCryptographyProvider)"/>. Values without <see cref="Prefix"/> are returned as they are.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="crypto"></param>
+    /// <param name="logger"></param>
+    /// <returns></returns>
+    /// <exception cref="CryptographicException"> When a value with <see cref="Prefix"/> cannot be decrypted and <paramref name="logger"/> is null. </exception>
+    public static string Unprotect(string value, IMilvaCryptographyProvider crypto, IMilvaLogger logger)
     {
-        var payload = marked[_prefix.Length..];
+        if (value is null || !value.StartsWith(Prefix, StringComparison.Ordinal))
+            return value;
 
         try
         {
-            return crypto.Decrypt(payload);
+            return crypto.Decrypt(value[Prefix.Length..]);
         }
-        catch
+        catch (Exception ex)
         {
-            // If data is corrupted or broken, do not throw an exception, just return the original marked value
-            return marked;
+            const string message = "A value marked as encrypted ('" + Prefix + "' prefix) could not be decrypted. The data is corrupted or it was encrypted with another key.";
+
+            if (logger is null)
+                throw new CryptographicException(message, ex);
+
+            // The value itself is not logged.
+            logger.Error(ex, message + " The stored value is returned as it is.");
+
+            return value;
         }
     }
 }
@@ -64,10 +105,13 @@ public sealed class JsonValueComparer<T> : ValueComparer<T>
 /// Encrypted JSON value converter for EF Core.
 /// </summary>
 /// <typeparam name="T"></typeparam>
+/// <remarks>
+/// Encrypted fields follow the rules of <see cref="MilvaEncryptionConverter"/> (not queryable, every value is encrypted on write, decryption failures are logged or thrown).
+/// </remarks>
 /// <param name="crypto"></param>
-public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider crypto) : ValueConverter<T, string>(model => ToProvider(model, crypto), json => FromProvider(json, crypto))
+/// <param name="logger"> Logs values that cannot be decrypted. If null, a <see cref="CryptographicException"/> is thrown instead. </param>
+public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider crypto, IMilvaLogger logger = null) : ValueConverter<T, string>(model => ToProvider(model, crypto), json => FromProvider(json, crypto, logger))
 {
-    private const string _prefix = "enc::";
 
     private static readonly JsonSerializerOptions _jsonOpts = new(JsonSerializerDefaults.Web)
     {
@@ -91,13 +135,13 @@ public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider cr
         return JsonSerializer.Serialize(shaped, _jsonOpts);
     }
 
-    private static T FromProvider(string json, IMilvaCryptographyProvider crypto)
+    private static T FromProvider(string json, IMilvaCryptographyProvider crypto, IMilvaLogger logger)
     {
         if (string.IsNullOrWhiteSpace(json))
             return default!;
 
         using var doc = JsonDocument.Parse(json);
-        var root = DecryptElement(doc.RootElement, typeof(T), crypto);
+        var root = DecryptElement(doc.RootElement, typeof(T), crypto, logger);
         return JsonSerializer.Deserialize<T>(root.GetRawText(), _jsonOpts)!;
     }
 
@@ -130,46 +174,6 @@ public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider cr
                                                                                                  p,
                                                                                                  p.GetCustomAttribute<EncryptedAttribute>() is not null,
                                                                                                  p.PropertyType))]);
-
-    private static string EncryptIfNeeded(string v, bool shouldEncrypt, IMilvaCryptographyProvider crypto)
-    {
-        if (!shouldEncrypt)
-            return v;
-
-        if (string.IsNullOrEmpty(v))
-            return v;
-
-        if (v.StartsWith(_prefix, StringComparison.Ordinal))
-            return v; // already marked
-
-        return _prefix + crypto.Encrypt(v);
-    }
-
-    private static string DecryptIfNeeded(string v, bool shouldDecrypt, IMilvaCryptographyProvider crypto)
-    {
-        if (!shouldDecrypt)
-            return v;
-
-        if (string.IsNullOrEmpty(v))
-            return v;
-
-        // tolerate legacy/plain values
-        if (!v.StartsWith(_prefix, StringComparison.Ordinal))
-            return v;
-
-        var payload = v[_prefix.Length..];
-
-        // Be tolerant: if base64/cipher is broken, just return original
-        try
-        {
-            return crypto.Decrypt(payload);
-        }
-        catch
-        {
-            // optionally log here
-            return v;
-        }
-    }
 
     /// <summary>
     /// Model -> shape (object graph) with field-level encryption applied
@@ -224,7 +228,7 @@ public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider cr
 
             if (meta.IsEncrypted && meta.PropType == typeof(string))
             {
-                dict[meta.Name] = EncryptIfNeeded((string)value, shouldEncrypt: true, crypto);
+                dict[meta.Name] = EncryptedValue.Protect((string)value, crypto);
             }
             else
             {
@@ -241,8 +245,9 @@ public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider cr
     /// <param name="element"></param>
     /// <param name="targetType"></param>
     /// <param name="crypto"></param>
+    /// <param name="logger"></param>
     /// <returns></returns>
-    private static JsonElement DecryptElement(JsonElement element, Type targetType, IMilvaCryptographyProvider crypto)
+    private static JsonElement DecryptElement(JsonElement element, Type targetType, IMilvaCryptographyProvider crypto, IMilvaLogger logger)
     {
         if (element.ValueKind == JsonValueKind.Object && GetDictionaryValueType(targetType) is Type dictionaryValueType)
         {
@@ -256,7 +261,7 @@ public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider cr
                     writer.WritePropertyName(jp.Name);
 
                     if (jp.Value.ValueKind is JsonValueKind.Object or JsonValueKind.Array)
-                        DecryptElement(jp.Value, dictionaryValueType, crypto).WriteTo(writer);
+                        DecryptElement(jp.Value, dictionaryValueType, crypto, logger).WriteTo(writer);
                     else
                         jp.Value.WriteTo(writer);
                 }
@@ -293,14 +298,14 @@ public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider cr
                     if (meta.IsEncrypted && meta.PropType == typeof(string) && jp.Value.ValueKind == JsonValueKind.String)
                     {
                         var str = jp.Value.GetString();
-                        var plain = DecryptIfNeeded(str, shouldDecrypt: true, crypto);
+                        var plain = EncryptedValue.Unprotect(str, crypto, logger);
                         writer.WriteStringValue(plain);
                         continue;
                     }
 
                     if (jp.Value.ValueKind is JsonValueKind.Object or JsonValueKind.Array)
                     {
-                        var child = DecryptElement(jp.Value, meta.PropType, crypto);
+                        var child = DecryptElement(jp.Value, meta.PropType, crypto, logger);
                         child.WriteTo(writer);
                     }
                     else
@@ -335,7 +340,7 @@ public sealed class EncryptedJsonValueConverter<T>(IMilvaCryptographyProvider cr
                 foreach (var item in element.EnumerateArray())
                 {
                     if (item.ValueKind is JsonValueKind.Object or JsonValueKind.Array)
-                        DecryptElement(item, elemType, crypto).WriteTo(writer);
+                        DecryptElement(item, elemType, crypto, logger).WriteTo(writer);
                     else
                         item.WriteTo(writer);
                 }

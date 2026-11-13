@@ -132,13 +132,18 @@ public static class ModelBuilderExtensions
     }
 
     /// <summary>
-    /// Adds value converter(<see cref="MilvaEncryptionConverter"/>) to string properties which marked with <see cref="EncryptedAttribute"/>.
+    /// Adds value converter(<see cref="MilvaEncryptionConverter"/>) to string properties which marked with <see cref="EncryptedAttribute"/>
+    /// and <see cref="EncryptedJsonValueConverter{T}"/> to jsonb mapped classes (their <see cref="EncryptedAttribute"/> marked string properties are encrypted).
     /// </summary>
+    /// <remarks>
+    /// <b>Encrypted columns are not queryable</b> (a random IV is used for every write), see <see cref="MilvaEncryptionConverter"/>.
+    /// </remarks>
     /// <param name="modelBuilder"></param>
     /// <param name="encryptionProvider"></param>
+    /// <param name="logger"> Logs values that cannot be decrypted. If null, reading such a value throws. See <see cref="MilvaEncryptionConverter"/>. </param>
     /// <returns></returns>
     /// <exception cref="MilvaDeveloperException"></exception>
-    public static ModelBuilder UseAnnotationEncryption(this ModelBuilder modelBuilder, IMilvaCryptographyProvider encryptionProvider)
+    public static ModelBuilder UseAnnotationEncryption(this ModelBuilder modelBuilder, IMilvaCryptographyProvider encryptionProvider, IMilvaLogger logger = null)
     {
         if (modelBuilder is null)
             throw new MilvaDeveloperException("The given model builder cannot be null");
@@ -146,7 +151,7 @@ public static class ModelBuilderExtensions
         if (encryptionProvider is null)
             throw new MilvaDeveloperException("Cannot initialize encryption with a null provider.");
 
-        var stringEncryptionConverter = new MilvaEncryptionConverter(encryptionProvider);
+        var stringEncryptionConverter = new MilvaEncryptionConverter(encryptionProvider, logger: logger);
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
@@ -182,7 +187,7 @@ public static class ModelBuilderExtensions
                 {
                     var convType = typeof(EncryptedJsonValueConverter<>).MakeGenericType(clrType);
 
-                    var converter = (ValueConverter)Activator.CreateInstance(convType, encryptionProvider)!;
+                    var converter = (ValueConverter)Activator.CreateInstance(convType, encryptionProvider, logger)!;
 
                     property.SetValueConverter(converter);
 
@@ -206,11 +211,23 @@ public static class ModelBuilderExtensions
     }
 
     /// <summary>
-    /// Adds value converter(<see cref="MilvaEncryptionConverter"/>) to all strings properties.
+    /// Adds value converter(<see cref="MilvaEncryptionConverter"/>) to string properties, except the properties that must stay comparable in the database:
+    /// primary and alternate key, foreign key, discriminator, concurrency token and index properties.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// <b>Encrypted columns are not queryable.</b> A random IV is used for every write, so filtering, joining, sorting, unique constraints and indexes do not work
+    /// on encrypted columns (see <see cref="MilvaEncryptionConverter"/>).
+    /// </para>
+    /// <para>
+    /// Keys, foreign keys, discriminators, concurrency tokens and indexes are read from the model while this method runs, so call it at the end of
+    /// <c>OnModelCreating</c>, after they are configured. Properties configured later are encrypted.
+    /// </para>
+    /// </remarks>
     /// <param name="modelBuilder"></param>
     /// <param name="encryptionProvider"></param>
-    public static ModelBuilder UseEncryption(this ModelBuilder modelBuilder, IMilvaCryptographyProvider encryptionProvider)
+    /// <param name="logger"> Logs values that cannot be decrypted. If null, reading such a value throws. See <see cref="MilvaEncryptionConverter"/>. </param>
+    public static ModelBuilder UseEncryption(this ModelBuilder modelBuilder, IMilvaCryptographyProvider encryptionProvider, IMilvaLogger logger = null)
     {
         if (modelBuilder is null)
             throw new MilvaDeveloperException("The given model builder cannot be null");
@@ -218,14 +235,26 @@ public static class ModelBuilderExtensions
         if (encryptionProvider is null)
             throw new MilvaDeveloperException("Cannot initialize encryption with a null provider.");
 
-        var encryptionConverter = new MilvaEncryptionConverter(encryptionProvider);
+        var encryptionConverter = new MilvaEncryptionConverter(encryptionProvider, logger: logger);
 
         foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
             foreach (IMutableProperty property in entityType.GetProperties())
-                if (property.ClrType == typeof(string) /* && !IsDiscriminator(property)*/)
+                if (property.ClrType == typeof(string) && CanBeEncrypted(entityType, property))
                     property.SetValueConverter(encryptionConverter);
+
         return modelBuilder;
     }
+
+    /// <summary>
+    /// Whether <paramref name="property"/> can be stored encrypted. Encrypted values are not comparable in the database,
+    /// so keys, foreign keys, discriminators, concurrency tokens and index properties are not encrypted.
+    /// </summary>
+    private static bool CanBeEncrypted(IReadOnlyEntityType entityType, IReadOnlyProperty property)
+        => !property.IsKey()
+           && !property.IsForeignKey()
+           && !property.IsConcurrencyToken
+           && !property.IsIndex()
+           && entityType.FindDiscriminatorProperty() != property;
 
     /// <summary>
     /// For PostgreSql, makes string properties for Turkish character compatible.
