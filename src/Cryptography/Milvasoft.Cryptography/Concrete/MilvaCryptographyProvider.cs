@@ -26,7 +26,7 @@ namespace Milvasoft.Cryptography.Concrete;
 /// the UTF-8 bytes are also used as the key of the legacy AES-CBC format, so values encrypted with this key by any version stay decryptable.</item>
 /// </list>
 /// <para>
-/// The two kinds never overlap: a <c>"base64:"</c> key is at least 50 characters long, longer than any UTF-8 key. A string that starts with
+/// The two kinds never overlap: a valid <c>"base64:"</c> key is 51 characters long, longer than any UTF-8 key. A string that starts with
 /// <c>"base64:"</c> but is 16, 24 or 32 bytes long is therefore treated as a UTF-8 key, as it was in older versions.
 /// The key must be a random secret; it is not stretched like a password. It is validated when the services are registered (see <see cref="ValidateKey(string)"/>).
 /// Changing the key, including converting a UTF-8 key to the <c>"base64:"</c> form, makes existing values undecryptable.
