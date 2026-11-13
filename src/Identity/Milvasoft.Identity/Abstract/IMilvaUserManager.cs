@@ -1,4 +1,4 @@
-using Milvasoft.Identity.Concrete.Entity;
+﻿using Milvasoft.Identity.Concrete.Entity;
 using Milvasoft.Identity.TokenProvider;
 
 namespace Milvasoft.Identity.Abstract;
@@ -17,14 +17,47 @@ public interface IMilvaUserManager<TUser, TKey> where TUser : MilvaUser<TKey> wh
     void ConfigureForCreate(ref TUser user, string password);
 
     /// <summary>
-    /// Checks <paramref name="password"/> against the user's password hash.
-    /// If the password is correct but the stored hash was created with weaker hasher settings than the configured ones,
-    /// <see cref="MilvaUser{TKey}.PasswordHash"/> is replaced with a new hash. Persist the user to keep the upgraded hash.
+    /// Checks <paramref name="password"/> against the user's password hash. The user is not modified.
     /// </summary>
+    /// <remarks>
+    /// This overload does not report whether the stored hash should be upgraded. Use
+    /// <see cref="CheckPassword(TUser, string, out bool)"/> on sign-in to upgrade hashes created with weaker hasher settings.
+    /// Lockout state (<see cref="MilvaUser{TKey}.AccessFailedCount"/>, <see cref="MilvaUser{TKey}.LockoutEnd"/>) is not changed;
+    /// use <see cref="ConfigureLockout(TUser, bool)"/> for that.
+    /// </remarks>
     /// <param name="user">The user</param>
     /// <param name="password"></param>
     /// <returns>True if the password is correct.</returns>
     bool CheckPassword(TUser user, string password);
+
+    /// <summary>
+    /// Checks <paramref name="password"/> against the user's password hash and reports whether the stored hash was created with
+    /// weaker hasher settings than the configured ones. The user is not modified.
+    /// </summary>
+    /// <remarks>
+    /// When the method returns true and <paramref name="rehashNeeded"/> is true, call <see cref="RehashPassword(TUser, string)"/>
+    /// with the same password and persist the user to store the upgraded hash. Ignoring it is safe; the old hash keeps verifying.
+    /// Lockout state is not changed; use <see cref="ConfigureLockout(TUser, bool)"/> for that.
+    /// </remarks>
+    /// <param name="user">The user</param>
+    /// <param name="password"></param>
+    /// <param name="rehashNeeded">True if the password is correct and the stored hash should be replaced. Always false when the password is wrong.</param>
+    /// <returns>True if the password is correct.</returns>
+    bool CheckPassword(TUser user, string password, out bool rehashNeeded);
+
+    /// <summary>
+    /// Replaces the user's password hash with a new hash of the same <paramref name="password"/> created with the configured hasher settings.
+    /// Use it after <see cref="CheckPassword(TUser, string, out bool)"/> reported that a rehash is needed, then persist the user.
+    /// </summary>
+    /// <remarks>
+    /// The password is verified against the stored hash first, so this method cannot be used to set a different password
+    /// (use <see cref="SetPasswordHash(TUser, string)"/> for password changes). This costs one extra hash computation, which only happens
+    /// once per user after the hasher settings change. The security stamp is not rotated because the credential does not change.
+    /// </remarks>
+    /// <param name="user">The user</param>
+    /// <param name="password">The user's current password.</param>
+    /// <returns>True if the password was correct and the hash was replaced; false if the password is wrong (the user is not modified).</returns>
+    bool RehashPassword(TUser user, string password);
 
     /// <summary>
     /// Hashes password and sets user's password hash property.

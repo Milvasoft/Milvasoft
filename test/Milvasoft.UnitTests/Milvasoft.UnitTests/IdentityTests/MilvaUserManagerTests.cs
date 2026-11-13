@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -162,9 +162,113 @@ public class MilvaUserManagerTests
     }
 
     [Fact]
-    public void CheckPassword_WithLegacyHash_ShouldReturnTrueAndUpgradeHash()
+    public void CheckPassword_WithLegacyHash_ShouldReportRehashNeededWithoutModifyingUser()
     {
         // Arrange: hash created with the previous defaults (HMAC-SHA256, 10,000 iterations).
+        var (userManager, currentHasher, legacyHash) = CreateUserManagerWithLegacyHash("Password123!");
+        var user = new TestUser { PasswordHash = legacyHash };
+
+        // Act
+        var resultWithoutOut = userManager.CheckPassword(user, "Password123!");
+        var result = userManager.CheckPassword(user, "Password123!", out var rehashNeeded);
+
+        // Assert
+        resultWithoutOut.Should().BeTrue();
+        result.Should().BeTrue();
+        rehashNeeded.Should().BeTrue();
+        user.PasswordHash.Should().Be(legacyHash);
+        currentHasher.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, "Password123!").Should().Be(PasswordVerificationResult.SuccessRehashNeeded);
+    }
+
+    [Fact]
+    public void CheckPassword_WithCurrentHash_ShouldNotReportRehashNeeded()
+    {
+        // Arrange
+        var user = new TestUser { PasswordHash = "hashedPassword" };
+        _passwordHasherMock.Setup(x => x.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, "Password123!"))
+                           .Returns(PasswordVerificationResult.Success);
+
+        // Act
+        var result = _userManager.CheckPassword(user, "Password123!", out var rehashNeeded);
+
+        // Assert
+        result.Should().BeTrue();
+        rehashNeeded.Should().BeFalse();
+    }
+
+    [Fact]
+    public void CheckPassword_WithWrongPasswordAndLegacyHash_ShouldNotReportRehashNeeded()
+    {
+        // Arrange
+        var (userManager, _, legacyHash) = CreateUserManagerWithLegacyHash("Password123!");
+        var user = new TestUser { PasswordHash = legacyHash };
+
+        // Act
+        var result = userManager.CheckPassword(user, "wrong", out var rehashNeeded);
+
+        // Assert
+        result.Should().BeFalse();
+        rehashNeeded.Should().BeFalse();
+        user.PasswordHash.Should().Be(legacyHash);
+    }
+
+    [Theory]
+    [InlineData(PasswordVerificationResult.Failed)]
+    [InlineData(PasswordVerificationResult.Success)]
+    [InlineData(PasswordVerificationResult.SuccessRehashNeeded)]
+    public void CheckPassword_ShouldNotChangeLockoutState(PasswordVerificationResult verificationResult)
+    {
+        // Arrange
+        var lockoutEnd = DateTimeOffset.UtcNow.AddMinutes(5);
+        var user = new TestUser { PasswordHash = "hashedPassword", LockoutEnabled = true, AccessFailedCount = 2, LockoutEnd = lockoutEnd };
+        _passwordHasherMock.Setup(x => x.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, "pw")).Returns(verificationResult);
+
+        // Act
+        _userManager.CheckPassword(user, "pw");
+        _userManager.CheckPassword(user, "pw", out _);
+
+        // Assert
+        user.AccessFailedCount.Should().Be(2);
+        user.LockoutEnd.Should().Be(lockoutEnd);
+        user.LockoutEnabled.Should().BeTrue();
+        user.PasswordHash.Should().Be("hashedPassword");
+        _passwordHasherMock.Verify(x => x.HashPassword(It.IsAny<string>()), Times.Never);
+    }
+
+    [Fact]
+    public void RehashPassword_WithCorrectPassword_ShouldStoreHashWithCurrentSettings()
+    {
+        // Arrange
+        var (userManager, currentHasher, legacyHash) = CreateUserManagerWithLegacyHash("Password123!");
+        var user = new TestUser { PasswordHash = legacyHash };
+
+        // Act
+        var rehashed = userManager.RehashPassword(user, "Password123!");
+
+        // Assert
+        rehashed.Should().BeTrue();
+        user.PasswordHash.Should().NotBe(legacyHash);
+        currentHasher.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, "Password123!").Should().Be(PasswordVerificationResult.Success);
+    }
+
+    [Fact]
+    public void RehashPassword_WithWrongPassword_ShouldNotModifyUser()
+    {
+        // Arrange
+        var (userManager, _, legacyHash) = CreateUserManagerWithLegacyHash("Password123!");
+        var user = new TestUser { PasswordHash = legacyHash };
+
+        // Act
+        var rehashed = userManager.RehashPassword(user, "another password");
+
+        // Assert
+        rehashed.Should().BeFalse();
+        user.PasswordHash.Should().Be(legacyHash);
+        userManager.CheckPassword(user, "another password").Should().BeFalse();
+    }
+
+    private (MilvaUserManager<TestUser, Guid> UserManager, MilvaPasswordHasher CurrentHasher, string LegacyHash) CreateUserManagerWithLegacyHash(string password)
+    {
         var legacyHasher = new MilvaPasswordHasher(new MilvaPasswordHasherOptions
         {
             IterationCount = 10000,
@@ -174,17 +278,8 @@ public class MilvaUserManagerTests
         var userManager = new MilvaUserManager<TestUser, Guid>(new Lazy<IDataProtectionProvider>(() => _dataProtectionProviderMock.Object),
                                                                _identityOptions,
                                                                new Lazy<IMilvaPasswordHasher>(() => currentHasher));
-        var password = "Password123!";
-        var legacyHash = legacyHasher.HashPassword(password);
-        var user = new TestUser { PasswordHash = legacyHash };
 
-        // Act
-        var result = userManager.CheckPassword(user, password);
-
-        // Assert
-        result.Should().BeTrue();
-        user.PasswordHash.Should().NotBe(legacyHash);
-        currentHasher.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, password).Should().Be(PasswordVerificationResult.Success);
+        return (userManager, currentHasher, legacyHasher.HashPassword(password));
     }
 
     [Fact]

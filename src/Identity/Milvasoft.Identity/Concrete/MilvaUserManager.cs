@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.DataProtection;
+﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Milvasoft.Identity.Abstract;
 using Milvasoft.Identity.Concrete.Entity;
@@ -42,22 +42,28 @@ public partial class MilvaUserManager<TUser, TKey>(Lazy<IDataProtectionProvider>
         user.NormalizedEmail = user.Email.MilvaNormalize();
     }
 
-    /// <summary>
-    /// Checks <paramref name="password"/> against the user's password hash.
-    /// If the password is correct but the stored hash was created with weaker hasher settings than the configured ones,
-    /// <see cref="MilvaUser{TKey}.PasswordHash"/> is replaced with a new hash. Persist the user to keep the upgraded hash.
-    /// </summary>
-    /// <param name="user">The user</param>
-    /// <param name="password"></param>
-    /// <returns>True if the password is correct.</returns>
-    public virtual bool CheckPassword(TUser user, string password)
+    /// <inheritdoc/>
+    public virtual bool CheckPassword(TUser user, string password) => CheckPassword(user, password, out _);
+
+    /// <inheritdoc/>
+    public virtual bool CheckPassword(TUser user, string password, out bool rehashNeeded)
     {
         var result = _passwordHasher.Value.VerifyHashedPasswordWithRehashCheck(user.PasswordHash, password);
 
-        if (result == PasswordVerificationResult.SuccessRehashNeeded)
-            user.PasswordHash = _passwordHasher.Value.HashPassword(password);
+        rehashNeeded = result == PasswordVerificationResult.SuccessRehashNeeded;
 
         return result != PasswordVerificationResult.Failed;
+    }
+
+    /// <inheritdoc/>
+    public virtual bool RehashPassword(TUser user, string password)
+    {
+        if (!CheckPassword(user, password))
+            return false;
+
+        user.PasswordHash = _passwordHasher.Value.HashPassword(password);
+
+        return true;
     }
 
     /// <summary>
