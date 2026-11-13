@@ -1,4 +1,6 @@
-﻿namespace Milvasoft.Identity.Concrete.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Milvasoft.Identity.Concrete.Entity;
 
 /// <summary>
 /// Represents a user in the identity system
@@ -38,6 +40,25 @@ public class MilvaUser<TKey> : EntityBase<TKey> where TKey : IEquatable<TKey>
     /// Gets or sets a salted and hashed representation of the password for this user.
     /// </summary>
     public virtual string PasswordHash { get; set; }
+
+    /// <summary>
+    /// Maximum length of <see cref="SecurityStamp"/>.
+    /// </summary>
+    public const int SecurityStampMaxLength = 64;
+
+    /// <summary>
+    /// Gets or sets a random value that must change whenever the user's credentials or identity change.
+    /// It is part of the security stamp that user tokens and 6 digit codes are bound to (see <see cref="TokenProvider.UserSecurityStamp"/>),
+    /// so changing it revokes every outstanding token of the user.
+    /// </summary>
+    /// <remarks>
+    /// Set and rotated by <see cref="Abstract.IMilvaUserManager{TUser, TKey}"/> (<c>ConfigureForCreate</c>, <c>SetPasswordHash</c>, <c>SetEmail</c>,
+    /// <c>ConfirmEmail</c>, <c>SetPhoneNumber</c>, <c>ConfirmPhoneNumber</c>, <c>RotateSecurityStamp</c> and successful token verification).
+    /// Nullable so that existing rows keep working: while it is null or empty the stamp is derived from the user's
+    /// security-relevant columns only, exactly as in versions without this column. Never expose it to clients.
+    /// </remarks>
+    [MaxLength(SecurityStampMaxLength)]
+    public virtual string SecurityStamp { get; set; }
 
     /// <summary>
     /// Gets or sets a telephone number for the user.

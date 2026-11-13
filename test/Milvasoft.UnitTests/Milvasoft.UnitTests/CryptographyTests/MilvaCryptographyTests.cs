@@ -60,6 +60,124 @@ public class MilvaCryptographyTests
 
     #endregion
 
+    #region Base64 raw keys
+
+    [Fact]
+    public void Base64Key_ShouldBeUsedDirectlyAsAesGcmKey()
+    {
+        // Arrange
+        var rawKey = RandomNumberGenerator.GetBytes(32);
+        var provider = CreateProvider("base64:" + Convert.ToBase64String(rawKey));
+
+        // Act
+        var encrypted = provider.Encrypt("securedata");
+
+        // Assert: decrypt the v2 payload with the raw key itself.
+        var payload = Convert.FromBase64String(encrypted["v2:".Length..]);
+        var plain = new byte[payload.Length - 12 - 16];
+        using var aesGcm = new AesGcm(rawKey, 16);
+        aesGcm.Decrypt(payload.AsSpan(0, 12), payload.AsSpan(12, plain.Length), payload.AsSpan(12 + plain.Length), plain);
+        Encoding.UTF8.GetString(plain).Should().Be("securedata");
+        provider.Decrypt(encrypted).Should().Be("securedata");
+    }
+
+    [Fact]
+    public async Task GenerateKey_ShouldProduceValidBase64KeyThatRoundTrips()
+    {
+        // Arrange
+        var key = MilvaCryptographyProvider.GenerateKey();
+        var provider = CreateProvider(key);
+        var bytes = RandomNumberGenerator.GetBytes(100);
+
+        // Act & Assert
+        key.Should().StartWith(MilvaCryptographyProvider.Base64KeyPrefix);
+        Convert.FromBase64String(key[MilvaCryptographyProvider.Base64KeyPrefix.Length..]).Should().HaveCount(32);
+        MilvaCryptographyProvider.GenerateKey().Should().NotBe(key);
+        provider.Decrypt(provider.Encrypt("securedata")).Should().Be("securedata");
+        (await provider.DecryptAsync(await provider.EncryptAsync("securedata"))).Should().Be("securedata");
+        provider.DecryptBytes(provider.EncryptBytes(bytes)).Should().Equal(bytes);
+    }
+
+    [Fact]
+    public void Base64Key_ShouldNotDecryptValuesOfUtf8KeyWithSameBytes()
+    {
+        // Arrange: same 32 bytes used as a UTF-8 key (HKDF derived) and as a raw key.
+        var encrypted = CreateProvider(_key32).Encrypt("securedata");
+        var rawKeyProvider = CreateProvider("base64:" + Convert.ToBase64String(Encoding.UTF8.GetBytes(_key32)));
+
+        // Act
+        Action act = () => rawKeyProvider.Decrypt(encrypted);
+
+        // Assert
+        act.Should().Throw<CryptographicException>();
+    }
+
+    [Fact]
+    public void Base64Key_WithLegacyCbcValue_ShouldThrowCryptographicException()
+    {
+        // Arrange
+        var provider = CreateProvider(MilvaCryptographyProvider.GenerateKey());
+
+        // Act
+        Action act = () => provider.Decrypt("evmtSvW8sFXeLueyevYMWtJID+xgtMqj4TDUT4NQ4wQ=");
+
+        // Assert
+        act.Should().Throw<CryptographicException>().WithMessage("*legacy format*");
+    }
+
+    [Theory]
+    [InlineData("base64:")]
+    [InlineData("base64:not base64 at all !!!!!!!!!!!!!!!!!!!!!!!!!!!")]
+    [InlineData("base64:AAAAAAAAAAAAAAAAAAAAAA==")] // 16 bytes
+    [InlineData("base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==")] // 34 bytes
+    [InlineData("BASE64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=")] // prefix is case sensitive
+    public void Base64Key_WithInvalidValue_ShouldThrowAtRegistration(string key)
+    {
+        // Arrange
+        var services = new ServiceCollection();
+
+        // Act
+        Action act = () => services.AddMilvaCryptography().WithOptions(opt => opt.Key = key);
+
+        // Assert
+        act.Should().Throw<CryptographicException>();
+    }
+
+    [Fact]
+    public void WithOptions_WithBase64Key_ShouldRegisterProvider()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        var key = MilvaCryptographyProvider.GenerateKey();
+
+        // Act
+        services.AddMilvaCryptography().WithOptions(opt => opt.Key = key);
+        using var serviceProvider = services.BuildServiceProvider();
+        var provider = serviceProvider.GetRequiredService<Milvasoft.Cryptography.Abstract.IMilvaCryptographyProvider>();
+
+        // Assert
+        provider.Decrypt(provider.Encrypt("securedata")).Should().Be("securedata");
+    }
+
+    /// <summary>
+    /// A UTF-8 key that happens to start with "base64:" is 16, 24 or 32 bytes and can never be a Base64 encoded 32 byte key,
+    /// so it keeps working as a UTF-8 key (HKDF derived GCM key and legacy CBC key).
+    /// </summary>
+    [Fact]
+    public void Utf8KeyStartingWithBase64Prefix_ShouldStillBeTreatedAsUtf8Key()
+    {
+        // Arrange
+        const string utf8Key = "base64:abcdefghi"; // 16 bytes
+        var provider = CreateProvider(utf8Key);
+        var legacyValue = EncryptLegacyCbc(utf8Key, "securedata");
+
+        // Act & Assert
+        provider.Decrypt(legacyValue).Should().Be("securedata");
+        provider.Decrypt(provider.Encrypt("securedata")).Should().Be("securedata");
+    }
+
+    #endregion
+
     #region String encryption
 
     [Theory]
@@ -255,6 +373,19 @@ public class MilvaCryptographyTests
     }
 
     #endregion
+
+    /// <summary>
+    /// Produces the legacy format: Base64(iv[16] | AES-CBC-PKCS7 ciphertext) with the UTF-8 key.
+    /// </summary>
+    private static string EncryptLegacyCbc(string key, string value)
+    {
+        using var aes = Aes.Create();
+        aes.Key = Encoding.UTF8.GetBytes(key);
+        aes.GenerateIV();
+        var cipherText = aes.EncryptCbc(Encoding.UTF8.GetBytes(value), aes.IV, PaddingMode.PKCS7);
+
+        return Convert.ToBase64String([.. aes.IV, .. cipherText]);
+    }
 
     private static MilvaCryptographyProvider CreateProvider(string key) => new(new MilvaCryptographyOptions { Key = key }, new Microsoft.IO.RecyclableMemoryStreamManager());
 

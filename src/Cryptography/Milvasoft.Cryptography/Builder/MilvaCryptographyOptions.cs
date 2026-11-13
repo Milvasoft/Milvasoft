@@ -37,7 +37,10 @@ public interface IMilvaCryptographyOptions
     public ServiceLifetime Lifetime { get; set; }
 
     /// <summary>
-    /// Encryption key. Must be a random secret of 16, 24 or 32 bytes (UTF-8). It is validated when the services are registered.
+    /// Encryption key, validated when the services are registered. Either <c>"base64:"</c> followed by the Base64 encoding of 32 random bytes
+    /// (recommended for new deployments, used directly as the AES-256-GCM key; see <see cref="Concrete.MilvaCryptographyProvider.GenerateKey"/>),
+    /// or a random secret of 16, 24 or 32 bytes (UTF-8) as used by existing deployments. Do not convert an existing key to the other form:
+    /// values encrypted with the old key would no longer decrypt.
     /// </summary>
     public string Key { get; set; }
 
