@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -187,6 +187,135 @@ public class MultiTenancyTests(CustomWebApplicationFactory factory) : DataAccess
         var stored = await GetAllIgnoringTenantAsync();
         stored.Should().ContainSingle();
         stored.Single().IsDeleted.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Model_TenantIdOfTenantEntities_ShouldBeConcurrencyToken()
+    {
+        await SetUpAsync();
+
+        using var scope = CreateTenantScope(_tenantA);
+        var dbContext = scope.ServiceProvider.GetRequiredService<MultiTenantDbContextFixture>();
+
+        dbContext.Model.FindEntityType(typeof(SomeMultiTenantTestEntityFixture)).FindProperty(nameof(SomeMultiTenantTestEntityFixture.TenantId)).IsConcurrencyToken.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task Update_WithDetachedForgedEntityOfAnotherTenantsRow_ShouldThrowAndNotChangeThatRow()
+    {
+        await SetUpAsync();
+
+        await SeedAsync(_tenantA, id: 1);
+
+        using var scope = CreateTenantScope(_tenantB);
+        var dbContext = scope.ServiceProvider.GetRequiredService<MultiTenantDbContextFixture>();
+
+        // Built from client input: tenant A's row id, the current tenant (B) id.
+        var forged = NewEntity(1);
+        forged.TenantId = _tenantB;
+        forged.SomeDecimalProp = 999M;
+
+        dbContext.Entities.Update(forged);
+
+        var act = () => dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
+
+        var stored = await GetAllIgnoringTenantAsync();
+        stored.Single().TenantId.Should().Be(_tenantA);
+        stored.Single().SomeDecimalProp.Should().Be(10M);
+    }
+
+    [Fact]
+    public async Task Delete_WithDetachedForgedEntityOfAnotherTenantsRow_ShouldThrowAndKeepThatRow()
+    {
+        await SetUpAsync();
+
+        await SeedAsync(_tenantA, id: 1);
+
+        using var scope = CreateTenantScope(_tenantB);
+        var dbContext = scope.ServiceProvider.GetRequiredService<MultiTenantDbContextFixture>();
+
+        var forged = NewEntity(1);
+        forged.TenantId = _tenantB;
+
+        dbContext.Entities.Remove(forged);
+
+        var act = () => dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
+
+        var stored = await GetAllIgnoringTenantAsync();
+        stored.Should().ContainSingle();
+        stored.Single().TenantId.Should().Be(_tenantA);
+        stored.Single().IsDeleted.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task RepositoryUpdate_WithDetachedForgedEntityOfAnotherTenantsRow_ShouldThrowAndNotChangeThatRow()
+    {
+        await SetUpAsync();
+
+        await SeedAsync(_tenantA, id: 1);
+
+        using var scope = CreateTenantScope(_tenantB);
+        var repository = scope.ServiceProvider.GetRequiredService<IMultiTenantRepository<SomeMultiTenantTestEntityFixture>>();
+
+        var forged = NewEntity(1);
+        forged.TenantId = _tenantB;
+        forged.SomeDecimalProp = 999M;
+
+        var act = () => repository.UpdateAsync(forged, TestContext.Current.CancellationToken);
+
+        await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
+
+        (await GetAllIgnoringTenantAsync()).Single().SomeDecimalProp.Should().Be(10M);
+    }
+
+    [Fact]
+    public async Task Update_WithDetachedEntityOfOwnRow_ShouldSucceed()
+    {
+        await SetUpAsync();
+
+        await SeedAsync(_tenantA, id: 1);
+
+        using var scope = CreateTenantScope(_tenantA);
+        var dbContext = scope.ServiceProvider.GetRequiredService<MultiTenantDbContextFixture>();
+
+        var entity = NewEntity(1);
+        entity.TenantId = _tenantA;
+        entity.SomeDecimalProp = 20M;
+
+        dbContext.Entities.Update(entity);
+
+        await dbContext.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        var stored = await GetAllIgnoringTenantAsync();
+        stored.Single().TenantId.Should().Be(_tenantA);
+        stored.Single().SomeDecimalProp.Should().Be(20M);
+    }
+
+    [Fact]
+    public async Task SaveChangesBulk_WithDetachedForgedEntityOfAnotherTenantsRow_ShouldNotChangeThatRow()
+    {
+        await SetUpAsync();
+
+        await SeedAsync(_tenantA, id: 1);
+
+        using var scope = CreateTenantScope(_tenantB);
+        var dbContext = scope.ServiceProvider.GetRequiredService<MultiTenantDbContextFixture>();
+
+        var forged = NewEntity(1);
+        forged.TenantId = _tenantB;
+        forged.SomeDecimalProp = 999M;
+
+        dbContext.Entities.Update(forged);
+
+        var act = () => dbContext.SaveChangesBulkAsync(cancellationToken: TestContext.Current.CancellationToken);
+
+        await act.Should().ThrowAsync<DbUpdateConcurrencyException>();
+
+        (await GetAllIgnoringTenantAsync()).Single().SomeDecimalProp.Should().Be(10M);
     }
 
     [Fact]
