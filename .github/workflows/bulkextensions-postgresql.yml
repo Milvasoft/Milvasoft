@@ -7,28 +7,13 @@ on:
       - 'src/BulkExtensions/Milvasoft.BulkExtensions.PostgreSql/**'
       - 'src/BulkExtensions/Milvasoft.BulkExtensions/**'
       - '**/Directory.Build.props'
-  pull_request:
-    branches: [ master ]
-    paths:
-      - 'src/BulkExtensions/Milvasoft.BulkExtensions.PostgreSql/**'
-      - 'src/BulkExtensions/Milvasoft.BulkExtensions/**'
-      - '**/Directory.Build.props'
+
+permissions:
+  contents: read
+  id-token: write  # passed to nuget-publish.yml for NuGet trusted publishing
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ vars.DOTNET_VERSION }}
-      - name: Restore Milvasoft.BulkExtensions.PostgreSql project dependencies
-        run: dotnet restore src/BulkExtensions/Milvasoft.BulkExtensions.PostgreSql/Milvasoft.BulkExtensions.PostgreSql.csproj
-      - name: Build Milvasoft.BulkExtensions.PostgreSql project
-        run: dotnet build src/BulkExtensions/Milvasoft.BulkExtensions.PostgreSql/Milvasoft.BulkExtensions.PostgreSql.csproj --no-restore --configuration Release
-      - name: Pack Milvasoft.BulkExtensions.PostgreSql project
-        run: dotnet pack src/BulkExtensions/Milvasoft.BulkExtensions.PostgreSql/Milvasoft.BulkExtensions.PostgreSql.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
-      - name: Publish package to NuGet
-        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+  publish:
+    uses: ./.github/workflows/nuget-publish.yml
+    with:
+      project: src/BulkExtensions/Milvasoft.BulkExtensions.PostgreSql/Milvasoft.BulkExtensions.PostgreSql.csproj

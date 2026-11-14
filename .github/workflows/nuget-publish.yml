@@ -1,0 +1,46 @@
+# Reusable workflow that builds, packs and publishes one project to nuget.org.
+# Every per-package workflow in this folder calls it.
+#
+# NuGet trusted publishing matches its policy against the OIDC "job_workflow_ref"
+# claim, which names this file (not the caller). The nuget.org policy therefore
+# names "nuget-publish.yml". Do not rename this file without updating the policy.
+
+name: NuGet Publish
+
+on:
+  workflow_call:
+    inputs:
+      project:
+        description: Path of the .csproj to build, pack and publish.
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # GitHub OIDC token for NuGet trusted publishing
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ vars.DOTNET_VERSION }}
+      - name: Restore project dependencies
+        run: dotnet restore "${{ inputs.project }}"
+      - name: Build project
+        run: dotnet build "${{ inputs.project }}" --no-restore --configuration Release
+      - name: Pack project
+        run: dotnet pack "${{ inputs.project }}" --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      - name: NuGet login (OIDC to temporary API key)
+        uses: NuGet/login@v1
+        id: nuget-login
+        with:
+          user: bugrakosen
+      - name: Publish package to NuGet
+        run: dotnet nuget push *.nupkg --api-key ${{ steps.nuget-login.outputs.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

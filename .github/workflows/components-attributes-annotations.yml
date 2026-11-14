@@ -6,27 +6,13 @@ on:
     paths:
       - 'src/Components/Milvasoft.Attributes.Annotations/**'
       - '**/Directory.Build.props'
-  pull_request:
-    branches: [ master ]
-    paths:
-      - 'src/Components/Milvasoft.Attributes.Annotations/**'
-      - '**/Directory.Build.props'
+
+permissions:
+  contents: read
+  id-token: write  # passed to nuget-publish.yml for NuGet trusted publishing
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ vars.DOTNET_VERSION }}
-      - name: Restore Milvasoft.Attributes.Annotations project dependencies
-        run: dotnet restore src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.Annotations.csproj
-      - name: Build Milvasoft.Attributes.Annotations project
-        run: dotnet build src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.Annotations.csproj --no-restore --configuration Release
-      - name: Pack Milvasoft.Attributes.Annotations project
-        run: dotnet pack src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.Annotations.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
-      - name: Publish package to NuGet
-        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+  publish:
+    uses: ./.github/workflows/nuget-publish.yml
+    with:
+      project: src/Components/Milvasoft.Attributes.Annotations/Milvasoft.Attributes.Annotations.csproj
