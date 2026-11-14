@@ -6,27 +6,13 @@ on:
     paths:
       - 'src/Middlewares/Milvasoft.Middlewares/**'
       - '**/Directory.Build.props'
-  pull_request:
-    branches: [ master ]
-    paths:
-      - 'src/Middlewares/Milvasoft.Middlewares/**'
-      - '**/Directory.Build.props'
+
+permissions:
+  contents: read
+  id-token: write  # passed to nuget-publish.yml for NuGet trusted publishing
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ vars.DOTNET_VERSION }}
-      - name: Restore Milvasoft.Middlewares project dependencies
-        run: dotnet restore src/Middlewares/Milvasoft.Middlewares/Milvasoft.Middlewares.csproj
-      - name: Build Milvasoft.Middlewares project
-        run: dotnet build src/Middlewares/Milvasoft.Middlewares/Milvasoft.Middlewares.csproj --no-restore --configuration Release
-      - name: Pack Milvasoft.Middlewares project
-        run: dotnet pack src/Middlewares/Milvasoft.Middlewares/Milvasoft.Middlewares.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
-      - name: Publish package to NuGet
-        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+  publish:
+    uses: ./.github/workflows/nuget-publish.yml
+    with:
+      project: src/Middlewares/Milvasoft.Middlewares/Milvasoft.Middlewares.csproj
