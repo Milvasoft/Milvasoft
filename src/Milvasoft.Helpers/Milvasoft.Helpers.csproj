@@ -6,9 +6,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="11.0.0-rc.3.26522.148" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="11.0.0-rc.3.26522.148" />
-	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0-rc.3" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="11.0.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="11.0.0" />
+	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="11.0.0" />
 	  <PackageReference Include="SharpCompress" Version="0.50.4" />
 	</ItemGroup>
 
